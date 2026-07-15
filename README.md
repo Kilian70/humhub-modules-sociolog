@@ -224,13 +224,14 @@ Das sorgt für:
 
 ## Modul-Aufbau
 
+```text
 sociolog/
 ├── assets/                             	# Registrierung von Modul-CSS und -JS
 │   └── SociologAsset.php                	# Bindet Styles und Skripte des Moduls ein
 │
 ├── controllers/							# Webcontroller (HTTP)
 │   ├── AdminController.php					# Admin-Einstellungen des Moduls
-│   ├── ApiTestController.php				# Test- und Debug-Controller
+│   ├── DecisionTypeController.php			# Verwaltung der Entscheidungsarten
 │   └── EntryController.php					# CRUD-Logik für Logbuch-Einträge
 │
 ├── messages/								# Übersetzungen (DE/EN)
@@ -295,7 +296,6 @@ sociolog/
 │
 ├── widgets/								# Widgets für Dashboard, Stream und Navigation
 │   ├── LatestEntries.php					# Widget: Neueste Einträge
-│	├── TopMenu.php							# Top-Menü-Eintrag des Moduls
 │   ├── WallEntry.php						# Stream-Darstellung eines Eintrags
 │ 	└── views/
 │ 		└── latestEntries.php				# View für LatestEntries-Widget
@@ -310,6 +310,7 @@ sociolog/
 │                                           # Standardbetrieb erfolgt über HumHub EVENT_ON_DAILY_RUN
 │
 └── README.md								# Dokumentation des Moduls
+```
 
 
 ## Berechtigungen
