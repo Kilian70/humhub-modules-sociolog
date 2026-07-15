@@ -1,0 +1,54 @@
+{
+  "id": "sociolog",
+  "name": "Logbuch",
+  "description": "Modul zur Dokumentation von Beschlüssen und Grundsatzentscheiden (Sociolog). Zeigt aktuelle Entscheidungen im Dashboard und sendet Benachrichtigungen bei Änderungen.",
+  "version": "1.0.5",
+
+  "namespace": "humhub\\modules\\sociolog",
+  "class": "humhub\\modules\\sociolog\\Module",
+  "bootstrap": true,
+
+  "humhub": {
+    "minVersion": "1.18.0"
+  },
+
+  "isUserModule": false,
+  "isSpaceModule": false,
+  "global": true,
+  "topMenuEnabled": true,
+
+  "icon": "resources/icon.svg",
+
+  "permissions": [
+    { "class": "humhub\\modules\\sociolog\\permissions\\CreateEntry" },
+    { "class": "humhub\\modules\\sociolog\\permissions\\UpdateEntry" },
+    { "class": "humhub\\modules\\sociolog\\permissions\\DeleteEntry" },
+    { "class": "humhub\\modules\\sociolog\\permissions\\ViewEntry" }
+  ],
+
+  "settings": {
+    "class": "humhub\\modules\\sociolog\\models\\SettingsForm"
+  },
+
+  "authors": [
+    {
+      "name": "Kilian Schmid",
+      "homepage": "https://www.humlab.ch",
+      "role": "Developer and Maintainer"
+    },
+    {
+      "name": "EinViertel Winterthur",
+      "role": "Project"
+    }
+  ],
+  "homepage": "https://www.humlab.ch",
+  "license": "MIT",
+  "keywords": [
+    "logbuch",
+    "entscheid",
+    "sociolog",
+    "soziokratie",
+    "humhub",
+    "einviertel"
+  ]
+}

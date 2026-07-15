@@ -1,0 +1,620 @@
+/* ============================================================
+   Sociolog – Haupt-Stylesheet (HumHub 1.18+)
+   ============================================================ */
+
+
+/* ============================================================
+   🟦 KARTENLAYOUT (Kacheln)
+   ============================================================ */
+
+/* Grid: gleich hohe Karten pro Zeile */
+.sociolog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1400px) {
+  .sociolog-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .sociolog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .sociolog-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Karte */
+.sociolog-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 16px;
+  background: #fff;
+  padding: 14px 16px 16px 16px;
+  min-height: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+
+/* Fade-in */
+.fade-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hover */
+.sociolog-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+}
+
+/* Motion */
+@media (prefers-reduced-motion: no-preference) {
+  .sociolog-card {
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* Farbbalken */
+.sociolog-bar {
+  height: 6px;
+  border-radius: 5px;
+  margin-bottom: 14px;
+}
+
+/* Pastell-Oval */
+.sociolog-oval-inside {
+  position: absolute;
+  top: 55px;
+  right: -50px;
+  width: 72%;
+  height: 72%;
+  border-radius: 50%;
+  border: 3px solid var(--oval-color, #ccc);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   🧩 KARTEN-INHALTE
+   ============================================================ */
+
+.sociolog-content h5 {
+  font-weight: 600;
+  color: #222;
+}
+
+.sociolog-snippet {
+  font-size: 13px;
+  color: var(--bs-secondary-color, #555);
+  line-height: 1.45;
+  min-height: 2.3em;
+}
+
+.badge-decision-type {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* Organ-Link */
+.organ-link-black {
+  color: var(--bs-body-color) !important;
+  text-decoration: none;
+  font-weight: 600;
+
+}
+.organ-link-black:hover {
+  text-decoration: underline;
+}
+/* Dezenter Entscheid-Typ (für Kacheln) */
+.badge-decision-subtle {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #555;
+  text-transform: none;
+}
+
+/* Dark Mode */
+html[data-bs-theme="dark"] .badge-decision-subtle {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ddd;
+}
+
+/* ============================================================
+   🎛️ KARTEN-AKTIONEN
+   ============================================================ */
+
+.sociolog-buttons {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 0.4rem;
+}
+.sociolog-buttons .btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sociolog-buttons .btn:hover {
+  transform: scale(1.1);
+}
+
+
+/* ============================================================
+   🖱️ KLICKBARE KARTEN – UX & ACCESSIBILITY
+   ============================================================ */
+
+.sociolog-clickable {
+  cursor: pointer;
+}
+
+.sociolog-clickable:focus-visible {
+  outline: 2px solid var(--oval-color, #6c757d);
+  outline-offset: 3px;
+}
+
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 576px) {
+  .sociolog-card {
+    min-height: 220px;
+    padding-bottom: 60px;
+  }
+}
+
+
+/* ============================================================
+   📊 TABELLENANSICHT
+   ============================================================ */
+
+#sociologTable th {
+  background: var(--bs-table-striped-bg, #f8f9fa);
+  font-weight: 600;
+}
+
+#sociologTable td {
+  vertical-align: middle;
+}
+
+
+/* ============================================================
+   🔍 SUCHBEREICH
+   ============================================================ */
+
+#searchPanel {
+  transition: all 0.3s ease;
+}
+
+/* Filter-Container */
+.sociolog-filter {
+  background: #fafafa;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Titel */
+.sociolog-filter-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #6c757d;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Labels */
+#searchPanel .form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+/* Inputs */
+#searchPanel .form-select,
+#searchPanel .form-control {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.5rem;
+}
+
+/* Formular-Abstände kompakter */
+#searchPanel .form-group {
+  margin-bottom: 6px;
+}
+
+/* Buttons */
+#searchPanel .btn-sm {
+  padding: 0.35rem 0.6rem;
+}
+
+
+/* ============================================================
+   🌙 DARK MODE
+   ============================================================ */
+
+html[data-bs-theme="dark"] .sociolog-filter {
+  background: #252a30;
+  border: 1px solid #343a40;
+}
+
+html[data-bs-theme="dark"] .sociolog-filter-title {
+  color: #adb5bd;
+}
+
+html[data-bs-theme="dark"] #searchPanel .form-control,
+html[data-bs-theme="dark"] #searchPanel .form-select {
+  background-color: #2f3540;
+  border-color: #495057;
+  color: #f1f3f5;
+}
+
+
+/* ============================================================
+   📋 DASHBOARD-WIDGET
+   ============================================================ */
+
+.sociolog-widget-card {
+  border-left: 4px solid var(--widget-color, #7AB62A);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  background: #fafafa;
+}
+
+
+/* ============================================================
+   ✏️ FORMULARE
+   ============================================================ */
+
+.form-group.required .control-label::after,
+div.required label::after {
+  content: " *";
+  color: #dc3545;
+  margin-left: 2px;
+  font-weight: bold;
+}
+
+
+/* ============================================================
+   🟠 STATUS: ÜBERPRÜFUNG FÄLLIG
+   ============================================================ */
+
+.badge.badge-sociolog-review {
+  background-color: #f59e0b !important;
+  color: #111 !important;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   🔧 LAYOUT-FIX
+   ============================================================ */
+
+.sociolog-card-link {
+  display: contents;
+}
+
+
+/* ============================================================
+   🌙 DARK MODE – SOCIOLOG (KOMPLETT)
+   ============================================================ */
+
+html[data-bs-theme="dark"] {
+
+  /* ------------------------------------------------------------
+     Grundfarben (Fallbacks)
+     ------------------------------------------------------------ */
+  --sociolog-bg-main: #1f2328;
+  --sociolog-bg-card: #2b2f36;
+  --sociolog-bg-soft: #252a30;
+  --sociolog-border: #343a40;
+  --sociolog-text-main: #f1f3f5;
+  --sociolog-text-muted: #adb5bd;
+  --sociolog-text-soft: #ced4da;
+  --sociolog-link: #9dc2ff;
+  --sociolog-link-hover: #cbe0ff;
+}
+
+/* ------------------------------------------------------------
+   Karten / Container
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] .sociolog-card,
+html[data-bs-theme="dark"] .sociolog-entry,
+html[data-bs-theme="dark"] .sociolog-view {
+  background-color: var(--sociolog-bg-card);
+  color: var(--sociolog-text-main);
+  border: 1px solid var(--sociolog-border);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+/* ------------------------------------------------------------
+   Titel & Überschriften
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] .sociolog-card h4,
+html[data-bs-theme="dark"] .sociolog-card h5,
+html[data-bs-theme="dark"] .sociolog-entry h4,
+html[data-bs-theme="dark"] .sociolog-entry h5,
+html[data-bs-theme="dark"] .sociolog-entry h6 {
+  color: var(--sociolog-text-main) !important;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Hover auf Titel */
+html[data-bs-theme="dark"] .sociolog-entry h4:hover,
+html[data-bs-theme="dark"] .sociolog-entry h5:hover {
+  color: var(--sociolog-link-hover) !important;
+}
+
+/* ------------------------------------------------------------
+   Text & Meta
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] .sociolog-view p,
+html[data-bs-theme="dark"] .sociolog-view span,
+html[data-bs-theme="dark"] .sociolog-view small,
+html[data-bs-theme="dark"] .sociolog-view .text-muted,
+html[data-bs-theme="dark"] .sociolog-view .text-secondary {
+  color: var(--sociolog-text-soft);
+}
+
+/* ------------------------------------------------------------
+   Links
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] a {
+  color: var(--sociolog-link);
+}
+html[data-bs-theme="dark"] a:hover {
+  color: var(--sociolog-link-hover);
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] .btn {
+  background-color: var(--sociolog-bg-soft);
+  border-color: var(--sociolog-border);
+  color: var(--sociolog-text-main);
+}
+html[data-bs-theme="dark"] .btn:hover {
+  background-color: #2f3540;
+  border-color: #495057;
+}
+
+/* ------------------------------------------------------------
+   Tabellen – Grundlayout
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] .sociolog-view table {
+  background-color: var(--sociolog-bg-card);
+  color: var(--sociolog-text-main);
+}
+
+/* Tabellenzellen */
+html[data-bs-theme="dark"] .table td,
+html[data-bs-theme="dark"] .table th {
+  color: var(--sociolog-text-main) !important;
+  border-color: var(--sociolog-border) !important;
+}
+
+/* Zebra Rows */
+html[data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #262b31;
+}
+
+/* Hover */
+html[data-bs-theme="dark"] .table-hover > tbody > tr:hover {
+  background-color: #303640;
+}
+
+/* ------------------------------------------------------------
+   DataTables – Tabellenkopf (WICHTIG)
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] table.dataTable thead th {
+  background-color: #1f2328 !important;
+  color: #f1f3f5 !important;
+  border-bottom: 1px solid var(--sociolog-border) !important;
+  font-weight: 600;
+}
+
+/* Sortierpfeile */
+html[data-bs-theme="dark"] table.dataTable thead th::before,
+html[data-bs-theme="dark"] table.dataTable thead th::after {
+  color: #adb5bd !important;
+  opacity: 1 !important;
+}
+
+/* ------------------------------------------------------------
+   Formulare & Filter
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] input,
+html[data-bs-theme="dark"] select,
+html[data-bs-theme="dark"] textarea {
+  background-color: var(--sociolog-bg-soft);
+  color: var(--sociolog-text-main);
+  border-color: var(--sociolog-border);
+}
+
+/* Placeholder */
+html[data-bs-theme="dark"] ::placeholder {
+  color: #868e96;
+}
+
+/* ------------------------------------------------------------
+   Status-Badges (Beispiel)
+   ------------------------------------------------------------ */
+html[data-bs-theme="dark"] .badge {
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+html[data-bs-theme="dark"] .badge-sociolog-valid {
+  background-color: #22c55e;
+  color: #052e16;
+}
+
+html[data-bs-theme="dark"] .badge-sociolog-review {
+  background-color: #fb923c;
+  color: #1f2937;
+}
+
+html[data-bs-theme="dark"] .badge-sociolog-expired {
+  background-color: #ef4444;
+  color: #1f2937;
+}
+/* ============================================================
+   🖨 DRUCK – Tabellenansicht (Sociolog) – Variante A (FINAL)
+   ============================================================ */
+@media print {
+
+  /* ------------------------------------------------------------
+     Seitenformat
+     ------------------------------------------------------------ */
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  /* ------------------------------------------------------------
+     Grundlayout neutralisieren
+     ------------------------------------------------------------ */
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  /* ------------------------------------------------------------
+     HumHub UI + Sociolog Header & Filter AUSBLENDEN
+     ------------------------------------------------------------ */
+  header,
+  nav,
+  .topbar,
+  .layout-sidebar-container,
+  .layout-footer,
+
+  /* HumHub Content Header */
+  .content-header,
+  .content-header-container,
+  .content-header-title,
+  .content-header-subtitle,
+
+  /* Sociolog / Filter */
+  .filter-row,
+  .status-bar,
+  .sociolog-header,
+  .sociolog-filters,
+
+  /* Sonstiges UI */
+  .btn,
+  .pagination,
+  .dataTables_length,
+  .dataTables_filter,
+  .dataTables_info,
+  .dataTables_paginate,
+  .page-title,
+  .page-header,
+  .panel-heading,
+  .form-search,
+  .form-inline,
+  .well,
+  .alert {
+    display: none !important;
+  }
+
+  /* ------------------------------------------------------------
+     Content-Container freigeben
+     ------------------------------------------------------------ */
+  .container,
+  .container-fluid,
+  .layout-content-container,
+  .content,
+  .panel,
+  .panel-body,
+  .card,
+  .card-body {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* ------------------------------------------------------------
+     DataTables Wrapper
+     ------------------------------------------------------------ */
+  .dataTables_wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* ------------------------------------------------------------
+     Tabelle
+     ------------------------------------------------------------ */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 11px;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  th,
+  td {
+    padding: 6px 8px !important;
+    vertical-align: top;
+    white-space: normal !important;
+    border: 1px solid #ccc !important;
+  }
+
+  /* ------------------------------------------------------------
+     Sort-Icons & UI-Grafiken entfernen
+     ------------------------------------------------------------ */
+  th::before,
+  th::after,
+  i,
+  svg {
+    display: none !important;
+  }
+}
+.sociolog-wall-entry a {
+    color: var(--bs-primary);
+}
+
+.sociolog-wall-entry a:hover {
+    text-decoration: underline;
+}

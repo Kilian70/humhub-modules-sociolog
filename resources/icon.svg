@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Hintergrund-Kreis -->
+  <circle cx="32" cy="32" r="30" fill="#00A8B5"/>
+
+  <!-- Clipboard-Rahmen -->
+  <rect x="18" y="16" width="28" height="34" rx="3" ry="3" fill="#ffffff" opacity="0.98"/>
+
+  <!-- Kopf vom Clipboard -->
+  <rect x="22" y="12" width="20" height="8" rx="2" ry="2" fill="#14586B" opacity="0.95"/>
+  <rect x="26" y="10" width="12" height="4" rx="2" ry="2" fill="#ffffff"/>
+
+  <!-- Liste: Linien -->
+  <line x1="24" y1="24" x2="40" y2="24" stroke="#14586B" stroke-width="2" stroke-linecap="round"/>
+  <line x1="24" y1="30" x2="40" y2="30" stroke="#14586B" stroke-width="2" stroke-linecap="round"/>
+  <line x1="24" y1="36" x2="40" y2="36" stroke="#14586B" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Häkchen (Entscheid) -->
+  <path d="M24 42 L28 46 L38 36"
+        fill="none"
+        stroke="#00A8B5"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+</svg>

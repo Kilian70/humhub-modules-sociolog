@@ -1,0 +1,30 @@
+/* ============================================================
+   🔹 Sociolog – Icon-Stile
+   ------------------------------------------------------------
+   - SVG-Hintergrund-Icons (z. B. im Modulmenü)
+   - FontAwesome-Icons für Ansichten
+   ============================================================ */
+
+/* Hauptsymbol für Logbuch (SVG) */
+.sociolog-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background-image: url('icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+  margin-right: 3px;
+}
+
+/* FontAwesome-Farben */
+.fa-book,
+.fa-scale-balanced,
+.fa-lightbulb {
+  color: #444;
+}
+public $css = [
+    'css/sociolog.css',
+    'css/icon.css', // ✅
+];
+
