@@ -3,7 +3,7 @@
 - **Sociolog** ist ein Logbuch-Modul für HumHub zur Dokumentation von Beschlüssen, Richtlinien und Entscheiden
 - Einträge verfügen über **Statuslogik**, **Überprüfungsdaten** sowie **Stream- und Kalender-Integration**
 - Automatische Status- und Kalenderläufe erfolgen über den täglichen HumHub-Cron (`php protected/yii cron/run`)
-- Ein zusätzlicher Modul-Cronjob ist **nicht erforderlich**
+- Ein zusätzlicher Modul-Cronjob ist **nicht erforderlich**; `run.php` steht bei Bedarf als Fallback zur Verfügung
 - Das Modul nutzt HumHub-Events (`EVENT_ON_DAILY_RUN`) für automatische Statuswechsel
 - Kalendertermine werden automatisch im **Space des zuständigen Organs** erstellt
 - Der Cron-Mechanismus ist **Shared-Hosting-kompatibel** (z. B. Cyon) und benötigt nur die regulären HumHub-Cronjobs
@@ -13,7 +13,7 @@
 **Version:** 1.0.5
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
-**Lizenz:** MIT License  
+**Lizenz:** GNU Affero General Public License v3.0 (AGPL-3.0)  
 
 ## Beschreibung
 
