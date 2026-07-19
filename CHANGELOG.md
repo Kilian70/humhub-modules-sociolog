@@ -3,6 +3,24 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.6] – 2026-07-19
+
+### Barrierefreiheit
+- Sichtbare Fokusmarkierungen für Tastaturbedienung ergänzt und Mausfokus ausgeblendet
+- Karten auf native Links umgestellt; Bearbeiten und Löschen separat per Tastatur erreichbar
+- Tabellen, Überschriften, Icon-Aktionen und dynamische Protokollfelder semantisch beschriftet
+- Space- und Organverwaltung für Tastatur und Screenreader überarbeitet
+- Tabellen bei starkem Zoom und kleinen Bildschirmen horizontal scrollbar gemacht
+- WCAG-basierte Kontrastberechnung für frei wählbare Entscheidungstyp-Farben ergänzt
+- Fehlerzusammenfassung und feldnahe Protokollfehler mit automatischem Fokus ergänzt
+- Links auf neue Fenster werden angekündigt
+- Systemeinstellung „Bewegung reduzieren“ wird berücksichtigt
+
+### Verbessert
+- Verständliche und übersetzbare Feldnamen in der Organverwaltung
+- README um Hinweise zur Barrierefreiheit und zu manuellen Tests erweitert
+- Lizenzangaben in Modul- und Composer-Metadaten auf AGPL-3.0 vereinheitlicht
+
 ## [1.0.5] – 2026-07-12
 
 ### Sicherheit

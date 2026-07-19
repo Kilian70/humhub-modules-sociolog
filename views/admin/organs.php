@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Organe';
+$this->title = Yii::t('SociologModule.base', 'Organe');
 
 ?>
 
@@ -10,18 +10,18 @@ $this->title = 'Organe';
 
     <div class="panel-heading d-flex justify-content-between align-items-center">
 
-        <strong><?= Html::encode($this->title) ?></strong>
+        <h1 class="h5 mb-0"><?= Html::encode($this->title) ?></h1>
 
         <div>
 
             <?= Html::a(
-                '<i class="fa-solid fa-arrow-left me-1"></i> Zurück',
+                '<i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
                 ['/sociolog/admin/index'],
                 ['class' => 'btn btn-sm btn-outline-secondary']
             ) ?>
 
             <?= Html::a(
-                '<i class="fa-solid fa-plus me-1"></i> Neues Organ',
+                '<i class="fa-solid fa-plus me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Neues Organ'),
                 ['create-organ'],
                 ['class' => 'btn btn-sm btn-success']
             ) ?>
@@ -32,15 +32,28 @@ $this->title = 'Organe';
 
     <div class="panel-body">
 
+        <div class="table-responsive sociolog-admin-table-scroll"
+             role="region"
+             aria-label="<?= Yii::t('SociologModule.base', 'Konfigurierte Logbuch-Organe') ?>"
+             tabindex="0">
+
         <table class="table table-striped">
 
+            <caption class="visually-hidden">
+                <?= Yii::t('SociologModule.base', 'Konfigurierte Logbuch-Organe') ?>
+            </caption>
+
+            <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Parent</th>
-                <th>Sort</th>
-                <th>Aktionen</th>
+                <th scope="col"><?= Yii::t('SociologModule.base', 'ID') ?></th>
+                <th scope="col"><?= Yii::t('SociologModule.base', 'Name') ?></th>
+                <th scope="col"><?= Yii::t('SociologModule.base', 'Übergeordnetes Organ') ?></th>
+                <th scope="col"><?= Yii::t('SociologModule.base', 'Sortierung') ?></th>
+                <th scope="col"><?= Yii::t('SociologModule.base', 'Aktionen') ?></th>
             </tr>
+            </thead>
+
+            <tbody>
 
             <?php foreach ($organs as $organ): ?>
 
@@ -48,12 +61,12 @@ $this->title = 'Organe';
 
                 <td><?= $organ->id ?></td>
 
-                <td>
+                <th scope="row">
                 <?php
                 $prefix = $organ->parent_id ? '— ' : '';
                 echo $prefix . Html::encode($organ->name);
                 ?>
-                </td>
+                </th>
 
                 <td>
                 <?= $organ->parent ? Html::encode($organ->parent->name) : '-' ?>
@@ -64,17 +77,21 @@ $this->title = 'Organe';
                 <td>
 
                 <?= Html::a(
-                    'Bearbeiten',
+                    Yii::t('SociologModule.base', 'Bearbeiten'),
                     ['update-organ', 'id' => $organ->id],
-                    ['class' => 'btn btn-primary btn-xs']
+                    [
+                        'class' => 'btn btn-primary btn-xs',
+                        'aria-label' => Yii::t('SociologModule.base', '{organ} bearbeiten', ['organ' => $organ->name]),
+                    ]
                 ) ?>
 
                 <?= Html::a(
-                    'Löschen',
+                    Yii::t('SociologModule.base', 'Löschen'),
                     ['delete-organ', 'id' => $organ->id],
                     [
                         'class' => 'btn btn-danger btn-xs',
-                        'data-confirm' => 'Organ wirklich löschen?',
+                        'aria-label' => Yii::t('SociologModule.base', '{organ} löschen', ['organ' => $organ->name]),
+                        'data-confirm' => Yii::t('SociologModule.base', 'Organ wirklich löschen?'),
                         'data-method' => 'post'
                     ]
                 ) ?>
@@ -85,8 +102,25 @@ $this->title = 'Organe';
 
             <?php endforeach; ?>
 
+            </tbody>
+
         </table>
+
+        </div>
 
     </div>
 
 </div>
+
+<?php
+$this->registerCss(<<<CSS
+.sociolog-admin-table-scroll:focus-visible {
+    outline: 3px solid var(--bs-primary, #4b8f29);
+    outline-offset: 3px;
+}
+
+.sociolog-admin-table-scroll:focus:not(:focus-visible) {
+    outline: none;
+}
+CSS);
+?>

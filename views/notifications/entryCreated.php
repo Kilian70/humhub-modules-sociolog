@@ -47,6 +47,8 @@ $url = $entry
             <div style="margin-top:4px;">
                 <a href="<?= Html::encode($url) ?>"
                    target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Eintrag ansehen') . ' – ' . Yii::t('SociologModule.base', 'öffnet in neuem Fenster')) ?>"
                    style="color:#0d6efd; text-decoration:none; font-weight:500;">
                     <?= Yii::t('SociologModule.base', 'Eintrag ansehen') ?> →
                 </a>

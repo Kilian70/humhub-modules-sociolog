@@ -56,10 +56,10 @@ $flows = EntryFlow::find()
 ============================================================ -->
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
 
-  <h4 class="mb-0 d-flex align-items-center">
-    <i class="fa-solid fa-book me-2 text-primary"></i>
+  <h1 class="h4 mb-0 d-flex align-items-center">
+    <i class="fa-solid fa-book me-2 text-primary" aria-hidden="true"></i>
     <?= Html::encode($entryTitle !== '' ? $entryTitle : Yii::t('SociologModule.base', '(ohne Titel)')) ?>
-  </h4>
+  </h1>
 
   <div class="btn-group">
 
@@ -78,22 +78,24 @@ $flows = EntryFlow::find()
 
     <?php if ($canWrite): ?>
       <?= Html::a(
-          '<i class="fa-solid fa-pen"></i>',
+          '<i class="fa-solid fa-pen" aria-hidden="true"></i>',
           ['update', 'id' => $model->id, 'view' => $currentView],
           [
               'class' => 'btn btn-sm btn-outline-secondary',
               'title' => Yii::t('SociologModule.base', 'Bearbeiten'),
+              'aria-label' => Yii::t('SociologModule.base', 'Eintrag bearbeiten'),
           ]
       ) ?>
     <?php endif; ?>
 
     <?php if ($canDelete): ?>
       <?= Html::a(
-          '<i class="fa-solid fa-trash"></i>',
+          '<i class="fa-solid fa-trash" aria-hidden="true"></i>',
           ['delete', 'id' => $model->id],
           [
               'class' => 'btn btn-sm btn-outline-danger',
               'title' => Yii::t('SociologModule.base', 'Löschen'),
+              'aria-label' => Yii::t('SociologModule.base', 'Eintrag löschen'),
               'data-confirm' => Yii::t('SociologModule.base', 'Diesen Eintrag wirklich löschen?'),
               'data-method' => 'post',
           ]
@@ -111,10 +113,13 @@ $flows = EntryFlow::find()
 
     <!-- Entscheid-Typ -->
     <?php if ($model->decisionType): ?>
-      <?php $typeColor = $model->decisionType->color ?: '#6c757d'; ?>
+      <?php
+        $typeColor = $model->decisionType->color ?: '#6c757d';
+        $typeTextColor = \humhub\modules\sociolog\models\DecisionType::getAccessibleTextColor($typeColor);
+      ?>
       <div class="mb-3">
         <span class="badge text-uppercase"
-              style="background-color: <?= Html::encode($typeColor) ?>; border-radius: 6px;">
+              style="background-color: <?= Html::encode($typeColor) ?>; color: <?= Html::encode($typeTextColor) ?>; border-radius: 6px;">
           <?= Html::encode($model->decisionType->name) ?>
         </span>
 
@@ -138,6 +143,7 @@ $flows = EntryFlow::find()
         'target' => '_blank',
         'rel' => 'noopener noreferrer',
         'class' => 'fw-semibold organ-link-black',
+        'aria-label' => $model->organName . ' – ' . Yii::t('SociologModule.base', 'öffnet in neuem Fenster'),
     ]
 ) ?>
       <?php else: ?>
@@ -386,7 +392,8 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
         $protocol->safeUrl,
         [
             'target' => '_blank',
-            'rel' => 'noopener noreferrer'
+            'rel' => 'noopener noreferrer',
+            'aria-label' => ($protocol->title ?: Yii::t('SociologModule.base', 'Protokoll')) . ' – ' . Yii::t('SociologModule.base', 'öffnet in neuem Fenster'),
         ]
     ) ?>
 <?php else: ?>

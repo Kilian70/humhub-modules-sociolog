@@ -158,9 +158,9 @@ $form = ActiveForm::begin();
 
  <div class="panel-heading d-flex justify-content-between align-items-center">
 
-    <strong>
+    <h1 class="h5 mb-0">
         <?= Yii::t('SociologModule.base', 'Spaces und Logbuch-Bereiche') ?>
-    </strong>
+    </h1>
 
     <?= Html::a(
         '<i class="fa-solid fa-arrow-left me-1"></i> ' .
@@ -218,41 +218,50 @@ $form = ActiveForm::begin();
              Tabelle
              ================================================== -->
 
+        <div class="table-responsive sociolog-admin-table-scroll"
+             role="region"
+             aria-label="<?= Yii::t('SociologModule.base', 'Konfiguration der Spaces und Bereiche') ?>"
+             tabindex="0">
+
         <table class="table table-hover table-sm">
+
+            <caption class="visually-hidden">
+                <?= Yii::t('SociologModule.base', 'Konfiguration der Spaces und Bereiche') ?>
+            </caption>
 
             <thead>
 
 			<tr>
 			
-			<th style="width:22%">
+				<th scope="col" style="width:22%">
 			<?= Yii::t('SociologModule.base', 'Space') ?>
 			</th>
 			
-			<th style="width:22%">
+				<th scope="col" style="width:22%">
 			<?= Yii::t('SociologModule.base', 'Bereich') ?>
 			</th>
 			
-			<th style="width:8%" class="text-center">
+				<th scope="col" style="width:8%" class="text-center">
 			<?= Yii::t('SociologModule.base', 'Organ-Space') ?>
 			</th>
 			
-			<th style="width:8%" class="text-center">
+				<th scope="col" style="width:8%" class="text-center">
 			<?= Yii::t('SociologModule.base', 'Global') ?>
 			</th>
 			
-			<th style="width:8%" class="text-center">
+				<th scope="col" style="width:8%" class="text-center">
 			<?= Yii::t('SociologModule.base', 'Löschen') ?>
 			</th>
 			
-			<th style="width:8%" class="text-center">
+				<th scope="col" style="width:8%" class="text-center">
 			<?= Yii::t('SociologModule.base', 'Sichtbar') ?>
 			</th>
 			
-			<th style="width:12%">
+				<th scope="col" style="width:12%">
 			<?= Yii::t('SociologModule.base', 'Link') ?>
 			</th>
 			
-			<th style="width:40%">
+				<th scope="col" style="width:40%">
 			<?= Yii::t('SociologModule.base', 'URL') ?>
 			</th>
 			
@@ -273,13 +282,13 @@ $form = ActiveForm::begin();
 
                 <tr class="table-secondary">
 
-                    <td colspan="7">
+                    <th scope="rowgroup" colspan="8">
 
                         <strong>
                             <?= Html::encode($organNames[$bereich] ?? $bereich) ?>
                         </strong>
 
-                    </td>
+                    </th>
 
                 </tr>
 
@@ -312,7 +321,9 @@ $form = ActiveForm::begin();
                                 [
                                     'class' => 'text-muted ms-2',
                                     'title' => Yii::t('SociologModule.base', 'Space öffnen'),
-                                    'target' => '_blank'
+                                    'aria-label' => Yii::t('SociologModule.base', 'Space öffnen') . ': ' . $space->name . ' – ' . Yii::t('SociologModule.base', 'öffnet in neuem Fenster'),
+                                    'target' => '_blank',
+                                    'rel' => 'noopener noreferrer',
                                 ]
                             ) ?>
 
@@ -326,8 +337,9 @@ $form = ActiveForm::begin();
                         <td>
 
 						<select
-							name="organ_id[<?= $space->id ?>]"
-							class="form-control"
+								name="organ_id[<?= $space->id ?>]"
+								class="form-control"
+								aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Organ für {space}', ['space' => $space->name])) ?>"
 						>
 						
 						<option value="">
@@ -355,7 +367,8 @@ $form = ActiveForm::begin();
 						
 						<input
 						type="checkbox"
-						name="is_organ_space[<?= $space->id ?>]"
+							name="is_organ_space[<?= $space->id ?>]"
+							aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Organ-Space: {space}', ['space' => $space->name])) ?>"
 						<?= ($config && $config->is_organ_space) ? 'checked' : '' ?>
 						>
 						
@@ -370,7 +383,8 @@ $form = ActiveForm::begin();
 
 						<input
 						type="checkbox"
-						name="global_write[<?= $space->id ?>]"
+							name="global_write[<?= $space->id ?>]"
+							aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Globales Schreibrecht für {space}', ['space' => $space->name])) ?>"
 						<?= ($config && $config->global_write)
 						? 'checked'
 						: '' ?>
@@ -387,7 +401,8 @@ $form = ActiveForm::begin();
 
 						<input
 type="checkbox"
-name="can_delete[<?= $space->id ?>]"
+	name="can_delete[<?= $space->id ?>]"
+	aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Löschrecht für {space}', ['space' => $space->name])) ?>"
 <?= ($config && $config->can_delete) ? 'checked' : '' ?>
 >
 						
@@ -397,7 +412,8 @@ name="can_delete[<?= $space->id ?>]"
 
 <input
 type="checkbox"
-name="enabled[<?= $space->id ?>]"
+	name="enabled[<?= $space->id ?>]"
+	aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Sichtbarkeit für {space}', ['space' => $space->name])) ?>"
 <?= (!$config || (isset($config->enabled) && $config->enabled)) ? 'checked' : '' ?>
 >
 
@@ -405,7 +421,9 @@ name="enabled[<?= $space->id ?>]"
 
 <td>
 
-<select name="link_mode[<?= $space->id ?>]" class="form-control form-control-sm">
+<select name="link_mode[<?= $space->id ?>]"
+        class="form-control form-control-sm"
+        aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Linkart für {space}', ['space' => $space->name])) ?>">
 
 <option value="about"
 <?= (!$config || $config->link_mode === 'about') ? 'selected' : '' ?>>
@@ -437,7 +455,8 @@ name="enabled[<?= $space->id ?>]"
 type="text"
 name="link[<?= $space->id ?>]"
 value="<?= $config->link ?? '' ?>"
-class="form-control form-control-sm"
+	class="form-control form-control-sm"
+	aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'URL für {space}', ['space' => $space->name])) ?>"
 style="width:100%"
 placeholder="<?= Yii::t('SociologModule.base','https://... (optional)') ?>"
 >
@@ -457,6 +476,8 @@ placeholder="<?= Yii::t('SociologModule.base','https://... (optional)') ?>"
             </tbody>
 
         </table>
+
+        </div>
 
 
         <!-- ==================================================
@@ -484,4 +505,17 @@ placeholder="<?= Yii::t('SociologModule.base','https://... (optional)') ?>"
  * Formular beenden
  * ------------------------------------------------------------ */
 ActiveForm::end();
+?>
+
+<?php
+$this->registerCss(<<<CSS
+.sociolog-admin-table-scroll:focus-visible {
+    outline: 3px solid var(--bs-primary, #4b8f29);
+    outline-offset: 3px;
+}
+
+.sociolog-admin-table-scroll:focus:not(:focus-visible) {
+    outline: none;
+}
+CSS);
 ?>

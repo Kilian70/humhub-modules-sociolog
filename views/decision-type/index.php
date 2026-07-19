@@ -27,10 +27,10 @@ $csrf = Yii::$app->request->csrfToken;
      🔹 Kopfbereich
 ============================================================ -->
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-  <h4 class="mb-0 fw-semibold">
-    <i class="fa-solid fa-list me-2 text-primary"></i>
+  <h1 class="h4 mb-0 fw-semibold">
+    <i class="fa-solid fa-list me-2 text-primary" aria-hidden="true"></i>
     <?= Html::encode($this->title) ?>
-  </h4>
+  </h1>
 
   <?= Html::a(
     '<i class="fa-solid fa-plus me-1"></i> ' . Yii::t('SociologModule.base', 'Neuer Entscheid-Typ'),
@@ -46,9 +46,7 @@ $csrf = Yii::$app->request->csrfToken;
   <?php foreach ($types as $type): ?>
     <?php
       $color = Html::encode($type->color ?: '#777');
-      $textColor = (hexdec(substr($color, 1, 2)) +
-                    hexdec(substr($color, 3, 2)) +
-                    hexdec(substr($color, 5, 2))) / 3 < 128 ? '#fff' : '#000';
+      $textColor = \humhub\modules\sociolog\models\DecisionType::getAccessibleTextColor($color);
     ?>
     <div class="type-card" data-id="<?= $type->id ?>" style="--type-color: <?= $color ?>;">
       <div class="type-header" style="background: <?= $color ?>;"></div>
@@ -67,13 +65,15 @@ $csrf = Yii::$app->request->csrfToken;
       </div>
 
       <div class="type-actions">
-        <?= Html::a('<i class="fa-solid fa-pen"></i>', ['update', 'id' => $type->id], [
+        <?= Html::a('<i class="fa-solid fa-pen" aria-hidden="true"></i>', ['update', 'id' => $type->id], [
           'class' => 'btn btn-sm btn-outline-secondary rounded-circle',
           'title' => Yii::t('SociologModule.base', 'Bearbeiten'),
+          'aria-label' => Yii::t('SociologModule.base', '{type} bearbeiten', ['type' => $type->name]),
         ]) ?>
-        <?= Html::a('<i class="fa-solid fa-trash"></i>', ['delete', 'id' => $type->id], [
+        <?= Html::a('<i class="fa-solid fa-trash" aria-hidden="true"></i>', ['delete', 'id' => $type->id], [
           'class' => 'btn btn-sm btn-outline-danger rounded-circle',
           'title' => Yii::t('SociologModule.base', 'Löschen'),
+          'aria-label' => Yii::t('SociologModule.base', '{type} löschen', ['type' => $type->name]),
           'data-confirm' => Yii::t('SociologModule.base', 'Diesen Entscheid-Typ wirklich löschen?'),
           'data-method' => 'post',
         ]) ?>
@@ -93,7 +93,7 @@ $this->registerJs(<<<JS
 const grid = document.getElementById('sortableGrid');
 if (grid) {
   Sortable.create(grid, {
-    animation: 150,
+    animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 150,
     ghostClass: 'sortable-placeholder',
     onEnd: function() {
       const ids = Array.from(grid.querySelectorAll('.type-card')).map(el => el.dataset.id);
@@ -129,6 +129,11 @@ JS);
   box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
+.type-card:has(:focus-visible) {
+  outline: 3px solid var(--type-color, var(--bs-primary, #0d6efd));
+  outline-offset: 3px;
+}
+
 .type-header {
   height: 6px;
   border-radius: 6px;
@@ -158,5 +163,15 @@ JS);
 
 @media (max-width: 576px) {
   .type-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type-card {
+    transition: none;
+  }
+
+  .type-card:hover {
+    transform: none;
+  }
 }
 </style>

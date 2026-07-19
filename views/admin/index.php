@@ -46,9 +46,9 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
 <div class="sociolog-admin-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3 p-3 rounded"
      style="background:linear-gradient(90deg,#6a5af9,#9b8cff);color:#fff;">
 
-  <h4 class="mb-0 fw-semibold">
-    <i class="fa-solid fa-gear me-2"></i> <?= Html::encode($this->title) ?>
-  </h4>
+  <h1 class="h4 mb-0 fw-semibold">
+    <i class="fa-solid fa-gear me-2" aria-hidden="true"></i> <?= Html::encode($this->title) ?>
+  </h1>
 
   <div class="d-flex gap-2">
 
@@ -266,10 +266,10 @@ echo Html::encode(implode(', ', $names));
 <!-- Gruppen mit Schreibrecht -->
 <div class="col-md-6">
 
-  <h6 class="fw-semibold text-primary">
+  <h2 class="h6 fw-semibold text-primary">
     <i class="fa-solid fa-users me-1"></i>
     <?= Yii::t('SociologModule.base', 'Gruppen mit Schreibrecht') ?>
-  </h6>
+  </h2>
 
   <?= Html::activeCheckboxList(
       $model,
@@ -293,10 +293,10 @@ echo Html::encode(implode(', ', $names));
 <!-- Gruppen mit Löschrecht -->
 <div class="col-md-6">
 
-  <h6 class="fw-semibold text-danger">
+  <h2 class="h6 fw-semibold text-danger">
     <i class="fa-solid fa-users-slash me-1"></i>
     <?= Yii::t('SociologModule.base', 'Gruppen mit Löschrecht') ?>
-  </h6>
+  </h2>
 
   <?= Html::activeCheckboxList(
       $model,
@@ -318,10 +318,10 @@ echo Html::encode(implode(', ', $names));
 
     <!-- Benachrichtigungen -->
     <div class="col-12 mt-3">
-      <h6 class="fw-semibold text-info">
+      <h2 class="h6 fw-semibold text-info">
         <i class="fa-solid fa-bell me-1"></i>
         <?= Yii::t('SociologModule.base','Benachrichtigungen bei neuen oder geänderten Einträgen') ?>
-      </h6>
+      </h2>
       <?= $form->field($model, 'notifyGroups')->checkboxList(
           ArrayHelper::map(Group::find()->orderBy('name')->all(), 'id', 'name'),
           ['separator' => '<br>']
@@ -334,10 +334,10 @@ echo Html::encode(implode(', ', $names));
 
     <!-- Entscheidungstypen -->
     <div class="col-12 mt-4">
-      <h6 class="fw-semibold text-secondary">
+      <h2 class="h6 fw-semibold text-secondary">
         <i class="fa-solid fa-list-check me-1"></i>
         <?= Yii::t('SociologModule.base','Entscheidungstypen') ?>
-      </h6>
+      </h2>
       <p class="form-text small">
         <?= Yii::t('SociologModule.base','Diese Typen werden in den Einträgen als „Art der Entscheidung“ angezeigt (z. B. Grundsatzentscheid, Prozessentscheid …).') ?>
       </p>
@@ -371,10 +371,10 @@ echo Html::encode(implode(', ', $names));
 <div class="card shadow-sm mb-4">
   <div class="card-body">
 
-    <h5 class="fw-semibold text-warning mb-2">
+    <h2 class="h5 fw-semibold text-warning mb-2">
       <i class="fa-solid fa-rotate me-1"></i>
       <?= Yii::t('SociologModule.base', 'Wartung') ?>
-    </h5>
+    </h2>
 
     <p class="text-muted mb-3">
       <?= Yii::t(
@@ -403,10 +403,10 @@ echo Html::encode(implode(', ', $names));
 
 <div class="alert alert-info mt-4">
 
-  <h5 class="fw-semibold text-primary mb-2">
+  <h2 class="h5 fw-semibold text-primary mb-2">
     <i class="fa-solid fa-rotate me-1"></i>
     <?= Yii::t('SociologModule.base','Automatische Status-Updates') ?>
-  </h5>
+  </h2>
 
   <p>
     <?= Yii::t(

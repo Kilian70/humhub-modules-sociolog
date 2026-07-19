@@ -25,11 +25,12 @@ if (!$model) {
         <?php
             $typeName  = $model->decisionType->name ?: Yii::t('SociologModule.base', 'Unbekannt');
             $typeColor = $model->decisionType->color ?: '#777777';
+            $typeTextColor = \humhub\modules\sociolog\models\DecisionType::getAccessibleTextColor($typeColor);
         ?>
         <p>
             <strong><?= Yii::t('SociologModule.base', 'Entscheid-Typ') ?>:</strong>
             <span class="print-type-badge"
-                  style="background-color: <?= Html::encode($typeColor) ?>;">
+                  style="background-color: <?= Html::encode($typeColor) ?>; color: <?= Html::encode($typeTextColor) ?>;">
                 <?= Html::encode($typeName) ?>
             </span>
         </p>
@@ -113,7 +114,11 @@ if (!$model) {
                             <?= Html::a(
                                 Html::encode($protocol->title),
                                 $protocol->safeUrl,
-                                ['target' => '_blank', 'rel' => 'noopener noreferrer']
+                                [
+                                    'target' => '_blank',
+                                    'rel' => 'noopener noreferrer',
+                                    'aria-label' => $protocol->title . ' – ' . Yii::t('SociologModule.base', 'öffnet in neuem Fenster'),
+                                ]
                             ) ?>
                         <?php else: ?>
                             <?= Html::encode($protocol->title) ?>

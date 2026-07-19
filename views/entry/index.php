@@ -83,11 +83,11 @@ foreach ($dataProvider->models as $entry) {
 <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2 sociolog-header">
 
   <div>
-    <h3 class="mb-1">
-      <i class="fa-solid fa-book me-2 text-primary"></i>
+    <h1 class="h3 mb-1">
+      <i class="fa-solid fa-book me-2 text-primary" aria-hidden="true"></i>
       <?= Html::encode($moduleTitle) ?>
       <span class="text-muted ms-1">/ <?= Yii::t('SociologModule.base', 'Einträge') ?></span>
-    </h3>
+    </h1>
 
     <!-- ✅ Status-Legende (einmalig) -->
     <div class="small sociolog-status-legend">
@@ -117,24 +117,28 @@ foreach ($dataProvider->models as $entry) {
     ) ?>
 
     <?= Html::a(
-      '<i class="fa-solid fa-th"></i>',
+      '<i class="fa-solid fa-th" aria-hidden="true"></i>',
       ['index', 'view' => 'cards'],
       [
         'class' => 'btn btn-sm ' . ($viewMode === 'cards'
           ? 'btn-primary'
           : 'btn-outline-secondary'),
-        'title' => Yii::t('SociologModule.base', 'Kachelansicht')
+        'title' => Yii::t('SociologModule.base', 'Kachelansicht'),
+        'aria-label' => Yii::t('SociologModule.base', 'Kachelansicht'),
+        'aria-current' => $viewMode === 'cards' ? 'page' : null,
       ]
     ) ?>
 
     <?= Html::a(
-      '<i class="fa-solid fa-table"></i>',
+      '<i class="fa-solid fa-table" aria-hidden="true"></i>',
       ['index', 'view' => 'table'],
       [
         'class' => 'btn btn-sm ' . ($viewMode === 'table'
           ? 'btn-primary'
           : 'btn-outline-secondary'),
-        'title' => Yii::t('SociologModule.base', 'Tabellenansicht')
+        'title' => Yii::t('SociologModule.base', 'Tabellenansicht'),
+        'aria-label' => Yii::t('SociologModule.base', 'Tabellenansicht'),
+        'aria-current' => $viewMode === 'table' ? 'page' : null,
       ]
     ) ?>
   </div>

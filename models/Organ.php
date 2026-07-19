@@ -29,6 +29,17 @@ class Organ extends ActiveRecord
     ];
 }
 
+    public function attributeLabels(): array
+    {
+        return [
+            'name' => Yii::t('SociologModule.base', 'Name'),
+            'parent_id' => Yii::t('SociologModule.base', 'Übergeordnetes Organ'),
+            'organ_space_id' => Yii::t('SociologModule.base', 'Zugehöriger Space'),
+            'sort_order' => Yii::t('SociologModule.base', 'Sortierreihenfolge'),
+            'color' => Yii::t('SociologModule.base', 'Farbe'),
+        ];
+    }
+
 
 
    public function behaviors()

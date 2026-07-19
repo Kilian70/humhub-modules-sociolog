@@ -58,11 +58,17 @@ if ($container instanceof Space) {
 }
 ?>
 
-<div class="sociolog-card sociolog-clickable fade-in shadow-sm"
-     role="link"
-     tabindex="0"
-     data-url="<?= Html::encode($url) ?>"
+<div class="sociolog-card fade-in shadow-sm"
      style="--oval-color:<?= Html::encode($color) ?>">
+
+     <?= Html::a(
+         '<span class="visually-hidden">' . Html::encode(Yii::t('SociologModule.base', 'Eintrag ansehen')) . '</span>',
+         $url,
+         [
+             'class' => 'sociolog-card-hit-area',
+             'aria-label' => Yii::t('SociologModule.base', 'Eintrag ansehen') . ': ' . ($title ?: Yii::t('SociologModule.base', '(ohne Titel)')),
+         ]
+     ) ?>
      
      <div class="sociolog-bar"
      style="background-color:<?= Html::encode($color) ?>"></div>
@@ -121,13 +127,11 @@ if ($container instanceof Space) {
 
         <?php if ($canWrite): ?>
             <?= Html::a(
-                '<i class="fa-solid fa-pen"></i>',
+                '<i class="fa-solid fa-pen" aria-hidden="true"></i>',
                 ['update', 'id' => $model->id],
                 [
                     'class' => 'btn btn-sm btn-outline-secondary',
                     'data-pjax' => 0,
-                    'tabindex' => -1,
-                    'onclick' => 'event.stopPropagation();',
                     'aria-label' => Yii::t('SociologModule.base', 'Eintrag bearbeiten'),
                 ]
             ) ?>
@@ -135,7 +139,7 @@ if ($container instanceof Space) {
 
         <?php if ($canDelete): ?>
             <?= Html::a(
-                '<i class="fa-solid fa-trash"></i>',
+                '<i class="fa-solid fa-trash" aria-hidden="true"></i>',
                 ['delete', 'id' => $model->id],
                 [
                     'class' => 'btn btn-sm btn-outline-danger',
@@ -144,9 +148,7 @@ if ($container instanceof Space) {
                         'SociologModule.base',
                         'Diesen Eintrag wirklich löschen?'
                     ),
-                    'onclick' => 'event.stopPropagation();',
                     'data-pjax' => 0,
-                    'tabindex' => -1,
                     'aria-label' => Yii::t('SociologModule.base', 'Eintrag löschen'),
                 ]
             ) ?>

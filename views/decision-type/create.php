@@ -16,10 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
      🔹 Header
 ============================================================ -->
 <div class="decision-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-  <h4 class="mb-0 fw-semibold text-white">
-    <i class="fa-solid fa-list me-2"></i>
+  <h1 class="h4 mb-0 fw-semibold text-white">
+    <i class="fa-solid fa-list me-2" aria-hidden="true"></i>
     <?= Html::encode($this->title) ?>
-  </h4>
+  </h1>
 
   <?= Html::a(
       '<i class="fa-solid fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),

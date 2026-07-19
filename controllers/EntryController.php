@@ -172,7 +172,7 @@ public function actionCreate()
 
             if (!$model->hasErrors()) {
                 $model->addError(
-                    'title',
+                    'protocol_error',
                     Yii::t('SociologModule.base', 'Die Protokoll-Links konnten nicht gespeichert werden.')
                 );
             }
@@ -262,7 +262,7 @@ public function actionUpdate($id)
 
             if (!$model->hasErrors()) {
                 $model->addError(
-                    'title',
+                    'protocol_error',
                     Yii::t('SociologModule.base', 'Die Protokoll-Links konnten nicht gespeichert werden.')
                 );
             }

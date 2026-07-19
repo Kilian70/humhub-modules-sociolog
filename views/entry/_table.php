@@ -38,23 +38,34 @@ $user = Yii::$app->user->identity ?? null;
     <!-- ========================================================
          🔹 Tabelle
     ========================================================= -->
-    <table id="sociologTable"
-           class="table table-striped table-sm align-middle w-100">
+    <div class="table-responsive sociolog-table-scroll"
+         role="region"
+         aria-label="<?= Yii::t('SociologModule.base', 'Logbuch-Einträge') ?>"
+         tabindex="0">
+
+      <table id="sociologTable"
+             class="table table-striped table-sm align-middle w-100">
+
+      <caption class="visually-hidden">
+        <?= Yii::t('SociologModule.base', 'Logbuch-Einträge') ?>
+      </caption>
 
       <thead class="table-light">
         <tr>
-          <th><?= Yii::t('SociologModule.base', 'Titel') ?></th>
-          <th><?= Yii::t('SociologModule.base', 'Status') ?></th>
-          <th><?= Yii::t('SociologModule.base', 'Organ') ?></th>
-          <th><?= Yii::t('SociologModule.base', 'Beschluss') ?></th>
-          <th><?= Yii::t('SociologModule.base', 'Inkrafttreten') ?></th>
-          <th class="text-center"
+          <th scope="col"><?= Yii::t('SociologModule.base', 'Titel') ?></th>
+          <th scope="col"><?= Yii::t('SociologModule.base', 'Status') ?></th>
+          <th scope="col"><?= Yii::t('SociologModule.base', 'Organ') ?></th>
+          <th scope="col"><?= Yii::t('SociologModule.base', 'Beschluss') ?></th>
+          <th scope="col"><?= Yii::t('SociologModule.base', 'Inkrafttreten') ?></th>
+          <th scope="col" class="text-center"
               title="<?= Yii::t('SociologModule.base', 'Themenhüter:in') ?>">
-            <i class="fa-solid fa-user-shield"></i>
+            <span class="visually-hidden"><?= Yii::t('SociologModule.base', 'Themenhüter:in') ?></span>
+            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
           </th>
-          <th class="text-center"
+          <th scope="col" class="text-center"
               title="<?= Yii::t('SociologModule.base', 'Bearbeiten') ?>">
-            <i class="fa-solid fa-pen"></i>
+            <span class="visually-hidden"><?= Yii::t('SociologModule.base', 'Bearbeiten') ?></span>
+            <i class="fa-solid fa-pen" aria-hidden="true"></i>
           </th>
         </tr>
       </thead>
@@ -132,7 +143,7 @@ $user = Yii::$app->user->identity ?? null;
             <td class="text-center">
               <?php if ($canWrite): ?>
                 <?= Html::a(
-                    '<i class="fa-solid fa-pen"></i>',
+                    '<i class="fa-solid fa-pen" aria-hidden="true"></i>',
                     Url::to([
                         '/sociolog/entry/update',
                         'id'   => $model->id,
@@ -141,6 +152,7 @@ $user = Yii::$app->user->identity ?? null;
                     [
                         'class' => 'btn btn-sm btn-outline-secondary',
                         'title' => Yii::t('SociologModule.base', 'Bearbeiten'),
+                        'aria-label' => Yii::t('SociologModule.base', 'Eintrag bearbeiten') . ': ' . $title,
                         'data-pjax' => 0,
                     ]
                 ) ?>
@@ -150,7 +162,9 @@ $user = Yii::$app->user->identity ?? null;
           </tr>
         <?php endforeach; ?>
       </tbody>
-    </table>
+      </table>
+
+    </div>
 
   </div>
 </div>

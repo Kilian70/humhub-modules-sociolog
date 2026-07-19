@@ -77,6 +77,19 @@ use yii\helpers\Url;
   .sociolog-widget-title { font-size: 14px; }
   .sociolog-widget-short { font-size: 12.5px; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .sociolog-widget-card {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+
+  .sociolog-widget-card:hover {
+    transform: none;
+  }
+}
 </style>
 
 <div class="card shadow-sm mb-3">
@@ -96,6 +109,7 @@ use yii\helpers\Url;
       <?php
         $colorOrgan = Html::encode($entry->getOrganColor($entry->organName) ?: '#0d6efd');
         $typeColor  = $entry->decisionType->color ?? '#555';
+        $typeTextColor = \humhub\modules\sociolog\models\DecisionType::getAccessibleTextColor($typeColor);
         $url   = Url::to(['/sociolog/entry/view', 'id' => $entry->id]);
         $date  = Yii::$app->formatter->asDate($entry->decision_date, 'php:d.m.Y');
         $short = Html::encode(mb_strimwidth(strip_tags((string)$entry->decision), 0, 130, ' …'));
@@ -113,7 +127,7 @@ use yii\helpers\Url;
 
           <?php if ($entry->decisionType): ?>
             <div class="mb-1">
-              <span class="sociolog-widget-type" style="background: <?= Html::encode($typeColor) ?>;">
+              <span class="sociolog-widget-type" style="background: <?= Html::encode($typeColor) ?>; color: <?= Html::encode($typeTextColor) ?>;">
                 <?= Html::encode($entry->decisionType->name) ?>
               </span>
             </div>

@@ -41,28 +41,6 @@
     }
   }
 
-  // ------------------------------------------------------------
-  // 🔹 Klickbare Sociolog-Karten
-  // ------------------------------------------------------------
-  $(document).on('click keypress', '.sociolog-clickable', function (e) {
-
-  // Tastatur: nur Enter
-  if (e.type === 'keypress' && e.key !== 'Enter') {
-    return;
-  }
-
-  // Klick auf Buttons oder Links ignorieren
-  if ($(e.target).closest('.btn, a').length) {
-    return;
-  }
-
-  const url = $(this).data('url');
-  if (url) {
-    window.location.href = url;
-  }
-
-});
-
   // Initialisierung
   document.addEventListener('DOMContentLoaded', initSociologTable);
   document.addEventListener('pjax:end', initSociologTable);
