@@ -153,6 +153,7 @@ html[data-bs-theme="dark"] .badge-decision-subtle {
   right: 16px;
   display: flex;
   gap: 0.4rem;
+  z-index: 4;
 }
 .sociolog-buttons .btn {
   width: 34px;
@@ -171,13 +172,32 @@ html[data-bs-theme="dark"] .badge-decision-subtle {
    🖱️ KLICKBARE KARTEN – UX & ACCESSIBILITY
    ============================================================ */
 
-.sociolog-clickable {
-  cursor: pointer;
+.sociolog-card-hit-area {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
 }
 
-.sociolog-clickable:focus-visible {
-  outline: 2px solid var(--oval-color, #6c757d);
-  outline-offset: 3px;
+.sociolog-card:has(.sociolog-card-hit-area:focus-visible) {
+  outline: 3px solid var(--oval-color, #6c757d);
+  outline-offset: 4px;
+}
+
+/*
+ * Den Fokus nach einem Mausklick nicht als blauen Ring anzeigen.
+ * :focus-visible bleibt für Tabulator- und Tastaturbedienung aktiv.
+ */
+.sociolog-card-hit-area:focus {
+  outline: none;
+}
+
+.sociolog-header .btn:focus:not(:focus-visible),
+.sociolog-filter .btn:focus:not(:focus-visible),
+.sociolog-buttons .btn:focus:not(:focus-visible),
+#sociologTable_wrapper .btn:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
 }
 
 
@@ -204,6 +224,42 @@ html[data-bs-theme="dark"] .badge-decision-subtle {
 
 #sociologTable td {
   vertical-align: middle;
+}
+
+#sociologTable tbody td:first-child a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+#sociologTable tbody td:first-child a:hover,
+#sociologTable tbody td:first-child a:focus-visible {
+  text-decoration-thickness: 2px;
+}
+
+.sociolog-view a:not(.btn),
+.sociolog-wall-entry a:not(.btn) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/*
+ * Bei Tastaturbedienung die vollständige zugehörige Tabellenzeile zeigen.
+ * Der einzelne Link/Button behält zusätzlich seinen eigenen Fokusindikator.
+ */
+#sociologTable tbody tr:has(:focus-visible) {
+  outline: 3px solid var(--bs-primary, #0d6efd);
+  outline-offset: -3px;
+  background-color: color-mix(in srgb, var(--bs-primary, #0d6efd) 8%, transparent);
+}
+
+.sociolog-table-scroll:focus-visible {
+  outline: 3px solid var(--bs-primary, #0d6efd);
+  outline-offset: 3px;
+}
+
+.sociolog-table-scroll:focus:not(:focus-visible) {
+  outline: none;
 }
 
 
@@ -617,4 +673,23 @@ html[data-bs-theme="dark"] .badge-sociolog-expired {
 
 .sociolog-wall-entry a:hover {
     text-decoration: underline;
+}
+
+/* ============================================================
+   Reduzierte Bewegung (Betriebssystem-Einstellung)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .sociolog-card,
+  .sociolog-card *,
+  .fade-in,
+  .sociolog-buttons .btn {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .sociolog-card:hover,
+  .sociolog-buttons .btn:hover {
+    transform: none !important;
+  }
 }

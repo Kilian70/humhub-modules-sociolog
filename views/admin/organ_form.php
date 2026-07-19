@@ -6,7 +6,9 @@ use yii\helpers\ArrayHelper;
 use humhub\modules\sociolog\models\Organ;
 use humhub\modules\space\models\Space;
 
-$this->title = $model->isNewRecord ? 'Organ erstellen' : 'Organ bearbeiten';
+$this->title = $model->isNewRecord
+    ? Yii::t('SociologModule.base', 'Organ erstellen')
+    : Yii::t('SociologModule.base', 'Organ bearbeiten');
 
 /* Parent-Optionen laden */
 $query = Organ::find()->orderBy(['sort_order' => SORT_ASC]);
@@ -32,7 +34,7 @@ $parents = ArrayHelper::map(
 
 <?= $form->field($model, 'parent_id')->dropDownList(
     $parents,
-    ['prompt' => 'Kein Parent']
+    ['prompt' => Yii::t('SociologModule.base', 'Kein übergeordnetes Organ')]
 ) ?>
 
 <?= $form->field($model, 'organ_space_id')->dropDownList(
@@ -41,22 +43,37 @@ $parents = ArrayHelper::map(
         'id',
         'name'
     ),
-    ['prompt' => 'Space auswählen']
+    ['prompt' => Yii::t('SociologModule.base', 'Space auswählen')]
 ) ?>
 
 <?= $form->field($model, 'sort_order')->input('number') ?>
 
-<div class="form-group mt-3">
+<div class="form-group mt-3 organ-form-actions">
     <?= Html::submitButton(
-        $model->isNewRecord ? 'Erstellen' : 'Speichern',
+        $model->isNewRecord ? Yii::t('SociologModule.base', 'Erstellen') : Yii::t('SociologModule.base', 'Speichern'),
         ['class' => 'btn btn-success']
     ) ?>
 
     <?= Html::a(
-        'Abbrechen',
+        Yii::t('SociologModule.base', 'Abbrechen'),
         ['organs'],
-        ['class' => 'btn btn-default']
+        ['class' => 'btn btn-outline-secondary']
     ) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
+
+<?php
+$this->registerCss(<<<CSS
+.organ-form-actions .btn:focus-visible {
+    outline: 3px solid var(--bs-primary, #4b8f29);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+.organ-form-actions .btn:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+CSS);
+?>

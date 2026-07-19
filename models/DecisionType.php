@@ -127,15 +127,7 @@ class DecisionType extends ActiveRecord
             $color = '#6c757d';
         }
 
-        // Kontrastberechnung
-        try {
-            $r = hexdec(substr($color, 1, 2));
-            $g = hexdec(substr($color, 3, 2));
-            $b = hexdec(substr($color, 5, 2));
-            $textColor = (($r + $g + $b) / 3 < 128) ? '#ffffff' : '#000000';
-        } catch (\Throwable $e) {
-            $textColor = '#ffffff';
-        }
+        $textColor = self::getAccessibleTextColor($color);
 
         return sprintf(
             '<span class="badge text-uppercase" style="background-color:%s;color:%s;border-radius:6px;">%s</span>',
@@ -143,6 +135,39 @@ class DecisionType extends ActiveRecord
             htmlspecialchars($textColor, ENT_QUOTES, 'UTF-8'),
             htmlspecialchars($name, ENT_QUOTES, 'UTF-8')
         );
+    }
+
+    /**
+     * Wählt anhand der relativen WCAG-Luminanz die kontrastreichere
+     * Textfarbe Schwarz oder Weiss für einen Hex-Hintergrund.
+     */
+    public static function getAccessibleTextColor(string $color): string
+    {
+        if (!preg_match('/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/', $color)) {
+            $color = '#6c757d';
+        }
+
+        $hex = substr($color, 1);
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+
+        $channels = [];
+        foreach ([0, 2, 4] as $offset) {
+            $value = hexdec(substr($hex, $offset, 2)) / 255;
+            $channels[] = $value <= 0.04045
+                ? $value / 12.92
+                : (($value + 0.055) / 1.055) ** 2.4;
+        }
+
+        $luminance = 0.2126 * $channels[0]
+            + 0.7152 * $channels[1]
+            + 0.0722 * $channels[2];
+
+        $contrastWhite = 1.05 / ($luminance + 0.05);
+        $contrastBlack = ($luminance + 0.05) / 0.05;
+
+        return $contrastWhite >= $contrastBlack ? '#ffffff' : '#000000';
     }
 
     /**

@@ -9,7 +9,12 @@ use yii\helpers\Html;
         <?= Html::a(
             Html::encode($entry->title),
             $entry->getUrl(),
-            ['target' => '_blank', 'class' => 'fw-bold text-decoration-none']
+            [
+                'target' => '_blank',
+                'rel' => 'noopener noreferrer',
+                'class' => 'fw-bold text-decoration-none',
+                'aria-label' => $entry->title . ' – ' . Yii::t('SociologModule.base', 'öffnet in neuem Fenster'),
+            ]
         ) ?>
     </h5>
 

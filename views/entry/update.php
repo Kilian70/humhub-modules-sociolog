@@ -21,12 +21,12 @@ $this->title = $moduleTitle . ' – ' . Yii::t('SociologModule.base', 'Eintrag b
        HEADER
   ============================================================ -->
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="mb-0">
+    <h1 class="h5 mb-0">
       <?= Html::encode($moduleTitle) ?>
       <span class="text-muted ms-1">
         / <?= Yii::t('SociologModule.base', 'Eintrag bearbeiten') ?>
       </span>
-    </h5>
+    </h1>
 
     <?= Html::a(
   '<i class="fa-solid fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),

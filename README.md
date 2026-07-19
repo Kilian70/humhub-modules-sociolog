@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.5
+**Version:** 1.0.6
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 (AGPL-3.0)  
@@ -35,6 +35,28 @@ Das Modul wurde speziell für gemeinschaftliche Wohn- und Organisationsprojekte 
 - **Mehrsprachigkeit:** Deutsch und Englisch (UK)  
 - **Kalender-Integration** (Überprüfungstermine sichtbar)  
 - **Stream-Integration**
+
+## Barrierefreiheit
+
+Das Modul unterstützt die Bedienung mit Tastatur und Screenreader und berücksichtigt
+die Systemeinstellung **Bewegung reduzieren**. Zu den umgesetzten Massnahmen gehören:
+
+- deutlich sichtbare Fokusmarkierungen nur bei Tastaturbedienung
+- native Links und vollständig per Tastatur erreichbare Aktionen
+- zugängliche Namen für Icon-Schaltflächen und dynamische Protokollfelder
+- semantische Überschriften, Tabellenbeschriftungen und Spaltenzuordnungen
+- kontrastabhängige schwarze oder weisse Schrift auf frei gewählten Typfarben
+- zugängliche Fehlerzusammenfassungen und feldnahe Fehlermeldungen
+- scrollbarere Tabellen bei kleinen Bildschirmen und starker Vergrösserung
+- Ankündigung von Links, die ein neues Fenster öffnen
+
+Die Reihenfolge der Entscheidungstypen kann per Maus durch Ziehen verändert werden.
+Als Tastaturalternative kann im Bearbeitungsformular die **Sortierreihenfolge** als Zahl
+eingetragen werden.
+
+Eine formelle WCAG-Zertifizierung ist damit nicht verbunden. Vor einer öffentlichen
+Freigabe werden zusätzliche Praxistests mit Browser-Zoom, Tastatur und Screenreader
+empfohlen.
 
 ## Benutzer löschen (WICHTIG)
 ❌ Nicht verwenden

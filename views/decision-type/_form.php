@@ -1,6 +1,10 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use humhub\modules\sociolog\models\DecisionType;
+
+$previewColor = $model->color ?: '#777777';
+$previewTextColor = DecisionType::getAccessibleTextColor($previewColor);
 
 /* @var $this yii\web\View */
 /* @var $model humhub\modules\sociolog\models\DecisionType */
@@ -34,13 +38,13 @@ use yii\widgets\ActiveForm;
       <div class="mt-2 d-flex align-items-center gap-3 flex-wrap">
         <div id="colorBox"
              style="width:48px;height:48px;border-radius:8px;border:1px solid #ccc;
-                    background:<?= Html::encode($model->color ?: '#777') ?>;">
+                    background:<?= Html::encode($previewColor) ?>;">
         </div>
 
         <span id="badgePreview"
               class="badge px-3 py-2 fw-semibold"
-              style="background:<?= Html::encode($model->color ?: '#777') ?>;
-                     color:#fff;font-size:14px;">
+              style="background:<?= Html::encode($previewColor) ?>;
+                     color:<?= Html::encode($previewTextColor) ?>;font-size:14px;">
           <?= Html::encode($model->name ?: Yii::t('SociologModule.base', 'Vorschau')) ?>
         </span>
       </div>
@@ -92,12 +96,16 @@ use yii\widgets\ActiveForm;
 // ============================================================
 $this->registerJs(<<<JS
 function updateBadgeColor(color) {
-  const textColor = (() => {
-    const r = parseInt(color.substr(1,2),16);
-    const g = parseInt(color.substr(3,2),16);
-    const b = parseInt(color.substr(5,2),16);
-    return (r+g+b)/3 < 128 ? '#fff' : '#000';
-  })();
+  const channels = [1, 3, 5].map(offset => {
+    const value = parseInt(color.substr(offset, 2), 16) / 255;
+    return value <= 0.04045
+      ? value / 12.92
+      : Math.pow((value + 0.055) / 1.055, 2.4);
+  });
+  const luminance = 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  const contrastWhite = 1.05 / (luminance + 0.05);
+  const contrastBlack = (luminance + 0.05) / 0.05;
+  const textColor = contrastWhite >= contrastBlack ? '#fff' : '#000';
   $('#colorBox').css('background-color', color);
   $('#badgePreview').css({'background-color': color, 'color': textColor});
 }

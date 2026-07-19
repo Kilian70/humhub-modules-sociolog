@@ -81,6 +81,14 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 ],
 ]); ?>
 
+<?= Html::errorSummary($model, [
+    'id' => 'sociolog-error-summary',
+    'class' => 'alert alert-danger sociolog-form-errors',
+    'role' => 'alert',
+    'tabindex' => '-1',
+    'header' => '<strong>' . Yii::t('SociologModule.base', 'Bitte korrigiere die folgenden Fehler:') . '</strong>',
+]) ?>
+
 
 <!-- ======================================================
      🧩 LINKE SPALTE
@@ -167,11 +175,20 @@ $allowedOrgans,
 
 <div class="col-12">
 
-<label class="form-label">
+<label class="form-label" id="protocols-label">
 <?= Yii::t('SociologModule.base','Protokolle') ?>
 </label>
 
-<div id="protocol-list">
+<?php if ($model->hasErrors('protocol_error')): ?>
+<div id="protocol-error" class="invalid-feedback d-block sociolog-protocol-error" role="alert">
+<?= Html::encode(implode(' ', $model->getErrors('protocol_error'))) ?>
+</div>
+<?php endif; ?>
+
+<div id="protocol-list"
+     role="group"
+     aria-labelledby="protocols-label"
+     <?= $model->hasErrors('protocol_error') ? 'aria-describedby="protocol-error"' : '' ?>>
 
 <?php if (!$model->isNewRecord && $model->protocols): ?>
 
@@ -186,17 +203,20 @@ value="<?= $protocol->id ?>">
 <input type="text"
 name="protocol_title[]"
 class="form-control"
+aria-label="<?= Yii::t('SociologModule.base','Protokolltitel') ?>"
 value="<?= Html::encode($protocol->title) ?>"
 placeholder="<?= Yii::t('SociologModule.base','Titel') ?>">
 
 <input type="url"
 name="protocol_url[]"
 class="form-control"
+aria-label="<?= Yii::t('SociologModule.base','Link zum Protokoll') ?>"
 value="<?= Html::encode($protocol->url) ?>"
 placeholder="<?= Yii::t('SociologModule.base','Link') ?>">
 
 <button type="button"
-class="btn btn-outline-danger btn-sm remove-protocol">
+class="btn btn-outline-danger btn-sm remove-protocol"
+aria-label="<?= Yii::t('SociologModule.base','Protokoll entfernen') ?>">
 
 <i class="fa-solid fa-trash"></i>
 
@@ -213,11 +233,13 @@ class="btn btn-outline-danger btn-sm remove-protocol">
 <input type="text"
 name="protocol_title[]"
 class="form-control mb-1"
+aria-label="<?= Yii::t('SociologModule.base','Protokolltitel') ?>"
 placeholder="<?= Yii::t('SociologModule.base','Titel (z.B. BK Protokoll)') ?>">
 
 <input type="url"
 name="protocol_url[]"
 class="form-control"
+aria-label="<?= Yii::t('SociologModule.base','Link zum Protokoll') ?>"
 placeholder="<?= Yii::t('SociologModule.base','Link zum Protokoll') ?>">
 
 </div>
@@ -225,6 +247,8 @@ placeholder="<?= Yii::t('SociologModule.base','Link zum Protokoll') ?>">
 <?php endif; ?>
 
 </div>
+
+<div id="protocol-status" class="visually-hidden" aria-live="polite"></div>
 
 
 <button type="button"
@@ -288,7 +312,18 @@ id="add-protocol">
 
 <?php
 
+$protocolTitleLabel = Html::encode(Yii::t('SociologModule.base', 'Protokolltitel'));
+$protocolUrlLabel = Html::encode(Yii::t('SociologModule.base', 'Link zum Protokoll'));
+$protocolRemoveLabel = Html::encode(Yii::t('SociologModule.base', 'Protokoll entfernen'));
+$protocolAddedMessage = json_encode(Yii::t('SociologModule.base', 'Protokoll hinzugefügt'));
+$protocolRemovedMessage = json_encode(Yii::t('SociologModule.base', 'Protokoll entfernt'));
+
 $script = <<<JS
+
+const errorSummary = document.getElementById('sociolog-error-summary');
+if (errorSummary && errorSummary.querySelector('li')) {
+  errorSummary.focus();
+}
 
 $(document).on('click','#add-protocol',function(){
 
@@ -300,15 +335,18 @@ const row = `
 <input type="text"
 name="protocol_title[]"
 class="form-control"
+aria-label="{$protocolTitleLabel}"
 placeholder="Titel (z.B. Leitungskreis)">
 
 <input type="url"
 name="protocol_url[]"
 class="form-control"
+aria-label="{$protocolUrlLabel}"
 placeholder="Link zum Protokoll">
 
 <button type="button"
-class="btn btn-outline-danger btn-sm remove-protocol">
+class="btn btn-outline-danger btn-sm remove-protocol"
+aria-label="{$protocolRemoveLabel}">
 
 <i class="fa-solid fa-trash"></i>
 
@@ -317,17 +355,53 @@ class="btn btn-outline-danger btn-sm remove-protocol">
 </div>
 `;
 
-$('#protocol-list').append(row);
+const \$row = $(row).appendTo('#protocol-list');
+\$row.find('input[name="protocol_title[]"]').trigger('focus');
+$('#protocol-status').text({$protocolAddedMessage});
 
 });
 
 
 $(document).on('click','.remove-protocol',function(){
 $(this).closest('.protocol-row').remove();
+$('#protocol-status').text({$protocolRemovedMessage});
+$('#add-protocol').trigger('focus');
 });
 
 JS;
 
 $this->registerJs($script);
+
+$this->registerCss(<<<CSS
+.sociolog-form-errors {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #842029;
+}
+
+.sociolog-form-errors:focus {
+  outline: 3px solid #842029;
+  outline-offset: 3px;
+}
+
+.sociolog-protocol-error {
+  color: #842029 !important;
+  font-weight: 600;
+}
+
+html[data-bs-theme="dark"] .sociolog-form-errors {
+  color: #ffd7da;
+  background-color: #4a171c;
+  border-color: #ffb3b8;
+}
+
+html[data-bs-theme="dark"] .sociolog-form-errors:focus {
+  outline-color: #ffb3b8;
+}
+
+html[data-bs-theme="dark"] .sociolog-protocol-error {
+  color: #ffb3b8 !important;
+}
+CSS);
 
 ?>

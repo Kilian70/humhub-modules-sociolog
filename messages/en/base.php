@@ -21,6 +21,10 @@ return [
     'Keine Einträge vorhanden.' => 'No entries available.',
     'Änderungen wurden gespeichert.' => 'Changes have been saved.',
     'Erfolgreich gespeichert' => 'Saved successfully.',
+    'Protokolltitel' => 'Protocol title',
+    'Protokoll entfernen' => 'Remove protocol',
+    'Protokoll hinzugefügt' => 'Protocol added',
+    'Protokoll entfernt' => 'Protocol removed',
 
     // ============================================================
     // 🔹 List View / Search / Index
@@ -46,8 +50,38 @@ return [
     'Zeilen anzeigen' => 'Show _MENU_ entries',
     'Zurücksetzen' => 'Reset',
     'Es sind noch keine Einträge vorhanden.' => 'There are no entries yet.',
-'Hier werden Grundsatzentscheide, Richtlinien und Beschlüsse dokumentiert.'
+    'Hier werden Grundsatzentscheide, Richtlinien und Beschlüsse dokumentiert.'
     => 'Here, fundamental decisions, guidelines and resolutions are documented.',
+    'Logbuch-Einträge' => 'Logbook entries',
+    'Konfiguration der Spaces und Bereiche' => 'Configuration of spaces and sections',
+    'Organ für {space}' => 'Organ for {space}',
+    'Organ-Space: {space}' => 'Organ space: {space}',
+    'Globales Schreibrecht für {space}' => 'Global write permission for {space}',
+    'Löschrecht für {space}' => 'Delete permission for {space}',
+    'Sichtbarkeit für {space}' => 'Visibility for {space}',
+    'Linkart für {space}' => 'Link type for {space}',
+    'URL für {space}' => 'URL for {space}',
+    '{type} bearbeiten' => 'Edit {type}',
+    '{type} löschen' => 'Delete {type}',
+    'Organe' => 'Organs',
+    'Neues Organ' => 'New organ',
+    'Konfigurierte Logbuch-Organe' => 'Configured logbook organs',
+    'ID' => 'ID',
+    'Name' => 'Name',
+    'Übergeordnetes Organ' => 'Parent organ',
+    'Sortierung' => 'Sort order',
+    '{organ} bearbeiten' => 'Edit {organ}',
+    '{organ} löschen' => 'Delete {organ}',
+    'Organ wirklich löschen?' => 'Really delete this organ?',
+    'Organ erstellen' => 'Create organ',
+    'Organ bearbeiten' => 'Edit organ',
+    'Kein übergeordnetes Organ' => 'No parent organ',
+    'Space auswählen' => 'Select space',
+    'Erstellen' => 'Create',
+    'Zugehöriger Space' => 'Associated space',
+    'Sortierreihenfolge' => 'Sort order',
+    'öffnet in neuem Fenster' => 'opens in a new window',
+    'Bitte korrigiere die folgenden Fehler:' => 'Please correct the following errors:',
 
 
     // ============================================================

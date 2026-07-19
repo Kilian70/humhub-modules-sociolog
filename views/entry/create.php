@@ -17,10 +17,10 @@ $this->title = $moduleTitle . ' – ' . Yii::t('SociologModule.base', 'Neuer Ein
 
   <!-- HEADER -->
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="mb-0">
+    <h1 class="h5 mb-0">
       <?= Html::encode($moduleTitle) ?>
       <span class="text-muted ms-1">/ <?= Yii::t('SociologModule.base', 'Neuer Eintrag') ?></span>
-    </h5>
+    </h1>
 
     <?php if (!Yii::$app->request->isAjax): ?>
       <?= Html::a(
