@@ -3,6 +3,16 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.7] – 2026-07-21
+
+### Kompatibilität
+- TopMenu-Registrierung an die HumHub-1.19-API angepasst
+- Veralteten Aufruf `TopMenu::getItems()` entfernt
+- Duplikatprüfung über das in HumHub 1.18 und 1.19 verfügbare `getEntryById()` umgesetzt
+- Menüeintrag weiterhin als `MenuLink` über `addEntry()` mit der ID `topmenu-sociolog` registriert
+- Aktive Menüerkennung verwendet den PHP-Nullsafe-Operator
+- Admin-Formulare auf die unter HumHub 1.18 und 1.19 verfügbare Yii-`ActiveForm`-Klasse umgestellt
+
 ## [1.0.6] – 2026-07-19
 
 ### Barrierefreiheit
