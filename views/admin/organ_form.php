@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use humhub\modules\ui\form\widgets\ActiveForm;
+use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use humhub\modules\sociolog\models\Organ;
 use humhub\modules\space\models\Space;

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
-use humhub\modules\ui\form\widgets\ActiveForm;
+use yii\widgets\ActiveForm;
 
 use humhub\modules\user\models\User;
 use humhub\modules\user\models\Group;

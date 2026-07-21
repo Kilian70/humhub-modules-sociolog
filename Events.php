@@ -3,9 +3,7 @@
 namespace humhub\modules\sociolog;
 
 use Yii;
-use yii\helpers\Url;
 use humhub\modules\ui\menu\MenuLink;
-use humhub\widgets\TopMenu;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\notifications\EntryCreated;
 use humhub\modules\sociolog\notifications\EntryUpdated;
@@ -25,34 +23,32 @@ use humhub\modules\sociolog\widgets\LatestEntries;
  */
 class Events
 {
-    /** 🔹 Menüeintrag im TopMenu hinzufügen */
-public static function onTopMenuInit($event)
-{
-    if (!Yii::$app->hasModule('sociolog') || Yii::$app->user->isGuest) {
-        return;
+    /** 🔹 Menüeintrag im TopMenu hinzufügen (HumHub 1.18+) */
+    public static function onTopMenuInit($event)
+    {
+        if (!Yii::$app->hasModule('sociolog') || Yii::$app->user->isGuest) {
+            return;
+        }
+
+        // getEntryById() ist in HumHub 1.18 und 1.19 verfügbar.
+        if ($event->sender->getEntryById('topmenu-sociolog') !== null) {
+            return;
+        }
+
+        $module = Yii::$app->getModule('sociolog');
+        $title = $module?->settings->get('moduleTitle', 'Logbuch') ?? 'Logbuch';
+
+        $event->sender->addEntry(new MenuLink([
+            'id' => 'topmenu-sociolog',
+            'label' => $title,
+            'url' => ['/sociolog/entry/index'],
+            'icon' => 'fa-book',
+            'sortOrder' => 350,
+            'isActive' => Yii::$app->controller?->module?->id === 'sociolog',
+        ]));
+
+        Yii::info('Sociolog: TopMenu-Eintrag hinzugefügt', 'sociolog');
     }
-
-    $module = Yii::$app->getModule('sociolog');
-    $title  = $module?->settings->get('moduleTitle', 'Logbuch') ?? 'Logbuch';
-
-    // Doppelten Menüeintrag verhindern (HumHub 1.18 korrekt)
-			foreach ($event->sender->getItems() as $item) {
-			if ($item->id === 'topmenu-sociolog') {
-				return;
-			}
-		}
-
-    $event->sender->addEntry(new MenuLink([
-        'id'        => 'topmenu-sociolog',
-        'label'     => $title,
-        'url'       => ['/sociolog/entry/index'],
-        'icon'      => 'fa-book',
-        'sortOrder' => 350,
-        'isActive'  => Yii::$app->controller?->module?->id === 'sociolog',
-    ]));
-
-    Yii::info('Sociolog: TopMenu-Eintrag hinzugefügt', 'sociolog');
-}
 
     /** 🔹 Dashboard-Widget (nur global) */
     public static function onDashboardSidebarInit($event)
