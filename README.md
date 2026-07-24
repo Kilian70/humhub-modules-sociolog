@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.7
+**Version:** 1.0.8
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 (AGPL-3.0)  
@@ -35,6 +35,12 @@ Das Modul wurde speziell für gemeinschaftliche Wohn- und Organisationsprojekte 
 - **Mehrsprachigkeit:** Deutsch und Englisch (UK)  
 - **Kalender-Integration** (Überprüfungstermine sichtbar)  
 - **Stream-Integration**
+- **Optionale Informationsseite:** frei konfigurierbare Regeln und Hinweise zur Benutzung des Logbuchs
+- **Flexible Vorgaben:** feste Entscheidungsart, ausblendbare Typen sowie anpassbare Feld- und Statusbezeichnungen
+- **Geschützte Veröffentlichung:** veröffentlichte Einträge können für reguläre Änderungen gesperrt werden
+- **Überprüfungspflege:** zuständige Space-Administratoren können optional nur das nächste Überprüfungsdatum und ein neues Protokoll ergänzen
+- **Historischer Import:** geprüfter CSV-Import mit Vorlage, Vorschau, Duplikatschutz und Transaktion
+- **Seitennavigation:** vollständiger Zugriff auf Übersichten mit mehr als 50 Einträgen
 
 ## Barrierefreiheit
 
@@ -99,6 +105,66 @@ inklusive Sociolog-Einträgen (Systemverhalten von HumHub).
 6. **Benachrichtigungen testen:** Erstelle oder ändere einen Eintrag, um Glocken- und Mail-Benachrichtigungen zu prüfen.
 
 **Dashboard-Widget:** Neueste Beschlüsse sind automatisch sichtbar
+
+## Optionale Konfiguration
+
+Version 1.0.8 erweitert das bisherige Logbuch ausschließlich um optionale Einstellungen.
+Nach einem Update bleibt das bisherige Verhalten erhalten, solange die neuen Optionen
+nicht aktiviert werden.
+
+Administrator:innen können unter **Administration → Module → Logbuch → Konfigurieren**
+unter anderem festlegen:
+
+- ob eine Informationsseite zur Benutzung und zu den Regeln des Logbuchs angezeigt wird
+- welche Entscheidungstypen bei neuen Einträgen und in den Filtern sichtbar sind
+- ob neue Einträge immer eine feste Entscheidungsart erhalten
+- ob das Veröffentlichungsdatum automatisch auf das aktuelle Datum gesetzt wird
+- ob neue Einträge zwingend ein Überprüfungsdatum benötigen
+- ob der Entscheidungstyp in Karten und Detailansicht sichtbar ist
+- ob veröffentlichte Einträge für reguläre Änderungen gesperrt werden
+- ob nach Erreichen des Überprüfungsdatums eine eingeschränkte Pflege erlaubt ist
+- welche Benutzer oder Gruppen das Logbuch verwalten dürfen
+- wie Feldbezeichnungen und der erste Status im Formular heißen
+
+### Eingeschränkte Pflege nach einer Überprüfung
+
+Ist diese Option aktiviert und das Überprüfungsdatum erreicht, dürfen berechtigte
+Administrator:innen des zuständigen Spaces nur:
+
+- ein neues Überprüfungsdatum festlegen
+- ein zusätzliches Protokoll verlinken
+
+Titel, Beschlusstext, Zuständigkeit und andere veröffentlichte Angaben bleiben gesperrt.
+Systemadministratoren und konfigurierte Logbuch-Manager behalten ihre weitergehenden
+Verwaltungsrechte.
+
+## Historische Einträge importieren
+
+Der Import befindet sich in den Moduleinstellungen unter
+**Wartung → Historische Daten** und ist ausschließlich für Systemadministratoren
+verfügbar. Auf der Importseite steht eine CSV-Vorlage zum Herunterladen bereit.
+
+Der Ablauf besteht aus zwei getrennten Schritten:
+
+1. CSV-Datei hochladen und serverseitig prüfen
+2. fehlerfreie Vorschau ausdrücklich bestätigen
+
+Die CSV-Datei verwendet diese Spalten:
+
+| Spalte | Inhalt |
+|--------|--------|
+| `source_sheet` | Name der ursprünglichen Tabelle oder Quelle |
+| `source_row` | Zeilennummer oder eindeutige Kennzeichnung in der Quelle |
+| `target_organ` | Exakter Name eines im Logbuch aktivierten Ziel-Spaces |
+| `decision_type` | Exakter Name einer vorhandenen Entscheidungsart |
+| `title` | Titel des Eintrags |
+| `decision` | Vollständiger Beschlusstext |
+| `decision_date` | Veröffentlichungsdatum im Format `JJJJ-MM-TT` |
+| `review_date` | Optionales Überprüfungsdatum im Format `JJJJ-MM-TT` |
+
+Die Vorschau prüft Ziel-Spaces, Entscheidungstypen, Datumswerte und Duplikate.
+Der endgültige Import läuft in einer Datenbanktransaktion. Historische Einträge
+erzeugen keine Benachrichtigungen, Kalendertermine oder Stream-Aktivitäten.
 
 ## Automatische Statusläufe & Cronjobs
 
@@ -254,6 +320,7 @@ sociolog/
 ├── controllers/							# Webcontroller (HTTP)
 │   ├── AdminController.php					# Admin-Einstellungen des Moduls
 │   ├── DecisionTypeController.php			# Verwaltung der Entscheidungsarten
+│   ├── ImportController.php					# Prüfung und Import historischer CSV-Daten
 │   └── EntryController.php					# CRUD-Logik für Logbuch-Einträge
 │
 ├── messages/								# Übersetzungen (DE/EN)
@@ -267,6 +334,8 @@ sociolog/
 │	├── EntryBase.php						# Basisklasse mit gemeinsamer Logik (abstrakt)
 │   ├── EntrySearch.php						# Such- und Filterlogik für Listen / Tabellen
 │   ├── DecisionType.php					# Entscheidungstypen
+│   ├── ImportUploadForm.php					# Upload-Validierung für historische CSV-Dateien
+│   ├── ReviewForm.php						# Eingeschränkte Pflege nach einer Überprüfung
 │   ├── SettingsForm.php					# Formularmodell für Modul-Einstellungen
 │	└── LocalCreatorBehavior.php			# Behavior zur automatischen Ermittlung des Erstellers
 │
@@ -286,6 +355,7 @@ sociolog/
 │
 ├──services/								# Fachlogik / Integrationen
 │	├── SociologCalendarService.php			# Kalender-Synchronisation
+│	├── SociologImportService.php				# Validierung und Transaktion für historische Importe
 │	├──	SociologStatusService.php			# Automatische Statuspflege der Einträge (Cron)
 │	└── SociologStreamService.php			# Stream-Integration
 │
@@ -298,6 +368,7 @@ sociolog/
 │   │ 	├── create.php						# Neuer Eintrag
 │   │ 	├── index.php						# Übersicht / Liste
 │   │ 	├── print.php						# Druckansicht
+│   │ 	├── review.php						# Eingeschränkte Überprüfungspflege
 │   │ 	├── update.php						# Bearbeiten
 │   │ 	└──	view.php 						# Detailansicht
 │   │
@@ -309,6 +380,12 @@ sociolog/
 │   │ 	├── create.php
 │   │ 	├── index.php
 │   │ 	└──	update.php
+│	│
+│	├── import/								# Historischer CSV-Import
+│   │ 	└── index.php						# Anleitung, Vorschau und Importbestätigung
+│	│
+│	├── info/								# Optionale Informationsseite
+│   │ 	└── index.php						# Regeln und Hinweise zum Logbuch
 │	│
 │   ├── notifications/						# Verwaltung von Notification-Einstellungen
 │   │ 	├── _form.php

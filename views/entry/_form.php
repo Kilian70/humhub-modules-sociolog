@@ -16,9 +16,33 @@ $allowedOrgans = Entry::getWritableOrgansForUser($user);
 // ============================================================
 // 🔹 Workflow-Modus laden
 // ============================================================
-$workflowEnabled = Yii::$app->getModule('sociolog')
-    ->settings
-    ->get('decisionWorkflowEnabled', true);
+$module = Yii::$app->getModule('sociolog');
+$settings = $module->settings;
+$workflowEnabled = $settings->get('decisionWorkflowEnabled', true);
+$autoPublicationDate = (bool)$settings->get('autoPublicationDate', false);
+$reviewDateRequired = $model->isNewRecord
+    && (bool)$settings->get('reviewDateRequiredForNewEntries', false);
+$fixedDecisionTypeId = (int)$settings->get('fixedDecisionTypeId', 0);
+$decisionTypes = Entry::getDecisionTypeList(
+    $model->isNewRecord ? null : (int)$model->decision_type_id
+);
+$allDecisionTypes = Entry::getDecisionTypeList(null, true);
+$fixedDecisionTypeName = $allDecisionTypes[$fixedDecisionTypeId] ?? null;
+$decisionDateLabel = $module->getCustomLabel(
+    'decisionDateLabel',
+    Yii::t('SociologModule.base', 'Beschlussdatum')
+);
+$topicOwnerLabel = $module->getCustomLabel(
+    'topicOwnerLabel',
+    Yii::t('SociologModule.base', 'Themenhüter:in')
+);
+$topicOwnerPlaceholder = trim((string)$settings->get('topicOwnerPlaceholder', ''));
+$protocolsLabel = $module->getCustomLabel(
+    'protocolsLabel',
+    Yii::t('SociologModule.base', 'Protokolle')
+);
+$statusManagersOnly = (bool)$settings->get('statusManagersOnly', false);
+$canSelectStatus = !$statusManagersOnly || Entry::isLogbookManager($user);
 
 ?>
 
@@ -28,7 +52,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <!-- ========================================================
      🔧 DEBUG (nur für Admins sichtbar)
 ======================================================== -->
-<?php if (Yii::$app->user->isAdmin()): ?>
+<?php if (defined('YII_DEBUG') && YII_DEBUG && Yii::$app->user->isAdmin()): ?>
 <div class="alert alert-info py-2 mb-4 small">
 
 <a class="text-decoration-none"
@@ -100,12 +124,29 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 ->textInput(['maxlength'=>true])
 ->label(Yii::t('SociologModule.base','Titel')) ?>
 
-<?= $form->field($model,'decision_type_id')
-->dropDownList(
-Entry::getDecisionTypeList(),
-['prompt'=>Yii::t('SociologModule.base','Bitte wählen …')]
-)
-->label(Yii::t('SociologModule.base','Art der Entscheidung')) ?>
+<?php if ($model->isNewRecord && $fixedDecisionTypeId > 0 && $fixedDecisionTypeName !== null): ?>
+  <?= Html::activeHiddenInput($model, 'decision_type_id') ?>
+  <div class="form-group">
+    <label class="control-label" for="sociolog-fixed-decision-type">
+      <?= Yii::t('SociologModule.base', 'Art der Entscheidung') ?>
+    </label>
+    <input id="sociolog-fixed-decision-type"
+           class="form-control"
+           value="<?= Html::encode($fixedDecisionTypeName) ?>"
+           disabled
+           aria-describedby="sociolog-fixed-decision-type-hint">
+    <div id="sociolog-fixed-decision-type-hint" class="form-text">
+      <?= Yii::t('SociologModule.base', 'Diese Entscheidungsart ist in den Moduleinstellungen vorgegeben.') ?>
+    </div>
+  </div>
+<?php else: ?>
+  <?= $form->field($model,'decision_type_id')
+  ->dropDownList(
+      $decisionTypes,
+      ['prompt'=>Yii::t('SociologModule.base','Bitte wählen …')]
+  )
+  ->label(Yii::t('SociologModule.base','Art der Entscheidung')) ?>
+<?php endif; ?>
 
 <?= $form->field($model,'organ')
 ->dropDownList(
@@ -115,8 +156,11 @@ $allowedOrgans,
 ->label(Yii::t('SociologModule.base','Organ')) ?>
 
 <?= $form->field($model,'topic_owner')
-->textInput(['maxlength'=>true])
-->label(Yii::t('SociologModule.base','Themenhüter:in')) ?>
+->textInput(array_filter([
+    'maxlength' => true,
+    'placeholder' => $topicOwnerPlaceholder !== '' ? $topicOwnerPlaceholder : null,
+]))
+->label($topicOwnerLabel) ?>
 
 </div>
 
@@ -144,9 +188,27 @@ $allowedOrgans,
 
 <div class="col-12 col-md-4">
 
-<?= $form->field($model,'decision_date')
-->input('date')
-->label(Yii::t('SociologModule.base','Beschlussdatum')) ?>
+<?php if ($model->isNewRecord && $autoPublicationDate): ?>
+  <?= Html::activeHiddenInput($model, 'decision_date') ?>
+  <div class="form-group">
+    <label class="control-label" for="sociolog-publication-date">
+      <?= Html::encode($decisionDateLabel) ?>
+    </label>
+    <input id="sociolog-publication-date"
+           class="form-control"
+           type="date"
+           value="<?= Html::encode((string)$model->decision_date) ?>"
+           disabled
+           aria-describedby="sociolog-publication-date-hint">
+    <div id="sociolog-publication-date-hint" class="form-text">
+      <?= Yii::t('SociologModule.base', 'Das heutige Datum wird beim Speichern automatisch gesetzt.') ?>
+    </div>
+  </div>
+<?php else: ?>
+  <?= $form->field($model,'decision_date')
+  ->input('date')
+  ->label($decisionDateLabel) ?>
+<?php endif; ?>
 
 </div>
 
@@ -163,8 +225,15 @@ $allowedOrgans,
 <div class="col-12 col-md-4">
 
 <?= $form->field($model,'review_date')
-    ->input('date')
-    ->label(Yii::t('SociologModule.base','Überprüfung ab')) ?>
+    ->input('date', [
+        'required' => $reviewDateRequired,
+        'aria-required' => $reviewDateRequired ? 'true' : 'false',
+    ])
+    ->label(
+        Yii::t('SociologModule.base','Überprüfung ab')
+        . ($reviewDateRequired ? ' <span class="required">*</span>' : ''),
+        ['encode' => false]
+    ) ?>
 
 </div>
 
@@ -176,7 +245,7 @@ $allowedOrgans,
 <div class="col-12">
 
 <label class="form-label" id="protocols-label">
-<?= Yii::t('SociologModule.base','Protokolle') ?>
+<?= Html::encode($protocolsLabel) ?>
 </label>
 
 <?php if ($model->hasErrors('protocol_error')): ?>
@@ -266,7 +335,7 @@ id="add-protocol">
      🏷️ STATUS
 ====================================================== -->
 
-<?php if (!$model->isNewRecord): ?>
+<?php if (!$model->isNewRecord && $canSelectStatus): ?>
 
 <div class="col-12">
 

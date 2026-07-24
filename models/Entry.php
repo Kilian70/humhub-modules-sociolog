@@ -34,6 +34,9 @@ class Entry extends EntryBase
      */
     public $wallEntryClass = 'humhub\modules\sociolog\widgets\WallEntry';
 
+    /** Unterdrückt Benachrichtigungen, Kalender- und aktuelle Stream-Aktivität beim Altimport. */
+    public bool $historicalImport = false;
+
     private static ?array $organCache = null;
 
     // Cache für Spaces
@@ -228,6 +231,16 @@ public function canWrite($user = null): bool
         return true;
     }
 
+    // Optionaler Veröffentlichungs-Schutz. Standardmässig ist er aus,
+    // damit das bisherige Rechteverhalten vollständig erhalten bleibt.
+    $lockPublished = (bool)Yii::$app->getModule('sociolog')
+        ->settings
+        ->get('lockPublishedEntries', false);
+
+    if ($lockPublished && !empty($this->published_at)) {
+        return static::isLogbookManager($user);
+    }
+
     // --------------------------------------------------------
     // 2️⃣ BENUTZER MIT SCHREIBRECHT
     // --------------------------------------------------------
@@ -276,12 +289,75 @@ public function canWrite($user = null): bool
     return false;
 }
 
+public static function isLogbookManager($user = null): bool
+{
+    $user = $user ?: (Yii::$app->user->identity ?? null);
+
+    if (!$user) {
+        return false;
+    }
+
+    if (Yii::$app->user->isAdmin()) {
+        return true;
+    }
+
+    $settings = Yii::$app->getModule('sociolog')->settings;
+    $managerUsers = (array)($settings->getSerialized('managerUsers') ?? []);
+
+    if (in_array($user->guid, $managerUsers, true)) {
+        return true;
+    }
+
+    $managerGroups = array_filter(array_map(
+        'intval',
+        (array)($settings->getSerialized('managerGroups') ?? [])
+    ));
+
+    if ($managerGroups === []) {
+        return false;
+    }
+
+    $userGroupIds = GroupUser::find()
+        ->select('group_id')
+        ->where(['user_id' => (int)$user->id])
+        ->column();
+
+    return array_intersect($userGroupIds, $managerGroups) !== [];
+}
+
 ///////////////////////////////////////////////////////////////
 // ➜ EDIT (HumHub Standardfunktion)
 ///////////////////////////////////////////////////////////////
 public function canEdit($user = null): bool
 {
     return $this->canWrite($user);
+}
+
+/**
+ * Darf ausschließlich das nächste Überprüfungsdatum pflegen und ein
+ * zusätzliches Protokoll verlinken.
+ */
+public function canMaintainReview($user = null): bool
+{
+    $user = $user ?: (Yii::$app->user->identity ?? null);
+
+    if (!$user) {
+        return false;
+    }
+
+    if ($this->canWrite($user)) {
+        return true;
+    }
+
+    $enabled = (bool)Yii::$app->getModule('sociolog')
+        ->settings
+        ->get('limitedReviewMaintenanceEnabled', false);
+
+    return $enabled
+        && !empty($this->published_at)
+        && !empty($this->review_date)
+        && (string)$this->review_date <= date('Y-m-d')
+        && static::canCreateGlobal($user, (int)$this->getDecisionOrgan());
 }
 
 
@@ -418,12 +494,28 @@ public static function getOrganList(): array
     return self::$organCache = $list;
 }
 
-    public static function getDecisionTypeList(): array
+    public static function getDecisionTypeList(?int $includeId = null, bool $includeHidden = false): array
     {
         $types = DecisionType::find()->orderBy(['sort_order' => SORT_ASC])->all();
         $result = [];
+        $hiddenIds = [];
+
+        if (!$includeHidden) {
+            $settings = Yii::$app->getModule('sociolog')->settings;
+            $hiddenIds = array_map(
+                'intval',
+                (array)($settings->getSerialized('hiddenDecisionTypeIds') ?? [])
+            );
+        }
 
         foreach ($types as $type) {
+            if (
+                in_array((int)$type->id, $hiddenIds, true)
+                && (int)$type->id !== (int)$includeId
+            ) {
+                continue;
+            }
+
             $name = trim((string)$type->name);
             if ($name !== '') {
                 $result[$type->id] = $name;
@@ -669,7 +761,11 @@ public function beforeSave($insert)
             ->settings
             ->get('defaultEffectiveDays', 10);
 
-        $effective = strtotime($this->published_at . " +{$days} days +1 day");
+        $addExtraDay = (bool)Yii::$app->getModule('sociolog')
+            ->settings
+            ->get('effectiveDateAddExtraDay', true);
+        $extraDay = $addExtraDay ? ' +1 day' : '';
+        $effective = strtotime($this->published_at . " +{$days} days" . $extraDay);
 
         $this->effective_date = date('Y-m-d', $effective);
     }
@@ -679,7 +775,7 @@ public function beforeSave($insert)
 // 🔹 Automatische Statuslogik
 // =====================================================
 
-if ($this->status !== self::STATUS_EXPIRED) {
+if (!self::isManualProtectedStatus((string)$this->status)) {
 
     $today = date('Y-m-d');
 
@@ -722,6 +818,10 @@ if ($this->status !== self::STATUS_EXPIRED) {
 public function afterSave($insert, $changedAttributes)
 {
     parent::afterSave($insert, $changedAttributes);
+
+    if ($this->historicalImport) {
+        return;
+    }
 
     $module = Yii::$app->getModule('sociolog');
 

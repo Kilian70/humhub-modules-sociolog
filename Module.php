@@ -34,7 +34,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.7';
+    public string $version = '1.0.8';
     public string $humhubMinVersion = '1.18';
     
   
@@ -132,6 +132,16 @@ public function init()
             'moduleTitle'          => 'Logbuch',
             'showEntriesInStream'  => true,
             'showReviewInCalendar' => true,
+            'infoPageEnabled'      => false,
+            'autoPublicationDate'  => false,
+            'fixedDecisionTypeId'  => 0,
+            'showDecisionTypeHeader' => true,
+            'reviewDateRequiredForNewEntries' => false,
+            'limitedReviewMaintenanceEnabled' => false,
+            'lockPublishedEntries' => false,
+            'statusManagersOnly'   => false,
+            'extendedStatusesEnabled' => false,
+            'effectiveDateAddExtraDay' => true,
         ];
 
         foreach ($defaults as $key => $value) {
@@ -213,6 +223,12 @@ public function init()
             return Html::encode($module->settings->get('moduleTitle', 'Logbuch'));
         }
         return 'Logbuch';
+    }
+
+    public function getCustomLabel(string $setting, string $fallback): string
+    {
+        $value = trim((string)$this->settings->get($setting, ''));
+        return $value !== '' ? $value : $fallback;
     }
 
     // ============================================================

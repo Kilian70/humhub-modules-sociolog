@@ -2,7 +2,7 @@
   "name": "kilian/sociolog",
   "description": "HumHub Sociolog Modul (Logbuch) fuer Beschluesse und Grundsatzentscheide.",
   "type": "humhub-module",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "AGPL-3.0-or-later",
   "require": {
     "php": ">=8.1"

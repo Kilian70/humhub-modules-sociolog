@@ -20,6 +20,11 @@ if (in_array($requestedView, ['cards', 'table'], true)) {
 }
 
 $user = Yii::$app->user->identity ?? null;
+$module = Yii::$app->getModule('sociolog');
+$topicOwnerLabel = $module->getCustomLabel(
+    'topicOwnerLabel',
+    Yii::t('SociologModule.base', 'Themenhüter:in')
+);
 ?>
 
 <div class="card shadow-sm">
@@ -58,8 +63,8 @@ $user = Yii::$app->user->identity ?? null;
           <th scope="col"><?= Yii::t('SociologModule.base', 'Beschluss') ?></th>
           <th scope="col"><?= Yii::t('SociologModule.base', 'Inkrafttreten') ?></th>
           <th scope="col" class="text-center"
-              title="<?= Yii::t('SociologModule.base', 'Themenhüter:in') ?>">
-            <span class="visually-hidden"><?= Yii::t('SociologModule.base', 'Themenhüter:in') ?></span>
+              title="<?= Html::encode($topicOwnerLabel) ?>">
+            <span class="visually-hidden"><?= Html::encode($topicOwnerLabel) ?></span>
             <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
           </th>
           <th scope="col" class="text-center"

@@ -8,6 +8,20 @@ use yii\helpers\Html;
 if (!$model) {
     return;
 }
+
+$module = Yii::$app->getModule('sociolog');
+$decisionDateLabel = $module->getCustomLabel(
+    'decisionDateLabel',
+    Yii::t('SociologModule.base', 'Beschlussdatum')
+);
+$topicOwnerLabel = $module->getCustomLabel(
+    'topicOwnerLabel',
+    Yii::t('SociologModule.base', 'Themenhüter:in')
+);
+$protocolsLabel = $module->getCustomLabel(
+    'protocolsLabel',
+    Yii::t('SociologModule.base', 'Protokolle')
+);
 ?>
 
 <div class="print-container">
@@ -52,7 +66,7 @@ if (!$model) {
 
     <?php if (!empty($model->topic_owner)): ?>
         <p>
-            <strong><?= Yii::t('SociologModule.base', 'Themenhüter:in') ?>:</strong>
+            <strong><?= Html::encode($topicOwnerLabel) ?>:</strong>
             <?= Html::encode($model->topic_owner) ?>
         </p>
     <?php endif; ?>
@@ -62,7 +76,7 @@ if (!$model) {
     ============================================================ -->
     <?php if ($model->decision_date): ?>
         <p>
-            <strong><?= Yii::t('SociologModule.base', 'Beschlussdatum') ?>:</strong>
+            <strong><?= Html::encode($decisionDateLabel) ?>:</strong>
             <?= Yii::$app->formatter->asDate($model->decision_date, 'php:d.m.Y') ?>
         </p>
     <?php endif; ?>
@@ -106,7 +120,7 @@ if (!$model) {
     ============================================================ -->
     <?php if (!empty($model->protocols)): ?>
         <div class="print-link">
-            <strong><?= Yii::t('SociologModule.base', 'Protokolle') ?>:</strong>
+            <strong><?= Html::encode($protocolsLabel) ?>:</strong>
             <ul>
                 <?php foreach ($model->protocols as $protocol): ?>
                     <li>
