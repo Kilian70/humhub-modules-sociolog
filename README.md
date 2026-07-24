@@ -120,7 +120,7 @@ unter anderem festlegen:
 - ob neue Einträge immer eine feste Entscheidungsart erhalten
 - ob das Veröffentlichungsdatum automatisch auf das aktuelle Datum gesetzt wird
 - ob neue Einträge zwingend ein Überprüfungsdatum benötigen
-- ob der Entscheidungstyp in Karten und Detailansicht sichtbar ist
+- ob der Entscheidungstyp in Karten, im Dashboard und in der Detailansicht sichtbar ist
 - ob veröffentlichte Einträge für reguläre Änderungen gesperrt werden
 - ob nach Erreichen des Überprüfungsdatums eine eingeschränkte Pflege erlaubt ist
 - welche Benutzer oder Gruppen das Logbuch verwalten dürfen

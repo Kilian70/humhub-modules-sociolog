@@ -518,8 +518,12 @@ return [
 => 'When disabled, the colored type line above the entry is hidden. The stored decision type is retained.',
 'Entscheidungstyp in Karten und Detailansicht anzeigen'
 => 'Show decision type in cards and detail view',
+'Entscheidungstyp in Karten, Dashboard und Detailansicht anzeigen'
+=> 'Show decision type in cards, dashboard and detail view',
 'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
 => 'When disabled, the colored type badge on cards and the type line in the detail view are hidden. The stored decision type is retained.',
+'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten und im Dashboard sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+=> 'When disabled, the colored type badge on cards and in the dashboard as well as the type line in the detail view are hidden. The stored decision type is retained.',
 'Eingeschränkte Pflege nach einer Überprüfung erlauben'
 => 'Allow limited maintenance after a review',
 'Zuständige Personen dürfen bei veröffentlichten Einträgen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'

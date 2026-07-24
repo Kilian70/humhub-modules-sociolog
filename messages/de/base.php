@@ -521,8 +521,12 @@ return [
 => 'Wenn deaktiviert, wird die farbige Typzeile oberhalb des Eintrags ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.',
 'Entscheidungstyp in Karten und Detailansicht anzeigen'
 => 'Entscheidungstyp in Karten und Detailansicht anzeigen',
+'Entscheidungstyp in Karten, Dashboard und Detailansicht anzeigen'
+=> 'Entscheidungstyp in Karten, Dashboard und Detailansicht anzeigen',
 'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
 => 'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.',
+'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten und im Dashboard sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+=> 'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten und im Dashboard sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.',
 'Eingeschränkte Pflege nach einer Überprüfung erlauben'
 => 'Eingeschränkte Pflege nach einer Überprüfung erlauben',
 'Zuständige Personen dürfen bei veröffentlichten Einträgen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
