@@ -420,4 +420,31 @@ return [
 
 
 
+'Informationsseite' => 'Information page',
+'Informationsseite aktivieren' => 'Enable information page',
+'Informationsseite im Logbuch anzeigen' => 'Show information page in the logbook',
+'Titel der Informationsseite' => 'Information page title',
+'So funktioniert das Logbuch' => 'How the logbook works',
+'Einleitung' => 'Introduction',
+'Link zum Einleitungsdokument' => 'Link to the introductory document',
+'Einleitungsdokument' => 'Introductory document',
+'So entsteht ein Eintrag' => 'How an entry is created',
+'Berechtigungen' => 'Permissions',
+'Wer darf was?' => 'Who may do what?',
+'Status und Fristen' => 'Statuses and deadlines',
+'Einsprache und Einwand' => 'Objections',
+'Überprüfung' => 'Review',
+'Protokolle und Dokumente' => 'Minutes and documents',
+'Zurück zu den Einträgen' => 'Back to entries',
+'Dokument öffnen' => 'Open document',
+'Die Informationsseite ist nicht aktiviert.' => 'The information page is not enabled.',
+'Bitte eine interne URL oder eine vollständige HTTP-/HTTPS-Adresse eingeben.'
+=> 'Please enter an internal URL or a complete HTTP/HTTPS address.',
+'Optionaler Link zu einem PDF, einer HumHub-Seite oder einem Dokument.'
+=> 'Optional link to a PDF, a HumHub page or a document.',
+'Die Informationsseite ist vollständig von den Einträgen getrennt. Wenn sie deaktiviert ist, bleibt das Logbuch unverändert.'
+=> 'The information page is completely separate from the entries. When disabled, the logbook remains unchanged.',
+'Hier findest du die ausführliche Einleitung und die verbindlichen Grundlagen des Logbuchs.'
+=> 'Here you can find the detailed introduction and the binding principles of the logbook.',
+
 ];

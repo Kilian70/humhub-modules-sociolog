@@ -27,6 +27,21 @@ class SettingsForm extends Model
 	
 	public $decisionWorkflowEnabled;
 
+    /* ============================================================
+     * Optionale Informationsseite
+     * ============================================================ */
+
+    public $infoPageEnabled;
+    public $infoPageTitle;
+    public $infoIntroText;
+    public $infoDocumentUrl;
+    public $infoProcessText;
+    public $infoPermissionsText;
+    public $infoStatusText;
+    public $infoObjectionText;
+    public $infoReviewText;
+    public $infoDocumentsText;
+
 
     /* ============================================================
      * Rechte
@@ -49,9 +64,21 @@ class SettingsForm extends Model
 	{
 		return [
 
-			[['moduleTitle'], 'trim'],
+			[['moduleTitle', 'infoPageTitle', 'infoDocumentUrl'], 'trim'],
 			[['moduleTitle'], 'required'],
 			[['moduleTitle'], 'string', 'max' => 100],
+			[['infoPageTitle'], 'string', 'max' => 150],
+			[['infoDocumentUrl'], 'string', 'max' => 1000],
+			[['infoDocumentUrl'], 'validateInfoDocumentUrl'],
+			[[
+				'infoIntroText',
+				'infoProcessText',
+				'infoPermissionsText',
+				'infoStatusText',
+				'infoObjectionText',
+				'infoReviewText',
+				'infoDocumentsText'
+			], 'string', 'max' => 5000],
 
 			[
 				[
@@ -90,13 +117,38 @@ class SettingsForm extends Model
 			[
 				[
 					'showReviewInCalendar',
-					'decisionWorkflowEnabled'
+					'decisionWorkflowEnabled',
+					'infoPageEnabled'
 				],
 				'boolean'
 			],
 	
 		];
 	}
+
+    public function validateInfoDocumentUrl(string $attribute): void
+    {
+        $value = trim((string)$this->$attribute);
+
+        if ($value === '') {
+            return;
+        }
+
+        $isInternal = str_starts_with($value, '/') && !str_starts_with($value, '//');
+        $scheme = strtolower((string)parse_url($value, PHP_URL_SCHEME));
+        $isExternal = in_array($scheme, ['http', 'https'], true)
+            && filter_var($value, FILTER_VALIDATE_URL) !== false;
+
+        if (!$isInternal && !$isExternal) {
+            $this->addError(
+                $attribute,
+                Yii::t(
+                    'SociologModule.base',
+                    'Bitte eine interne URL oder eine vollständige HTTP-/HTTPS-Adresse eingeben.'
+                )
+            );
+        }
+    }
 
 
     /* ============================================================
@@ -149,6 +201,36 @@ class SettingsForm extends Model
             'notifyGroups' =>
                 Yii::t('SociologModule.base', 'Benachrichtigungsgruppen'),
 
+            'infoPageEnabled' =>
+                Yii::t('SociologModule.base', 'Informationsseite aktivieren'),
+
+            'infoPageTitle' =>
+                Yii::t('SociologModule.base', 'Titel der Informationsseite'),
+
+            'infoIntroText' =>
+                Yii::t('SociologModule.base', 'Einleitung'),
+
+            'infoDocumentUrl' =>
+                Yii::t('SociologModule.base', 'Link zum Einleitungsdokument'),
+
+            'infoProcessText' =>
+                Yii::t('SociologModule.base', 'So entsteht ein Eintrag'),
+
+            'infoPermissionsText' =>
+                Yii::t('SociologModule.base', 'Berechtigungen'),
+
+            'infoStatusText' =>
+                Yii::t('SociologModule.base', 'Status und Fristen'),
+
+            'infoObjectionText' =>
+                Yii::t('SociologModule.base', 'Einsprache und Einwand'),
+
+            'infoReviewText' =>
+                Yii::t('SociologModule.base', 'Überprüfung'),
+
+            'infoDocumentsText' =>
+                Yii::t('SociologModule.base', 'Protokolle und Dokumente'),
+
         ];
     }
 
@@ -195,6 +277,36 @@ class SettingsForm extends Model
 	
 		$this->decisionWorkflowEnabled =
 			$settings->get('decisionWorkflowEnabled', true);
+
+        $this->infoPageEnabled =
+            (bool)$settings->get('infoPageEnabled', false);
+
+        $this->infoPageTitle =
+            $settings->get('infoPageTitle', Yii::t('SociologModule.base', 'So funktioniert das Logbuch'));
+
+        $this->infoIntroText =
+            $settings->get('infoIntroText', '');
+
+        $this->infoDocumentUrl =
+            $settings->get('infoDocumentUrl', '');
+
+        $this->infoProcessText =
+            $settings->get('infoProcessText', '');
+
+        $this->infoPermissionsText =
+            $settings->get('infoPermissionsText', '');
+
+        $this->infoStatusText =
+            $settings->get('infoStatusText', '');
+
+        $this->infoObjectionText =
+            $settings->get('infoObjectionText', '');
+
+        $this->infoReviewText =
+            $settings->get('infoReviewText', '');
+
+        $this->infoDocumentsText =
+            $settings->get('infoDocumentsText', '');
 	
 	
 	
@@ -262,6 +374,17 @@ class SettingsForm extends Model
 		$settings->set('showReviewInCalendar', $this->showReviewInCalendar);
 	
 		$settings->set('decisionWorkflowEnabled', $this->decisionWorkflowEnabled);
+
+        $settings->set('infoPageEnabled', (bool)$this->infoPageEnabled);
+        $settings->set('infoPageTitle', trim((string)$this->infoPageTitle));
+        $settings->set('infoIntroText', trim((string)$this->infoIntroText));
+        $settings->set('infoDocumentUrl', trim((string)$this->infoDocumentUrl));
+        $settings->set('infoProcessText', trim((string)$this->infoProcessText));
+        $settings->set('infoPermissionsText', trim((string)$this->infoPermissionsText));
+        $settings->set('infoStatusText', trim((string)$this->infoStatusText));
+        $settings->set('infoObjectionText', trim((string)$this->infoObjectionText));
+        $settings->set('infoReviewText', trim((string)$this->infoReviewText));
+        $settings->set('infoDocumentsText', trim((string)$this->infoDocumentsText));
 	
 	
 	

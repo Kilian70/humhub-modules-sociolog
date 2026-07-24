@@ -423,7 +423,31 @@ return [
 'Die Space-Konfiguration konnte nicht gespeichert werden. Bitte prüfe die Eingaben.'
 => 'Die Space-Konfiguration konnte nicht gespeichert werden. Bitte prüfe die Eingaben.',
 
-
-
+'Informationsseite' => 'Informationsseite',
+'Informationsseite aktivieren' => 'Informationsseite aktivieren',
+'Informationsseite im Logbuch anzeigen' => 'Informationsseite im Logbuch anzeigen',
+'Titel der Informationsseite' => 'Titel der Informationsseite',
+'So funktioniert das Logbuch' => 'So funktioniert das Logbuch',
+'Einleitung' => 'Einleitung',
+'Link zum Einleitungsdokument' => 'Link zum Einleitungsdokument',
+'Einleitungsdokument' => 'Einleitungsdokument',
+'So entsteht ein Eintrag' => 'So entsteht ein Eintrag',
+'Berechtigungen' => 'Berechtigungen',
+'Wer darf was?' => 'Wer darf was?',
+'Status und Fristen' => 'Status und Fristen',
+'Einsprache und Einwand' => 'Einsprache und Einwand',
+'Überprüfung' => 'Überprüfung',
+'Protokolle und Dokumente' => 'Protokolle und Dokumente',
+'Zurück zu den Einträgen' => 'Zurück zu den Einträgen',
+'Dokument öffnen' => 'Dokument öffnen',
+'Die Informationsseite ist nicht aktiviert.' => 'Die Informationsseite ist nicht aktiviert.',
+'Bitte eine interne URL oder eine vollständige HTTP-/HTTPS-Adresse eingeben.'
+=> 'Bitte eine interne URL oder eine vollständige HTTP-/HTTPS-Adresse eingeben.',
+'Optionaler Link zu einem PDF, einer HumHub-Seite oder einem Dokument.'
+=> 'Optionaler Link zu einem PDF, einer HumHub-Seite oder einem Dokument.',
+'Die Informationsseite ist vollständig von den Einträgen getrennt. Wenn sie deaktiviert ist, bleibt das Logbuch unverändert.'
+=> 'Die Informationsseite ist vollständig von den Einträgen getrennt. Wenn sie deaktiviert ist, bleibt das Logbuch unverändert.',
+'Hier findest du die ausführliche Einleitung und die verbindlichen Grundlagen des Logbuchs.'
+=> 'Hier findest du die ausführliche Einleitung und die verbindlichen Grundlagen des Logbuchs.',
 
 ];

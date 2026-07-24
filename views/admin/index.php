@@ -350,6 +350,96 @@ echo Html::encode(implode(', ', $names));
       </div>
     </div>
 
+    <!-- Optionale Informationsseite -->
+    <div class="col-12 mt-4">
+      <fieldset class="card border-info p-3">
+        <legend class="h5 fw-semibold text-info mb-3">
+          <i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>
+          <?= Yii::t('SociologModule.base', 'Informationsseite') ?>
+        </legend>
+
+        <?= $form->field($model, 'infoPageEnabled')->checkbox([
+            'label' => Yii::t('SociologModule.base', 'Informationsseite im Logbuch anzeigen'),
+            'uncheck' => 0,
+        ]) ?>
+
+        <p class="form-text mb-4">
+          <?= Yii::t(
+              'SociologModule.base',
+              'Die Informationsseite ist vollständig von den Einträgen getrennt. Wenn sie deaktiviert ist, bleibt das Logbuch unverändert.'
+          ) ?>
+        </p>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoPageTitle')->textInput([
+                  'maxlength' => true,
+                  'placeholder' => Yii::t('SociologModule.base', 'So funktioniert das Logbuch'),
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoDocumentUrl')->textInput([
+                  'maxlength' => true,
+                  'placeholder' => 'https://… oder /seite/pfad',
+              ])->hint(Yii::t(
+                  'SociologModule.base',
+                  'Optionaler Link zu einem PDF, einer HumHub-Seite oder einem Dokument.'
+              )) ?>
+            </div>
+
+            <div class="col-12">
+              <?= $form->field($model, 'infoIntroText')->textarea([
+                  'rows' => 3,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoProcessText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoPermissionsText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoStatusText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoObjectionText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoReviewText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoDocumentsText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+        </div>
+      </fieldset>
+    </div>
+
     <!-- Buttons -->
     <div class="col-12 text-end mt-4">
       <?= Html::submitButton(

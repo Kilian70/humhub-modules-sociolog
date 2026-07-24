@@ -693,3 +693,76 @@ html[data-bs-theme="dark"] .badge-sociolog-expired {
     transform: none !important;
   }
 }
+
+/* ============================================================
+   Optionale Informationsseite
+   ============================================================ */
+.sociolog-info-page {
+  padding: 1rem;
+}
+
+.sociolog-info-intro {
+  max-width: 70ch;
+}
+
+.sociolog-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.sociolog-info-card {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-top: 4px solid var(--sociolog-info-accent, #6c757d);
+}
+
+.sociolog-info-card h2 {
+  color: var(--sociolog-info-accent, #495057);
+}
+
+.sociolog-info-card--process {
+  --sociolog-info-accent: #0d6efd;
+}
+
+.sociolog-info-card--permissions {
+  --sociolog-info-accent: #6f42c1;
+}
+
+.sociolog-info-card--status {
+  --sociolog-info-accent: #8a6400;
+}
+
+.sociolog-info-card--objection {
+  --sociolog-info-accent: #b02a37;
+}
+
+.sociolog-info-card--review {
+  --sociolog-info-accent: #087990;
+}
+
+.sociolog-info-card--documents {
+  --sociolog-info-accent: #146c43;
+}
+
+.sociolog-info-text {
+  line-height: 1.55;
+  white-space: normal;
+}
+
+.sociolog-info-text a,
+.sociolog-info-intro a {
+  color: var(--bs-link-color, #0d6efd);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+@media (max-width: 767.98px) {
+  .sociolog-info-page {
+    padding: 0.75rem;
+  }
+
+  .sociolog-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

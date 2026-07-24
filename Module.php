@@ -132,6 +132,7 @@ public function init()
             'moduleTitle'          => 'Logbuch',
             'showEntriesInStream'  => true,
             'showReviewInCalendar' => true,
+            'infoPageEnabled'      => false,
         ];
 
         foreach ($defaults as $key => $value) {

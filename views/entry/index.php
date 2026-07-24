@@ -17,6 +17,7 @@ $module = Yii::$app->getModule('sociolog');
 $moduleTitle = $module && $module->settings->get('moduleTitle')
     ? $module->settings->get('moduleTitle')
     : 'Logbuch';
+$infoPageEnabled = $module && (bool)$module->settings->get('infoPageEnabled', false);
 
 /* ============================================================
    🧭 View-Modus: Request → Session → Default
@@ -102,6 +103,15 @@ foreach ($dataProvider->models as $entry) {
   </div>
 
   <div class="btn-group">
+    <?php if ($infoPageEnabled): ?>
+      <?= Html::a(
+        '<i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>'
+          . Yii::t('SociologModule.base', 'So funktioniert das Logbuch'),
+        ['/sociolog/info/index'],
+        ['class' => 'btn btn-sm btn-outline-primary']
+      ) ?>
+    <?php endif; ?>
+
     <?php if (\humhub\modules\sociolog\models\Entry::canCreateGlobal(Yii::$app->user->identity)): ?>
       <?= Html::a(
         '<i class="fa-solid fa-plus me-1"></i>' . Yii::t('SociologModule.base', 'Neuer Eintrag'),
