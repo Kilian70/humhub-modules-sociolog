@@ -507,7 +507,7 @@ echo Html::encode(implode(', ', $names));
                 'uncheck' => 0,
             ])->hint(Yii::t(
                 'SociologModule.base',
-                'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+                'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten und im Dashboard sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
             )) ?>
           </div>
 

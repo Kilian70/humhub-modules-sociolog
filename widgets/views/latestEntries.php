@@ -3,6 +3,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 /** @var humhub\modules\sociolog\models\Entry[] $entries */
+
+$module = Yii::$app->getModule('sociolog');
+$showDecisionTypeHeader = $module
+  ? (bool)$module->settings->get('showDecisionTypeHeader', true)
+  : true;
 ?>
 
 <style>
@@ -125,7 +130,7 @@ use yii\helpers\Url;
             ]) ?>
           </div>
 
-          <?php if ($entry->decisionType): ?>
+          <?php if ($showDecisionTypeHeader && $entry->decisionType): ?>
             <div class="mb-1">
               <span class="sociolog-widget-type" style="background: <?= Html::encode($typeColor) ?>; color: <?= Html::encode($typeTextColor) ?>;">
                 <?= Html::encode($entry->decisionType->name) ?>

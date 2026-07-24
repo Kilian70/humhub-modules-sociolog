@@ -338,7 +338,7 @@ class SettingsForm extends Model
                 Yii::t('SociologModule.base', 'Ausgeblendete Entscheidungstypen'),
 
             'showDecisionTypeHeader' =>
-                Yii::t('SociologModule.base', 'Entscheidungstyp in Karten und Detailansicht anzeigen'),
+                Yii::t('SociologModule.base', 'Entscheidungstyp in Karten, Dashboard und Detailansicht anzeigen'),
 
             'reviewDateRequiredForNewEntries' =>
                 Yii::t('SociologModule.base', 'Überprüfungsdatum bei neuen Einträgen verlangen'),

@@ -25,7 +25,7 @@ Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentier
 - Sichere Behandlung von Informations- und Protokoll-Links
 
 ### Verbessert
-- Entscheidungstyp-Kopf kann in Karten und Detailansicht ausgeblendet werden
+- Entscheidungstyp-Kopf kann in Karten, im Dashboard-Widget und in der Detailansicht ausgeblendet werden
 - Ausgeblendete Entscheidungstypen verschwinden bei neuen Einträgen und in Filtern; bestehende Einträge bleiben erhalten
 - Fokusdarstellung, Tabellenbedienung und Formulare weiter für Tastatur und Screenreader optimiert
 - Historischer Import und manuelle Statusprüfung im Administrationsbereich unter „Wartung“ zusammengefasst
