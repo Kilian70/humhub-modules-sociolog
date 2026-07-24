@@ -87,12 +87,7 @@ $currentView = Yii::$app->request->get('view', 'cards');
       <div class="col-12 col-md-2">
         <?= $form->field($model, 'status')
           ->dropDownList(
-              [
-                  'pending' => Yii::t('SociologModule.base', 'Nicht in Kraft'),
-                  'valid'   => Yii::t('SociologModule.base', 'Gültig'),
-                  'review'  => Yii::t('SociologModule.base', 'In Überprüfung'),
-                  'expired' => Yii::t('SociologModule.base', 'Nicht mehr gültig'),
-              ],
+              Entry::getStatusOptions(),
               [
                   'prompt' => Yii::t('SociologModule.base', 'Status auswählen …'),
                   'class'  => 'form-select',

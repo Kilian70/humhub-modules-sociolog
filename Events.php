@@ -85,6 +85,10 @@ class Events
             return;
         }
 
+        if ($entry->historicalImport) {
+            return;
+        }
+
         $oid = spl_object_id($entry);
         if (isset(self::$processedEntries[$oid])) {
             // Schutz vor Doppel-Events

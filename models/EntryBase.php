@@ -27,6 +27,8 @@ class EntryBase extends ContentActiveRecord
     const STATUS_VALID   = 'valid';
     const STATUS_REVIEW  = 'review';
     const STATUS_EXPIRED = 'expired';
+    const STATUS_OBJECTION = 'objection';
+    const STATUS_REPLACED = 'replaced';
 
     // ============================================================
     // 🔹 Tabellenname
@@ -99,6 +101,13 @@ class EntryBase extends ContentActiveRecord
 
         // Datum
         [['decision_date', 'effective_date', 'review_date'], 'safe'],
+        [['review_date'], 'required',
+            'when' => static function ($model): bool {
+                return $model->isNewRecord
+                    && (bool)self::getSetting('reviewDateRequiredForNewEntries', false);
+            },
+            'enableClientValidation' => false,
+        ],
 
         // Strings
         [['title', 'topic_owner'], 'string', 'max' => 255],
@@ -130,7 +139,11 @@ class EntryBase extends ContentActiveRecord
     $days = (int) self::getSetting('defaultEffectiveDays', 0);
 
     // Inkrafttreten berechnen
-    if (!empty($this->decision_date) && empty($this->effective_date)) {
+    if (
+        !self::isManualProtectedStatus((string)$this->status)
+        && !empty($this->decision_date)
+        && empty($this->effective_date)
+    ) {
 
         if ($days > 0) {
             $this->status = self::STATUS_PENDING;
@@ -160,7 +173,10 @@ class EntryBase extends ContentActiveRecord
                 'color' => 'secondary',
             ],
             self::STATUS_PENDING => [
-                'label' => Yii::t('SociologModule.base', 'Nicht in Kraft'),
+                'label' => (string)self::getSetting(
+                    'pendingStatusLabel',
+                    Yii::t('SociologModule.base', 'Nicht in Kraft')
+                ),
                 'color' => 'secondary',
             ],
             self::STATUS_VALID => [
@@ -175,7 +191,24 @@ class EntryBase extends ContentActiveRecord
                 'label' => Yii::t('SociologModule.base', 'Nicht mehr gültig'),
                 'color' => 'dark',
             ],
+            self::STATUS_OBJECTION => [
+                'label' => Yii::t('SociologModule.base', 'Schwerwiegender Einwand'),
+                'color' => 'danger',
+            ],
+            self::STATUS_REPLACED => [
+                'label' => Yii::t('SociologModule.base', 'Ersetzt'),
+                'color' => 'dark',
+            ],
         ];
+    }
+
+    public static function isManualProtectedStatus(string $status): bool
+    {
+        return in_array($status, [
+            self::STATUS_EXPIRED,
+            self::STATUS_OBJECTION,
+            self::STATUS_REPLACED,
+        ], true);
     }
 
     // ============================================================
@@ -190,6 +223,14 @@ class EntryBase extends ContentActiveRecord
             if ($key === self::STATUS_AUTO) {
                 continue;
             }
+
+            if (
+                in_array($key, [self::STATUS_OBJECTION, self::STATUS_REPLACED], true)
+                && !(bool)self::getSetting('extendedStatusesEnabled', false)
+            ) {
+                continue;
+            }
+
             $options[$key] = $cfg['label'];
         }
 

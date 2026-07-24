@@ -23,6 +23,7 @@ class SettingsForm extends Model
     public $globalOrgans;
 
     public $defaultEffectiveDays;
+    public $effectiveDateAddExtraDay;
 	public $showReviewInCalendar;
 	
 	public $decisionWorkflowEnabled;
@@ -41,6 +42,24 @@ class SettingsForm extends Model
     public $infoObjectionText;
     public $infoReviewText;
     public $infoDocumentsText;
+    public $infoGuidelineText;
+    public $infoExamplesText;
+
+    /* ============================================================
+     * Optionale Formularvorgaben
+     * ============================================================ */
+
+    public $autoPublicationDate;
+    public $fixedDecisionTypeId;
+    public $hiddenDecisionTypeIds = [];
+    public $showDecisionTypeHeader;
+    public $reviewDateRequiredForNewEntries;
+    public $limitedReviewMaintenanceEnabled;
+    public $decisionDateLabel;
+    public $topicOwnerLabel;
+    public $topicOwnerPlaceholder;
+    public $protocolsLabel;
+    public $pendingStatusLabel;
 
 
     /* ============================================================
@@ -52,8 +71,13 @@ class SettingsForm extends Model
 
     public $writerGroups = [];
     public $deleterGroups = [];
+    public $managerUsers = [];
+    public $managerGroups = [];
 
     public $notifyGroups = [];
+    public $lockPublishedEntries;
+    public $statusManagersOnly;
+    public $extendedStatusesEnabled;
 
 
     /* ============================================================
@@ -64,12 +88,34 @@ class SettingsForm extends Model
 	{
 		return [
 
-			[['moduleTitle', 'infoPageTitle', 'infoDocumentUrl'], 'trim'],
+			[[
+				'moduleTitle',
+				'infoPageTitle',
+				'infoDocumentUrl',
+				'decisionDateLabel',
+				'topicOwnerLabel',
+				'topicOwnerPlaceholder',
+				'protocolsLabel',
+				'pendingStatusLabel'
+			], 'trim'],
 			[['moduleTitle'], 'required'],
 			[['moduleTitle'], 'string', 'max' => 100],
 			[['infoPageTitle'], 'string', 'max' => 150],
 			[['infoDocumentUrl'], 'string', 'max' => 1000],
 			[['infoDocumentUrl'], 'validateInfoDocumentUrl'],
+			[[
+				'decisionDateLabel',
+				'topicOwnerLabel',
+				'protocolsLabel',
+				'pendingStatusLabel'
+			], 'required'],
+			[[
+				'decisionDateLabel',
+				'topicOwnerLabel',
+				'topicOwnerPlaceholder',
+				'protocolsLabel',
+				'pendingStatusLabel'
+			], 'string', 'max' => 100],
 			[[
 				'infoIntroText',
 				'infoProcessText',
@@ -77,7 +123,9 @@ class SettingsForm extends Model
 				'infoStatusText',
 				'infoObjectionText',
 				'infoReviewText',
-				'infoDocumentsText'
+				'infoDocumentsText',
+				'infoGuidelineText',
+				'infoExamplesText'
 			], 'string', 'max' => 5000],
 
 			[
@@ -94,7 +142,8 @@ class SettingsForm extends Model
 				[
 					'latestEntriesLimit',
 					'widgetSortOrder',
-					'defaultEffectiveDays'
+					'defaultEffectiveDays',
+					'fixedDecisionTypeId'
 				],
 				'integer'
 			],
@@ -102,6 +151,8 @@ class SettingsForm extends Model
 			[['latestEntriesLimit'], 'integer', 'min' => 1, 'max' => 50],
 			[['widgetSortOrder'], 'integer', 'min' => 0],
 			[['defaultEffectiveDays'], 'integer', 'min' => 0],
+			[['fixedDecisionTypeId'], 'integer', 'min' => 0],
+			[['fixedDecisionTypeId'], 'validateFixedDecisionType'],
 	
 			[
 				[
@@ -109,7 +160,10 @@ class SettingsForm extends Model
 					'deleterUsers',
 					'writerGroups',
 					'deleterGroups',
-					'notifyGroups'
+					'managerUsers',
+					'managerGroups',
+					'notifyGroups',
+					'hiddenDecisionTypeIds'
 				],
 				'safe'
 			],
@@ -118,7 +172,15 @@ class SettingsForm extends Model
 				[
 					'showReviewInCalendar',
 					'decisionWorkflowEnabled',
-					'infoPageEnabled'
+					'infoPageEnabled',
+					'autoPublicationDate',
+					'showDecisionTypeHeader',
+					'reviewDateRequiredForNewEntries',
+					'limitedReviewMaintenanceEnabled',
+					'lockPublishedEntries',
+					'statusManagersOnly',
+					'extendedStatusesEnabled',
+					'effectiveDateAddExtraDay'
 				],
 				'boolean'
 			],
@@ -150,6 +212,17 @@ class SettingsForm extends Model
         }
     }
 
+    public function validateFixedDecisionType(string $attribute): void
+    {
+        $id = (int)$this->$attribute;
+
+        if ($id > 0 && !DecisionType::find()->where(['id' => $id])->exists()) {
+            $this->addError(
+                $attribute,
+                Yii::t('SociologModule.base', 'Der ausgewählte Entscheid-Typ existiert nicht mehr.')
+            );
+        }
+    }
 
     /* ============================================================
      * Labels
@@ -183,6 +256,9 @@ class SettingsForm extends Model
             'defaultEffectiveDays' =>
                 Yii::t('SociologModule.base', 'Inkrafttreten nach (Tagen)'),
 
+            'effectiveDateAddExtraDay' =>
+                Yii::t('SociologModule.base', 'Inkrafttreten erst am Folgetag der vollständigen Frist'),
+
             'showReviewInCalendar' =>
                 Yii::t('SociologModule.base', 'Überprüfungsdaten im Kalender anzeigen'),
 
@@ -200,6 +276,21 @@ class SettingsForm extends Model
 
             'notifyGroups' =>
                 Yii::t('SociologModule.base', 'Benachrichtigungsgruppen'),
+
+            'managerUsers' =>
+                Yii::t('SociologModule.base', 'Logbuch-Verantwortliche'),
+
+            'managerGroups' =>
+                Yii::t('SociologModule.base', 'Verantwortliche Gruppen'),
+
+            'lockPublishedEntries' =>
+                Yii::t('SociologModule.base', 'Veröffentlichte Einträge für Erfasser:innen sperren'),
+
+            'statusManagersOnly' =>
+                Yii::t('SociologModule.base', 'Manuelle Statusänderung nur für Logbuch-Verantwortliche'),
+
+            'extendedStatusesEnabled' =>
+                Yii::t('SociologModule.base', 'Zusätzliche Status „Schwerwiegender Einwand“ und „Ersetzt“ aktivieren'),
 
             'infoPageEnabled' =>
                 Yii::t('SociologModule.base', 'Informationsseite aktivieren'),
@@ -230,6 +321,45 @@ class SettingsForm extends Model
 
             'infoDocumentsText' =>
                 Yii::t('SociologModule.base', 'Protokolle und Dokumente'),
+
+            'infoGuidelineText' =>
+                Yii::t('SociologModule.base', 'Was ist ein Grundsatzentscheid?'),
+
+            'infoExamplesText' =>
+                Yii::t('SociologModule.base', 'Beispiele'),
+
+            'autoPublicationDate' =>
+                Yii::t('SociologModule.base', 'Veröffentlichungsdatum bei neuen Einträgen automatisch setzen'),
+
+            'fixedDecisionTypeId' =>
+                Yii::t('SociologModule.base', 'Feste Entscheidungsart für neue Einträge'),
+
+            'hiddenDecisionTypeIds' =>
+                Yii::t('SociologModule.base', 'Ausgeblendete Entscheidungstypen'),
+
+            'showDecisionTypeHeader' =>
+                Yii::t('SociologModule.base', 'Entscheidungstyp in Karten und Detailansicht anzeigen'),
+
+            'reviewDateRequiredForNewEntries' =>
+                Yii::t('SociologModule.base', 'Überprüfungsdatum bei neuen Einträgen verlangen'),
+
+            'limitedReviewMaintenanceEnabled' =>
+                Yii::t('SociologModule.base', 'Eingeschränkte Pflege nach einer Überprüfung erlauben'),
+
+            'decisionDateLabel' =>
+                Yii::t('SociologModule.base', 'Bezeichnung des Entscheidungsdatums'),
+
+            'topicOwnerLabel' =>
+                Yii::t('SociologModule.base', 'Bezeichnung der Ausführungsverantwortung'),
+
+            'topicOwnerPlaceholder' =>
+                Yii::t('SociologModule.base', 'Platzhalter der Ausführungsverantwortung'),
+
+            'protocolsLabel' =>
+                Yii::t('SociologModule.base', 'Bezeichnung für Protokolle und Dokumente'),
+
+            'pendingStatusLabel' =>
+                Yii::t('SociologModule.base', 'Bezeichnung des ersten Status'),
 
         ];
     }
@@ -271,6 +401,9 @@ class SettingsForm extends Model
 	
 		$this->defaultEffectiveDays =
 			$settings->get('defaultEffectiveDays', 10);
+
+        $this->effectiveDateAddExtraDay =
+            (bool)$settings->get('effectiveDateAddExtraDay', true);
 	
 		$this->showReviewInCalendar =
 			$settings->get('showReviewInCalendar', false);
@@ -307,6 +440,45 @@ class SettingsForm extends Model
 
         $this->infoDocumentsText =
             $settings->get('infoDocumentsText', '');
+
+        $this->infoGuidelineText =
+            $settings->get('infoGuidelineText', '');
+
+        $this->infoExamplesText =
+            $settings->get('infoExamplesText', '');
+
+        $this->autoPublicationDate =
+            (bool)$settings->get('autoPublicationDate', false);
+
+        $this->fixedDecisionTypeId =
+            (int)$settings->get('fixedDecisionTypeId', 0);
+
+        $this->hiddenDecisionTypeIds =
+            $settings->getSerialized('hiddenDecisionTypeIds') ?? [];
+
+        $this->showDecisionTypeHeader =
+            (bool)$settings->get('showDecisionTypeHeader', true);
+
+        $this->reviewDateRequiredForNewEntries =
+            (bool)$settings->get('reviewDateRequiredForNewEntries', false);
+
+        $this->limitedReviewMaintenanceEnabled =
+            (bool)$settings->get('limitedReviewMaintenanceEnabled', false);
+
+        $this->decisionDateLabel =
+            $settings->get('decisionDateLabel', Yii::t('SociologModule.base', 'Beschlussdatum'));
+
+        $this->topicOwnerLabel =
+            $settings->get('topicOwnerLabel', Yii::t('SociologModule.base', 'Themenhüter:in'));
+
+        $this->topicOwnerPlaceholder =
+            $settings->get('topicOwnerPlaceholder', '');
+
+        $this->protocolsLabel =
+            $settings->get('protocolsLabel', Yii::t('SociologModule.base', 'Protokolle'));
+
+        $this->pendingStatusLabel =
+            $settings->get('pendingStatusLabel', Yii::t('SociologModule.base', 'Nicht in Kraft'));
 	
 	
 	
@@ -327,6 +499,21 @@ class SettingsForm extends Model
 	
 		$this->deleterGroups =
 			$settings->getSerialized('deleterGroups') ?? [];
+
+        $this->managerUsers =
+            $settings->getSerialized('managerUsers') ?? [];
+
+        $this->managerGroups =
+            $settings->getSerialized('managerGroups') ?? [];
+
+        $this->lockPublishedEntries =
+            (bool)$settings->get('lockPublishedEntries', false);
+
+        $this->statusManagersOnly =
+            (bool)$settings->get('statusManagersOnly', false);
+
+        $this->extendedStatusesEnabled =
+            (bool)$settings->get('extendedStatusesEnabled', false);
 	
 	
 	
@@ -370,6 +557,7 @@ class SettingsForm extends Model
 		$settings->set('globalOrgans', $this->globalOrgans);
 	
 		$settings->set('defaultEffectiveDays', $this->defaultEffectiveDays);
+        $settings->set('effectiveDateAddExtraDay', (bool)$this->effectiveDateAddExtraDay);
 	
 		$settings->set('showReviewInCalendar', $this->showReviewInCalendar);
 	
@@ -385,6 +573,36 @@ class SettingsForm extends Model
         $settings->set('infoObjectionText', trim((string)$this->infoObjectionText));
         $settings->set('infoReviewText', trim((string)$this->infoReviewText));
         $settings->set('infoDocumentsText', trim((string)$this->infoDocumentsText));
+        $settings->set('infoGuidelineText', trim((string)$this->infoGuidelineText));
+        $settings->set('infoExamplesText', trim((string)$this->infoExamplesText));
+        $settings->set('autoPublicationDate', (bool)$this->autoPublicationDate);
+        $hiddenDecisionTypeIds = array_values(array_unique(array_filter(array_map(
+            'intval',
+            (array)$this->hiddenDecisionTypeIds
+        ))));
+        $fixedDecisionTypeId = (int)$this->fixedDecisionTypeId;
+        if (in_array($fixedDecisionTypeId, $hiddenDecisionTypeIds, true)) {
+            $fixedDecisionTypeId = 0;
+        }
+        $settings->set('fixedDecisionTypeId', $fixedDecisionTypeId);
+        $settings->setSerialized(
+            'hiddenDecisionTypeIds',
+            $hiddenDecisionTypeIds
+        );
+        $settings->set('showDecisionTypeHeader', (bool)$this->showDecisionTypeHeader);
+        $settings->set(
+            'reviewDateRequiredForNewEntries',
+            (bool)$this->reviewDateRequiredForNewEntries
+        );
+        $settings->set(
+            'limitedReviewMaintenanceEnabled',
+            (bool)$this->limitedReviewMaintenanceEnabled
+        );
+        $settings->set('decisionDateLabel', trim((string)$this->decisionDateLabel));
+        $settings->set('topicOwnerLabel', trim((string)$this->topicOwnerLabel));
+        $settings->set('topicOwnerPlaceholder', trim((string)$this->topicOwnerPlaceholder));
+        $settings->set('protocolsLabel', trim((string)$this->protocolsLabel));
+        $settings->set('pendingStatusLabel', trim((string)$this->pendingStatusLabel));
 	
 	
 	
@@ -413,6 +631,20 @@ class SettingsForm extends Model
 			'deleterGroups',
 			array_values(array_filter((array)$this->deleterGroups))
 		);
+
+        $settings->setSerialized(
+            'managerUsers',
+            array_values(array_filter((array)$this->managerUsers))
+        );
+
+        $settings->setSerialized(
+            'managerGroups',
+            array_values(array_filter((array)$this->managerGroups))
+        );
+
+        $settings->set('lockPublishedEntries', (bool)$this->lockPublishedEntries);
+        $settings->set('statusManagersOnly', (bool)$this->statusManagersOnly);
+        $settings->set('extendedStatusesEnabled', (bool)$this->extendedStatusesEnabled);
 	
 	
 	

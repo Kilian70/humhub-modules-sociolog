@@ -80,6 +80,18 @@ class InfoController extends Controller
                     'title' => Yii::t('SociologModule.base', 'Protokolle und Dokumente'),
                     'text' => (string)$module->settings->get('infoDocumentsText', ''),
                 ],
+                [
+                    'icon' => 'fa-scale-balanced',
+                    'class' => 'sociolog-info-card--guideline',
+                    'title' => Yii::t('SociologModule.base', 'Was ist ein Grundsatzentscheid?'),
+                    'text' => (string)$module->settings->get('infoGuidelineText', ''),
+                ],
+                [
+                    'icon' => 'fa-table-list',
+                    'class' => 'sociolog-info-card--examples',
+                    'title' => Yii::t('SociologModule.base', 'Beispiele'),
+                    'text' => (string)$module->settings->get('infoExamplesText', ''),
+                ],
             ],
         ]);
     }

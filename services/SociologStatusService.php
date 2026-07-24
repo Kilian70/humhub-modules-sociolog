@@ -115,7 +115,7 @@ public static function run(): void
 		}
 
     // Endzustand: nie automatisch ändern
-    if ($status === 'expired') {
+    if (Entry::isManualProtectedStatus($status)) {
         return null;
     }
 
@@ -127,12 +127,16 @@ public static function run(): void
     if ($effective === null && !empty($row['published_at'])) {
 
         $days = (int)Yii::$app->getModule('sociolog')->settings->get('defaultEffectiveDays', 10);
+        $addExtraDay = (bool)Yii::$app->getModule('sociolog')
+            ->settings
+            ->get('effectiveDateAddExtraDay', true);
 
         $published = new DateTimeImmutable((string)$row['published_at']);
 
-        $effective = $published
-            ->modify("+{$days} days")
-            ->modify('+1 day');
+        $effective = $published->modify("+{$days} days");
+        if ($addExtraDay) {
+            $effective = $effective->modify('+1 day');
+        }
     }
 
     $review = !empty($row['review_date'])

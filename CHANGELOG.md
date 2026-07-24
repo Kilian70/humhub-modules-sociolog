@@ -3,6 +3,34 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.8] – 2026-07-24
+
+### Neu
+- Optionale Informationsseite „So funktioniert das Logbuch“ mit frei konfigurierbaren Textkarten, Dokumentlink und sicherem E-Mail-Link
+- Optionale feste Entscheidungsart für neue Einträge sowie ein- und ausblendbare Entscheidungstypen
+- Frei konfigurierbare Feld- und Statusbezeichnungen
+- Optional automatisch gesetztes Veröffentlichungsdatum
+- Optional verpflichtendes Überprüfungsdatum für neue Einträge
+- Optionale eingeschränkte Pflege nach erreichter Überprüfung: zuständige Space-Administratoren dürfen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken
+- Historischer CSV-Import mit zweistufiger Vorschau, Validierung, Duplikatschutz und herunterladbarer Vorlage
+- Seitennavigation für Logbuchübersichten mit mehr als 50 Einträgen
+- Optionale zusätzliche manuelle Status „Schwerwiegender Einwand“ und „Ersetzt“
+- Eigene Logbuch-Manager-Benutzer und -Gruppen
+
+### Sicherheit und Datenintegrität
+- Historische Importe sind nur für Systemadministratoren verfügbar und werden vollständig in einer Datenbanktransaktion ausgeführt
+- Importdateien werden serverseitig auf Spalten, Ziel-Spaces, Entscheidungsarten, Datumswerte und Duplikate geprüft
+- Importierte historische Einträge erzeugen keine nachträglichen Benachrichtigungen, Kalendertermine oder Stream-Aktivitäten
+- Veröffentlichte Einträge können optional für reguläre Bearbeitungen gesperrt werden
+- Sichere Behandlung von Informations- und Protokoll-Links
+
+### Verbessert
+- Entscheidungstyp-Kopf kann in Karten und Detailansicht ausgeblendet werden
+- Ausgeblendete Entscheidungstypen verschwinden bei neuen Einträgen und in Filtern; bestehende Einträge bleiben erhalten
+- Fokusdarstellung, Tabellenbedienung und Formulare weiter für Tastatur und Screenreader optimiert
+- Historischer Import und manuelle Statusprüfung im Administrationsbereich unter „Wartung“ zusammengefasst
+- Kompatibilität erfolgreich mit HumHub 1.18 und 1.19 getestet
+
 ## [1.0.7] – 2026-07-21
 
 ### Kompatibilität

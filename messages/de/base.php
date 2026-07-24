@@ -449,5 +449,172 @@ return [
 => 'Die Informationsseite ist vollständig von den Einträgen getrennt. Wenn sie deaktiviert ist, bleibt das Logbuch unverändert.',
 'Hier findest du die ausführliche Einleitung und die verbindlichen Grundlagen des Logbuchs.'
 => 'Hier findest du die ausführliche Einleitung und die verbindlichen Grundlagen des Logbuchs.',
+'Was ist ein Grundsatzentscheid?' => 'Was ist ein Grundsatzentscheid?',
+'Beispiele' => 'Beispiele',
+'Formular und Bezeichnungen' => 'Formular und Bezeichnungen',
+'Keine feste Entscheidungsart' => 'Keine feste Entscheidungsart',
+'Veröffentlichungsdatum bei neuen Einträgen automatisch setzen'
+=> 'Veröffentlichungsdatum bei neuen Einträgen automatisch setzen',
+'Feste Entscheidungsart für neue Einträge' => 'Feste Entscheidungsart für neue Einträge',
+'Überprüfungsdatum bei neuen Einträgen verlangen'
+=> 'Überprüfungsdatum bei neuen Einträgen verlangen',
+'Bezeichnung des Entscheidungsdatums' => 'Bezeichnung des Entscheidungsdatums',
+'Bezeichnung der Ausführungsverantwortung' => 'Bezeichnung der Ausführungsverantwortung',
+'Platzhalter der Ausführungsverantwortung' => 'Platzhalter der Ausführungsverantwortung',
+'Bezeichnung für Protokolle und Dokumente' => 'Bezeichnung für Protokolle und Dokumente',
+'Bezeichnung des ersten Status' => 'Bezeichnung des ersten Status',
+'Welche Gruppe setzt den Entscheid um?' => 'Welche Gruppe setzt den Entscheid um?',
+'Diese Entscheidungsart ist in den Moduleinstellungen vorgegeben.'
+=> 'Diese Entscheidungsart ist in den Moduleinstellungen vorgegeben.',
+'Das heutige Datum wird beim Speichern automatisch gesetzt.'
+=> 'Das heutige Datum wird beim Speichern automatisch gesetzt.',
+'Der ausgewählte Entscheid-Typ existiert nicht mehr.'
+=> 'Der ausgewählte Entscheid-Typ existiert nicht mehr.',
+'Alle Optionen sind standardmässig so eingestellt, dass das bisherige Verhalten erhalten bleibt.'
+=> 'Alle Optionen sind standardmässig so eingestellt, dass das bisherige Verhalten erhalten bleibt.',
+'Wenn aktiviert, wird bei neuen Einträgen automatisch das aktuelle Datum verwendet.'
+=> 'Wenn aktiviert, wird bei neuen Einträgen automatisch das aktuelle Datum verwendet.',
+'Bestehende Einträge ohne Überprüfungsdatum bleiben weiterhin bearbeitbar.'
+=> 'Bestehende Einträge ohne Überprüfungsdatum bleiben weiterhin bearbeitbar.',
+'Optional wird die gewählte Entscheidungsart bei neuen Einträgen fest vorgegeben.'
+=> 'Optional wird die gewählte Entscheidungsart bei neuen Einträgen fest vorgegeben.',
+'Nach dem Entscheid wechselt der Status von „{status}“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.'
+=> 'Nach dem Entscheid wechselt der Status von „{status}“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.',
+'Logbuch-Verantwortliche' => 'Logbuch-Verantwortliche',
+'Verantwortliche Gruppen' => 'Verantwortliche Gruppen',
+'Veröffentlichte Einträge für Erfasser:innen sperren'
+=> 'Veröffentlichte Einträge für Erfasser:innen sperren',
+'Manuelle Statusänderung nur für Logbuch-Verantwortliche'
+=> 'Manuelle Statusänderung nur für Logbuch-Verantwortliche',
+'Diese Personen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
+=> 'Diese Personen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.',
+'Mitglieder dieser Gruppen dürfen Einträge erstellen und – sofern nicht gesperrt – bearbeiten.'
+=> 'Mitglieder dieser Gruppen dürfen Einträge erstellen und – sofern nicht gesperrt – bearbeiten.',
+'Mitglieder dieser Gruppen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
+=> 'Mitglieder dieser Gruppen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.',
+'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.'
+=> 'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.',
+'Die automatische Statuspflege bleibt unabhängig davon aktiv.'
+=> 'Die automatische Statuspflege bleibt unabhängig davon aktiv.',
+'Zusätzliche Status „Schwerwiegender Einwand“ und „Ersetzt“ aktivieren'
+=> 'Zusätzliche Status „Schwerwiegender Einwand“ und „Ersetzt“ aktivieren',
+'Schwerwiegender Einwand' => 'Schwerwiegender Einwand',
+'Ersetzt' => 'Ersetzt',
+'Die zusätzlichen Status werden nie durch die automatische tägliche Statusprüfung überschrieben.'
+=> 'Die zusätzlichen Status werden nie durch die automatische tägliche Statusprüfung überschrieben.',
+'Inkrafttreten erst am Folgetag der vollständigen Frist'
+=> 'Inkrafttreten erst am Folgetag der vollständigen Frist',
+'Aktiviert entspricht dem bisherigen Verhalten (+ Fristtage und anschließend ein weiterer Tag).'
+=> 'Aktiviert entspricht dem bisherigen Verhalten (+ Fristtage und anschließend ein weiterer Tag).',
+'Ausgeblendete Entscheidungstypen' => 'Ausgeblendete Entscheidungstypen',
+'Markierte Typen werden bei neuen Einträgen und in den Filtern ausgeblendet. Bestehende Einträge bleiben unverändert und weiterhin bearbeitbar.'
+=> 'Markierte Typen werden bei neuen Einträgen und in den Filtern ausgeblendet. Bestehende Einträge bleiben unverändert und weiterhin bearbeitbar.',
+'Markierte Typen werden bei neuen Einträgen und in den Filtern ausgeblendet. Bestehende Einträge bleiben unverändert und weiterhin bearbeitbar. Eine gleichzeitig ausgeblendete feste Entscheidungsart wird automatisch aufgehoben.'
+=> 'Markierte Typen werden bei neuen Einträgen und in den Filtern ausgeblendet. Bestehende Einträge bleiben unverändert und weiterhin bearbeitbar. Eine gleichzeitig ausgeblendete feste Entscheidungsart wird automatisch aufgehoben.',
+'Dieser Entscheidungstyp ist derzeit ausgeblendet.'
+=> 'Dieser Entscheidungstyp ist derzeit ausgeblendet.',
+'Eine fest vorgegebene Entscheidungsart kann nicht gleichzeitig ausgeblendet werden.'
+=> 'Eine fest vorgegebene Entscheidungsart kann nicht gleichzeitig ausgeblendet werden.',
+'Entscheidungstyp und Beschreibung in der Detailansicht anzeigen'
+=> 'Entscheidungstyp und Beschreibung in der Detailansicht anzeigen',
+'Wenn deaktiviert, wird die farbige Typzeile oberhalb des Eintrags ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+=> 'Wenn deaktiviert, wird die farbige Typzeile oberhalb des Eintrags ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.',
+'Entscheidungstyp in Karten und Detailansicht anzeigen'
+=> 'Entscheidungstyp in Karten und Detailansicht anzeigen',
+'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+=> 'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.',
+'Eingeschränkte Pflege nach einer Überprüfung erlauben'
+=> 'Eingeschränkte Pflege nach einer Überprüfung erlauben',
+'Zuständige Personen dürfen bei veröffentlichten Einträgen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
+=> 'Zuständige Personen dürfen bei veröffentlichten Einträgen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.',
+'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
+=> 'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.',
+'Für ein neues Protokoll werden Titel und Link benötigt.'
+=> 'Für ein neues Protokoll werden Titel und Link benötigt.',
+'Titel des neuen Protokolls' => 'Titel des neuen Protokolls',
+'Link zum neuen Protokoll' => 'Link zum neuen Protokoll',
+'Hier können ausschließlich das nächste Überprüfungsdatum angepasst und ein zusätzliches Protokoll verlinkt werden.'
+=> 'Hier können ausschließlich das nächste Überprüfungsdatum angepasst und ein zusätzliches Protokoll verlinkt werden.',
+'Neues Protokoll (optional)' => 'Neues Protokoll (optional)',
+'Überprüfung speichern' => 'Überprüfung speichern',
+'Die Überprüfung konnte nicht gespeichert werden.'
+=> 'Die Überprüfung konnte nicht gespeichert werden.',
+'Bereinigte CSV-Importdatei' => 'Bereinigte CSV-Importdatei',
+'Historische Einträge importieren' => 'Historische Einträge importieren',
+'Der Import läuft in zwei Schritten. Zuerst wird die CSV-Datei geprüft. Erst danach kann der Import ausdrücklich bestätigt werden.'
+=> 'Der Import läuft in zwei Schritten. Zuerst wird die CSV-Datei geprüft. Erst danach kann der Import ausdrücklich bestätigt werden.',
+'Datei prüfen' => 'Datei prüfen',
+'Serverseitige Importprüfung' => 'Serverseitige Importprüfung',
+'{count} importbereit' => '{count} importbereit',
+'{count} Duplikate' => '{count} Duplikate',
+'{count} Fehler' => '{count} Fehler',
+'Quelle' => 'Quelle',
+'Zielorgan' => 'Zielorgan',
+'Hinweis' => 'Hinweis',
+'Bereit' => 'Bereit',
+'Duplikat' => 'Duplikat',
+'Mit der Bestätigung werden ausschließlich die importbereiten Einträge gespeichert. Duplikate werden übersprungen. Alte Einträge lösen keine Benachrichtigungen oder Kalendertermine aus.'
+=> 'Mit der Bestätigung werden ausschließlich die importbereiten Einträge gespeichert. Duplikate werden übersprungen. Alte Einträge lösen keine Benachrichtigungen oder Kalendertermine aus.',
+'{count} Einträge jetzt importieren' => '{count} Einträge jetzt importieren',
+'Historischen Import jetzt endgültig ausführen?'
+=> 'Historischen Import jetzt endgültig ausführen?',
+'Titel fehlt.' => 'Titel fehlt.',
+'Beschluss fehlt.' => 'Beschluss fehlt.',
+'Veröffentlichungsdatum ist ungültig.' => 'Veröffentlichungsdatum ist ungültig.',
+'Überprüfungsdatum ist ungültig.' => 'Überprüfungsdatum ist ungültig.',
+'Ziel-Space wurde nicht gefunden.' => 'Ziel-Space wurde nicht gefunden.',
+'Der Name des Ziel-Spaces ist nicht eindeutig.'
+=> 'Der Name des Ziel-Spaces ist nicht eindeutig.',
+'Der Ziel-Space ist nicht als Logbuch-Organ aktiviert.'
+=> 'Der Ziel-Space ist nicht als Logbuch-Organ aktiviert.',
+'Entscheidungstyp wurde nicht gefunden.' => 'Entscheidungstyp wurde nicht gefunden.',
+'Die Importdatei konnte nicht geprüft werden.'
+=> 'Die Importdatei konnte nicht geprüft werden.',
+'Die Importbestätigung ist ungültig oder abgelaufen.'
+=> 'Die Importbestätigung ist ungültig oder abgelaufen.',
+'Die Importvorschau wurde nicht gefunden.'
+=> 'Die Importvorschau wurde nicht gefunden.',
+'{count} historische Einträge wurden importiert. {duplicates} Duplikate wurden übersprungen.'
+=> '{count} historische Einträge wurden importiert. {duplicates} Duplikate wurden übersprungen.',
+'Der Import wurde vollständig abgebrochen. Es wurden keine unvollständigen Daten übernommen.'
+=> 'Der Import wurde vollständig abgebrochen. Es wurden keine unvollständigen Daten übernommen.',
+'Nur Administrator:innen dürfen historische Einträge importieren.'
+=> 'Nur Administrator:innen dürfen historische Einträge importieren.',
+'Historische Daten' => 'Historische Daten',
+'Hier können vorbereitete historische Logbuch-Einträge zuerst geprüft und anschließend importiert werden.'
+=> 'Hier können vorbereitete historische Logbuch-Einträge zuerst geprüft und anschließend importiert werden.',
+'Aufbau der CSV-Importdatei' => 'Aufbau der CSV-Importdatei',
+'Verwende die Vorlage und lasse die Spaltennamen unverändert. Jede weitere Zeile entspricht einem historischen Logbuch-Eintrag.'
+=> 'Verwende die Vorlage und lasse die Spaltennamen unverändert. Jede weitere Zeile entspricht einem historischen Logbuch-Eintrag.',
+'Name der ursprünglichen Tabelle oder Quelle'
+=> 'Name der ursprünglichen Tabelle oder Quelle',
+'Zeilennummer oder eindeutige Kennzeichnung in der Quelle'
+=> 'Zeilennummer oder eindeutige Kennzeichnung in der Quelle',
+'Exakter Name eines im Logbuch aktivierten Ziel-Spaces'
+=> 'Exakter Name eines im Logbuch aktivierten Ziel-Spaces',
+'Exakter Name einer vorhandenen Entscheidungsart'
+=> 'Exakter Name einer vorhandenen Entscheidungsart',
+'Titel des Eintrags' => 'Titel des Eintrags',
+'Vollständiger Beschlusstext' => 'Vollständiger Beschlusstext',
+'Veröffentlichungsdatum im Format JJJJ-MM-TT'
+=> 'Veröffentlichungsdatum im Format JJJJ-MM-TT',
+'Optionales Überprüfungsdatum im Format JJJJ-MM-TT'
+=> 'Optionales Überprüfungsdatum im Format JJJJ-MM-TT',
+'Die Prüfung zeigt fehlende Ziel-Spaces, unbekannte Entscheidungsarten, ungültige Daten und bereits vorhandene Einträge an. Erst eine fehlerfreie Vorschau kann importiert werden.'
+=> 'Die Prüfung zeigt fehlende Ziel-Spaces, unbekannte Entscheidungsarten, ungültige Daten und bereits vorhandene Einträge an. Erst eine fehlerfreie Vorschau kann importiert werden.',
+'CSV-Vorlage herunterladen' => 'CSV-Vorlage herunterladen',
+'Seitennavigation der Logbuch-Einträge'
+=> 'Seitennavigation der Logbuch-Einträge',
+'Einträge {start}–{end} von {total}'
+=> 'Einträge {start}–{end} von {total}',
+'Veröffentlichungsdatum' => 'Veröffentlichungsdatum',
+'Fehler' => 'Fehler',
+'Export CSV' => 'CSV exportieren',
+'Sociolog – Tabellenansicht' => 'Sociolog – Tabellenansicht',
+'Organe:' => 'Organe:',
+'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttreten erreicht ist.'
+=> 'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttreten erreicht ist.',
+'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.'
+=> 'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.',
 
 ];

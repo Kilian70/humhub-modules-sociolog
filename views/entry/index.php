@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\assets\SociologAsset;
 use humhub\modules\sociolog\models\SpaceConfig;
@@ -18,6 +19,9 @@ $moduleTitle = $module && $module->settings->get('moduleTitle')
     ? $module->settings->get('moduleTitle')
     : 'Logbuch';
 $infoPageEnabled = $module && (bool)$module->settings->get('infoPageEnabled', false);
+$pendingStatusLabel = Entry::getStatusConfig()[Entry::STATUS_PENDING]['label'];
+$extendedStatusesEnabled = $module
+    && (bool)$module->settings->get('extendedStatusesEnabled', false);
 
 /* ============================================================
    🧭 View-Modus: Request → Session → Default
@@ -93,12 +97,16 @@ foreach ($dataProvider->models as $entry) {
     <!-- ✅ Status-Legende (einmalig) -->
     <div class="small sociolog-status-legend">
       <strong><?= Yii::t('SociologModule.base', 'Status') ?>:</strong>
-      <span class="badge bg-secondary"><?= Yii::t('SociologModule.base', 'Nicht in Kraft') ?></span>
+      <span class="badge bg-secondary"><?= Html::encode($pendingStatusLabel) ?></span>
       <span class="badge bg-success"><?= Yii::t('SociologModule.base', 'Gültig') ?></span>
       <span class="badge badge-sociolog-review">
         <?= Yii::t('SociologModule.base', 'Überprüfung fällig') ?>
       </span>
       <span class="badge bg-dark"><?= Yii::t('SociologModule.base', 'Nicht mehr gültig') ?></span>
+      <?php if ($extendedStatusesEnabled): ?>
+        <span class="badge bg-danger"><?= Yii::t('SociologModule.base', 'Schwerwiegender Einwand') ?></span>
+        <span class="badge bg-dark"><?= Yii::t('SociologModule.base', 'Ersetzt') ?></span>
+      <?php endif; ?>
     </div>
   </div>
 
@@ -205,12 +213,7 @@ foreach ($dataProvider->models as $entry) {
 
       <div class="col-md-2">
         <?= $form->field($searchModel, 'status')
-          ->dropDownList([
-            'pending' => Yii::t('SociologModule.base', 'Nicht in Kraft'),
-            'valid'   => Yii::t('SociologModule.base', 'Gültig'),
-            'review'  => Yii::t('SociologModule.base', 'In Überprüfung'),
-            'expired' => Yii::t('SociologModule.base', 'Nicht mehr gültig'),
-          ], [
+          ->dropDownList(Entry::getStatusOptions(), [
             'prompt' => Yii::t('SociologModule.base', 'Status auswählen...')
           ]) ?>
       </div>
@@ -278,4 +281,26 @@ foreach ($dataProvider->models as $entry) {
   <div class="alert alert-info mt-3">
     <?= Yii::t('SociologModule.base', 'Es sind noch keine Einträge vorhanden.') ?>
   </div>
+<?php endif; ?>
+
+<?php if ($dataProvider->getTotalCount() > 0): ?>
+  <nav class="d-flex flex-column align-items-center mt-3"
+       aria-label="<?= Yii::t('SociologModule.base', 'Seitennavigation der Logbuch-Einträge') ?>">
+    <p class="text-muted small mb-2">
+      <?= Yii::t(
+        'SociologModule.base',
+        'Einträge {start}–{end} von {total}',
+        [
+          'start' => $dataProvider->pagination->getOffset() + 1,
+          'end' => $dataProvider->pagination->getOffset() + $dataProvider->getCount(),
+          'total' => $dataProvider->getTotalCount(),
+        ]
+      ) ?>
+    </p>
+
+    <?= LinkPager::widget([
+      'pagination' => $dataProvider->pagination,
+      'maxButtonCount' => 7,
+    ]) ?>
+  </nav>
 <?php endif; ?>

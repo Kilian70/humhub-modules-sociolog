@@ -19,6 +19,10 @@ $title        = (string) ($model->title ?? '');
 $organ        = (string) ($model->organName ?? '');
 $decisionDate = $model->decision_date ?: null;
 $decisionText = (string) ($model->decision ?? '');
+$showDecisionTypeHeader = (bool)Yii::$app
+    ->getModule('sociolog')
+    ->settings
+    ->get('showDecisionTypeHeader', true);
 
 $color = Entry::getOrganColor($organ);
 
@@ -86,7 +90,7 @@ if ($container instanceof Space) {
         </h5>
 
         <!-- Entscheid-Typ (dezente Darstellung) -->
-        <?php if ($model->decisionType): ?>
+        <?php if ($showDecisionTypeHeader && $model->decisionType): ?>
     <?= $model->decisionType->badge ?>
 <?php endif; ?>
 

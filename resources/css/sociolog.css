@@ -744,6 +744,14 @@ html[data-bs-theme="dark"] .badge-sociolog-expired {
   --sociolog-info-accent: #146c43;
 }
 
+.sociolog-info-card--guideline {
+  --sociolog-info-accent: #495057;
+}
+
+.sociolog-info-card--examples {
+  --sociolog-info-accent: #6c3d10;
+}
+
 .sociolog-info-text {
   line-height: 1.55;
   white-space: normal;

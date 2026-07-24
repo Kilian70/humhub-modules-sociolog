@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 
 use humhub\modules\user\models\User;
 use humhub\modules\user\models\Group;
+use humhub\modules\sociolog\models\DecisionType;
 
 $this->title = Yii::t('SociologModule.base', 'Sociolog – Einstellungen');
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,8 +30,24 @@ foreach ($allGroups as $g) {
     $groupOptions[$g->id] = $g->name . ' (ID ' . $g->id . ')';
 }
 
+$decisionTypeOptions = [0 => Yii::t('SociologModule.base', 'Keine feste Entscheidungsart')]
+    + ArrayHelper::map(
+        DecisionType::find()->orderBy(['sort_order' => SORT_ASC, 'name' => SORT_ASC])->all(),
+        'id',
+        'name'
+    );
+$allDecisionTypeOptions = ArrayHelper::map(
+    DecisionType::find()->orderBy(['sort_order' => SORT_ASC, 'name' => SORT_ASC])->all(),
+    'id',
+    'name'
+);
+
 // Einstellungen laden (nur Anzeige)
 $settings = Yii::$app->getModule('sociolog')->settings;
+$pendingStatusLabel = Yii::$app->getModule('sociolog')->getCustomLabel(
+    'pendingStatusLabel',
+    Yii::t('SociologModule.base', 'Nicht in Kraft')
+);
 
 $organs = trim((string)$settings->get('organs'));
 $globalOrgans = trim((string)$settings->get('globalOrgans'));
@@ -86,6 +103,13 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
           ->input('number', ['min' => 0])
           ->label(Yii::t('SociologModule.base', 'Inkrafttreten nach (Tagen)'))
           ->hint(Yii::t('SociologModule.base', 'Automatische Berechnung des Inkrafttretens nach Erstellung.')) ?>
+
+      <?= $form->field($model, 'effectiveDateAddExtraDay')->checkbox([
+          'uncheck' => 0,
+      ])->hint(Yii::t(
+          'SociologModule.base',
+          'Aktiviert entspricht dem bisherigen Verhalten (+ Fristtage und anschließend ein weiterer Tag).'
+      )) ?>
     </div>
 
 <div class="col-md-8">
@@ -262,6 +286,21 @@ echo Html::encode(implode(', ', $names));
 
 </div>
 
+<!-- Logbuch-Verantwortliche -->
+<div class="col-md-6">
+
+    <?= $form->field($model, 'managerUsers')->widget(
+        \humhub\modules\user\widgets\UserPickerField::class,
+        [
+            'maxSelection' => 0,
+        ]
+    )->hint(Yii::t(
+        'SociologModule.base',
+        'Diese Personen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
+    )) ?>
+
+</div>
+
 
 <!-- Gruppen mit Schreibrecht -->
 <div class="col-md-6">
@@ -283,7 +322,7 @@ echo Html::encode(implode(', ', $names));
 
   <p class="form-text small">
     <?= Yii::t('SociologModule.base',
-        'Mitglieder dieser Gruppen dürfen Einträge erstellen und bearbeiten.'
+        'Mitglieder dieser Gruppen dürfen Einträge erstellen und – sofern nicht gesperrt – bearbeiten.'
     ) ?>
   </p>
 
@@ -314,6 +353,58 @@ echo Html::encode(implode(', ', $names));
     ) ?>
   </p>
 
+</div>
+
+<!-- Verantwortliche Gruppen -->
+<div class="col-md-6">
+
+  <h2 class="h6 fw-semibold text-primary">
+    <i class="fa-solid fa-user-shield me-1" aria-hidden="true"></i>
+    <?= Yii::t('SociologModule.base', 'Verantwortliche Gruppen') ?>
+  </h2>
+
+  <?= Html::activeCheckboxList(
+      $model,
+      'managerGroups',
+      $groupOptions,
+      [
+          'class' => 'form-check',
+          'separator' => '<br>',
+      ]
+  ) ?>
+
+  <p class="form-text small">
+    <?= Yii::t(
+        'SociologModule.base',
+        'Mitglieder dieser Gruppen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
+    ) ?>
+  </p>
+
+</div>
+
+<div class="col-12">
+  <div class="p-3 rounded border">
+    <?= $form->field($model, 'lockPublishedEntries')->checkbox([
+        'uncheck' => 0,
+    ])->hint(Yii::t(
+        'SociologModule.base',
+        'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.'
+    )) ?>
+
+    <?= $form->field($model, 'statusManagersOnly')->checkbox([
+        'uncheck' => 0,
+    ])->hint(Yii::t(
+        'SociologModule.base',
+        'Die automatische Statuspflege bleibt unabhängig davon aktiv.'
+    )) ?>
+
+    <?= $form->field($model, 'extendedStatusesEnabled')->checkbox([
+        'uncheck' => 0,
+    ])->hint(Yii::t(
+        'SociologModule.base',
+        'Die zusätzlichen Status werden nie durch die automatische tägliche Statusprüfung überschrieben.'
+    )) ?>
+  </div>
 </div>
 
     <!-- Benachrichtigungen -->
@@ -347,7 +438,111 @@ echo Html::encode(implode(', ', $names));
             ['/sociolog/decision-type/index'],
             ['class'=>'btn btn-outline-secondary btn-sm']
         ) ?>
+        <div class="mt-3">
+          <?= $form->field($model, 'hiddenDecisionTypeIds')->checkboxList(
+              $allDecisionTypeOptions,
+              ['separator' => '<br>']
+          )->hint(Yii::t(
+              'SociologModule.base',
+              'Markierte Typen werden bei neuen Einträgen und in den Filtern ausgeblendet. Bestehende Einträge bleiben unverändert und weiterhin bearbeitbar. Eine gleichzeitig ausgeblendete feste Entscheidungsart wird automatisch aufgehoben.'
+          )) ?>
+        </div>
       </div>
+    </div>
+
+    <!-- Optionale Formularvorgaben -->
+    <div class="col-12 mt-4">
+      <fieldset class="card border-secondary p-3">
+        <legend class="h5 fw-semibold mb-3">
+          <i class="fa-solid fa-sliders me-1" aria-hidden="true"></i>
+          <?= Yii::t('SociologModule.base', 'Formular und Bezeichnungen') ?>
+        </legend>
+
+        <p class="form-text mb-4">
+          <?= Yii::t(
+              'SociologModule.base',
+              'Alle Optionen sind standardmässig so eingestellt, dass das bisherige Verhalten erhalten bleibt.'
+          ) ?>
+        </p>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <?= $form->field($model, 'autoPublicationDate')->checkbox([
+                'uncheck' => 0,
+            ])->hint(Yii::t(
+                'SociologModule.base',
+                'Wenn aktiviert, wird bei neuen Einträgen automatisch das aktuelle Datum verwendet.'
+            )) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'reviewDateRequiredForNewEntries')->checkbox([
+                'uncheck' => 0,
+            ])->hint(Yii::t(
+                'SociologModule.base',
+                'Bestehende Einträge ohne Überprüfungsdatum bleiben weiterhin bearbeitbar.'
+            )) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'limitedReviewMaintenanceEnabled')->checkbox([
+                'uncheck' => 0,
+            ])->hint(Yii::t(
+                'SociologModule.base',
+                'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
+            )) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'fixedDecisionTypeId')->dropDownList(
+                $decisionTypeOptions
+            )->hint(Yii::t(
+                'SociologModule.base',
+                'Optional wird die gewählte Entscheidungsart bei neuen Einträgen fest vorgegeben.'
+            )) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'showDecisionTypeHeader')->checkbox([
+                'uncheck' => 0,
+            ])->hint(Yii::t(
+                'SociologModule.base',
+                'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+            )) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'decisionDateLabel')->textInput([
+                'maxlength' => true,
+            ]) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'topicOwnerLabel')->textInput([
+                'maxlength' => true,
+            ]) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'topicOwnerPlaceholder')->textInput([
+                'maxlength' => true,
+                'placeholder' => Yii::t('SociologModule.base', 'Welche Gruppe setzt den Entscheid um?'),
+            ]) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'protocolsLabel')->textInput([
+                'maxlength' => true,
+            ]) ?>
+          </div>
+
+          <div class="col-md-6">
+            <?= $form->field($model, 'pendingStatusLabel')->textInput([
+                'maxlength' => true,
+            ]) ?>
+          </div>
+        </div>
+      </fieldset>
     </div>
 
     <!-- Optionale Informationsseite -->
@@ -436,6 +631,20 @@ echo Html::encode(implode(', ', $names));
                   'maxlength' => 5000,
               ]) ?>
             </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoGuidelineText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
+
+            <div class="col-md-6">
+              <?= $form->field($model, 'infoExamplesText')->textarea([
+                  'rows' => 5,
+                  'maxlength' => 5000,
+              ]) ?>
+            </div>
         </div>
       </fieldset>
     </div>
@@ -486,6 +695,27 @@ echo Html::encode(implode(', ', $names));
         ]
     ) ?>
 
+    <hr class="my-4">
+
+    <h3 class="h6 fw-semibold mb-2">
+      <i class="fa-solid fa-file-import me-1"></i>
+      <?= Yii::t('SociologModule.base', 'Historische Daten') ?>
+    </h3>
+
+    <p class="text-muted mb-3">
+      <?= Yii::t(
+          'SociologModule.base',
+          'Hier können vorbereitete historische Logbuch-Einträge zuerst geprüft und anschließend importiert werden.'
+      ) ?>
+    </p>
+
+    <?= Html::a(
+        '<i class="fa-solid fa-file-import me-1"></i> '
+          . Yii::t('SociologModule.base', 'Historische Einträge importieren'),
+        ['/sociolog/import/index'],
+        ['class' => 'btn btn-outline-secondary']
+    ) ?>
+
   </div>
 </div>
 
@@ -509,7 +739,8 @@ echo Html::encode(implode(', ', $names));
     <li>
       <?= Yii::t(
           'SociologModule.base',
-          'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.'
+          'Nach dem Entscheid wechselt der Status von „{status}“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.',
+          ['status' => $pendingStatusLabel]
       ) ?>
     </li>
 

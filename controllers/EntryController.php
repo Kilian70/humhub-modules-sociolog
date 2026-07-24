@@ -12,6 +12,7 @@ use humhub\modules\sociolog\models\EntrySearch;
 use humhub\modules\sociolog\models\SpaceConfig;
 use humhub\modules\sociolog\models\EntryFlow;
 use humhub\modules\sociolog\models\Protocol;
+use humhub\modules\sociolog\models\ReviewForm;
 
 /**
  * ============================================================
@@ -42,7 +43,7 @@ class EntryController extends Controller
                 'take-over'  => ['POST'],
                 'decide'     => ['POST'],
                 'return'     => ['POST'],
-                'review'     => ['POST'],
+                'review'     => ['GET', 'POST'],
                 'export-csv' => ['GET'],
             ],
         ];
@@ -116,6 +117,16 @@ class EntryController extends Controller
 public function actionCreate()
 {
     $model = new Entry();
+    $settings = Yii::$app->getModule('sociolog')->settings;
+
+    if ((bool)$settings->get('autoPublicationDate', false)) {
+        $model->decision_date = date('Y-m-d');
+    }
+
+    $fixedDecisionTypeId = (int)$settings->get('fixedDecisionTypeId', 0);
+    if ($fixedDecisionTypeId > 0) {
+        $model->decision_type_id = $fixedDecisionTypeId;
+    }
 
     $user = Yii::$app->user->identity;
     $allowed = Entry::canCreateGlobal($user);
@@ -128,6 +139,23 @@ public function actionCreate()
     }
 
     if ($model->load(Yii::$app->request->post())) {
+        // Optionale Vorgaben werden serverseitig durchgesetzt. Manipulierte
+        // Formularwerte können sie dadurch nicht umgehen.
+        if ((bool)$settings->get('autoPublicationDate', false)) {
+            $model->decision_date = date('Y-m-d');
+        }
+
+        if ($fixedDecisionTypeId > 0) {
+            $model->decision_type_id = $fixedDecisionTypeId;
+        } elseif (!array_key_exists(
+            (int)$model->decision_type_id,
+            Entry::getDecisionTypeList()
+        )) {
+            $model->addError(
+                'decision_type_id',
+                Yii::t('SociologModule.base', 'Dieser Entscheidungstyp ist derzeit ausgeblendet.')
+            );
+        }
 
         // Das Dropdown ist nur eine UI-Hilfe. Die Berechtigung muss
         // für das tatsächlich übermittelte Organ erneut geprüft werden.
@@ -210,6 +238,8 @@ public function actionUpdate($id)
     $model = $this->findModel($id);
     $user = Yii::$app->user->identity;
     $originalOrgan = (int)$model->organ;
+    $originalStatus = (string)$model->status;
+    $originalDecisionTypeId = (int)$model->decision_type_id;
     $originView = Yii::$app->request->get('view', 'cards');
 
     $this->view->params['backUrl'] = Yii::$app->request->referrer;
@@ -222,6 +252,37 @@ public function actionUpdate($id)
     }
 
     if ($model->load(Yii::$app->request->post())) {
+        $statusManagersOnly = (bool)Yii::$app->getModule('sociolog')
+            ->settings
+            ->get('statusManagersOnly', false);
+        $extendedStatusesEnabled = (bool)Yii::$app->getModule('sociolog')
+            ->settings
+            ->get('extendedStatusesEnabled', false);
+
+        if ($statusManagersOnly && !Entry::isLogbookManager($user)) {
+            $model->status = $originalStatus;
+        }
+
+        if (
+            !$extendedStatusesEnabled
+            && in_array($model->status, [Entry::STATUS_OBJECTION, Entry::STATUS_REPLACED], true)
+        ) {
+            $model->status = $originalStatus;
+        }
+
+        if (
+            (int)$model->decision_type_id !== $originalDecisionTypeId
+            && !array_key_exists(
+                (int)$model->decision_type_id,
+                Entry::getDecisionTypeList()
+            )
+        ) {
+            $model->addError(
+                'decision_type_id',
+                Yii::t('SociologModule.base', 'Dieser Entscheidungstyp ist derzeit ausgeblendet.')
+            );
+        }
+
         $targetOrgan = (int)$model->organ;
 
         // Für einen Organwechsel muss auch im neuen Ziel-Space ein
@@ -572,30 +633,109 @@ public function actionReturn($id)
 public function actionReview($id)
 {
     $model = $this->findModel($id);
+    $limitedMaintenanceEnabled = (bool)Yii::$app->getModule('sociolog')
+        ->settings
+        ->get('limitedReviewMaintenanceEnabled', false);
 
-    if (!$model->canWrite(Yii::$app->user->identity)) {
+    if (!$limitedMaintenanceEnabled) {
+        if (!$model->canWrite(Yii::$app->user->identity)) {
+            throw new \yii\web\ForbiddenHttpException(
+                Yii::t('SociologModule.base', 'Du hast keine Berechtigung.')
+            );
+        }
+
+        if (!Yii::$app->request->isPost) {
+            throw new \yii\web\MethodNotAllowedHttpException();
+        }
+
+        if (!EntryFlow::log(
+            $model->id,
+            $model->current_organ,
+            $model->current_organ,
+            'review'
+        )) {
+            throw new \yii\web\ServerErrorHttpException(
+                Yii::t('SociologModule.base', 'Der Verlaufsschritt konnte nicht gespeichert werden.')
+            );
+        }
+
+        Yii::$app->session->setFlash(
+            'success',
+            Yii::t('SociologModule.base', 'Überprüfung wurde dokumentiert.')
+        );
+
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
+
+    if (!$model->canMaintainReview(Yii::$app->user->identity)) {
         throw new \yii\web\ForbiddenHttpException(
             Yii::t('SociologModule.base', 'Du hast keine Berechtigung.')
         );
     }
 
-    if (!EntryFlow::log(
-        $model->id,
-        $model->current_organ,
-        $model->current_organ,
-        'review'
-    )) {
-        throw new \yii\web\ServerErrorHttpException(
-            Yii::t('SociologModule.base', 'Der Verlaufsschritt konnte nicht gespeichert werden.')
+    $form = new ReviewForm([
+        'reviewDate' => $model->review_date,
+    ]);
+
+    if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            $model->review_date = $form->reviewDate;
+            if (!$model->save(false, ['review_date'])) {
+                throw new \RuntimeException('Review date could not be saved.');
+            }
+
+            if (trim((string)$form->protocolTitle) !== '') {
+                $protocol = new Protocol([
+                    'entry_id' => $model->id,
+                    'title' => $form->protocolTitle,
+                    'url' => $form->protocolUrl,
+                ]);
+
+                if (!$protocol->save()) {
+                    throw new \RuntimeException(json_encode($protocol->getErrors()));
+                }
+            }
+
+            if (!EntryFlow::log(
+                $model->id,
+                $model->current_organ,
+                $model->current_organ,
+                'review'
+            )) {
+                throw new \RuntimeException('Review history could not be saved.');
+            }
+
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            if ($transaction->isActive) {
+                $transaction->rollBack();
+            }
+
+            Yii::error([
+                'message' => 'Sociolog-Überprüfung konnte nicht gespeichert werden.',
+                'entryId' => $model->id,
+                'exception' => $e->getMessage(),
+            ], 'sociolog.review');
+
+            throw new \yii\web\ServerErrorHttpException(
+                Yii::t('SociologModule.base', 'Die Überprüfung konnte nicht gespeichert werden.')
+            );
+        }
+
+        Yii::$app->session->setFlash(
+            'success',
+            Yii::t('SociologModule.base', 'Überprüfung wurde dokumentiert.')
         );
+
+        return $this->redirect(['view', 'id' => $model->id]);
     }
 
-    Yii::$app->session->setFlash(
-        'success',
-        Yii::t('SociologModule.base', 'Überprüfung wurde dokumentiert.')
-    );
-
-    return $this->redirect(['view', 'id' => $model->id]);
+    return $this->render('review', [
+        'model' => $model,
+        'formModel' => $form,
+    ]);
 }
 
     // ============================================================
@@ -708,6 +848,11 @@ public function actionReview($id)
     // ============================================================
     public function actionExportCsv()
     {
+        $module = Yii::$app->getModule('sociolog');
+        $decisionDateLabel = $module->getCustomLabel('decisionDateLabel', 'Beschlussdatum');
+        $topicOwnerLabel = $module->getCustomLabel('topicOwnerLabel', 'Themenhüter:in');
+        $protocolsLabel = $module->getCustomLabel('protocolsLabel', 'Protokolle');
+
         $response = Yii::$app->response;
         $response->format = \yii\web\Response::FORMAT_RAW;
 
@@ -723,14 +868,14 @@ public function actionReview($id)
             'Titel',
             'Entscheid-Typ',
             'Organ',
-            'Themenhüter:in',
+            $topicOwnerLabel,
             'Beschluss',
             'Begründung',
-            'Beschlussdatum',
+            $decisionDateLabel,
             'Inkrafttreten',
             'Überprüfung ab',
             'Status',
-            'Protokoll-Links',
+            $protocolsLabel,
             'Erstellt von',
             'Erstellt am',
             'Bearbeitet von',

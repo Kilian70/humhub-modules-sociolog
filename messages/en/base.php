@@ -446,5 +446,172 @@ return [
 => 'The information page is completely separate from the entries. When disabled, the logbook remains unchanged.',
 'Hier findest du die ausführliche Einleitung und die verbindlichen Grundlagen des Logbuchs.'
 => 'Here you can find the detailed introduction and the binding principles of the logbook.',
+'Was ist ein Grundsatzentscheid?' => 'What is a fundamental decision?',
+'Beispiele' => 'Examples',
+'Formular und Bezeichnungen' => 'Form and labels',
+'Keine feste Entscheidungsart' => 'No fixed decision type',
+'Veröffentlichungsdatum bei neuen Einträgen automatisch setzen'
+=> 'Set the publication date automatically for new entries',
+'Feste Entscheidungsart für neue Einträge' => 'Fixed decision type for new entries',
+'Überprüfungsdatum bei neuen Einträgen verlangen'
+=> 'Require a review date for new entries',
+'Bezeichnung des Entscheidungsdatums' => 'Decision date label',
+'Bezeichnung der Ausführungsverantwortung' => 'Execution responsibility label',
+'Platzhalter der Ausführungsverantwortung' => 'Execution responsibility placeholder',
+'Bezeichnung für Protokolle und Dokumente' => 'Minutes and documents label',
+'Bezeichnung des ersten Status' => 'Initial status label',
+'Welche Gruppe setzt den Entscheid um?' => 'Which group implements the decision?',
+'Diese Entscheidungsart ist in den Moduleinstellungen vorgegeben.'
+=> 'This decision type is predefined in the module settings.',
+'Das heutige Datum wird beim Speichern automatisch gesetzt.'
+=> 'Today’s date is set automatically when saving.',
+'Der ausgewählte Entscheid-Typ existiert nicht mehr.'
+=> 'The selected decision type no longer exists.',
+'Alle Optionen sind standardmässig so eingestellt, dass das bisherige Verhalten erhalten bleibt.'
+=> 'All options default to the previous behavior.',
+'Wenn aktiviert, wird bei neuen Einträgen automatisch das aktuelle Datum verwendet.'
+=> 'When enabled, the current date is used automatically for new entries.',
+'Bestehende Einträge ohne Überprüfungsdatum bleiben weiterhin bearbeitbar.'
+=> 'Existing entries without a review date remain editable.',
+'Optional wird die gewählte Entscheidungsart bei neuen Einträgen fest vorgegeben.'
+=> 'The selected decision type can optionally be fixed for new entries.',
+'Nach dem Entscheid wechselt der Status von „{status}“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.'
+=> 'After the decision, the status changes from “{status}” to “Valid” when the effective date is reached.',
+'Logbuch-Verantwortliche' => 'Logbook managers',
+'Verantwortliche Gruppen' => 'Manager groups',
+'Veröffentlichte Einträge für Erfasser:innen sperren'
+=> 'Lock published entries for authors',
+'Manuelle Statusänderung nur für Logbuch-Verantwortliche'
+=> 'Allow manual status changes only for logbook managers',
+'Diese Personen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
+=> 'These users may edit published entries when publication protection is enabled.',
+'Mitglieder dieser Gruppen dürfen Einträge erstellen und – sofern nicht gesperrt – bearbeiten.'
+=> 'Members of these groups may create entries and edit them unless they are locked.',
+'Mitglieder dieser Gruppen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
+=> 'Members of these groups may edit published entries when publication protection is enabled.',
+'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.'
+=> 'When disabled, the previous edit permissions continue to apply. System administrators always retain access.',
+'Die automatische Statuspflege bleibt unabhängig davon aktiv.'
+=> 'Automatic status maintenance remains active independently.',
+'Zusätzliche Status „Schwerwiegender Einwand“ und „Ersetzt“ aktivieren'
+=> 'Enable the additional statuses “Serious objection” and “Replaced”',
+'Schwerwiegender Einwand' => 'Serious objection',
+'Ersetzt' => 'Replaced',
+'Die zusätzlichen Status werden nie durch die automatische tägliche Statusprüfung überschrieben.'
+=> 'The additional statuses are never overwritten by the automatic daily status check.',
+'Inkrafttreten erst am Folgetag der vollständigen Frist'
+=> 'Effective date on the day after the complete waiting period',
+'Aktiviert entspricht dem bisherigen Verhalten (+ Fristtage und anschließend ein weiterer Tag).'
+=> 'Enabled corresponds to the previous behavior (waiting-period days plus one additional day).',
+'Ausgeblendete Entscheidungstypen' => 'Hidden decision types',
+'Markierte Typen werden bei neuen Einträgen und in den Filtern ausgeblendet. Bestehende Einträge bleiben unverändert und weiterhin bearbeitbar.'
+=> 'Selected types are hidden for new entries and in filters. Existing entries remain unchanged and editable.',
+'Markierte Typen werden bei neuen Einträgen und in den Filtern ausgeblendet. Bestehende Einträge bleiben unverändert und weiterhin bearbeitbar. Eine gleichzeitig ausgeblendete feste Entscheidungsart wird automatisch aufgehoben.'
+=> 'Selected types are hidden for new entries and in filters. Existing entries remain unchanged and editable. A fixed decision type is automatically cleared when it is hidden.',
+'Dieser Entscheidungstyp ist derzeit ausgeblendet.'
+=> 'This decision type is currently hidden.',
+'Eine fest vorgegebene Entscheidungsart kann nicht gleichzeitig ausgeblendet werden.'
+=> 'A fixed decision type cannot be hidden at the same time.',
+'Entscheidungstyp und Beschreibung in der Detailansicht anzeigen'
+=> 'Show decision type and description in the detail view',
+'Wenn deaktiviert, wird die farbige Typzeile oberhalb des Eintrags ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+=> 'When disabled, the colored type line above the entry is hidden. The stored decision type is retained.',
+'Entscheidungstyp in Karten und Detailansicht anzeigen'
+=> 'Show decision type in cards and detail view',
+'Wenn deaktiviert, werden das farbige Typ-Schild auf Karten sowie die Typzeile in der Detailansicht ausgeblendet. Der gespeicherte Entscheidungstyp bleibt erhalten.'
+=> 'When disabled, the colored type badge on cards and the type line in the detail view are hidden. The stored decision type is retained.',
+'Eingeschränkte Pflege nach einer Überprüfung erlauben'
+=> 'Allow limited maintenance after a review',
+'Zuständige Personen dürfen bei veröffentlichten Einträgen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
+=> 'Responsible users may only set the next review date and link one additional protocol for published entries. Other fields remain locked.',
+'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
+=> 'As soon as the review date is reached, responsible users may only set the next review date and link one additional protocol. Other fields remain locked.',
+'Für ein neues Protokoll werden Titel und Link benötigt.'
+=> 'A title and link are required for a new protocol.',
+'Titel des neuen Protokolls' => 'Title of the new protocol',
+'Link zum neuen Protokoll' => 'Link to the new protocol',
+'Hier können ausschließlich das nächste Überprüfungsdatum angepasst und ein zusätzliches Protokoll verlinkt werden.'
+=> 'Only the next review date and one additional protocol can be added here.',
+'Neues Protokoll (optional)' => 'New protocol (optional)',
+'Überprüfung speichern' => 'Save review',
+'Die Überprüfung konnte nicht gespeichert werden.'
+=> 'The review could not be saved.',
+'Bereinigte CSV-Importdatei' => 'Cleaned CSV import file',
+'Historische Einträge importieren' => 'Import historical entries',
+'Der Import läuft in zwei Schritten. Zuerst wird die CSV-Datei geprüft. Erst danach kann der Import ausdrücklich bestätigt werden.'
+=> 'The import runs in two steps. The CSV file is checked first, and the import must then be explicitly confirmed.',
+'Datei prüfen' => 'Check file',
+'Serverseitige Importprüfung' => 'Server-side import check',
+'{count} importbereit' => '{count} ready to import',
+'{count} Duplikate' => '{count} duplicates',
+'{count} Fehler' => '{count} errors',
+'Quelle' => 'Source',
+'Zielorgan' => 'Target body',
+'Hinweis' => 'Note',
+'Bereit' => 'Ready',
+'Duplikat' => 'Duplicate',
+'Mit der Bestätigung werden ausschließlich die importbereiten Einträge gespeichert. Duplikate werden übersprungen. Alte Einträge lösen keine Benachrichtigungen oder Kalendertermine aus.'
+=> 'Only import-ready entries are saved after confirmation. Duplicates are skipped. Historical entries do not trigger notifications or calendar events.',
+'{count} Einträge jetzt importieren' => 'Import {count} entries now',
+'Historischen Import jetzt endgültig ausführen?'
+=> 'Run the historical import now?',
+'Titel fehlt.' => 'Title is missing.',
+'Beschluss fehlt.' => 'Decision is missing.',
+'Veröffentlichungsdatum ist ungültig.' => 'Publication date is invalid.',
+'Überprüfungsdatum ist ungültig.' => 'Review date is invalid.',
+'Ziel-Space wurde nicht gefunden.' => 'Target space was not found.',
+'Der Name des Ziel-Spaces ist nicht eindeutig.'
+=> 'The target space name is ambiguous.',
+'Der Ziel-Space ist nicht als Logbuch-Organ aktiviert.'
+=> 'The target space is not enabled as a logbook body.',
+'Entscheidungstyp wurde nicht gefunden.' => 'Decision type was not found.',
+'Die Importdatei konnte nicht geprüft werden.'
+=> 'The import file could not be checked.',
+'Die Importbestätigung ist ungültig oder abgelaufen.'
+=> 'The import confirmation is invalid or has expired.',
+'Die Importvorschau wurde nicht gefunden.'
+=> 'The import preview was not found.',
+'{count} historische Einträge wurden importiert. {duplicates} Duplikate wurden übersprungen.'
+=> '{count} historical entries were imported. {duplicates} duplicates were skipped.',
+'Der Import wurde vollständig abgebrochen. Es wurden keine unvollständigen Daten übernommen.'
+=> 'The import was completely aborted. No incomplete data was retained.',
+'Nur Administrator:innen dürfen historische Einträge importieren.'
+=> 'Only administrators may import historical entries.',
+'Historische Daten' => 'Historical data',
+'Hier können vorbereitete historische Logbuch-Einträge zuerst geprüft und anschließend importiert werden.'
+=> 'Prepared historical logbook entries can be checked here before they are imported.',
+'Aufbau der CSV-Importdatei' => 'CSV import file structure',
+'Verwende die Vorlage und lasse die Spaltennamen unverändert. Jede weitere Zeile entspricht einem historischen Logbuch-Eintrag.'
+=> 'Use the template and leave the column names unchanged. Each additional row represents one historical logbook entry.',
+'Name der ursprünglichen Tabelle oder Quelle'
+=> 'Name of the original table or source',
+'Zeilennummer oder eindeutige Kennzeichnung in der Quelle'
+=> 'Row number or unique identifier in the source',
+'Exakter Name eines im Logbuch aktivierten Ziel-Spaces'
+=> 'Exact name of a target space enabled in the logbook',
+'Exakter Name einer vorhandenen Entscheidungsart'
+=> 'Exact name of an existing decision type',
+'Titel des Eintrags' => 'Entry title',
+'Vollständiger Beschlusstext' => 'Complete decision text',
+'Veröffentlichungsdatum im Format JJJJ-MM-TT'
+=> 'Publication date in YYYY-MM-DD format',
+'Optionales Überprüfungsdatum im Format JJJJ-MM-TT'
+=> 'Optional review date in YYYY-MM-DD format',
+'Die Prüfung zeigt fehlende Ziel-Spaces, unbekannte Entscheidungsarten, ungültige Daten und bereits vorhandene Einträge an. Erst eine fehlerfreie Vorschau kann importiert werden.'
+=> 'The check reports missing target spaces, unknown decision types, invalid dates and existing entries. Only an error-free preview can be imported.',
+'CSV-Vorlage herunterladen' => 'Download CSV template',
+'Seitennavigation der Logbuch-Einträge'
+=> 'Logbook entry pagination',
+'Einträge {start}–{end} von {total}'
+=> 'Entries {start}–{end} of {total}',
+'Veröffentlichungsdatum' => 'Publication date',
+'Fehler' => 'Error',
+'Export CSV' => 'Export CSV',
+'Sociolog – Tabellenansicht' => 'Sociolog – Table view',
+'Organe:' => 'Bodies:',
+'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttreten erreicht ist.'
+=> 'After the decision, the status changes from “Not in force” to “Valid” when the effective date is reached.',
+'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.'
+=> 'After the decision, the status changes from “Not in force” to “Valid” when the effective date is reached.',
 
 ];

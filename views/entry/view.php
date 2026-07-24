@@ -9,6 +9,21 @@ use humhub\modules\space\models\Space;
 /** @var yii\web\View $this */
 /** @var humhub\modules\sociolog\models\Entry $model */
 
+$module = Yii::$app->getModule('sociolog');
+$decisionDateLabel = $module->getCustomLabel(
+    'decisionDateLabel',
+    Yii::t('SociologModule.base', 'Beschlussdatum')
+);
+$topicOwnerLabel = $module->getCustomLabel(
+    'topicOwnerLabel',
+    Yii::t('SociologModule.base', 'Themenhüter:in')
+);
+$protocolsLabel = $module->getCustomLabel(
+    'protocolsLabel',
+    Yii::t('SociologModule.base', 'Protokolle')
+);
+$showDecisionTypeHeader = (bool)$module->settings->get('showDecisionTypeHeader', true);
+
 // ============================================================
 // 🔹 Seitentitel (Single Source of Truth – NULL & undefined safe)
 // ============================================================
@@ -33,10 +48,14 @@ $currentView = Yii::$app->request->get('view', 'cards');
 
 $canWrite  = $model->canWrite(Yii::$app->user->identity);
 $canDelete = $model->canDelete(Yii::$app->user->identity);
+$canMaintainReview = $model->canMaintainReview(Yii::$app->user->identity);
 
 $workflowEnabled = Yii::$app->getModule('sociolog')
     ->settings
     ->get('decisionWorkflowEnabled', true);
+$limitedReviewMaintenanceEnabled = (bool)Yii::$app->getModule('sociolog')
+    ->settings
+    ->get('limitedReviewMaintenanceEnabled', false);
 
 $organColor = Entry::getOrganColor($model->organName);
 $organLink  = Entry::getOrganLink($model->getDecisionOrgan());
@@ -112,7 +131,7 @@ $flows = EntryFlow::find()
   <div class="card-body">
 
     <!-- Entscheid-Typ -->
-    <?php if ($model->decisionType): ?>
+    <?php if ($showDecisionTypeHeader && $model->decisionType): ?>
       <?php
         $typeColor = $model->decisionType->color ?: '#6c757d';
         $typeTextColor = \humhub\modules\sociolog\models\DecisionType::getAccessibleTextColor($typeColor);
@@ -297,7 +316,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <?php endif; ?>
 
 
-<?php if ($workflowEnabled && $canWrite && $model->decision_date): ?>
+<?php if ($workflowEnabled && $canMaintainReview && $model->decision_date): ?>
 
 <div class="mt-2">
 
@@ -307,7 +326,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
     ['review', 'id' => $model->id],
     [
         'class' => 'btn btn-info btn-sm',
-        'data-method' => 'post'
+        'data-method' => $limitedReviewMaintenanceEnabled ? null : 'post'
     ]
 ) ?>
 
@@ -349,7 +368,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
     <!-- Themenhüter:in -->
     <p>
       <i class="fa-solid fa-user-shield me-2 text-secondary"></i>
-      <strong><?= Yii::t('SociologModule.base', 'Themenhüter:in') ?>:</strong>
+      <strong><?= Html::encode($topicOwnerLabel) ?>:</strong>
       <?= $model->topic_owner ? Html::encode($model->topic_owner) : '–' ?>
     </p>
 
@@ -377,7 +396,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 
 <h6 class="mt-4 mb-1">
   <i class="fa-solid fa-file-lines me-2 text-primary"></i>
-  <strong><?= Yii::t('SociologModule.base', 'Protokolle') ?>:</strong>
+  <strong><?= Html::encode($protocolsLabel) ?>:</strong>
 </h6>
 
 <ul class="ps-4 mb-3">
@@ -410,7 +429,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
     <!-- Daten -->
     <div class="row mt-4">
       <div class="col-md-4 mb-2">
-        <strong><?= Yii::t('SociologModule.base', 'Beschlussdatum') ?>:</strong><br>
+        <strong><?= Html::encode($decisionDateLabel) ?>:</strong><br>
         <?= $model->decision_date
             ? Yii::$app->formatter->asDate($model->decision_date)
             : '–' ?>
