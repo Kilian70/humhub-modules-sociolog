@@ -454,6 +454,7 @@ public function canDelete($user = null): bool
     public static function getAvailableYears(): array
     {
         $years = static::find()
+            ->publishedOrLegacy()
             ->select(['YEAR(decision_date) AS year'])
             ->where(['IS NOT', 'decision_date', null])
             ->distinct()

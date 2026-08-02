@@ -61,6 +61,7 @@ class EntrySearch extends Model
 		public function search($params)
 		{
 			$query = Entry::find()
+				->publishedOrLegacy()
 				->orderBy(['decision_date' => SORT_DESC]);
 		
 			$dataProvider = new ActiveDataProvider([

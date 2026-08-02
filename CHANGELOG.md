@@ -3,6 +3,19 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.9] – 2026-08-02
+
+### HumHub-Content-Lifecycle
+- Logbuch-Einträge mit zugehörigem HumHub-Content-Datensatz werden nun über `Content::softDelete()` gelöscht
+- Historische Einträge ohne Content-Datensatz bleiben über einen klar begrenzten Kompatibilitäts-Fallback löschbar
+- Weich gelöschte Einträge werden unmittelbar aus Übersicht, Detailansicht, Suche, Dashboard-Widget, CSV-Export und Statusprüfung ausgeblendet
+- Kalenderverknüpfungen werden nach erfolgreichem Löschen weiterhin bereinigt
+- Sociolog-Einträge sind explizit dem Modul `sociolog` zugeordnet
+
+### Berechtigungen
+- Die globale Lesbarkeit des Vereinslogbuchs bleibt erhalten: Alle angemeldeten Benutzer sehen die Einträge unabhängig von der Mitgliedschaft im zugehörigen Space
+- Erstellen, Bearbeiten, Weiterleiten und Löschen bleiben weiterhin auf die zuständigen Space-Administratoren und Logbuch-Administratoren beschränkt
+
 ## [1.0.8] – 2026-07-24
 
 ### Neu

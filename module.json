@@ -2,7 +2,7 @@
   "id": "sociolog",
   "name": "Logbuch",
   "description": "Modul zur Dokumentation von Beschlüssen und Grundsatzentscheiden (Sociolog). Zeigt aktuelle Entscheidungen im Dashboard und sendet Benachrichtigungen bei Änderungen.",
-  "version": "1.0.8",
+  "version": "1.0.9",
 
   "namespace": "humhub\\modules\\sociolog",
   "class": "humhub\\modules\\sociolog\\Module",
