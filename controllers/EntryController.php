@@ -95,8 +95,9 @@ class EntryController extends Controller
     public function actionView($id)
     {
         $model = Entry::find()
+            ->publishedOrLegacy()
             ->with(['decisionType'])
-            ->where(['id' => $id])
+            ->andWhere([Entry::tableName() . '.id' => $id])
             ->one();
 
         if (!$model) {
@@ -357,15 +358,28 @@ public function actionDelete($id)
     }
 
     try {
-        // Explizite Bereinigung ist für bestehende Sociolog-Installationen
-        // erforderlich, deren Content-Datensätze historisch erzeugt wurden.
-        \humhub\modules\sociolog\services\SociologStreamService::onAfterDelete($model);
-        \humhub\modules\sociolog\services\SociologCalendarService::deleteByEntryId($model->id);
-        Entry::deleteAll(['id' => $model->id]);
+        $content = $model->content;
+        if ($content !== null && !$content->getIsNewRecord()) {
+            // HumHub-Standard: Content zunächst weich löschen. Der eigentliche
+            // Datensatz wird durch den Content-Lifecycle später entfernt.
+            if (!$content->softDelete()) {
+                throw new \RuntimeException('Content could not be soft-deleted.');
+            }
 
-        if (Entry::findOne($model->id) !== null) {
-            throw new \RuntimeException('Entry could not be deleted.');
+            if (Entry::find()->publishedOrLegacy()->andWhere([Entry::tableName() . '.id' => $model->id])->exists()) {
+                throw new \RuntimeException('Soft-deleted entry is still visible.');
+            }
+        } else {
+            // Begrenzter Kompatibilitäts-Fallback für historische Datensätze,
+            // die vor der Content-Integration ohne Content-Zeile entstanden.
+            if (Entry::deleteAll(['id' => $model->id]) !== 1) {
+                throw new \RuntimeException('Legacy entry could not be deleted.');
+            }
         }
+
+        // Kalenderverknüpfungen sind keine HumHub-Content-Datensätze und
+        // werden deshalb direkt nach erfolgreichem Löschen bereinigt.
+        \humhub\modules\sociolog\services\SociologCalendarService::deleteByEntryId($model->id);
 
         Yii::$app->session->setFlash('success',
             Yii::t('SociologModule.base', 'Eintrag wurde erfolgreich gelöscht.')
@@ -743,7 +757,10 @@ public function actionReview($id)
     // ============================================================
     protected function findModel($id): Entry
     {
-        $model = Entry::findOne(['id' => $id]);
+        $model = Entry::find()
+            ->publishedOrLegacy()
+            ->andWhere([Entry::tableName() . '.id' => $id])
+            ->one();
 
         if (!$model) {
             throw new NotFoundHttpException(
@@ -883,6 +900,7 @@ public function actionReview($id)
         ], ';');
 
         $query = Entry::find()
+            ->publishedOrLegacy()
             ->with(['decisionType', 'protocols', 'creator', 'editor'])
             ->orderBy(['decision_date' => SORT_DESC]);
 

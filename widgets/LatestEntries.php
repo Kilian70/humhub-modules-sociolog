@@ -47,6 +47,7 @@ class LatestEntries extends Widget
     {
         // 🔹 Lade Einträge nach Beschlussdatum (neueste zuerst)
         $entries = Entry::find()
+            ->publishedOrLegacy()
             ->orderBy(['decision_date' => SORT_DESC])
             ->limit($this->limit)
             ->all();

@@ -25,18 +25,19 @@ public static function run(): void
         $db = Yii::$app->db;
         $today = new DateTimeImmutable('today');
 
-        $rows = (new \yii\db\Query())
+        $rows = Entry::find()
+            ->publishedOrLegacy()
             ->select([
-				'id',
-				'status',
-				'published_at',
-				'effective_date',
-				'review_date',
-				'forwarded_to'
+				Entry::tableName() . '.id',
+				Entry::tableName() . '.status',
+				Entry::tableName() . '.published_at',
+				Entry::tableName() . '.effective_date',
+				Entry::tableName() . '.review_date',
+				Entry::tableName() . '.forwarded_to'
 			])
-            ->from(Entry::tableName())
-            ->where(['!=', 'status', 'expired'])
-            ->all($db);
+            ->andWhere(['!=', Entry::tableName() . '.status', 'expired'])
+            ->asArray()
+            ->all();
 
         $total = count($rows);
         $updated = 0;

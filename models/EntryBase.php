@@ -19,6 +19,11 @@ use humhub\modules\sociolog\models\EntryQuery;
  */
 class EntryBase extends ContentActiveRecord
 {
+    /**
+     * Associates this ContentActiveRecord explicitly with the Sociolog module.
+     */
+    protected $moduleId = 'sociolog';
+
     // ============================================================
     // 🔹 Status-Konstanten (DB-Werte)
     // ============================================================

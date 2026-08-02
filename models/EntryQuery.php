@@ -3,9 +3,31 @@
 namespace humhub\modules\sociolog\models;
 
 use humhub\modules\content\components\ActiveQueryContent;
+use humhub\modules\content\models\Content;
 
 class EntryQuery extends ActiveQueryContent
 {
+    /**
+     * Excludes soft-deleted HumHub content while retaining historical Sociolog
+     * rows which were created without an associated content record.
+     *
+     * We intentionally do not use readable() here: Sociolog entries are global
+     * logbook records and must be readable by every authenticated user,
+     * independently of membership in the entry's Space.
+     */
+    public function publishedOrLegacy(): self
+    {
+        $contentTable = Content::tableName();
+
+        return $this
+            ->joinWith('content')
+            ->andWhere([
+                'or',
+                ['!=', $contentTable . '.state', Content::STATE_DELETED],
+                [$contentTable . '.id' => null],
+            ]);
+    }
+
     public function visible(): self
     {
         return $this->readable();
