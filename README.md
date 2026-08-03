@@ -209,6 +209,8 @@ Beispiel (Cyon Shared Hosting):
 Dieser startet den Statuslauf einmal täglich um Mitternacht.
 
 `run.php` ermittelt den HumHub-Ordner automatisch relativ zum Modulpfad.
+Das Skript akzeptiert aus Sicherheitsgründen ausschliesslich Aufrufe über PHP-CLI
+und kann nicht als Web-Endpunkt verwendet werden.
 Im Skript selbst muss deshalb kein installationsabhängiger Serverpfad
 eingetragen werden.
 
