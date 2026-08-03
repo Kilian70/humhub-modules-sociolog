@@ -34,8 +34,8 @@ $topicOwnerLabel = $module->getCustomLabel(
          🔹 Toolbar
     ========================================================= -->
     <div class="d-flex justify-content-end mb-2">
-      <button id="printTable" class="btn btn-sm btn-outline-secondary">
-        <i class="fa-solid fa-print me-1"></i>
+      <button id="printTable" type="button" class="btn btn-sm btn-outline-secondary">
+        <i class="fa fa-print me-1"></i>
         <?= Yii::t('SociologModule.base', 'Tabelle drucken') ?>
       </button>
     </div>
@@ -65,12 +65,12 @@ $topicOwnerLabel = $module->getCustomLabel(
           <th scope="col" class="text-center"
               title="<?= Html::encode($topicOwnerLabel) ?>">
             <span class="visually-hidden"><?= Html::encode($topicOwnerLabel) ?></span>
-            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+            <i class="fa fa-user-secret" aria-hidden="true"></i>
           </th>
           <th scope="col" class="text-center"
               title="<?= Yii::t('SociologModule.base', 'Bearbeiten') ?>">
             <span class="visually-hidden"><?= Yii::t('SociologModule.base', 'Bearbeiten') ?></span>
-            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+            <i class="fa fa-pencil" aria-hidden="true"></i>
           </th>
         </tr>
       </thead>
@@ -148,7 +148,7 @@ $topicOwnerLabel = $module->getCustomLabel(
             <td class="text-center">
               <?php if ($canWrite): ?>
                 <?= Html::a(
-                    '<i class="fa-solid fa-pen" aria-hidden="true"></i>',
+                    '<i class="fa fa-pencil" aria-hidden="true"></i>',
                     Url::to([
                         '/sociolog/entry/update',
                         'id'   => $model->id,

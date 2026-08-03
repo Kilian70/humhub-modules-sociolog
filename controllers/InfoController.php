@@ -45,13 +45,13 @@ class InfoController extends Controller
             'documentUrl' => trim((string)$module->settings->get('infoDocumentUrl', '')),
             'sections' => [
                 [
-                    'icon' => 'fa-route',
+                    'icon' => 'fa-random',
                     'class' => 'sociolog-info-card--process',
                     'title' => Yii::t('SociologModule.base', 'So entsteht ein Eintrag'),
                     'text' => (string)$module->settings->get('infoProcessText', ''),
                 ],
                 [
-                    'icon' => 'fa-user-shield',
+                    'icon' => 'fa-user-secret',
                     'class' => 'sociolog-info-card--permissions',
                     'title' => Yii::t('SociologModule.base', 'Wer darf was?'),
                     'text' => (string)$module->settings->get('infoPermissionsText', ''),
@@ -63,31 +63,31 @@ class InfoController extends Controller
                     'text' => (string)$module->settings->get('infoStatusText', ''),
                 ],
                 [
-                    'icon' => 'fa-circle-exclamation',
+                    'icon' => 'fa-exclamation-circle',
                     'class' => 'sociolog-info-card--objection',
                     'title' => Yii::t('SociologModule.base', 'Einsprache und Einwand'),
                     'text' => (string)$module->settings->get('infoObjectionText', ''),
                 ],
                 [
-                    'icon' => 'fa-calendar-check',
+                    'icon' => 'fa-calendar-check-o',
                     'class' => 'sociolog-info-card--review',
                     'title' => Yii::t('SociologModule.base', 'Überprüfung'),
                     'text' => (string)$module->settings->get('infoReviewText', ''),
                 ],
                 [
-                    'icon' => 'fa-file-lines',
+                    'icon' => 'fa-file-text-o',
                     'class' => 'sociolog-info-card--documents',
                     'title' => Yii::t('SociologModule.base', 'Protokolle und Dokumente'),
                     'text' => (string)$module->settings->get('infoDocumentsText', ''),
                 ],
                 [
-                    'icon' => 'fa-scale-balanced',
+                    'icon' => 'fa-balance-scale',
                     'class' => 'sociolog-info-card--guideline',
                     'title' => Yii::t('SociologModule.base', 'Was ist ein Grundsatzentscheid?'),
                     'text' => (string)$module->settings->get('infoGuidelineText', ''),
                 ],
                 [
-                    'icon' => 'fa-table-list',
+                    'icon' => 'fa-list-alt',
                     'class' => 'sociolog-info-card--examples',
                     'title' => Yii::t('SociologModule.base', 'Beispiele'),
                     'text' => (string)$module->settings->get('infoExamplesText', ''),

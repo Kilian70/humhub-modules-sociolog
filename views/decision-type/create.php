@@ -17,12 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ============================================================ -->
 <div class="decision-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
   <h1 class="h4 mb-0 fw-semibold text-white">
-    <i class="fa-solid fa-list me-2" aria-hidden="true"></i>
+    <i class="fa fa-list me-2" aria-hidden="true"></i>
     <?= Html::encode($this->title) ?>
   </h1>
 
   <?= Html::a(
-      '<i class="fa-solid fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
+      '<i class="fa fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
       ['index'],
       ['class' => 'btn btn-light btn-sm text-dark']
   ) ?>

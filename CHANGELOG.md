@@ -3,6 +3,14 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.11] – 2026-08-03
+
+### Ressourcen
+- Externe DataTables-Dateien und die extern geladene Sprachdatei entfernt; Filterung und Seitennavigation erfolgen weiterhin serverseitig über HumHub/Yii
+- Externes Font Awesome 6 entfernt und alle Symbole auf das von HumHub 1.18 und 1.19 mitgelieferte Font-Awesome-Bundle umgestellt
+- Versehentlich in `icon.css` enthaltenen ungültigen PHP-Text entfernt
+- Tabellen-Druckschaltfläche über PJAX-sichere Ereignisdelegation stabilisiert
+
 ## [1.0.10] – 2026-08-03
 
 ### Berechtigungen

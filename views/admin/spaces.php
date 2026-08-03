@@ -163,7 +163,7 @@ $form = ActiveForm::begin();
     </h1>
 
     <?= Html::a(
-        '<i class="fa-solid fa-arrow-left me-1"></i> ' .
+        '<i class="fa fa-arrow-left me-1"></i> ' .
         Yii::t('SociologModule.base', 'Zurück zu Einstellungen'),
         ['/sociolog/admin/index'],
         ['class' => 'btn btn-sm btn-outline-secondary']
@@ -316,7 +316,7 @@ $form = ActiveForm::begin();
                             </strong>
 
                             <?= Html::a(
-                                '<i class="fa-solid fa-arrow-up-right-from-square"></i>',
+                                '<i class="fa fa-external-link"></i>',
                                 $space->getUrl(),
                                 [
                                     'class' => 'text-muted ms-2',
@@ -487,7 +487,7 @@ placeholder="<?= Yii::t('SociologModule.base','https://... (optional)') ?>"
         <div class="form-group mt-3">
 
             <?= Html::submitButton(
-                '<i class="fa-solid fa-floppy-disk me-1"></i> ' .
+                '<i class="fa fa-save me-1"></i> ' .
                 Yii::t('SociologModule.base', 'Speichern'),
                 ['class' => 'btn btn-primary']
             ) ?>

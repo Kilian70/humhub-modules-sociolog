@@ -493,23 +493,6 @@ html[data-bs-theme="dark"] .table-hover > tbody > tr:hover {
 }
 
 /* ------------------------------------------------------------
-   DataTables – Tabellenkopf (WICHTIG)
-   ------------------------------------------------------------ */
-html[data-bs-theme="dark"] table.dataTable thead th {
-  background-color: #1f2328 !important;
-  color: #f1f3f5 !important;
-  border-bottom: 1px solid var(--sociolog-border) !important;
-  font-weight: 600;
-}
-
-/* Sortierpfeile */
-html[data-bs-theme="dark"] table.dataTable thead th::before,
-html[data-bs-theme="dark"] table.dataTable thead th::after {
-  color: #adb5bd !important;
-  opacity: 1 !important;
-}
-
-/* ------------------------------------------------------------
    Formulare & Filter
    ------------------------------------------------------------ */
 html[data-bs-theme="dark"] input,
@@ -594,10 +577,6 @@ html[data-bs-theme="dark"] .badge-sociolog-expired {
   /* Sonstiges UI */
   .btn,
   .pagination,
-  .dataTables_length,
-  .dataTables_filter,
-  .dataTables_info,
-  .dataTables_paginate,
   .page-title,
   .page-header,
   .panel-heading,
@@ -626,14 +605,6 @@ html[data-bs-theme="dark"] .badge-sociolog-expired {
     background: transparent !important;
     box-shadow: none !important;
     border: none !important;
-  }
-
-  /* ------------------------------------------------------------
-     DataTables Wrapper
-     ------------------------------------------------------------ */
-  .dataTables_wrapper {
-    margin: 0 !important;
-    padding: 0 !important;
   }
 
   /* ------------------------------------------------------------

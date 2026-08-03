@@ -15,13 +15,6 @@ class SociologAsset extends AssetBundle
 
     /** 🎨 CSS-Dateien */
     public $css = [
-        // DataTables (Bootstrap 5)
-        'https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css',
-
-        // Das Modul verwendet Font-Awesome-6-Klassen (fa-solid).
-        // HumHubs gebündelte Icon-Version deckt diese nicht vollständig ab.
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-
         // Modul-CSS
         'css/sociolog.css',
         'css/icon.css',
@@ -29,13 +22,8 @@ class SociologAsset extends AssetBundle
 
     /** ⚙️ JavaScript-Dateien */
     public $js = [
-        // DataTables
-        'https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js',
-        'https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js',
-
         // Modul-JS
         'js/sociolog-search.js',
-        'js/sociolog-table.js',
         'js/sociolog-form.js',
         'js/sociolog-decision-type-sort.js',
 

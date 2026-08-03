@@ -76,7 +76,7 @@ $flows = EntryFlow::find()
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
 
   <h1 class="h4 mb-0 d-flex align-items-center">
-    <i class="fa-solid fa-book me-2 text-primary" aria-hidden="true"></i>
+    <i class="fa fa-book me-2 text-primary" aria-hidden="true"></i>
     <?= Html::encode($entryTitle !== '' ? $entryTitle : Yii::t('SociologModule.base', '(ohne Titel)')) ?>
   </h1>
 
@@ -91,13 +91,13 @@ $flows = EntryFlow::find()
     <button type="button"
             class="btn btn-sm btn-outline-secondary"
             data-action="print-entry">
-      <i class="fa-solid fa-print me-1"></i>
+      <i class="fa fa-print me-1"></i>
       <?= Yii::t('SociologModule.base', 'Eintrag drucken') ?>
     </button>
 
     <?php if ($canWrite): ?>
       <?= Html::a(
-          '<i class="fa-solid fa-pen" aria-hidden="true"></i>',
+          '<i class="fa fa-pencil" aria-hidden="true"></i>',
           ['update', 'id' => $model->id, 'view' => $currentView],
           [
               'class' => 'btn btn-sm btn-outline-secondary',
@@ -109,7 +109,7 @@ $flows = EntryFlow::find()
 
     <?php if ($canDelete): ?>
       <?= Html::a(
-          '<i class="fa-solid fa-trash" aria-hidden="true"></i>',
+          '<i class="fa fa-trash" aria-hidden="true"></i>',
           ['delete', 'id' => $model->id],
           [
               'class' => 'btn btn-sm btn-outline-danger',
@@ -152,7 +152,7 @@ $flows = EntryFlow::find()
 
     <!-- Organ -->
     <p>
-      <i class="fa-solid fa-sitemap me-2 text-secondary"></i>
+      <i class="fa fa-sitemap me-2 text-secondary"></i>
       <strong><?= Yii::t('SociologModule.base', 'Zuständiges Organ') ?>:</strong>
       <?php if ($organLink): ?>
         <?= Html::a(
@@ -244,7 +244,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <div class="mt-3">
 
 <?= Html::a(
-    '<i class="fa-solid fa-share me-1"></i> '
+    '<i class="fa fa-share me-1"></i> '
     . Yii::t('SociologModule.base', 'Weiterleiten an')
     . ' ' . $nextOrgan,
     ['forward', 'id' => $model->id],
@@ -264,7 +264,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <div class="mt-2">
 
 <?= Html::a(
-    '<i class="fa-solid fa-rotate-left me-1"></i> '
+    '<i class="fa fa-rotate-left me-1"></i> '
     . Yii::t('SociologModule.base', 'Entscheid zurückgeben'),
     ['return', 'id' => $model->id],
     [
@@ -283,7 +283,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <div class="mt-2">
 
 <?= Html::a(
-    '<i class="fa-solid fa-check me-1"></i> '
+    '<i class="fa fa-check me-1"></i> '
     . Yii::t('SociologModule.base', 'Entscheid übernehmen'),
     ['take-over', 'id' => $model->id],
     [
@@ -302,7 +302,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <div class="mt-2">
 
 <?= Html::a(
-    '<i class="fa-solid fa-gavel me-1"></i> '
+    '<i class="fa fa-gavel me-1"></i> '
     . Yii::t('SociologModule.base', 'Beschluss fassen'),
     ['decide', 'id' => $model->id],
     [
@@ -321,7 +321,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <div class="mt-2">
 
 <?= Html::a(
-    '<i class="fa-solid fa-search me-1"></i> '
+    '<i class="fa fa-search me-1"></i> '
     . Yii::t('SociologModule.base', 'Überprüfung dokumentieren'),
     ['review', 'id' => $model->id],
     [
@@ -367,14 +367,14 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 
     <!-- Themenhüter:in -->
     <p>
-      <i class="fa-solid fa-user-shield me-2 text-secondary"></i>
+      <i class="fa fa-user-secret me-2 text-secondary"></i>
       <strong><?= Html::encode($topicOwnerLabel) ?>:</strong>
       <?= $model->topic_owner ? Html::encode($model->topic_owner) : '–' ?>
     </p>
 
     <!-- Beschluss -->
     <h6 class="mt-4 mb-1">
-      <i class="fa-solid fa-scroll me-2 text-primary"></i>
+      <i class="fa fa-file-text-o me-2 text-primary"></i>
       <strong><?= Yii::t('SociologModule.base', 'Beschluss') ?>:</strong>
     </h6>
     <p class="ps-4"><?= nl2br(Html::encode($model->decision)) ?></p>
@@ -382,7 +382,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
     <!-- Begründung -->
     <?php if ($model->description): ?>
       <h6 class="mt-4 mb-1">
-        <i class="fa-solid fa-quote-left me-2 text-primary"></i>
+        <i class="fa fa-quote-left me-2 text-primary"></i>
         <strong><?= Yii::t('SociologModule.base', 'Begründung') ?>:</strong>
       </h6>
       <p class="ps-4"><?= nl2br(Html::encode($model->description)) ?></p>
@@ -395,7 +395,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <?php if (!empty($model->protocols)): ?>
 
 <h6 class="mt-4 mb-1">
-  <i class="fa-solid fa-file-lines me-2 text-primary"></i>
+  <i class="fa fa-file-text-o me-2 text-primary"></i>
   <strong><?= Html::encode($protocolsLabel) ?>:</strong>
 </h6>
 
@@ -404,7 +404,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <?php foreach ($model->protocols as $protocol): ?>
 
 <li>
-<i class="fa-solid fa-file-lines me-1 text-secondary"></i>
+<i class="fa fa-file-text-o me-1 text-secondary"></i>
 <?php if ($protocol->safeUrl !== null): ?>
     <?= Html::a(
         Html::encode($protocol->title ?: Yii::t('SociologModule.base','Protokoll')),

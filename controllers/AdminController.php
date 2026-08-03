@@ -73,7 +73,7 @@ public function actionIndex()
         if ($model->save()) {
             Yii::$app->session->setFlash(
                 'success',
-                '<i class="fa-solid fa-circle-check me-1"></i> Einstellungen wurden gespeichert.'
+                '<i class="fa fa-check-circle me-1"></i> Einstellungen wurden gespeichert.'
             );
 
             return $this->redirect(['index']);
@@ -123,7 +123,7 @@ public function actionIndex()
 
         Yii::$app->session->setFlash(
             'success',
-            '<i class="fa-solid fa-circle-check me-1"></i> Statusprüfung wurde erfolgreich ausgeführt.'
+            '<i class="fa fa-check-circle me-1"></i> Statusprüfung wurde erfolgreich ausgeführt.'
         );
 
         // Zurück zur Admin-Seite
@@ -172,7 +172,7 @@ public function actionIndex()
         </div>
 
         <div class="mt-2">
-            <i class="fa-solid fa-pen-to-square text-primary me-1"></i>
+            <i class="fa fa-pencil-square-o text-primary me-1"></i>
             Schreibrechte:
             <?php if (!empty($writable)): ?>
                 <span class="badge bg-success">
@@ -187,7 +187,7 @@ public function actionIndex()
         </div>
 
         <div class="mt-1">
-            <i class="fa-solid fa-trash-can text-danger me-1"></i>
+            <i class="fa fa-trash text-danger me-1"></i>
             Löschrecht:
             <?= $canDelete
                 ? '<span class="badge bg-danger">Ja</span>'
@@ -318,7 +318,7 @@ if (Yii::$app->request->isPost) {
 
     Yii::$app->session->setFlash(
         'success',
-        '<i class="fa-solid fa-circle-check me-1"></i> Einstellungen wurden gespeichert.'
+        '<i class="fa fa-check-circle me-1"></i> Einstellungen wurden gespeichert.'
     );
 
     return $this->redirect(['spaces']);

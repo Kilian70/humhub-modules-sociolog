@@ -24,7 +24,7 @@ $this->title = $moduleTitle . ' – ' . Yii::t('SociologModule.base', 'Neuer Ein
 
     <?php if (!Yii::$app->request->isAjax): ?>
       <?= Html::a(
-        '<i class="fa-solid fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
+        '<i class="fa fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
         ['index', 'view' => $viewMode],
         ['class' => 'btn btn-sm btn-outline-secondary']
       ) ?>

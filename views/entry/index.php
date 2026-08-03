@@ -89,7 +89,7 @@ foreach ($dataProvider->models as $entry) {
 
   <div>
     <h1 class="h3 mb-1">
-      <i class="fa-solid fa-book me-2 text-primary" aria-hidden="true"></i>
+      <i class="fa fa-book me-2 text-primary" aria-hidden="true"></i>
       <?= Html::encode($moduleTitle) ?>
       <span class="text-muted ms-1">/ <?= Yii::t('SociologModule.base', 'Einträge') ?></span>
     </h1>
@@ -113,7 +113,7 @@ foreach ($dataProvider->models as $entry) {
   <div class="btn-group">
     <?php if ($infoPageEnabled): ?>
       <?= Html::a(
-        '<i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>'
+        '<i class="fa fa-info-circle me-1" aria-hidden="true"></i>'
           . Yii::t('SociologModule.base', 'So funktioniert das Logbuch'),
         ['/sociolog/info/index'],
         ['class' => 'btn btn-sm btn-outline-primary']
@@ -122,20 +122,20 @@ foreach ($dataProvider->models as $entry) {
 
     <?php if (\humhub\modules\sociolog\models\Entry::canCreateGlobal(Yii::$app->user->identity)): ?>
       <?= Html::a(
-        '<i class="fa-solid fa-plus me-1"></i>' . Yii::t('SociologModule.base', 'Neuer Eintrag'),
+        '<i class="fa fa-plus me-1"></i>' . Yii::t('SociologModule.base', 'Neuer Eintrag'),
         ['create', 'view' => $viewMode],
         ['class' => 'btn btn-sm btn-primary']
       ) ?>
     <?php endif; ?>
 
     <?= Html::a(
-      '<i class="fa-solid fa-file-csv me-1"></i>' . Yii::t('SociologModule.base', 'Export CSV'),
+      '<i class="fa fa-file-text-o me-1"></i>' . Yii::t('SociologModule.base', 'Export CSV'),
       ['export-csv'],
       ['class' => 'btn btn-sm btn-outline-secondary']
     ) ?>
 
     <?= Html::a(
-      '<i class="fa-solid fa-th" aria-hidden="true"></i>',
+      '<i class="fa fa-th" aria-hidden="true"></i>',
       ['index', 'view' => 'cards'],
       [
         'class' => 'btn btn-sm ' . ($viewMode === 'cards'
@@ -148,7 +148,7 @@ foreach ($dataProvider->models as $entry) {
     ) ?>
 
     <?= Html::a(
-      '<i class="fa-solid fa-table" aria-hidden="true"></i>',
+      '<i class="fa fa-table" aria-hidden="true"></i>',
       ['index', 'view' => 'table'],
       [
         'class' => 'btn btn-sm ' . ($viewMode === 'table'
@@ -172,7 +172,7 @@ foreach ($dataProvider->models as $entry) {
   <div class="card-body pb-2">
 
     <div class="sociolog-filter-title">
-      <i class="fa-solid fa-filter me-1"></i>
+      <i class="fa fa-filter me-1"></i>
       <?= Yii::t('SociologModule.base', 'Filter') ?>
     </div>
 

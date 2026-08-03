@@ -287,7 +287,7 @@ placeholder="<?= Yii::t('SociologModule.base','Link') ?>">
 class="btn btn-outline-danger btn-sm remove-protocol"
 aria-label="<?= Yii::t('SociologModule.base','Protokoll entfernen') ?>">
 
-<i class="fa-solid fa-trash"></i>
+<i class="fa fa-trash"></i>
 
 </button>
 
@@ -364,7 +364,7 @@ id="add-protocol">
 <div class="col-12 d-flex justify-content-end mt-3">
 
 <?= Html::submitButton(
-'<i class="fa-solid fa-floppy-disk me-1"></i> '
+'<i class="fa fa-save me-1"></i> '
 . Yii::t('SociologModule.base','Speichern'),
 ['class'=>'btn btn-primary me-2']
 ) ?>
@@ -417,7 +417,7 @@ placeholder="Link zum Protokoll">
 class="btn btn-outline-danger btn-sm remove-protocol"
 aria-label="{$protocolRemoveLabel}">
 
-<i class="fa-solid fa-trash"></i>
+<i class="fa fa-trash"></i>
 
 </button>
 

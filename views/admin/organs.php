@@ -15,13 +15,13 @@ $this->title = Yii::t('SociologModule.base', 'Organe');
         <div>
 
             <?= Html::a(
-                '<i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
+                '<i class="fa fa-arrow-left me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
                 ['/sociolog/admin/index'],
                 ['class' => 'btn btn-sm btn-outline-secondary']
             ) ?>
 
             <?= Html::a(
-                '<i class="fa-solid fa-plus me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Neues Organ'),
+                '<i class="fa fa-plus me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Neues Organ'),
                 ['create-organ'],
                 ['class' => 'btn btn-sm btn-success']
             ) ?>

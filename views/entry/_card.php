@@ -131,7 +131,7 @@ if ($container instanceof Space) {
 
         <?php if ($canWrite): ?>
             <?= Html::a(
-                '<i class="fa-solid fa-pen" aria-hidden="true"></i>',
+                '<i class="fa fa-pencil" aria-hidden="true"></i>',
                 ['update', 'id' => $model->id],
                 [
                     'class' => 'btn btn-sm btn-outline-secondary',
@@ -143,7 +143,7 @@ if ($container instanceof Space) {
 
         <?php if ($canDelete): ?>
             <?= Html::a(
-                '<i class="fa-solid fa-trash" aria-hidden="true"></i>',
+                '<i class="fa fa-trash" aria-hidden="true"></i>',
                 ['delete', 'id' => $model->id],
                 [
                     'class' => 'btn btn-sm btn-outline-danger',

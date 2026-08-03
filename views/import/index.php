@@ -51,7 +51,7 @@ $this->title = Yii::t('SociologModule.base', 'Historische Einträge importieren'
                     ) ?>
                 </p>
                 <?= Html::a(
-                    '<i class="fa-solid fa-download me-1" aria-hidden="true"></i> '
+                    '<i class="fa fa-download me-1" aria-hidden="true"></i> '
                         . Yii::t('SociologModule.base', 'CSV-Vorlage herunterladen'),
                     ['template'],
                     ['class' => 'btn btn-default btn-sm', 'data-pjax' => 0]

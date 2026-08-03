@@ -101,7 +101,7 @@ $currentView = Yii::$app->request->get('view', 'cards');
         <div class="d-flex justify-content-end gap-2">
 
           <?= Html::submitButton(
-              '<i class="fa-solid fa-search"></i>',
+              '<i class="fa fa-search"></i>',
               [
                   'class'       => 'btn btn-primary btn-sm',
                   'title'       => Yii::t('SociologModule.base', 'Suchen'),
@@ -110,7 +110,7 @@ $currentView = Yii::$app->request->get('view', 'cards');
           ) ?>
 
           <?= Html::a(
-              '<i class="fa-solid fa-rotate-left"></i>',
+              '<i class="fa fa-rotate-left"></i>',
               ['index', 'view' => $currentView],
               [
                   'class'      => 'btn btn-outline-secondary btn-sm',

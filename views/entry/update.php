@@ -29,7 +29,7 @@ $this->title = $moduleTitle . ' – ' . Yii::t('SociologModule.base', 'Eintrag b
     </h1>
 
     <?= Html::a(
-  '<i class="fa-solid fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
+  '<i class="fa fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück'),
   ['index', 'view' => $viewMode],
   ['class' => 'btn btn-sm btn-outline-secondary']
 ) ?>
