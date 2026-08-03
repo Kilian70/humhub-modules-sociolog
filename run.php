@@ -2,6 +2,15 @@
 <?php
 error_reporting(E_ALL & ~E_DEPRECATED);
 
+// Dieses Fallback fuehrt administrative Wartungslogik aus und darf daher
+// ausschliesslich durch PHP auf der Kommandozeile gestartet werden. Die
+// regulaere HumHub-Installation sperrt /protected bereits serverseitig;
+// diese Pruefung ist eine zusaetzliche Absicherung bei Fehlkonfigurationen.
+if (PHP_SAPI !== 'cli') {
+    http_response_code(404);
+    exit(1);
+}
+
 define('YII_DEBUG', false);
 define('YII_ENV', 'prod');
 

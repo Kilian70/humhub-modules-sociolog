@@ -59,6 +59,17 @@ if (($module['humhub']['minVersion'] ?? null) !== '1.18.0') {
     $errors[] = 'The declared minimum HumHub version must remain 1.18.0.';
 }
 
+$fallbackCron = (string)file_get_contents($root . '/run.php');
+if (!str_contains($fallbackCron, "PHP_SAPI !== 'cli'")) {
+    $errors[] = 'run.php must reject non-CLI requests.';
+}
+
+$importController = (string)file_get_contents($root . '/controllers/ImportController.php');
+if (!str_contains($importController, 'PREVIEW_MAX_AGE = 86400')
+    || !str_contains($importController, 'cleanupExpiredPreviews()')) {
+    $errors[] = 'Import previews must expire after 24 hours.';
+}
+
 if (is_file($root . '/permissions/ViewEntry.php')
     || str_contains($moduleClass, 'ViewEntry')
     || str_contains((string)file_get_contents($root . '/module.json'), 'ViewEntry')) {

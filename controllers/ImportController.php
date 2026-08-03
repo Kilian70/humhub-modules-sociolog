@@ -13,6 +13,8 @@ use yii\web\UploadedFile;
 
 class ImportController extends Controller
 {
+    private const PREVIEW_MAX_AGE = 86400;
+
     public function behaviors(): array
     {
         $behaviors = parent::behaviors();
@@ -28,6 +30,8 @@ class ImportController extends Controller
     public function actionIndex()
     {
         $this->requireAdmin();
+        $this->cleanupExpiredPreviews();
+
         $model = new ImportUploadForm();
         $preview = null;
         $token = null;
@@ -38,6 +42,7 @@ class ImportController extends Controller
             if ($model->validate()) {
                 try {
                     $preview = SociologImportService::preview($model->file->tempName);
+                    $this->removeCurrentUserPreview();
                     $token = bin2hex(random_bytes(24));
                     $path = $this->getPreviewPath($token);
                     $directory = dirname($path);
@@ -126,6 +131,8 @@ class ImportController extends Controller
     public function actionRun()
     {
         $this->requireAdmin();
+        $this->cleanupExpiredPreviews();
+
         $token = (string)Yii::$app->request->post('token');
         $sessionToken = (string)Yii::$app->session->get('sociologImportToken', '');
 
@@ -190,5 +197,48 @@ class ImportController extends Controller
         $userId = (int)Yii::$app->user->id;
         return Yii::getAlias('@runtime/sociolog-import/')
             . $userId . '-' . $token . '.json';
+    }
+
+    /**
+     * Entfernt die vorherige Vorschau dieses Administrators, sobald eine neue
+     * erstellt wird. Andere aktive Sitzungen bleiben davon unberuehrt.
+     */
+    private function removeCurrentUserPreview(): void
+    {
+        $oldToken = (string)Yii::$app->session->get('sociologImportToken', '');
+        if ($oldToken === '' || !preg_match('/^[a-f0-9]{48}$/', $oldToken)) {
+            return;
+        }
+
+        $oldPath = $this->getPreviewPath($oldToken);
+        if (is_file($oldPath) && !is_link($oldPath)) {
+            @unlink($oldPath);
+        }
+
+        Yii::$app->session->remove('sociologImportToken');
+    }
+
+    /**
+     * Importvorschauen enthalten die zu importierenden Beschlusstexte. Nicht
+     * bestaetigte Dateien werden deshalb nach 24 Stunden automatisch entfernt.
+     */
+    private function cleanupExpiredPreviews(): void
+    {
+        $directory = Yii::getAlias('@runtime/sociolog-import');
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $expiry = time() - self::PREVIEW_MAX_AGE;
+        foreach (glob($directory . '/*.json') ?: [] as $path) {
+            if (is_link($path) || !is_file($path)) {
+                continue;
+            }
+
+            $modifiedAt = filemtime($path);
+            if ($modifiedAt !== false && $modifiedAt < $expiry) {
+                @unlink($path);
+            }
+        }
     }
 }
