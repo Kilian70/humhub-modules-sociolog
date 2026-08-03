@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.11
+**Version:** 1.0.12
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 (AGPL-3.0)  
@@ -420,6 +420,27 @@ sociolog/
 | DeleteEntry  | Einträge löschen          | Admin |
 
 Alle angemeldeten Benutzer können sämtliche Logbuch-Einträge lesen und exportieren. Dieses globale Leserecht ist bewusst nicht als Space-Berechtigung konfigurierbar. Die Schreibberechtigungen können über **Admin → Rechte → Sociolog** angepasst werden.
+
+
+## Automatisierte Prüfungen
+
+Bei jedem Push und Pull Request prüft GitHub Actions das Modul mit PHP 8.1 und 8.3:
+
+- PHP-Syntax aller Moduldateien
+- JavaScript-Syntax der lokalen Modulskripte
+- Übereinstimmung der Versionsnummern in `Module.php`, `module.json`, `composer.json` und README
+- HumHub- und Composer-konforme Lizenzfelder
+- deklarierte Mindestversion HumHub 1.18
+- keine erneute Registrierung der entfernten `ViewEntry`-Berechtigung
+- keine erneuten externen CDN- oder Font-Awesome-6-Referenzen
+
+Die lokale Metadaten- und Richtlinienprüfung kann mit folgendem Befehl ausgeführt werden:
+
+```bash
+php tests/validate-module.php
+```
+
+Funktionale Abläufe mit Datenbank, Spaces, Content-Lifecycle, Kalender und Cron benötigen weiterhin eine echte HumHub-Testinstallation.
 
 
 ## Datenbankstruktur

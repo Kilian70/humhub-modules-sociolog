@@ -2,7 +2,7 @@
   "id": "sociolog",
   "name": "Logbuch",
   "description": "Modul zur Dokumentation von Beschlüssen und Grundsatzentscheiden (Sociolog). Zeigt aktuelle Entscheidungen im Dashboard und sendet Benachrichtigungen bei Änderungen.",
-  "version": "1.0.11",
+  "version": "1.0.12",
 
   "namespace": "humhub\\modules\\sociolog",
   "class": "humhub\\modules\\sociolog\\Module",
@@ -41,7 +41,7 @@
     }
   ],
   "homepage": "https://www.humlab.ch",
-  "license": "AGPL-3.0-or-later",
+  "licence": "AGPL-3.0-or-later",
   "keywords": [
     "logbuch",
     "entscheid",
