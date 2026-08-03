@@ -13,6 +13,14 @@ Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentier
 - Automatische PHP- und JavaScript-Syntaxprüfung hinzugefügt
 - Eigenständige Modulprüfung für Versionen, Lizenzfelder, HumHub-Mindestversion, Berechtigungsregistrierung und externe Ressourcen ergänzt
 
+### Sicherheit
+- Alternatives `run.php`-Fallback ausdrücklich auf PHP-CLI-Aufrufe beschränkt
+- Temporäre Importvorschauen werden nach 24 Stunden und beim Erstellen einer neuen Vorschau automatisch bereinigt
+
+### Darstellung
+- Eigenständiges HumHub-Modulbild unter `resources/module_image.png` ergänzt
+- SVG-Symbol als klar erkennbares Logbuch mit bestätigtem Entscheid überarbeitet
+
 ## [1.0.11] – 2026-08-03
 
 ### Ressourcen
