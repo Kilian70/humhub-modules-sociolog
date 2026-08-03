@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.9
+**Version:** 1.0.10
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 (AGPL-3.0)  
@@ -347,8 +347,7 @@ sociolog/
 ├── permissions/							# Rechte und Berechtigungen
 │   ├── CreateEntry.php						# Recht: Eintrag erstellen
 │	├── DeleteEntry.php						# Recht: Eintrag löschen
-│   ├── UpdateEntry.php						# Recht: Eintrag bearbeiten
-│	└── ViewEntry.php						# Recht: Eintrag ansehen
+│	└── UpdateEntry.php						# Recht: Eintrag bearbeiten
 │
 ├── resources/								# Statische Ressourcen
 │   └── css/js								# Modul-Styles und JavaScript-Dateien
@@ -416,12 +415,11 @@ sociolog/
 
 | Berechtigung | Beschreibung              | Standard |
 |--------------|---------------------------|----------|
-| ViewEntry    | Einträge ansehen          | Alle angemeldeten Nutzer |
 | CreateEntry  | Neue Einträge erstellen   | Ersteller / Admin |
 | UpdateEntry  | Einträge bearbeiten       | Ersteller / Admin |
 | DeleteEntry  | Einträge löschen          | Admin |
 
-Berechtigungen können über **Admin → Rechte → Sociolog** angepasst werden.
+Alle angemeldeten Benutzer können sämtliche Logbuch-Einträge lesen und exportieren. Dieses globale Leserecht ist bewusst nicht als Space-Berechtigung konfigurierbar. Die Schreibberechtigungen können über **Admin → Rechte → Sociolog** angepasst werden.
 
 
 ## Datenbankstruktur
