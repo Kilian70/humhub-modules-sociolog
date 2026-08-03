@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="512" height="512" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="512"
+     height="512"
+     viewBox="0 0 64 64"
+     role="img"
+     aria-labelledby="title description">
+  <title id="title">Logbuch</title>
+  <desc id="description">Ein Logbuch mit einem bestätigten Entscheid</desc>
 
-  <!-- Hintergrund-Kreis -->
-  <circle cx="32" cy="32" r="30" fill="#00A8B5"/>
+  <!-- Ruhige, gut erkennbare Modulfläche -->
+  <rect width="64" height="64" rx="14" fill="#00a8b5"/>
 
-  <!-- Clipboard-Rahmen -->
-  <rect x="18" y="16" width="28" height="34" rx="3" ry="3" fill="#ffffff" opacity="0.98"/>
+  <!-- Logbuch -->
+  <path d="M17 13h25a6 6 0 0 1 6 6v30a3 3 0 0 1-3 3H20a7 7 0 0 1-7-7V17a4 4 0 0 1 4-4Z"
+        fill="#ffffff"/>
+  <path d="M20 13v39" fill="none" stroke="#14586b" stroke-width="3"/>
+  <path d="M20 44h25a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3H20a4 4 0 0 1 0-8Z"
+        fill="#e9f8f9"/>
 
-  <!-- Kopf vom Clipboard -->
-  <rect x="22" y="12" width="20" height="8" rx="2" ry="2" fill="#14586B" opacity="0.95"/>
-  <rect x="26" y="10" width="12" height="4" rx="2" ry="2" fill="#ffffff"/>
-
-  <!-- Liste: Linien -->
-  <line x1="24" y1="24" x2="40" y2="24" stroke="#14586B" stroke-width="2" stroke-linecap="round"/>
-  <line x1="24" y1="30" x2="40" y2="30" stroke="#14586B" stroke-width="2" stroke-linecap="round"/>
-  <line x1="24" y1="36" x2="40" y2="36" stroke="#14586B" stroke-width="2" stroke-linecap="round"/>
-
-  <!-- Häkchen (Entscheid) -->
-  <path d="M24 42 L28 46 L38 36"
+  <!-- Eintragslinien -->
+  <path d="M27 22h14M27 28h14M27 34h8"
         fill="none"
-        stroke="#00A8B5"
-        stroke-width="3"
+        stroke="#14586b"
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+
+  <!-- Bestätigter Entscheid -->
+  <circle cx="41" cy="38" r="10" fill="#14586b"/>
+  <path d="m36.5 38 3 3 6-7"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="2.8"
         stroke-linecap="round"
         stroke-linejoin="round"/>
-
 </svg>
