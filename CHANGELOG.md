@@ -3,6 +3,16 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.12] – 2026-08-03
+
+### Metadaten
+- Lizenzfeld in `module.json` entsprechend dem HumHub-Standard von `license` auf `licence` korrigiert; das Composer-Metadatenfeld bleibt standardkonform `license`
+
+### Tests
+- GitHub-Actions-Prüfung für PHP 8.1 und 8.3 ergänzt
+- Automatische PHP- und JavaScript-Syntaxprüfung hinzugefügt
+- Eigenständige Modulprüfung für Versionen, Lizenzfelder, HumHub-Mindestversion, Berechtigungsregistrierung und externe Ressourcen ergänzt
+
 ## [1.0.11] – 2026-08-03
 
 ### Ressourcen
