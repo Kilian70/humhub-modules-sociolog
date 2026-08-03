@@ -17,7 +17,7 @@ $csrf = Yii::$app->request->csrfToken;
 ============================================================ -->
 <div class="mb-3">
   <?= Html::a(
-      '<i class="fa-solid fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück zu den Einstellungen'),
+      '<i class="fa fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück zu den Einstellungen'),
       ['/sociolog/admin/index'],
       ['class' => 'btn btn-outline-secondary btn-sm']
   ) ?>
@@ -28,12 +28,12 @@ $csrf = Yii::$app->request->csrfToken;
 ============================================================ -->
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
   <h1 class="h4 mb-0 fw-semibold">
-    <i class="fa-solid fa-list me-2 text-primary" aria-hidden="true"></i>
+    <i class="fa fa-list me-2 text-primary" aria-hidden="true"></i>
     <?= Html::encode($this->title) ?>
   </h1>
 
   <?= Html::a(
-    '<i class="fa-solid fa-plus me-1"></i> ' . Yii::t('SociologModule.base', 'Neuer Entscheid-Typ'),
+    '<i class="fa fa-plus me-1"></i> ' . Yii::t('SociologModule.base', 'Neuer Entscheid-Typ'),
     ['create'],
     ['class' => 'btn btn-sm btn-primary']
   ) ?>
@@ -68,12 +68,12 @@ $csrf = Yii::$app->request->csrfToken;
       </div>
 
       <div class="type-actions">
-        <?= Html::a('<i class="fa-solid fa-pen" aria-hidden="true"></i>', ['update', 'id' => $type->id], [
+        <?= Html::a('<i class="fa fa-pencil" aria-hidden="true"></i>', ['update', 'id' => $type->id], [
           'class' => 'btn btn-sm btn-outline-secondary rounded-circle',
           'title' => Yii::t('SociologModule.base', 'Bearbeiten'),
           'aria-label' => Yii::t('SociologModule.base', '{type} bearbeiten', ['type' => $type->name]),
         ]) ?>
-        <?= Html::a('<i class="fa-solid fa-trash" aria-hidden="true"></i>', ['delete', 'id' => $type->id], [
+        <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['delete', 'id' => $type->id], [
           'class' => 'btn btn-sm btn-outline-danger rounded-circle',
           'title' => Yii::t('SociologModule.base', 'Löschen'),
           'aria-label' => Yii::t('SociologModule.base', '{type} löschen', ['type' => $type->name]),

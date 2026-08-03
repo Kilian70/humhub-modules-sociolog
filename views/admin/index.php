@@ -64,20 +64,20 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
      style="background:linear-gradient(90deg,#6a5af9,#9b8cff);color:#fff;">
 
   <h1 class="h4 mb-0 fw-semibold">
-    <i class="fa-solid fa-gear me-2" aria-hidden="true"></i> <?= Html::encode($this->title) ?>
+    <i class="fa fa-gear me-2" aria-hidden="true"></i> <?= Html::encode($this->title) ?>
   </h1>
 
   <div class="d-flex gap-2">
 
     <?= Html::a(
-        '<i class="fa-solid fa-sitemap me-1"></i> ' .
+        '<i class="fa fa-sitemap me-1"></i> ' .
         Yii::t('SociologModule.base', 'Spaces & Bereiche'),
         ['/sociolog/admin/spaces'],
         ['class'=>'btn btn-light btn-sm text-dark']
     ) ?>
 
     <?= Html::a(
-        '<i class="fa-solid fa-arrow-left me-1"></i> ' .
+        '<i class="fa fa-arrow-left me-1"></i> ' .
         Yii::t('SociologModule.base', 'Zurück'),
         ['/admin/module'],
         ['class'=>'btn btn-light btn-sm text-dark']
@@ -192,7 +192,7 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
 <div class="p-3 rounded" style="background:#eef6ff;border-left:5px solid #007bff;">
 
 <strong>
-<i class="fa-solid fa-layer-group text-primary me-1"></i>
+<i class="fa fa-object-group text-primary me-1"></i>
 <?= Yii::t('SociologModule.base', 'Logbuch-Organe verwalten') ?>
 </strong>
 
@@ -208,7 +208,7 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
 <br><br>
 
 <?= Html::a(
-'<i class="fa-solid fa-sitemap me-1"></i> ' .
+'<i class="fa fa-sitemap me-1"></i> ' .
 Yii::t('SociologModule.base', 'Organe verwalten'),
 ['/sociolog/admin/organs'],
 ['class'=>'btn btn-sm btn-primary']
@@ -228,7 +228,7 @@ Yii::t('SociologModule.base', 'Organe verwalten'),
 <div class="p-3 rounded" style="background:#e9f0ff;border-left:5px solid #6a5af9;">
 
 <strong>
-<i class="fa-solid fa-pen-to-square text-primary me-1"></i>
+<i class="fa fa-pencil-square-o text-primary me-1"></i>
 <?= Yii::t('SociologModule.base', 'Globale Schreibrechte') ?>
 </strong>
 
@@ -306,7 +306,7 @@ echo Html::encode(implode(', ', $names));
 <div class="col-md-6">
 
   <h2 class="h6 fw-semibold text-primary">
-    <i class="fa-solid fa-users me-1"></i>
+    <i class="fa fa-users me-1"></i>
     <?= Yii::t('SociologModule.base', 'Gruppen mit Schreibrecht') ?>
   </h2>
 
@@ -333,7 +333,7 @@ echo Html::encode(implode(', ', $names));
 <div class="col-md-6">
 
   <h2 class="h6 fw-semibold text-danger">
-    <i class="fa-solid fa-users-slash me-1"></i>
+    <i class="fa fa-user-times me-1"></i>
     <?= Yii::t('SociologModule.base', 'Gruppen mit Löschrecht') ?>
   </h2>
 
@@ -359,7 +359,7 @@ echo Html::encode(implode(', ', $names));
 <div class="col-md-6">
 
   <h2 class="h6 fw-semibold text-primary">
-    <i class="fa-solid fa-user-shield me-1" aria-hidden="true"></i>
+    <i class="fa fa-user-secret me-1" aria-hidden="true"></i>
     <?= Yii::t('SociologModule.base', 'Verantwortliche Gruppen') ?>
   </h2>
 
@@ -410,7 +410,7 @@ echo Html::encode(implode(', ', $names));
     <!-- Benachrichtigungen -->
     <div class="col-12 mt-3">
       <h2 class="h6 fw-semibold text-info">
-        <i class="fa-solid fa-bell me-1"></i>
+        <i class="fa fa-bell me-1"></i>
         <?= Yii::t('SociologModule.base','Benachrichtigungen bei neuen oder geänderten Einträgen') ?>
       </h2>
       <?= $form->field($model, 'notifyGroups')->checkboxList(
@@ -426,7 +426,7 @@ echo Html::encode(implode(', ', $names));
     <!-- Entscheidungstypen -->
     <div class="col-12 mt-4">
       <h2 class="h6 fw-semibold text-secondary">
-        <i class="fa-solid fa-list-check me-1"></i>
+        <i class="fa fa-tasks me-1"></i>
         <?= Yii::t('SociologModule.base','Entscheidungstypen') ?>
       </h2>
       <p class="form-text small">
@@ -434,7 +434,7 @@ echo Html::encode(implode(', ', $names));
       </p>
       <div class="p-3 rounded" style="background:#f8f9fa;border:1px solid #ddd;">
         <?= Html::a(
-            '<i class="fa-solid fa-sliders me-1"></i> ' . Yii::t('SociologModule.base','Entscheidungstypen verwalten'),
+            '<i class="fa fa-sliders me-1"></i> ' . Yii::t('SociologModule.base','Entscheidungstypen verwalten'),
             ['/sociolog/decision-type/index'],
             ['class'=>'btn btn-outline-secondary btn-sm']
         ) ?>
@@ -454,7 +454,7 @@ echo Html::encode(implode(', ', $names));
     <div class="col-12 mt-4">
       <fieldset class="card border-secondary p-3">
         <legend class="h5 fw-semibold mb-3">
-          <i class="fa-solid fa-sliders me-1" aria-hidden="true"></i>
+          <i class="fa fa-sliders me-1" aria-hidden="true"></i>
           <?= Yii::t('SociologModule.base', 'Formular und Bezeichnungen') ?>
         </legend>
 
@@ -549,7 +549,7 @@ echo Html::encode(implode(', ', $names));
     <div class="col-12 mt-4">
       <fieldset class="card border-info p-3">
         <legend class="h5 fw-semibold text-info mb-3">
-          <i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>
+          <i class="fa fa-info-circle me-1" aria-hidden="true"></i>
           <?= Yii::t('SociologModule.base', 'Informationsseite') ?>
         </legend>
 
@@ -652,11 +652,11 @@ echo Html::encode(implode(', ', $names));
     <!-- Buttons -->
     <div class="col-12 text-end mt-4">
       <?= Html::submitButton(
-          '<i class="fa-solid fa-floppy-disk me-1"></i> ' . Yii::t('SociologModule.base','Speichern'),
+          '<i class="fa fa-save me-1"></i> ' . Yii::t('SociologModule.base','Speichern'),
           ['class'=>'btn btn-primary']
       ) ?>
       <?= Html::a(
-          '<i class="fa-solid fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base','Zurück'),
+          '<i class="fa fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base','Zurück'),
           ['/admin/module'],
           ['class'=>'btn btn-outline-secondary']
       ) ?>
@@ -671,7 +671,7 @@ echo Html::encode(implode(', ', $names));
   <div class="card-body">
 
     <h2 class="h5 fw-semibold text-warning mb-2">
-      <i class="fa-solid fa-rotate me-1"></i>
+      <i class="fa fa-refresh me-1"></i>
       <?= Yii::t('SociologModule.base', 'Wartung') ?>
     </h2>
 
@@ -683,7 +683,7 @@ echo Html::encode(implode(', ', $names));
     </p>
 
     <?= Html::a(
-        '<i class="fa-solid fa-play me-1"></i> ' . Yii::t('SociologModule.base', 'Status jetzt prüfen'),
+        '<i class="fa fa-play me-1"></i> ' . Yii::t('SociologModule.base', 'Status jetzt prüfen'),
         ['run-status-check'],
         [
             'class' => 'btn btn-warning',
@@ -698,7 +698,7 @@ echo Html::encode(implode(', ', $names));
     <hr class="my-4">
 
     <h3 class="h6 fw-semibold mb-2">
-      <i class="fa-solid fa-file-import me-1"></i>
+      <i class="fa fa-upload me-1"></i>
       <?= Yii::t('SociologModule.base', 'Historische Daten') ?>
     </h3>
 
@@ -710,7 +710,7 @@ echo Html::encode(implode(', ', $names));
     </p>
 
     <?= Html::a(
-        '<i class="fa-solid fa-file-import me-1"></i> '
+        '<i class="fa fa-upload me-1"></i> '
           . Yii::t('SociologModule.base', 'Historische Einträge importieren'),
         ['/sociolog/import/index'],
         ['class' => 'btn btn-outline-secondary']
@@ -724,7 +724,7 @@ echo Html::encode(implode(', ', $names));
 <div class="alert alert-info mt-4">
 
   <h2 class="h5 fw-semibold text-primary mb-2">
-    <i class="fa-solid fa-rotate me-1"></i>
+    <i class="fa fa-refresh me-1"></i>
     <?= Yii::t('SociologModule.base','Automatische Status-Updates') ?>
   </h2>
 
@@ -791,7 +791,7 @@ $updated  = $settings->get('lastStatusRunUpdated');
 <div class="alert alert-light border mt-3">
 
 <strong>
-<i class="fa-solid fa-clock me-1"></i>
+<i class="fa fa-clock me-1"></i>
 <?= Yii::t('SociologModule.base','Letzter Statuslauf') ?>
 </strong>
 

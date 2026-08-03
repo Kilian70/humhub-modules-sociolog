@@ -46,7 +46,7 @@ $renderInfoText = static function (string $text): string {
     <header class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
         <div>
             <h1 class="h3 mb-1">
-                <i class="fa-solid fa-circle-info me-2 text-primary" aria-hidden="true"></i>
+                <i class="fa fa-info-circle me-2 text-primary" aria-hidden="true"></i>
                 <?= Html::encode($title) ?>
             </h1>
 
@@ -58,7 +58,7 @@ $renderInfoText = static function (string $text): string {
         </div>
 
         <?= Html::a(
-            '<i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i>'
+            '<i class="fa fa-arrow-left me-1" aria-hidden="true"></i>'
                 . Yii::t('SociologModule.base', 'Zurück zu den Einträgen'),
             ['/sociolog/entry/index'],
             ['class' => 'btn btn-sm btn-outline-secondary']
@@ -67,7 +67,7 @@ $renderInfoText = static function (string $text): string {
 
     <?php if ($hasDocument): ?>
         <aside class="alert alert-info d-flex align-items-start gap-3 mb-4" aria-labelledby="sociolog-document-title">
-            <i class="fa-solid fa-book-open fa-lg mt-1" aria-hidden="true"></i>
+            <i class="fa fa-book fa-lg mt-1" aria-hidden="true"></i>
             <div>
                 <h2 id="sociolog-document-title" class="h5 mb-1">
                     <?= Yii::t('SociologModule.base', 'Einleitungsdokument') ?>
@@ -102,7 +102,7 @@ $renderInfoText = static function (string $text): string {
             <article class="card shadow-sm sociolog-info-card <?= Html::encode($section['class']) ?>">
                 <div class="card-body">
                     <h2 class="h5">
-                        <i class="fa-solid <?= Html::encode($section['icon']) ?> me-2" aria-hidden="true"></i>
+                        <i class="fa <?= Html::encode($section['icon']) ?> me-2" aria-hidden="true"></i>
                         <?= Html::encode($section['title']) ?>
                     </h2>
                     <div class="sociolog-info-text">

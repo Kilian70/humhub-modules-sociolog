@@ -1,17 +1,19 @@
 // ============================================================
-// Sociolog – Tabelle drucken (PJAX-sicher, minimal)
+// Sociolog – Tabelle drucken (PJAX-sicher)
 // ============================================================
 (function () {
-  function bindPrintTable() {
-    const btn = document.getElementById('printTable');
-    if (!btn) return;
+  'use strict';
 
-    btn.onclick = function (e) {
-      e.preventDefault();
-      window.print();
-    };
-  }
+  // Ereignisdelegation funktioniert sowohl beim ersten Seitenaufruf als auch
+  // nach einer PJAX-Navigation. Eine Bindung an DOMContentLoaded ist hier
+  // unzuverlässig, weil HumHub Asset-Dateien am Seitenende laden kann.
+  document.addEventListener('click', function (event) {
+    const button = event.target.closest('#printTable');
+    if (!button) {
+      return;
+    }
 
-  document.addEventListener('DOMContentLoaded', bindPrintTable);
-  document.addEventListener('pjax:end', bindPrintTable);
+    event.preventDefault();
+    window.print();
+  });
 })();

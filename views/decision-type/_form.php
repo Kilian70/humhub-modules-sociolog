@@ -72,13 +72,13 @@ $previewTextColor = DecisionType::getAccessibleTextColor($previewColor);
     <!-- 🔹 Buttons -->
     <div class="col-12 d-flex justify-content-end gap-2 mt-4 flex-wrap">
       <?= Html::submitButton(
-          '<i class="fa-solid fa-floppy-disk me-1"></i> ' .
+          '<i class="fa fa-save me-1"></i> ' .
           Yii::t('SociologModule.base', 'Speichern'),
           ['class' => 'btn btn-primary']
       ) ?>
 
       <?= Html::a(
-          '<i class="fa-solid fa-arrow-left me-1"></i> ' .
+          '<i class="fa fa-arrow-left me-1"></i> ' .
           Yii::t('SociologModule.base', 'Zurück'),
           ['index'],
           ['class' => 'btn btn-outline-secondary']

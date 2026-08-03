@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.10
+**Version:** 1.0.11
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 (AGPL-3.0)  
@@ -84,7 +84,7 @@ inklusive Sociolog-Einträgen (Systemverhalten von HumHub).
 | **Datenbanktabellen** | `sociolog_entry`, `sociolog_decision_type` |
 | **Benachrichtigungen** | `EntryCreated`, `EntryUpdated` |
 | **Views** | Formulare, Index-Ansicht, Detail-View, Admin-Seite, Notification-Views |
-| **Assets** | DataTables, FontAwesome 6, eigene CSS-/JS-Bundles |
+| **Assets** | HumHubs Font-Awesome-Bundle sowie eigene CSS-/JS-Ressourcen; keine externen CDN-Abhängigkeiten |
 
 ## Installation
 

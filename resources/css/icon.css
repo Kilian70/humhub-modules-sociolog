@@ -19,12 +19,7 @@
 
 /* FontAwesome-Farben */
 .fa-book,
-.fa-scale-balanced,
+.fa-balance-scale,
 .fa-lightbulb {
   color: #444;
 }
-public $css = [
-    'css/sociolog.css',
-    'css/icon.css', // ✅
-];
-
