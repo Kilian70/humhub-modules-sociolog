@@ -42,7 +42,10 @@ $csrf = Yii::$app->request->csrfToken;
 <!-- ============================================================
      🔹 Kartenübersicht (sortable)
 ============================================================ -->
-<div id="sortableGrid" class="type-grid">
+<div id="sortableGrid"
+     class="type-grid"
+     data-sort-url="<?= Html::encode($sortUrl) ?>"
+     data-csrf="<?= Html::encode($csrf) ?>">
   <?php foreach ($types as $type): ?>
     <?php
       $color = Html::encode($type->color ?: '#777');
@@ -83,25 +86,10 @@ $csrf = Yii::$app->request->csrfToken;
 </div>
 
 <!-- ============================================================
-     🧩 Drag & Drop Sortierung (SortableJS)
+     🧩 Drag & Drop Sortierung (lokales Modul-JavaScript)
 ============================================================ -->
 <?php
-$this->registerJsFile('https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js', [
-    'depends' => [\yii\web\JqueryAsset::class],
-]);
-$this->registerJs(<<<JS
-const grid = document.getElementById('sortableGrid');
-if (grid) {
-  Sortable.create(grid, {
-    animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 150,
-    ghostClass: 'sortable-placeholder',
-    onEnd: function() {
-      const ids = Array.from(grid.querySelectorAll('.type-card')).map(el => el.dataset.id);
-      $.post('$sortUrl', {ids: ids, _csrf: '$csrf'});
-    }
-  });
-}
-JS);
+$this->registerJs('window.sociologInitDecisionTypeSorting && window.sociologInitDecisionTypeSorting();');
 ?>
 
 <!-- ============================================================

@@ -2,7 +2,7 @@
   "id": "sociolog",
   "name": "Logbuch",
   "description": "Modul zur Dokumentation von Beschlüssen und Grundsatzentscheiden (Sociolog). Zeigt aktuelle Entscheidungen im Dashboard und sendet Benachrichtigungen bei Änderungen.",
-  "version": "1.0.9",
+  "version": "1.0.10",
 
   "namespace": "humhub\\modules\\sociolog",
   "class": "humhub\\modules\\sociolog\\Module",
@@ -22,8 +22,7 @@
   "permissions": [
     { "class": "humhub\\modules\\sociolog\\permissions\\CreateEntry" },
     { "class": "humhub\\modules\\sociolog\\permissions\\UpdateEntry" },
-    { "class": "humhub\\modules\\sociolog\\permissions\\DeleteEntry" },
-    { "class": "humhub\\modules\\sociolog\\permissions\\ViewEntry" }
+    { "class": "humhub\\modules\\sociolog\\permissions\\DeleteEntry" }
   ],
 
   "settings": {

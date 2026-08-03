@@ -11,7 +11,6 @@ use humhub\components\Module as BaseModule;
 use humhub\modules\sociolog\permissions\CreateEntry;
 use humhub\modules\sociolog\permissions\UpdateEntry;
 use humhub\modules\sociolog\permissions\DeleteEntry;
-use humhub\modules\sociolog\permissions\ViewEntry;
 use humhub\modules\space\models\Space;
 
 /**
@@ -34,7 +33,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.8';
+    public string $version = '1.0.10';
     public string $humhubMinVersion = '1.18';
     
   
@@ -198,7 +197,6 @@ public function init()
         }
 
         return [
-            new ViewEntry(),
             new CreateEntry(),
             new UpdateEntry(),
             new DeleteEntry(),

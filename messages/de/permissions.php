@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'Einträge ansehen' => 'Einträge ansehen',
-    'Erlaubt das Ansehen von Logbuch-Einträgen.' => 'Erlaubt das Ansehen von Logbuch-Einträgen.',
     'Einträge erstellen' => 'Einträge erstellen',
     'Erlaubt das Erstellen neuer Logbuch-Einträge.' => 'Erlaubt das Erstellen neuer Logbuch-Einträge.',
     'Einträge bearbeiten' => 'Einträge bearbeiten',

@@ -3,6 +3,15 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.10] – 2026-08-03
+
+### Berechtigungen
+- Die ungenutzte Space-Berechtigung `ViewEntry` wurde entfernt, damit das globale Lesekonzept in Code und Dokumentation eindeutig abgebildet ist
+- Das globale Lese- und Exportrecht für alle angemeldeten Benutzer bleibt unverändert erhalten
+
+### Ressourcen
+- Die Entscheidungsarten-Sortierung benötigt kein extern von jsDelivr geladenes SortableJS mehr und verwendet stattdessen lokales Modul-JavaScript
+
 ## [1.0.9] – 2026-08-02
 
 ### HumHub-Content-Lifecycle

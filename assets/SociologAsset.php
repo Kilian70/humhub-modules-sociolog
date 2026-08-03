@@ -37,6 +37,7 @@ class SociologAsset extends AssetBundle
         'js/sociolog-search.js',
         'js/sociolog-table.js',
         'js/sociolog-form.js',
+        'js/sociolog-decision-type-sort.js',
 
         // 🔽 DRUCK
         'js/sociolog-print.js',
