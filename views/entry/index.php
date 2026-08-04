@@ -19,7 +19,6 @@ $moduleTitle = $module && $module->settings->get('moduleTitle')
     ? $module->settings->get('moduleTitle')
     : 'Logbuch';
 $infoPageEnabled = $module && (bool)$module->settings->get('infoPageEnabled', false);
-$pendingStatusLabel = Entry::getStatusConfig()[Entry::STATUS_PENDING]['label'];
 $extendedStatusesEnabled = $module
     && (bool)$module->settings->get('extendedStatusesEnabled', false);
 
@@ -97,15 +96,13 @@ foreach ($dataProvider->models as $entry) {
     <!-- ✅ Status-Legende (einmalig) -->
     <div class="small sociolog-status-legend">
       <strong><?= Yii::t('SociologModule.base', 'Status') ?>:</strong>
-      <span class="badge bg-secondary"><?= Html::encode($pendingStatusLabel) ?></span>
-      <span class="badge bg-success"><?= Yii::t('SociologModule.base', 'Gültig') ?></span>
-      <span class="badge badge-sociolog-review">
-        <?= Yii::t('SociologModule.base', 'Überprüfung fällig') ?>
-      </span>
-      <span class="badge bg-dark"><?= Yii::t('SociologModule.base', 'Nicht mehr gültig') ?></span>
+      <?= Entry::getStatusBadgeForStatus(Entry::STATUS_PENDING) ?>
+      <?= Entry::getStatusBadgeForStatus(Entry::STATUS_VALID) ?>
+      <?= Entry::getStatusBadgeForStatus(Entry::STATUS_REVIEW) ?>
+      <?= Entry::getStatusBadgeForStatus(Entry::STATUS_EXPIRED) ?>
       <?php if ($extendedStatusesEnabled): ?>
-        <span class="badge bg-danger"><?= Yii::t('SociologModule.base', 'Schwerwiegender Einwand') ?></span>
-        <span class="badge bg-dark"><?= Yii::t('SociologModule.base', 'Ersetzt') ?></span>
+        <?= Entry::getStatusBadgeForStatus(Entry::STATUS_OBJECTION) ?>
+        <?= Entry::getStatusBadgeForStatus(Entry::STATUS_REPLACED) ?>
       <?php endif; ?>
     </div>
   </div>

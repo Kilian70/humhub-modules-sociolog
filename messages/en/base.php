@@ -372,7 +372,6 @@ return [
     
 
 'Spaces & Bereiche' => 'Spaces & Sections',
-'Spaces und Logbuch-Bereiche' => 'Spaces and Logbook Sections',
 
 'Space' => 'Space',
 'Bereich' => 'Section',
@@ -428,6 +427,20 @@ return [
 'Einleitungsdokument' => 'Introductory document',
 'So entsteht ein Eintrag' => 'How an entry is created',
 'Berechtigungen' => 'Permissions',
+'Allgemein und Navigation' => 'General and navigation',
+'Position im Hauptmenü' => 'Main menu position',
+'Je kleiner die Zahl, desto weiter links erscheint das Logbuch im Hauptmenü.'
+=> 'The smaller the number, the further left the logbook appears in the main menu.',
+'Fristen und Integrationen' => 'Deadlines and integrations',
+'Soziokratischen Entscheidungsprozess aktivieren'
+=> 'Enable sociocratic decision workflow',
+'Steuert Weitergabe, Entscheidungs-Buttons und Entscheidungsverlauf.'
+=> 'Controls forwarding, decision buttons and decision history.',
+'Organe und Bereiche' => 'Bodies and areas',
+'Spaces und Logbuch-Bereiche' => 'Spaces and logbook areas',
+'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
+=> 'Enable spaces for the logbook, assign them to areas and bodies, and configure write and delete permissions and optional links here.',
+'Spaces und Bereiche verwalten' => 'Manage spaces and areas',
 'Wer darf was?' => 'Who may do what?',
 'Status und Fristen' => 'Statuses and deadlines',
 'Einsprache und Einwand' => 'Objections',

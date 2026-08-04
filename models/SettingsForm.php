@@ -14,6 +14,7 @@ class SettingsForm extends Model
      * ============================================================ */
 
     public $moduleTitle;
+    public $mainMenuSortOrder;
     public $latestEntriesLimit;
     public $widgetSortOrder;
 
@@ -141,6 +142,7 @@ class SettingsForm extends Model
 			[
 				[
 					'latestEntriesLimit',
+					'mainMenuSortOrder',
 					'widgetSortOrder',
 					'defaultEffectiveDays',
 					'fixedDecisionTypeId'
@@ -149,6 +151,7 @@ class SettingsForm extends Model
 			],
 
 			[['latestEntriesLimit'], 'integer', 'min' => 1, 'max' => 50],
+			[['mainMenuSortOrder'], 'integer', 'min' => 0, 'max' => 1000],
 			[['widgetSortOrder'], 'integer', 'min' => 0],
 			[['defaultEffectiveDays'], 'integer', 'min' => 0],
 			[['fixedDecisionTypeId'], 'integer', 'min' => 0],
@@ -237,6 +240,9 @@ class SettingsForm extends Model
 
             'latestEntriesLimit' =>
                 Yii::t('SociologModule.base', 'Einträge im Dashboard'),
+
+            'mainMenuSortOrder' =>
+                Yii::t('SociologModule.base', 'Position im Hauptmenü'),
 
             'widgetSortOrder' =>
                 Yii::t('SociologModule.base', 'Widget-Position'),
@@ -383,6 +389,9 @@ class SettingsForm extends Model
 	
 		$this->latestEntriesLimit =
 			$settings->get('latestEntriesLimit', 5);
+
+        $this->mainMenuSortOrder =
+            (int)$settings->get('mainMenuSortOrder', 350);
 	
 		$this->widgetSortOrder =
 			$settings->get('widgetSortOrder', 100);
@@ -545,6 +554,8 @@ class SettingsForm extends Model
 		$settings->set('moduleTitle', $this->moduleTitle);
 	
 		$settings->set('latestEntriesLimit', $this->latestEntriesLimit);
+
+        $settings->set('mainMenuSortOrder', (int)$this->mainMenuSortOrder);
 	
 		$settings->set('widgetSortOrder', $this->widgetSortOrder);
 	

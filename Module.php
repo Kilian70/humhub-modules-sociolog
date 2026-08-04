@@ -128,6 +128,7 @@ public function init()
         $defaults = [
             'notificationsEnabled' => true,
             'widgetSortOrder'      => 100,
+            'mainMenuSortOrder'    => 350,
             'moduleTitle'          => 'Logbuch',
             'showEntriesInStream'  => true,
             'showReviewInCalendar' => true,

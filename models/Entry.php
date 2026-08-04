@@ -165,23 +165,35 @@ public function getDecisionType()
     // ============================================================
     public function getStatusBadge(): string
     {
-        $status = (string)$this->status;
+        return self::getStatusBadgeForStatus((string)$this->status);
+    }
+
+    /**
+     * Rendert Statusfarben unabhängig von den Bootstrap-Klassen des Themes.
+     */
+    public static function getStatusBadgeForStatus(string $status): string
+    {
         $cfg = self::getStatusConfig()[$status] ?? null;
 
         if (!$cfg) {
-            return Html::tag('span', Yii::t('SociologModule.base', 'Unbekannt'), [
-                'class' => 'badge bg-secondary',
+            return Html::tag('span', Html::encode(Yii::t('SociologModule.base', 'Unbekannt')), [
+                'class' => 'badge sociolog-status-badge badge-sociolog-pending',
             ]);
         }
 
-        if (($cfg['color'] ?? null) === 'sociolog-review') {
-            return Html::tag('span', $cfg['label'], [
-                'class' => 'badge badge-sociolog-review',
-            ]);
-        }
+        $classes = [
+            self::STATUS_AUTO => 'badge-sociolog-pending',
+            self::STATUS_PENDING => 'badge-sociolog-pending',
+            self::STATUS_VALID => 'badge-sociolog-valid',
+            self::STATUS_REVIEW => 'badge-sociolog-review',
+            self::STATUS_EXPIRED => 'badge-sociolog-expired',
+            self::STATUS_OBJECTION => 'badge-sociolog-objection',
+            self::STATUS_REPLACED => 'badge-sociolog-replaced',
+        ];
 
-        return Html::tag('span', $cfg['label'], [
-            'class' => 'badge bg-' . ($cfg['color'] ?? 'secondary'),
+        return Html::tag('span', Html::encode((string)$cfg['label']), [
+            'class' => 'badge sociolog-status-badge '
+                . ($classes[$status] ?? 'badge-sociolog-pending'),
         ]);
     }
 

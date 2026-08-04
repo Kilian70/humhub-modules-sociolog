@@ -1,7 +1,9 @@
 <?php
 use yii\helpers\Html;
+use humhub\modules\sociolog\assets\SociologAsset;
 
 /** @var humhub\modules\sociolog\models\Entry $entry */
+SociologAsset::register($this);
 ?>
 
 <div class="sociolog-wall-entry">
