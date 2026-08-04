@@ -377,7 +377,6 @@ return [
         
 
 'Spaces & Bereiche' => 'Spaces & Bereiche',
-'Spaces und Logbuch-Bereiche' => 'Spaces und Logbuch-Bereiche',
 
 'Space' => 'Space',
 'Bereich' => 'Bereich',
@@ -431,6 +430,20 @@ return [
 'Einleitungsdokument' => 'Einleitungsdokument',
 'So entsteht ein Eintrag' => 'So entsteht ein Eintrag',
 'Berechtigungen' => 'Berechtigungen',
+'Allgemein und Navigation' => 'Allgemein und Navigation',
+'Position im Hauptmenü' => 'Position im Hauptmenü',
+'Je kleiner die Zahl, desto weiter links erscheint das Logbuch im Hauptmenü.'
+=> 'Je kleiner die Zahl, desto weiter links erscheint das Logbuch im Hauptmenü.',
+'Fristen und Integrationen' => 'Fristen und Integrationen',
+'Soziokratischen Entscheidungsprozess aktivieren'
+=> 'Soziokratischen Entscheidungsprozess aktivieren',
+'Steuert Weitergabe, Entscheidungs-Buttons und Entscheidungsverlauf.'
+=> 'Steuert Weitergabe, Entscheidungs-Buttons und Entscheidungsverlauf.',
+'Organe und Bereiche' => 'Organe und Bereiche',
+'Spaces und Logbuch-Bereiche' => 'Spaces und Logbuch-Bereiche',
+'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
+=> 'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.',
+'Spaces und Bereiche verwalten' => 'Spaces und Bereiche verwalten',
 'Wer darf was?' => 'Wer darf was?',
 'Status und Fristen' => 'Status und Fristen',
 'Einsprache und Einwand' => 'Einsprache und Einwand',

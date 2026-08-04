@@ -37,13 +37,14 @@ class Events
 
         $module = Yii::$app->getModule('sociolog');
         $title = $module?->settings->get('moduleTitle', 'Logbuch') ?? 'Logbuch';
+        $sortOrder = (int)($module?->settings->get('mainMenuSortOrder', 350) ?? 350);
 
         $event->sender->addEntry(new MenuLink([
             'id' => 'topmenu-sociolog',
             'label' => $title,
             'url' => ['/sociolog/entry/index'],
             'icon' => 'fa-book',
-            'sortOrder' => 350,
+            'sortOrder' => $sortOrder,
             'isActive' => Yii::$app->controller?->module?->id === 'sociolog',
         ]));
 

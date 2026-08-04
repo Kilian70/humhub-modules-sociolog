@@ -68,14 +68,6 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
   </h1>
 
   <div class="d-flex gap-2">
-
-    <?= Html::a(
-        '<i class="fa fa-sitemap me-1"></i> ' .
-        Yii::t('SociologModule.base', 'Spaces & Bereiche'),
-        ['/sociolog/admin/spaces'],
-        ['class'=>'btn btn-light btn-sm text-dark']
-    ) ?>
-
     <?= Html::a(
         '<i class="fa fa-arrow-left me-1"></i> ' .
         Yii::t('SociologModule.base', 'Zurück'),
@@ -94,100 +86,89 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
   <div class="card-body">
     <?php $form = ActiveForm::begin([
         'id' => 'sociolog-settings-form',
-        'options' => ['class' => 'row g-4']
+        'options' => ['class' => 'sociolog-settings-form']
     ]); ?>
 
-    <!-- Inkrafttreten & Integrationen -->
-    <div class="col-md-4">
-      <?= $form->field($model, 'defaultEffectiveDays')
-          ->input('number', ['min' => 0])
-          ->label(Yii::t('SociologModule.base', 'Inkrafttreten nach (Tagen)'))
-          ->hint(Yii::t('SociologModule.base', 'Automatische Berechnung des Inkrafttretens nach Erstellung.')) ?>
-
-      <?= $form->field($model, 'effectiveDateAddExtraDay')->checkbox([
-          'uncheck' => 0,
-      ])->hint(Yii::t(
-          'SociologModule.base',
-          'Aktiviert entspricht dem bisherigen Verhalten (+ Fristtage und anschließend ein weiterer Tag).'
-      )) ?>
-    </div>
-
-<div class="col-md-8">
-
-    <?= $form->field($model, 'showReviewInCalendar')->checkbox([
-        'label' => Yii::t('SociologModule.base', 'Überprüfungsdaten im Kalender anzeigen'),
-        'uncheck' => 0,
-    ]) ?>
-
-    <small class="text-muted d-block mb-3">
-        <?= Yii::t('SociologModule.base', 'Wenn aktiviert, werden alle Überprüfungsdaten automatisch als Termine im Kalender angezeigt.') ?>
-    </small>
-
-
-    <?= $form->field($model, 'decisionWorkflowEnabled')->checkbox([
-        'label' => Yii::t(
-            'SociologModule.base',
-            'Soziokratischen Entscheidungsprozess aktivieren (Weitergabe + Entscheidungs-Buttons + Entscheidungsverlauf)'
-        ),
-        'uncheck' => 0,
-    ]) ?>
-
-    <small class="text-muted d-block mb-3">
-        <?= Yii::t(
-            'SociologModule.base',
-            'Wenn deaktiviert, werden Entscheidungen ohne Weitergabe erstellt – wie in der ursprünglichen Modulversion.'
-        ) ?>
-    </small>
-
-
-    <div class="form-group mt-4">
-        <label class="form-label fw-semibold">
-            <?= Yii::t('SociologModule.base', 'Stream-Integration') ?>
-        </label>
-        <div class="form-text text-muted">
-            <?= Yii::t('SociologModule.base', 'Die Anzeige von Einträgen im Stream ist dauerhaft aktiviert, um Transparenz und Benachrichtigungen sicherzustellen.') ?>
+    <fieldset class="card border-primary p-3 mb-4">
+      <legend class="h5 fw-semibold text-primary mb-3">
+        <i class="fa fa-bars me-1" aria-hidden="true"></i>
+        <?= Yii::t('SociologModule.base', 'Allgemein und Navigation') ?>
+      </legend>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <?= $form->field($model, 'moduleTitle')->textInput(['maxlength' => true]) ?>
         </div>
-    </div>
+        <div class="col-md-3">
+          <?= $form->field($model, 'mainMenuSortOrder')
+              ->input('number', ['min' => 0, 'max' => 1000])
+              ->hint(Yii::t('SociologModule.base', 'Je kleiner die Zahl, desto weiter links erscheint das Logbuch im Hauptmenü.')) ?>
+        </div>
+        <div class="col-md-3">
+          <?= $form->field($model, 'latestEntriesLimit')
+              ->input('number', ['min' => 1, 'max' => 50]) ?>
+        </div>
+        <div class="col-md-3">
+          <?= $form->field($model, 'widgetSortOrder')
+              ->input('number', ['min' => 0, 'max' => 1000])
+              ->hint(Yii::t('SociologModule.base', 'Je kleiner die Zahl, desto weiter oben erscheint das Logbuch-Widget im Dashboard.')) ?>
+        </div>
+        <div class="col-md-9">
+          <?= $form->field($model, 'organColors')->textarea([
+              'rows' => 3,
+              'placeholder' => "Hausverein:#FF8800\nLeitungskreis:#007BFF\nVermietung:#28A745",
+          ])->hint(Yii::t('SociologModule.base', 'Optional: Eintrag im Format Organname:#Farbe pro Zeile (z. B. Hausverein:#FF8800).')) ?>
+        </div>
+      </div>
+    </fieldset>
 
-</div>
-
-    <!-- Modulname / Dashboard -->
-    <div class="col-md-8">
-      <?= $form->field($model, 'moduleTitle')->textInput(['maxlength' => true])
-          ->label(Yii::t('SociologModule.base', 'Modulname')) ?>
-    </div>
-
-    <div class="col-md-4">
-      <?= $form->field($model, 'latestEntriesLimit')
-          ->input('number', ['min' => 1, 'max' => 50])
-          ->label(Yii::t('SociologModule.base', 'Einträge im Dashboard')) ?>
-    </div>
-
-    <!-- Widget-Position -->
-    <div class="col-md-4">
-      <?= $form->field($model, 'widgetSortOrder')
-          ->input('number', ['min' => 0, 'max' => 300])
-          ->label(Yii::t('SociologModule.base', 'Widget-Position'))
-          ->hint(Yii::t('SociologModule.base', 'Je kleiner die Zahl, desto weiter oben erscheint das Logbuch-Widget im Dashboard.')) ?>
-    </div>
-
-    <!-- Farben -->
-
-
-    <div class="col-md-4">
-      <?= $form->field($model, 'organColors')->textarea([
-          'rows' => 4,
-          'placeholder' => "Hausverein:#FF8800\nLeitungskreis:#007BFF\nVermietung:#28A745",
-      ])
-          ->label(Yii::t('SociologModule.base', 'Organfarben'))
-          ->hint(Yii::t('SociologModule.base', 'Optional: Eintrag im Format Organname:#Farbe pro Zeile (z. B. Hausverein:#FF8800).')) ?>
-    </div>
+    <fieldset class="card border-secondary p-3 mb-4">
+      <legend class="h5 fw-semibold mb-3">
+        <i class="fa fa-clock-o me-1" aria-hidden="true"></i>
+        <?= Yii::t('SociologModule.base', 'Fristen und Integrationen') ?>
+      </legend>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <?= $form->field($model, 'defaultEffectiveDays')
+              ->input('number', ['min' => 0])
+              ->hint(Yii::t('SociologModule.base', 'Automatische Berechnung des Inkrafttretens nach Erstellung.')) ?>
+        </div>
+        <div class="col-md-8">
+          <?= $form->field($model, 'effectiveDateAddExtraDay')->checkbox([
+              'uncheck' => 0,
+          ])->hint(Yii::t('SociologModule.base', 'Aktiviert entspricht dem bisherigen Verhalten (+ Fristtage und anschließend ein weiterer Tag).')) ?>
+        </div>
+        <div class="col-md-6">
+          <?= $form->field($model, 'showReviewInCalendar')->checkbox([
+              'uncheck' => 0,
+          ])->hint(Yii::t('SociologModule.base', 'Wenn aktiviert, werden alle Überprüfungsdaten automatisch als Termine im Kalender angezeigt.')) ?>
+        </div>
+        <div class="col-md-6">
+          <?= $form->field($model, 'decisionWorkflowEnabled')->checkbox([
+              'label' => Yii::t('SociologModule.base', 'Soziokratischen Entscheidungsprozess aktivieren'),
+              'uncheck' => 0,
+          ])->hint(Yii::t('SociologModule.base', 'Steuert Weitergabe, Entscheidungs-Buttons und Entscheidungsverlauf.')) ?>
+        </div>
+        <div class="col-12">
+          <div class="alert alert-light border mb-0">
+            <strong><?= Yii::t('SociologModule.base', 'Stream-Integration') ?>:</strong>
+            <?= Yii::t('SociologModule.base', 'Die Anzeige von Einträgen im Stream ist dauerhaft aktiviert, um Transparenz und Benachrichtigungen sicherzustellen.') ?>
+          </div>
+        </div>
+      </div>
+    </fieldset>
 
 <!-- ============================================================
      Infofelder – Organe
 ============================================================ -->
 
-<div class="col-12">
+<fieldset class="card border-secondary p-3 mb-4">
+<legend class="h5 fw-semibold mb-3">
+  <i class="fa fa-sitemap me-1" aria-hidden="true"></i>
+  <?= Yii::t('SociologModule.base', 'Organe und Bereiche') ?>
+</legend>
+<div class="row g-3">
+
+<div class="col-md-6">
 
 <div class="p-3 rounded" style="background:#eef6ff;border-left:5px solid #007bff;">
 
@@ -212,6 +193,37 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
 Yii::t('SociologModule.base', 'Organe verwalten'),
 ['/sociolog/admin/organs'],
 ['class'=>'btn btn-sm btn-primary']
+) ?>
+
+</div>
+
+</div>
+
+<div class="col-md-6">
+
+<div class="p-3 rounded h-100" style="background:#eef6ff;border-left:5px solid #17a2b8;">
+
+<strong>
+<i class="fa fa-th-large text-info me-1" aria-hidden="true"></i>
+<?= Yii::t('SociologModule.base', 'Spaces und Logbuch-Bereiche') ?>
+</strong>
+
+<br><br>
+
+<small class="text-muted">
+<?= Yii::t(
+    'SociologModule.base',
+    'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
+) ?>
+</small>
+
+<br><br>
+
+<?= Html::a(
+    '<i class="fa fa-th-large me-1" aria-hidden="true"></i> '
+        . Yii::t('SociologModule.base', 'Spaces und Bereiche verwalten'),
+    ['/sociolog/admin/spaces'],
+    ['class' => 'btn btn-sm btn-info']
 ) ?>
 
 </div>
@@ -256,9 +268,19 @@ echo Html::encode(implode(', ', $names));
 </div>
 <?php endif; ?>
 
+</div>
+</fieldset>
+
 <!-- ============================================================
      🔐 Benutzer- und Gruppenrechte
 ============================================================ -->
+
+<fieldset class="card border-secondary p-3 mb-4">
+<legend class="h5 fw-semibold mb-3">
+  <i class="fa fa-lock me-1" aria-hidden="true"></i>
+  <?= Yii::t('SociologModule.base', 'Berechtigungen') ?>
+</legend>
+<div class="row g-3">
 
 
 <!-- Benutzer mit Schreibrecht -->
@@ -407,8 +429,11 @@ echo Html::encode(implode(', ', $names));
   </div>
 </div>
 
+</div>
+</fieldset>
+
     <!-- Benachrichtigungen -->
-    <div class="col-12 mt-3">
+    <fieldset class="card border-secondary p-3 mb-4">
       <h2 class="h6 fw-semibold text-info">
         <i class="fa fa-bell me-1"></i>
         <?= Yii::t('SociologModule.base','Benachrichtigungen bei neuen oder geänderten Einträgen') ?>
@@ -421,10 +446,10 @@ echo Html::encode(implode(', ', $names));
         <?= Yii::t('SociologModule.base','Nur Mitglieder dieser Gruppen erhalten eine Mitteilung, wenn ein Eintrag erstellt oder geändert wird.') ?><br>
         <?= Yii::t('SociologModule.base','Wenn keine Gruppe ausgewählt ist, erhalten alle aktiven Benutzer Benachrichtigungen (Standardverhalten).') ?>
       </p>
-    </div>
+    </fieldset>
 
     <!-- Entscheidungstypen -->
-    <div class="col-12 mt-4">
+    <fieldset class="card border-secondary p-3 mb-4">
       <h2 class="h6 fw-semibold text-secondary">
         <i class="fa fa-tasks me-1"></i>
         <?= Yii::t('SociologModule.base','Entscheidungstypen') ?>
@@ -448,10 +473,10 @@ echo Html::encode(implode(', ', $names));
           )) ?>
         </div>
       </div>
-    </div>
+    </fieldset>
 
     <!-- Optionale Formularvorgaben -->
-    <div class="col-12 mt-4">
+    <div class="mb-4">
       <fieldset class="card border-secondary p-3">
         <legend class="h5 fw-semibold mb-3">
           <i class="fa fa-sliders me-1" aria-hidden="true"></i>

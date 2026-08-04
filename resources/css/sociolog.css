@@ -362,13 +362,48 @@ div.required label::after {
 
 
 /* ============================================================
-   🟠 STATUS: ÜBERPRÜFUNG FÄLLIG
+   STATUS – unabhängig vom HumHub-Theme / Bootstrap-Version
    ============================================================ */
+
+.badge.sociolog-status-badge {
+  display: inline-block;
+  padding: 0.28em 0.55em;
+  border-radius: 4px;
+  font-size: 0.78em;
+  font-weight: 600;
+  line-height: 1.15;
+  opacity: 1 !important;
+  text-shadow: none;
+}
+
+.badge.badge-sociolog-pending {
+  background-color: #6b7280 !important;
+  color: #fff !important;
+}
+
+.badge.badge-sociolog-valid {
+  background-color: #3f7d20 !important;
+  color: #fff !important;
+}
 
 .badge.badge-sociolog-review {
   background-color: #f59e0b !important;
   color: #111 !important;
-  font-weight: 600;
+}
+
+.badge.badge-sociolog-expired {
+  background-color: #343a40 !important;
+  color: #fff !important;
+}
+
+.badge.badge-sociolog-objection {
+  background-color: #c82333 !important;
+  color: #fff !important;
+}
+
+.badge.badge-sociolog-replaced {
+  background-color: #4b5563 !important;
+  color: #fff !important;
 }
 
 

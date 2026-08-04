@@ -1,10 +1,12 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use humhub\modules\sociolog\assets\SociologAsset;
 
 /** @var humhub\modules\sociolog\models\Entry[] $entries */
 
 $module = Yii::$app->getModule('sociolog');
+SociologAsset::register($this);
 $showDecisionTypeHeader = $module
   ? (bool)$module->settings->get('showDecisionTypeHeader', true)
   : true;
