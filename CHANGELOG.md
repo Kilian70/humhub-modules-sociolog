@@ -3,6 +3,20 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.13] – 2026-08-04
+
+### Administration und Navigation
+- Administrationsbereich in klar getrennte Themenblöcke gegliedert
+- Verwaltung der Logbuch-Organe sowie der Spaces und Logbuch-Bereiche zusammengeführt und erläutert
+- Position des Logbuchs im HumHub-Hauptmenü konfigurierbar gemacht
+
+### Darstellung
+- Statusfarben unabhängig vom verwendeten HumHub-Theme vereinheitlicht und kontrastreicher gestaltet
+- Statusdarstellung in Übersicht, Dashboard-Widget und Stream konsistent gemacht
+
+### Übersetzungen
+- Deutsche und englische Texte für die neuen Einstellungen und Verwaltungsbereiche ergänzt
+
 ## [1.0.12] – 2026-08-03
 
 ### Metadaten
