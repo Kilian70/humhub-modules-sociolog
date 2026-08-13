@@ -124,6 +124,7 @@ return [
     'Nicht in Kraft' => 'Not in force',
     'Gültig' => 'Valid',
     'Überprüfung' => 'Under review',
+    'Überprüfung fällig' => 'Review due',
     'Nicht mehr gültig' => 'Expired',
     'In Bearbeitung' => 'In progress',
     'In Vorbereitung' => 'In preparation',

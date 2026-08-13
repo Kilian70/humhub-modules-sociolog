@@ -33,7 +33,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.13';
+    public string $version = '1.0.14';
     public string $humhubMinVersion = '1.18';
     
   
@@ -227,7 +227,14 @@ public function init()
     public function getCustomLabel(string $setting, string $fallback): string
     {
         $value = trim((string)$this->settings->get($setting, ''));
-        return $value !== '' ? $value : $fallback;
+        if ($value === '') {
+            return $fallback;
+        }
+
+        // Gespeicherte Standardbezeichnungen folgen der aktuellen Sprache.
+        // Frei eingegebene Bezeichnungen bleiben unverändert, da Yii bei
+        // unbekannten Übersetzungsschlüsseln den Ausgangstext zurückgibt.
+        return Yii::t('SociologModule.base', $value);
     }
 
     // ============================================================

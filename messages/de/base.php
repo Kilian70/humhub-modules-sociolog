@@ -132,6 +132,7 @@ return [
     'Nicht in Kraft' => 'Nicht in Kraft',
     'Gültig' => 'Gültig',
     'Überprüfung' => 'Überprüfung',
+    'Überprüfung fällig' => 'Überprüfung fällig',
     'Nicht mehr gültig' => 'Nicht mehr gültig',
     'In Bearbeitung' => 'In Bearbeitung',
     'In Vorbereitung' => 'In Vorbereitung',

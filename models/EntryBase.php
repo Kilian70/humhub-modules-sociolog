@@ -178,9 +178,9 @@ class EntryBase extends ContentActiveRecord
                 'color' => 'secondary',
             ],
             self::STATUS_PENDING => [
-                'label' => (string)self::getSetting(
-                    'pendingStatusLabel',
-                    Yii::t('SociologModule.base', 'Nicht in Kraft')
+                'label' => Yii::t(
+                    'SociologModule.base',
+                    trim((string)self::getSetting('pendingStatusLabel', '')) ?: 'Nicht in Kraft'
                 ),
                 'color' => 'secondary',
             ],
