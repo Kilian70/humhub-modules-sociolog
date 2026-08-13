@@ -57,7 +57,7 @@ class InfoController extends Controller
                     'text' => (string)$module->settings->get('infoPermissionsText', ''),
                 ],
                 [
-                    'icon' => 'fa-clock',
+                    'icon' => 'fa-clock-o',
                     'class' => 'sociolog-info-card--status',
                     'title' => Yii::t('SociologModule.base', 'Status und Fristen'),
                     'text' => (string)$module->settings->get('infoStatusText', ''),

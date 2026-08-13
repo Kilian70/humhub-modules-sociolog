@@ -33,7 +33,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.14';
+    public string $version = '1.0.15';
     public string $humhubMinVersion = '1.18';
     
   
@@ -113,6 +113,16 @@ public function init()
         [\humhub\modules\sociolog\Events::class, 'onAfterSave']
         
     );
+
+    // Vor dem HumHub-Content-Handler ausführen. Dieser löscht bei einer
+    // vollständigen Benutzerlöschung sonst alle vom Benutzer erstellten Inhalte.
+    Event::on(
+        \humhub\modules\user\models\User::class,
+        \humhub\modules\user\models\User::EVENT_BEFORE_DELETE,
+        [\humhub\modules\sociolog\Events::class, 'onUserDelete'],
+        null,
+        false
+    );
 }
     
     // ============================================================
@@ -142,6 +152,8 @@ public function init()
             'statusManagersOnly'   => false,
             'extendedStatusesEnabled' => false,
             'effectiveDateAddExtraDay' => true,
+            'preserveEntriesOnUserDelete' => false,
+            'archiveUserId' => 0,
         ];
 
         foreach ($defaults as $key => $value) {

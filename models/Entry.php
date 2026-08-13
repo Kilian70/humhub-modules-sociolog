@@ -15,6 +15,7 @@ use humhub\modules\sociolog\models\Protocol;
 use humhub\modules\space\models\Space;
 use humhub\modules\sociolog\models\DecisionType;
 use humhub\modules\content\components\ContentContainerPermissionManager;
+use humhub\modules\user\components\PermissionManager as UserPermissionManager;
 use humhub\modules\sociolog\permissions\CreateEntry;
 use humhub\modules\sociolog\permissions\UpdateEntry;
 use humhub\modules\sociolog\permissions\DeleteEntry;
@@ -116,6 +117,16 @@ private static function canInSpace(Space $space, string $permissionClass, User $
         'subject' => $user,
         'contentContainer' => $space,
     ]);
+
+    return $permissionManager->can(new $permissionClass());
+}
+
+/**
+ * Prüft eine in der HumHub-Gruppenverwaltung gesetzte globale Modulberechtigung.
+ */
+private static function canGlobally(string $permissionClass, User $user): bool
+{
+    $permissionManager = new UserPermissionManager(['subject' => $user]);
 
     return $permissionManager->can(new $permissionClass());
 }
@@ -236,10 +247,7 @@ public function canWrite($user = null): bool
         return false;
     }
 
-    // --------------------------------------------------------
-    // 1️⃣ SYSTEM ADMIN
-    // --------------------------------------------------------
-    if (Yii::$app->user->isAdmin()) {
+    if (self::canGlobally(UpdateEntry::class, $user)) {
         return true;
     }
 
@@ -307,10 +315,6 @@ public static function isLogbookManager($user = null): bool
 
     if (!$user) {
         return false;
-    }
-
-    if (Yii::$app->user->isAdmin()) {
-        return true;
     }
 
     $settings = Yii::$app->getModule('sociolog')->settings;
@@ -384,15 +388,12 @@ public function canDelete($user = null): bool
         return false;
     }
 
-    // --------------------------------------------------------
-    // 1️⃣ SYSTEM ADMIN
-    // --------------------------------------------------------
-    if (Yii::$app->user->isAdmin()) {
+    if (self::canGlobally(DeleteEntry::class, $user)) {
         return true;
     }
 
     // --------------------------------------------------------
-    // 2️⃣ BENUTZER MIT LÖSCHRECHT (MODULE SETTINGS)
+    // 1️⃣ BENUTZER MIT LÖSCHRECHT (MODULE SETTINGS)
     // --------------------------------------------------------
     $deleterUsers = (array)(
         Yii::$app->getModule('sociolog')->settings->getSerialized('deleterUsers') ?? []
@@ -630,8 +631,7 @@ public static function getWritableOrgansForUser($user = null): array
         return [];
     }
 
-    // System Admin → alle Organe
-    if (Yii::$app->user->isAdmin()) {
+    if (self::canGlobally(CreateEntry::class, $user)) {
         return static::getOrganList();
     }
 

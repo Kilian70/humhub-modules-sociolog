@@ -278,7 +278,10 @@ return [
     'Gruppen mit Schreibrecht' => 'Groups with write permission',
     'Gruppen mit Löschrecht' => 'Groups with delete permission',
     'Mitglieder dieser Gruppen dürfen Einträge erstellen und bearbeiten.' => 'Members of these groups may create and edit entries.',
-    'Mitglieder dieser Gruppen dürfen Einträge löschen (zusätzlich zu Administrator:innen).' => 'Members of these groups may delete entries (in addition to administrators).',
+    'Diese Benutzer dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.' => 'These users may create entries for all bodies and edit them unless they are locked.',
+    'Mitglieder dieser Gruppen dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.' => 'Members of these groups may create entries for all bodies and edit them unless they are locked.',
+    'Diese Benutzer dürfen Einträge löschen.' => 'These users may delete entries.',
+    'Mitglieder dieser Gruppen dürfen Einträge löschen.' => 'Members of these groups may delete entries.',
 
     // ============================================================
     // 🔹 Notifications
@@ -442,6 +445,22 @@ return [
 'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
 => 'Enable spaces for the logbook, assign them to areas and bodies, and configure write and delete permissions and optional links here.',
 'Spaces und Bereiche verwalten' => 'Manage spaces and areas',
+'Datenerhalt bei Benutzerlöschung' => 'Data preservation when deleting users',
+'Archiv' => 'Archive',
+'Archiv-Benutzerkonto' => 'Archive user account',
+'Archiv-Benutzerkonto auswählen ...' => 'Select archive user account ...',
+'Logbucheinträge bei vollständiger Benutzerlöschung erhalten' => 'Preserve logbook entries when permanently deleting users',
+'Archivkonto für erhaltene Logbucheinträge' => 'Archive account for preserved logbook entries',
+'Archivkonto auswählen ...' => 'Select archive account ...',
+'Bitte ein aktives, dauerhaftes Archivkonto auswählen.' => 'Please select an active, permanent archive account.',
+'Diese Funktion überträgt Logbucheinträge, Protokoll-Verknüpfungen und Verlauf auf das Archiv-Benutzerkonto. Von der Person in HumHub hochgeladene Protokolldateien werden dadurch nicht übertragen.'
+=> 'This function transfers logbook entries, protocol links and history to the archive user account. Protocol files uploaded by the person in HumHub are not transferred by this function.',
+'Wichtig: Übertrage vor dem Löschen der Person deren hochgeladene Dokumente mit dem HumHub-Modul „Move content and users“ auf das Archiv-Benutzerkonto. Andernfalls können die Dateien beim Löschen aller Beiträge verloren gehen.'
+=> 'Important: Before deleting the person, use the HumHub module “Move content and users” to transfer their uploaded documents to the archive user account. Otherwise, the files may be lost when all contributions are deleted.',
+'Die Funktion greift nur bei der vollständigen Löschung eines Benutzers. Das normale Löschen einzelner Logbucheinträge bleibt unverändert.'
+=> 'This function only applies when a user is permanently deleted. Normal deletion of individual logbook entries remains unchanged.',
+'Verwende ein dauerhaftes System- oder Vereinskonto. Dieses Konto darf nicht gelöscht werden, solange es als Archivkonto eingetragen ist.'
+=> 'Use a permanent system or association account. This account must not be deleted while it is configured as the archive account.',
 'Wer darf was?' => 'Who may do what?',
 'Status und Fristen' => 'Statuses and deadlines',
 'Einsprache und Einwand' => 'Objections',
@@ -501,8 +520,8 @@ return [
 => 'Members of these groups may create entries and edit them unless they are locked.',
 'Mitglieder dieser Gruppen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
 => 'Members of these groups may edit published entries when publication protection is enabled.',
-'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.'
-=> 'When disabled, the previous edit permissions continue to apply. System administrators always retain access.',
+'Wenn deaktiviert, gelten weiterhin die konfigurierten Benutzer-, Gruppen- und Space-Rechte. Systemadministratoren benötigen ebenfalls ein entsprechendes Inhaltsrecht.'
+=> 'When disabled, the configured user, group and space permissions continue to apply. System administrators also require the corresponding content permission.',
 'Die automatische Statuspflege bleibt unabhängig davon aktiv.'
 => 'Automatic status maintenance remains active independently.',
 'Zusätzliche Status „Schwerwiegender Einwand“ und „Ersetzt“ aktivieren'
