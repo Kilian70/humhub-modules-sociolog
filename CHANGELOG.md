@@ -3,6 +3,13 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.14] – 2026-08-13
+
+### Übersetzungen
+- Fehlende englische Übersetzung für den Status „Überprüfung fällig“ ergänzt
+- Gespeicherte Standardbezeichnungen werden nun entsprechend der aktuell gewählten Sprache übersetzt
+- Frei konfigurierte eigene Bezeichnungen bleiben unverändert erhalten
+
 ## [1.0.13] – 2026-08-04
 
 ### Administration und Navigation
