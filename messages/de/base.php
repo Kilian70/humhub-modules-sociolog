@@ -286,8 +286,12 @@ return [
     'Gruppen mit Löschrecht' => 'Gruppen mit Löschrecht',
     'Mitglieder dieser Gruppen dürfen Einträge erstellen und bearbeiten.'
         => 'Mitglieder dieser Gruppen dürfen Einträge erstellen und bearbeiten.',
-    'Mitglieder dieser Gruppen dürfen Einträge löschen (zusätzlich zu Administrator:innen).'
-        => 'Mitglieder dieser Gruppen dürfen Einträge löschen (zusätzlich zu Administrator:innen).',
+    'Diese Benutzer dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.'
+        => 'Diese Benutzer dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.',
+    'Mitglieder dieser Gruppen dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.'
+        => 'Mitglieder dieser Gruppen dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.',
+    'Diese Benutzer dürfen Einträge löschen.' => 'Diese Benutzer dürfen Einträge löschen.',
+    'Mitglieder dieser Gruppen dürfen Einträge löschen.' => 'Mitglieder dieser Gruppen dürfen Einträge löschen.',
 
     // ============================================================
     // 🔹 Notifications
@@ -445,6 +449,22 @@ return [
 'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
 => 'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.',
 'Spaces und Bereiche verwalten' => 'Spaces und Bereiche verwalten',
+'Datenerhalt bei Benutzerlöschung' => 'Datenerhalt bei Benutzerlöschung',
+'Archiv' => 'Archiv',
+'Archiv-Benutzerkonto' => 'Archiv-Benutzerkonto',
+'Archiv-Benutzerkonto auswählen ...' => 'Archiv-Benutzerkonto auswählen ...',
+'Logbucheinträge bei vollständiger Benutzerlöschung erhalten' => 'Logbucheinträge bei vollständiger Benutzerlöschung erhalten',
+'Archivkonto für erhaltene Logbucheinträge' => 'Archivkonto für erhaltene Logbucheinträge',
+'Archivkonto auswählen ...' => 'Archivkonto auswählen ...',
+'Bitte ein aktives, dauerhaftes Archivkonto auswählen.' => 'Bitte ein aktives, dauerhaftes Archivkonto auswählen.',
+'Diese Funktion überträgt Logbucheinträge, Protokoll-Verknüpfungen und Verlauf auf das Archiv-Benutzerkonto. Von der Person in HumHub hochgeladene Protokolldateien werden dadurch nicht übertragen.'
+=> 'Diese Funktion überträgt Logbucheinträge, Protokoll-Verknüpfungen und Verlauf auf das Archiv-Benutzerkonto. Von der Person in HumHub hochgeladene Protokolldateien werden dadurch nicht übertragen.',
+'Wichtig: Übertrage vor dem Löschen der Person deren hochgeladene Dokumente mit dem HumHub-Modul „Move content and users“ auf das Archiv-Benutzerkonto. Andernfalls können die Dateien beim Löschen aller Beiträge verloren gehen.'
+=> 'Wichtig: Übertrage vor dem Löschen der Person deren hochgeladene Dokumente mit dem HumHub-Modul „Move content and users“ auf das Archiv-Benutzerkonto. Andernfalls können die Dateien beim Löschen aller Beiträge verloren gehen.',
+'Die Funktion greift nur bei der vollständigen Löschung eines Benutzers. Das normale Löschen einzelner Logbucheinträge bleibt unverändert.'
+=> 'Die Funktion greift nur bei der vollständigen Löschung eines Benutzers. Das normale Löschen einzelner Logbucheinträge bleibt unverändert.',
+'Verwende ein dauerhaftes System- oder Vereinskonto. Dieses Konto darf nicht gelöscht werden, solange es als Archivkonto eingetragen ist.'
+=> 'Verwende ein dauerhaftes System- oder Vereinskonto. Dieses Konto darf nicht gelöscht werden, solange es als Archivkonto eingetragen ist.',
 'Wer darf was?' => 'Wer darf was?',
 'Status und Fristen' => 'Status und Fristen',
 'Einsprache und Einwand' => 'Einsprache und Einwand',
@@ -504,8 +524,8 @@ return [
 => 'Mitglieder dieser Gruppen dürfen Einträge erstellen und – sofern nicht gesperrt – bearbeiten.',
 'Mitglieder dieser Gruppen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
 => 'Mitglieder dieser Gruppen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.',
-'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.'
-=> 'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.',
+'Wenn deaktiviert, gelten weiterhin die konfigurierten Benutzer-, Gruppen- und Space-Rechte. Systemadministratoren benötigen ebenfalls ein entsprechendes Inhaltsrecht.'
+=> 'Wenn deaktiviert, gelten weiterhin die konfigurierten Benutzer-, Gruppen- und Space-Rechte. Systemadministratoren benötigen ebenfalls ein entsprechendes Inhaltsrecht.',
 'Die automatische Statuspflege bleibt unabhängig davon aktiv.'
 => 'Die automatische Statuspflege bleibt unabhängig davon aktiv.',
 'Zusätzliche Status „Schwerwiegender Einwand“ und „Ersetzt“ aktivieren'

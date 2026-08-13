@@ -19,8 +19,12 @@ $allUsers = User::find()
     ->all();
 
 $userOptions = [];
+$archiveUserOptions = [];
 foreach ($allUsers as $u) {
     $userOptions[$u->id] = $u->displayName . ' (ID ' . $u->id . ')';
+    if ((int)$u->status === User::STATUS_ENABLED) {
+        $archiveUserOptions[$u->id] = $u->displayName . ' (ID ' . $u->id . ')';
+    }
 }
 
 // Gruppenoptionen
@@ -291,7 +295,10 @@ echo Html::encode(implode(', ', $names));
         [
             'maxSelection' => 0,
         ]
-    ) ?>
+    )->hint(Yii::t(
+        'SociologModule.base',
+        'Diese Benutzer dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.'
+    )) ?>
 
 </div>
 
@@ -304,7 +311,10 @@ echo Html::encode(implode(', ', $names));
         [
             'maxSelection' => 0,
         ]
-    ) ?>
+    )->hint(Yii::t(
+        'SociologModule.base',
+        'Diese Benutzer dürfen Einträge löschen.'
+    )) ?>
 
 </div>
 
@@ -344,7 +354,7 @@ echo Html::encode(implode(', ', $names));
 
   <p class="form-text small">
     <?= Yii::t('SociologModule.base',
-        'Mitglieder dieser Gruppen dürfen Einträge erstellen und – sofern nicht gesperrt – bearbeiten.'
+        'Mitglieder dieser Gruppen dürfen Einträge für alle Organe erstellen und – sofern nicht gesperrt – bearbeiten.'
     ) ?>
   </p>
 
@@ -371,7 +381,7 @@ echo Html::encode(implode(', ', $names));
 
   <p class="form-text small">
     <?= Yii::t('SociologModule.base',
-        'Mitglieder dieser Gruppen dürfen Einträge löschen (zusätzlich zu Administrator:innen).'
+        'Mitglieder dieser Gruppen dürfen Einträge löschen.'
     ) ?>
   </p>
 
@@ -410,7 +420,7 @@ echo Html::encode(implode(', ', $names));
         'uncheck' => 0,
     ])->hint(Yii::t(
         'SociologModule.base',
-        'Wenn deaktiviert, gelten weiterhin die bisherigen Bearbeitungsrechte. Systemadministratoren behalten immer Zugriff.'
+        'Wenn deaktiviert, gelten weiterhin die konfigurierten Benutzer-, Gruppen- und Space-Rechte. Systemadministratoren benötigen ebenfalls ein entsprechendes Inhaltsrecht.'
     )) ?>
 
     <?= $form->field($model, 'statusManagersOnly')->checkbox([
@@ -431,6 +441,45 @@ echo Html::encode(implode(', ', $names));
 
 </div>
 </fieldset>
+
+    <fieldset class="card border-warning p-3 mb-4">
+      <legend class="h5 fw-semibold text-warning mb-3">
+        <i class="fa fa-archive me-1" aria-hidden="true"></i>
+        <?= Yii::t('SociologModule.base', 'Archiv') ?>
+      </legend>
+
+      <div class="alert alert-light border mb-3">
+        <?= Yii::t(
+            'SociologModule.base',
+            'Diese Funktion überträgt Logbucheinträge, Protokoll-Verknüpfungen und Verlauf auf das Archiv-Benutzerkonto. Von der Person in HumHub hochgeladene Protokolldateien werden dadurch nicht übertragen.'
+        ) ?>
+        <br><strong><?= Yii::t(
+            'SociologModule.base',
+            'Wichtig: Übertrage vor dem Löschen der Person deren hochgeladene Dokumente mit dem HumHub-Modul „Move content and users“ auf das Archiv-Benutzerkonto. Andernfalls können die Dateien beim Löschen aller Beiträge verloren gehen.'
+        ) ?></strong>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <?= $form->field($model, 'preserveEntriesOnUserDelete')->checkbox([
+              'uncheck' => 0,
+          ])->hint(Yii::t(
+              'SociologModule.base',
+              'Die Funktion greift nur bei der vollständigen Löschung eines Benutzers. Das normale Löschen einzelner Logbucheinträge bleibt unverändert.'
+          )) ?>
+        </div>
+
+        <div class="col-md-6">
+          <?= $form->field($model, 'archiveUserId')->dropDownList(
+              $archiveUserOptions,
+              ['prompt' => Yii::t('SociologModule.base', 'Archiv-Benutzerkonto auswählen ...')]
+          )->hint(Yii::t(
+              'SociologModule.base',
+              'Verwende ein dauerhaftes System- oder Vereinskonto. Dieses Konto darf nicht gelöscht werden, solange es als Archivkonto eingetragen ist.'
+          )) ?>
+        </div>
+      </div>
+    </fieldset>
 
     <!-- Benachrichtigungen -->
     <fieldset class="card border-secondary p-3 mb-4">

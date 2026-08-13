@@ -10,6 +10,7 @@ use humhub\modules\sociolog\notifications\EntryUpdated;
 use humhub\modules\user\models\User;
 use humhub\modules\dashboard\widgets\Sidebar;
 use humhub\modules\sociolog\widgets\LatestEntries;
+use humhub\modules\sociolog\services\SociologUserDeletionService;
 
 /**
  * ============================================================
@@ -23,6 +24,17 @@ use humhub\modules\sociolog\widgets\LatestEntries;
  */
 class Events
 {
+    /**
+     * Überträgt institutionelle Logbuchdaten vor einer vollständigen
+     * Benutzerlöschung auf das konfigurierte Archivkonto.
+     */
+    public static function onUserDelete($event): void
+    {
+        if ($event->sender instanceof User) {
+            SociologUserDeletionService::preserveEntriesForUser($event->sender);
+        }
+    }
+
     /** 🔹 Menüeintrag im TopMenu hinzufügen (HumHub 1.18+) */
     public static function onTopMenuInit($event)
     {

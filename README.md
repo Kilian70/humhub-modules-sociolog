@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.14
+**Version:** 1.0.15
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 (AGPL-3.0)  
@@ -65,14 +65,24 @@ Freigabe werden zusätzliche Praxistests mit Browser-Zoom, Tastatur und Screenre
 empfohlen.
 
 ## Benutzer löschen (WICHTIG)
-❌ Nicht verwenden
 
-Beim Löschen eines Benutzers darf die folgende Option NICHT aktiviert werden:
+HumHub löscht mit der Option **„Alle Beiträge des Benutzers löschen“** standardmässig
+auch die von dieser Person erstellten Sociolog-Inhalte.
 
-**„Alle Beiträge des Benutzers löschen“**
+Sociolog kann die institutionellen Logbucheinträge davor schützen. Dazu muss in den
+Moduleinstellungen unter **„Archiv“** ein dauerhaftes Archiv-Benutzerkonto ausgewählt
+und die Schutzfunktion aktiviert werden. Vor der endgültigen Benutzerlöschung werden
+die betroffenen Logbucheinträge, Protokoll-Verknüpfungen und der Verlauf auf dieses
+Konto übertragen.
 
-Diese Option löscht alle Inhalte unwiderruflich –
-inklusive Sociolog-Einträgen (Systemverhalten von HumHub).   
+**Wichtig:** Von der Person in HumHub hochgeladene Protokolldateien werden von dieser
+Sociolog-Funktion nicht übertragen. Diese Dokumente müssen vor der Benutzerlöschung
+mit dem HumHub-Modul **„Move content and users“** auf das Archiv-Benutzerkonto
+verschoben werden. Andernfalls können die Dateien beim Löschen aller Beiträge verloren
+gehen und die im Logbuch erhaltenen Verknüpfungen danach ins Leere führen.
+
+Ohne aktivierte Schutzfunktion darf **„Alle Beiträge des Benutzers löschen“** weiterhin
+nicht verwendet werden, wenn die Sociolog-Einträge erhalten bleiben sollen.
 
 ## Technische Details
 
@@ -135,8 +145,12 @@ Administrator:innen des zuständigen Spaces nur:
 - ein zusätzliches Protokoll verlinken
 
 Titel, Beschlusstext, Zuständigkeit und andere veröffentlichte Angaben bleiben gesperrt.
-Systemadministratoren und konfigurierte Logbuch-Manager behalten ihre weitergehenden
-Verwaltungsrechte.
+Konfigurierte Logbuch-Manager behalten ihre weitergehenden Verwaltungsrechte.
+Systemadministratoren haben weiterhin Zugang zu den Moduleinstellungen, benötigen zum
+Erstellen, Bearbeiten oder Löschen von Einträgen jedoch ebenfalls die entsprechenden
+Benutzer-, Gruppen- oder Space-Rechte. Die unter **Administration → Benutzer → Gruppen
+→ Berechtigungen** gesetzten HumHub-Rechte „Einträge erstellen“, „Einträge bearbeiten“
+und „Einträge löschen“ werden dabei ebenfalls ausgewertet.
 
 ## Historische Einträge importieren
 

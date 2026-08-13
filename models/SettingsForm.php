@@ -5,6 +5,7 @@ namespace humhub\modules\sociolog\models;
 use Yii;
 use yii\base\Model;
 use humhub\modules\user\models\Group;
+use humhub\modules\user\models\User;
 
 class SettingsForm extends Model
 {
@@ -79,6 +80,8 @@ class SettingsForm extends Model
     public $lockPublishedEntries;
     public $statusManagersOnly;
     public $extendedStatusesEnabled;
+    public $preserveEntriesOnUserDelete;
+    public $archiveUserId;
 
 
     /* ============================================================
@@ -145,7 +148,8 @@ class SettingsForm extends Model
 					'mainMenuSortOrder',
 					'widgetSortOrder',
 					'defaultEffectiveDays',
-					'fixedDecisionTypeId'
+					'fixedDecisionTypeId',
+					'archiveUserId'
 				],
 				'integer'
 			],
@@ -155,7 +159,9 @@ class SettingsForm extends Model
 			[['widgetSortOrder'], 'integer', 'min' => 0],
 			[['defaultEffectiveDays'], 'integer', 'min' => 0],
 			[['fixedDecisionTypeId'], 'integer', 'min' => 0],
+			[['archiveUserId'], 'integer', 'min' => 0],
 			[['fixedDecisionTypeId'], 'validateFixedDecisionType'],
+			[['archiveUserId'], 'validateArchiveUser'],
 	
 			[
 				[
@@ -183,13 +189,29 @@ class SettingsForm extends Model
 					'lockPublishedEntries',
 					'statusManagersOnly',
 					'extendedStatusesEnabled',
-					'effectiveDateAddExtraDay'
+					'effectiveDateAddExtraDay',
+					'preserveEntriesOnUserDelete'
 				],
 				'boolean'
 			],
 	
 		];
 	}
+
+    public function validateArchiveUser(string $attribute): void
+    {
+        if (!(bool)$this->preserveEntriesOnUserDelete) {
+            return;
+        }
+
+        $user = User::findOne((int)$this->$attribute);
+        if (!$user || (int)$user->status !== User::STATUS_ENABLED) {
+            $this->addError(
+                $attribute,
+                Yii::t('SociologModule.base', 'Bitte ein aktives, dauerhaftes Archivkonto auswählen.')
+            );
+        }
+    }
 
     public function validateInfoDocumentUrl(string $attribute): void
     {
@@ -367,6 +389,12 @@ class SettingsForm extends Model
             'pendingStatusLabel' =>
                 Yii::t('SociologModule.base', 'Bezeichnung des ersten Status'),
 
+            'preserveEntriesOnUserDelete' =>
+                Yii::t('SociologModule.base', 'Logbucheinträge bei vollständiger Benutzerlöschung erhalten'),
+
+            'archiveUserId' =>
+                Yii::t('SociologModule.base', 'Archiv-Benutzerkonto'),
+
         ];
     }
 
@@ -523,6 +551,12 @@ class SettingsForm extends Model
 
         $this->extendedStatusesEnabled =
             (bool)$settings->get('extendedStatusesEnabled', false);
+
+        $this->preserveEntriesOnUserDelete =
+            (bool)$settings->get('preserveEntriesOnUserDelete', false);
+
+        $this->archiveUserId =
+            (int)$settings->get('archiveUserId', 0);
 	
 	
 	
@@ -656,6 +690,11 @@ class SettingsForm extends Model
         $settings->set('lockPublishedEntries', (bool)$this->lockPublishedEntries);
         $settings->set('statusManagersOnly', (bool)$this->statusManagersOnly);
         $settings->set('extendedStatusesEnabled', (bool)$this->extendedStatusesEnabled);
+        $settings->set(
+            'preserveEntriesOnUserDelete',
+            (bool)$this->preserveEntriesOnUserDelete
+        );
+        $settings->set('archiveUserId', (int)$this->archiveUserId);
 	
 	
 	

@@ -3,6 +3,23 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.15] – 2026-08-13
+
+### Archiv und Datenintegrität
+- Optionale Übertragung der Sociolog-Urheberschaft auf ein frei wählbares Archiv-Benutzerkonto vor einer vollständigen Benutzerlöschung ergänzt
+- Logbucheinträge, Protokoll-Verknüpfungen, Entscheidungsverlauf und Organ-Zuordnungen bleiben nachvollziehbar erhalten
+- Deutlicher Hinweis ergänzt, dass hochgeladene HumHub-Dokumente vor der Benutzerlöschung separat mit „Move content and users“ übertragen werden müssen
+
+### Berechtigungen
+- Automatische Inhaltsrechte für Systemadministratoren entfernt; der Zugang zu den Moduleinstellungen bleibt erhalten
+- Globale HumHub-Gruppenberechtigungen für Erstellen, Bearbeiten und Löschen werden nun tatsächlich ausgewertet
+- Benutzer-, Gruppen- und Space-Rechte bleiben kombinierbar
+- Erläuterungen der Schreib-, Verwaltungs- und Löschrechte präzisiert
+
+### Darstellung und Übersetzungen
+- Fehlendes Uhr-Symbol bei „Status und Fristen“ mit HumHub-kompatibler Font-Awesome-Klasse korrigiert
+- Deutsche und englische Texte für Archivfunktion und Berechtigungen ergänzt
+
 ## [1.0.14] – 2026-08-13
 
 ### Übersetzungen

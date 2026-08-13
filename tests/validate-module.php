@@ -70,6 +70,17 @@ if (!str_contains($importController, 'PREVIEW_MAX_AGE = 86400')
     $errors[] = 'Import previews must expire after 24 hours.';
 }
 
+$userDeletionServiceFile = $root . '/services/SociologUserDeletionService.php';
+$userDeletionService = is_file($userDeletionServiceFile)
+    ? (string)file_get_contents($userDeletionServiceFile)
+    : '';
+if (!str_contains($moduleClass, 'User::EVENT_BEFORE_DELETE')
+    || !str_contains($moduleClass, "'onUserDelete'")
+    || !str_contains($userDeletionService, 'Content::updateAll')
+    || !str_contains($userDeletionService, 'archiveUserId')) {
+    $errors[] = 'The user deletion protection for institutional logbook entries is incomplete.';
+}
+
 if (is_file($root . '/permissions/ViewEntry.php')
     || str_contains($moduleClass, 'ViewEntry')
     || str_contains((string)file_get_contents($root . '/module.json'), 'ViewEntry')) {
