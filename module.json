@@ -41,7 +41,7 @@
     }
   ],
   "homepage": "https://www.humlab.ch",
-  "licence": "AGPL-3.0-or-later",
+  "licence": "AGPL-3.0",
   "keywords": [
     "logbuch",
     "entscheid",
