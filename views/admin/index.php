@@ -487,13 +487,26 @@ echo Html::encode(implode(', ', $names));
         <i class="fa fa-bell me-1"></i>
         <?= Yii::t('SociologModule.base','Benachrichtigungen bei neuen oder geänderten Einträgen') ?>
       </h2>
+      <?= $form->field($model, 'notificationRecipientMode')->dropDownList([
+          \humhub\modules\sociolog\models\SettingsForm::NOTIFICATION_MODE_NONE =>
+              Yii::t('SociologModule.base', 'Keine Benachrichtigungen'),
+          \humhub\modules\sociolog\models\SettingsForm::NOTIFICATION_MODE_GROUPS =>
+              Yii::t('SociologModule.base', 'Nur Mitglieder ausgewählter Gruppen'),
+          \humhub\modules\sociolog\models\SettingsForm::NOTIFICATION_MODE_SPACE =>
+              Yii::t('SociologModule.base', 'Nur Mitglieder des aktuell zuständigen Spaces'),
+          \humhub\modules\sociolog\models\SettingsForm::NOTIFICATION_MODE_ALL =>
+              Yii::t('SociologModule.base', 'Alle aktiven Benutzer'),
+      ])->hint(Yii::t(
+          'SociologModule.base',
+          'Die handelnde Person wird in jedem Modus automatisch ausgeschlossen.'
+      )) ?>
       <?= $form->field($model, 'notifyGroups')->checkboxList(
           ArrayHelper::map(Group::find()->orderBy('name')->all(), 'id', 'name'),
           ['separator' => '<br>']
       )->label(false) ?>
       <p class="form-text small text-muted mb-0">
-        <?= Yii::t('SociologModule.base','Nur Mitglieder dieser Gruppen erhalten eine Mitteilung, wenn ein Eintrag erstellt oder geändert wird.') ?><br>
-        <?= Yii::t('SociologModule.base','Wenn keine Gruppe ausgewählt ist, erhalten alle aktiven Benutzer Benachrichtigungen (Standardverhalten).') ?>
+        <?= Yii::t('SociologModule.base','Die Gruppenauswahl wird nur im Modus „Nur Mitglieder ausgewählter Gruppen“ verwendet.') ?><br>
+        <?= Yii::t('SociologModule.base','Beim Upgrade bleibt „Alle aktiven Benutzer“ zunächst als bisheriges Standardverhalten eingestellt.') ?>
       </p>
     </fieldset>
 

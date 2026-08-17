@@ -81,6 +81,43 @@ if (!str_contains($moduleClass, 'User::EVENT_BEFORE_DELETE')
     $errors[] = 'The user deletion protection for institutional logbook entries is incomplete.';
 }
 
+$config = (string)file_get_contents($root . '/config.php');
+$entryController = (string)file_get_contents($root . '/controllers/EntryController.php');
+$entryModel = (string)file_get_contents($root . '/models/Entry.php');
+$settingsForm = (string)file_get_contents($root . '/models/SettingsForm.php');
+$events = (string)file_get_contents($root . '/Events.php');
+
+if (!str_contains($config, 'ActiveRecord::EVENT_AFTER_INSERT')
+    || !str_contains($config, 'ActiveRecord::EVENT_AFTER_UPDATE')
+    || str_contains($moduleClass, 'ActiveRecord::EVENT_AFTER_INSERT')
+    || str_contains($moduleClass, 'ActiveRecord::EVENT_AFTER_UPDATE')) {
+    $errors[] = 'Entry events must be registered exactly through config.php.';
+}
+
+if (!str_contains($entryController, 'Space::findOne((int)$model->current_organ)')
+    || !str_contains($entryController, '$model->isAwaitingTakeover()')
+    || !str_contains($entryModel, 'function isAwaitingTakeover()')
+    || !str_contains($entryModel, 'function getOrganSpaceId(Organ $organ)')
+    || !str_contains($entryModel, "'is_organ_space' => 1")) {
+    $errors[] = 'Forwarding and takeover must use the stable target Space ID.';
+}
+
+if (!str_contains($events, '->distinct()')
+    || !str_contains($events, '->each(200)')
+    || !str_contains($events, "['<>', 'user.id', (int)\$actor->id]")) {
+    $errors[] = 'Notification recipients must be unique, batched and exclude the actor.';
+}
+
+if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")
+    || !str_contains($settingsForm, "NOTIFICATION_MODE_GROUPS = 'groups'")
+    || !str_contains($settingsForm, "NOTIFICATION_MODE_SPACE = 'space'")
+    || !str_contains($settingsForm, "NOTIFICATION_MODE_ALL = 'all'")
+    || !str_contains($settingsForm, 'validateNotificationGroups')
+    || !str_contains($events, "'notificationRecipientMode'")
+    || !str_contains($events, 'Membership::STATUS_MEMBER')) {
+    $errors[] = 'The explicit notification recipient modes are incomplete.';
+}
+
 if (is_file($root . '/permissions/ViewEntry.php')
     || str_contains($moduleClass, 'ViewEntry')
     || str_contains((string)file_get_contents($root . '/module.json'), 'ViewEntry')) {

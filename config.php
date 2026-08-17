@@ -5,6 +5,8 @@ use humhub\modules\sociolog\Events;
 use humhub\widgets\TopMenu;
 use humhub\modules\dashboard\widgets\Sidebar;
 use humhub\commands\CronController;
+use humhub\modules\sociolog\models\Entry;
+use yii\db\ActiveRecord;
 
 return [
     'id' => 'sociolog',
@@ -33,5 +35,17 @@ return [
 			'event' => CronController::EVENT_ON_DAILY_RUN,
 			'callback' => [Events::class, 'onCronRun'],
 		],
+
+        // 🔹 Benachrichtigungen bei Logbuch-Einträgen
+        [
+            'class' => Entry::class,
+            'event' => ActiveRecord::EVENT_AFTER_INSERT,
+            'callback' => [Events::class, 'onAfterSave'],
+        ],
+        [
+            'class' => Entry::class,
+            'event' => ActiveRecord::EVENT_AFTER_UPDATE,
+            'callback' => [Events::class, 'onAfterSave'],
+        ],
     ],
 ];

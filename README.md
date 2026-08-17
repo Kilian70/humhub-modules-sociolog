@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.15
+**Version:** 1.0.16
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  

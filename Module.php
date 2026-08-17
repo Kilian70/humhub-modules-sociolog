@@ -33,7 +33,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.15';
+    public string $version = '1.0.16';
     public string $humhubMinVersion = '1.18';
     
   
@@ -98,24 +98,11 @@ public function init()
         );
     }
 
-    // ============================================================
-    // 🔔 Entry-Events registrieren
-    // ============================================================
-    Event::on(
-        \humhub\modules\sociolog\models\Entry::class,
-        \yii\db\ActiveRecord::EVENT_AFTER_INSERT,
-        [\humhub\modules\sociolog\Events::class, 'onAfterSave']
-    );
-
-    Event::on(
-        \humhub\modules\sociolog\models\Entry::class,
-        \yii\db\ActiveRecord::EVENT_AFTER_UPDATE,
-        [\humhub\modules\sociolog\Events::class, 'onAfterSave']
-        
-    );
-
     // Vor dem HumHub-Content-Handler ausführen. Dieser löscht bei einer
     // vollständigen Benutzerlöschung sonst alle vom Benutzer erstellten Inhalte.
+    // Diese Registrierung bleibt absichtlich hier, weil append=false den Handler
+    // vor den bereits registrierten HumHub-Löschhandler setzt. Die normalen
+    // Modul-Events werden einheitlich über config.php registriert.
     Event::on(
         \humhub\modules\user\models\User::class,
         \humhub\modules\user\models\User::EVENT_BEFORE_DELETE,
@@ -154,6 +141,7 @@ public function init()
             'effectiveDateAddExtraDay' => true,
             'preserveEntriesOnUserDelete' => false,
             'archiveUserId' => 0,
+            'notificationRecipientMode' => 'all',
         ];
 
         foreach ($defaults as $key => $value) {
