@@ -252,6 +252,8 @@ if (Yii::$app->request->isPost) {
     $transaction = Yii::$app->db->beginTransaction();
 
     try {
+    $organSpaceIds = [];
+
     foreach ($spaces as $space) {
 
         $spaceId = (int)$space->id;
@@ -264,8 +266,31 @@ if (Yii::$app->request->isPost) {
         $global = isset($globalWrite[$spaceId]);
         $delete = isset($canDelete[$spaceId]);
         $show   = isset($enabled[$spaceId]);
+        $organSpaceSelected = isset($isOrganSpace[$spaceId]);
         $mode   = $linkMode[$spaceId] ?? 'about';
         $url    = trim($link[$spaceId] ?? '');
+
+        if ($organSpaceSelected && empty($organId)) {
+            throw new \RuntimeException(
+                Yii::t('SociologModule.base', 'Ein Organ-Space muss einem Organ zugeordnet sein.')
+            );
+        }
+
+        if ($organSpaceSelected && !$show) {
+            throw new \RuntimeException(
+                Yii::t('SociologModule.base', 'Ein Organ-Space muss im Logbuch sichtbar sein.')
+            );
+        }
+
+        if ($organSpaceSelected && isset($organSpaceIds[(int)$organId])) {
+            throw new \RuntimeException(
+                Yii::t('SociologModule.base', 'Jedem Organ darf nur ein Organ-Space zugeordnet sein.')
+            );
+        }
+
+        if ($organSpaceSelected) {
+            $organSpaceIds[(int)$organId] = $spaceId;
+        }
 
         if (empty($organId) && !$global && !$delete && !$show && $mode === 'about' && $url === '') {
 
@@ -290,11 +315,21 @@ if (Yii::$app->request->isPost) {
 		$config->link_mode    = $mode;
 		$config->link         = ($mode === 'custom') ? $url : null;
 		
-		$config->is_organ_space = isset($isOrganSpace[$spaceId]) ? 1 : 0;
+		$config->is_organ_space = $organSpaceSelected ? 1 : 0;
 
         if (!$config->save()) {
             throw new \RuntimeException(json_encode($config->getErrors()));
         }
+    }
+
+    // Das historische Feld im Organ bleibt synchron, damit bestehende
+    // Integrationen und ältere Modulstände dieselbe Zuordnung sehen.
+    \humhub\modules\sociolog\models\Organ::updateAll(['organ_space_id' => null]);
+    foreach ($organSpaceIds as $organId => $spaceId) {
+        \humhub\modules\sociolog\models\Organ::updateAll(
+            ['organ_space_id' => (int)$spaceId],
+            ['id' => (int)$organId]
+        );
     }
 
     $transaction->commit();

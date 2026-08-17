@@ -915,6 +915,37 @@ public function getDecisionOrgan(): ?int
 }
 
 /**
+ * Kennzeichnet eine noch nicht übernommene Weiterleitung.
+ */
+public function isAwaitingTakeover(): bool
+{
+    return trim((string)$this->forwarded_to) !== ''
+        && !empty($this->current_organ);
+}
+
+/**
+ * Ermittelt den eindeutigen Organ-Space. Die zentrale Space-Konfiguration
+ * ist führend; organ_space_id bleibt als Rückwärtskompatibilität erhalten.
+ */
+private static function getOrganSpaceId(Organ $organ): ?int
+{
+    $config = SpaceConfig::find()
+        ->where([
+            'organ_id' => (int)$organ->id,
+            'is_organ_space' => 1,
+            'enabled' => 1,
+        ])
+        ->orderBy(['space_id' => SORT_ASC])
+        ->one();
+
+    if ($config) {
+        return (int)$config->space_id;
+    }
+
+    return $organ->organ_space_id ? (int)$organ->organ_space_id : null;
+}
+
+/**
  * ============================================================
  * 🔹 Nächstes Entscheidungsorgan bestimmen
  * ============================================================
@@ -941,8 +972,9 @@ public function getNextOrgan(): ?int
      * Wenn aktueller Space NICHT der Organ-Space ist
      * → zuerst zum Organ-Space desselben Organs
      */
-    if ($organ->organ_space_id && (int)$organ->organ_space_id !== (int)$spaceId) {
-        return (int)$organ->organ_space_id;
+    $organSpaceId = self::getOrganSpaceId($organ);
+    if ($organSpaceId && $organSpaceId !== (int)$spaceId) {
+        return $organSpaceId;
     }
 
     /*
@@ -955,11 +987,11 @@ public function getNextOrgan(): ?int
 
     $parent = Organ::findOne((int)$organ->parent_id);
 
-    if (!$parent || !$parent->organ_space_id) {
+    if (!$parent) {
         return null;
     }
 
-    return (int)$parent->organ_space_id;
+    return self::getOrganSpaceId($parent);
 }
 
 /**

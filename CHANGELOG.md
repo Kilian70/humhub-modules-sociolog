@@ -3,6 +3,23 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.16] – 2026-08-17
+
+### Workflow
+- Weiterleitung und Übernahme verwenden die eindeutige Ziel-Space-ID statt des veränderlichen Space-Namens
+- Noch nicht übernommene Entscheide können nicht erneut weitergeleitet und damit nicht versehentlich an ein Organ vorbeigeführt werden
+- Der in „Spaces und Logbuch-Bereiche“ gewählte Organ-Space ist nun die führende Zuordnung für BG → BK → LK
+- Organ-Space-Zuordnungen werden validiert und mit dem historischen Organ-Feld synchronisiert
+
+### Events und Benachrichtigungen
+- Entry-Events einheitlich über `config.php` registriert
+- Die jeweils handelnde Person erhält keine eigene Benachrichtigung
+- Empfänger aus mehreren Benachrichtigungsgruppen werden dedupliziert und blockweise verarbeitet
+- Duplikatschutz gilt pro Eintrag und Request auch bei mehreren Modellinstanzen
+
+### Tests
+- Modulprüfung um Workflow-, Event- und Benachrichtigungsregeln erweitert
+
 ## [1.0.15] – 2026-08-13
 
 ### Archiv und Datenintegrität

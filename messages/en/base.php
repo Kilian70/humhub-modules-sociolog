@@ -1,5 +1,9 @@
 <?php
 return [
+    'Ein Organ-Space muss einem Organ zugeordnet sein.' => 'An organ space must be assigned to a body.',
+    'Ein Organ-Space muss im Logbuch sichtbar sein.' => 'An organ space must be visible in the logbook.',
+    'Jedem Organ darf nur ein Organ-Space zugeordnet sein.' => 'Only one organ space may be assigned to each body.',
+    'Der Entscheid muss zuerst vom Zielorgan übernommen werden.' => 'The decision must first be accepted by the target body.',
 
     // ============================================================
     // 🔹 General

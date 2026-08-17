@@ -410,6 +410,17 @@ public function actionForward($id)
         );
     }
 
+    // Eine offene Weiterleitung muss vom Zielorgan zuerst übernommen oder
+    // zurückgegeben werden. Andernfalls könnte ein Organ übersprungen werden.
+    if ($model->isAwaitingTakeover()) {
+        Yii::$app->session->setFlash(
+            'warning',
+            Yii::t('SociologModule.base', 'Der Entscheid muss zuerst vom Zielorgan übernommen werden.')
+        );
+
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
+
     $currentOrgan = (int)$model->current_organ;
 
     if (!$currentOrgan) {
@@ -486,13 +497,15 @@ public function actionTakeOver($id)
         );
     }
 
-    if (!$model->forwarded_to) {
+    if (!$model->isAwaitingTakeover()) {
         throw new \yii\web\ForbiddenHttpException();
     }
 
-    $space = \humhub\modules\space\models\Space::find()
-        ->where(['name' => $model->forwarded_to])
-        ->one();
+    // current_organ enthält seit der Weiterleitung die eindeutige Ziel-Space-ID.
+    // forwarded_to ist nur noch ein lesbarer Hinweis und darf nicht zur
+    // Identifikation verwendet werden (Space-Namen können sich ändern oder
+    // mehrfach vorkommen).
+    $space = \humhub\modules\space\models\Space::findOne((int)$model->current_organ);
 
     if (!$space) {
         Yii::$app->session->setFlash(
@@ -503,7 +516,18 @@ public function actionTakeOver($id)
         return $this->redirect(['view', 'id' => $model->id]);
     }
 
-    $fromOrgan = $model->current_organ;
+    $lastForward = EntryFlow::find()
+        ->where([
+            'entry_id' => $model->id,
+            'action' => 'forward',
+            'to_organ_id' => (int)$space->id,
+        ])
+        ->orderBy(['id' => SORT_DESC])
+        ->one();
+
+    $fromOrgan = $lastForward
+        ? (int)$lastForward->from_organ_id
+        : (int)$model->current_organ;
 
     // --------------------------------------------------------
     // ➡️ Organ übernehmen

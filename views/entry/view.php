@@ -239,7 +239,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
  🔹 BUTTONS
 ============================================================ -->
 
-<?php if ($workflowEnabled && $canWrite && $nextOrgan): ?>
+<?php if ($workflowEnabled && $canWrite && $nextOrgan && !$model->isAwaitingTakeover()): ?>
 
 <div class="mt-3">
 

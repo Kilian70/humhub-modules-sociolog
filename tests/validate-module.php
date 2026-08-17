@@ -81,6 +81,32 @@ if (!str_contains($moduleClass, 'User::EVENT_BEFORE_DELETE')
     $errors[] = 'The user deletion protection for institutional logbook entries is incomplete.';
 }
 
+$config = (string)file_get_contents($root . '/config.php');
+$entryController = (string)file_get_contents($root . '/controllers/EntryController.php');
+$entryModel = (string)file_get_contents($root . '/models/Entry.php');
+$events = (string)file_get_contents($root . '/Events.php');
+
+if (!str_contains($config, 'ActiveRecord::EVENT_AFTER_INSERT')
+    || !str_contains($config, 'ActiveRecord::EVENT_AFTER_UPDATE')
+    || str_contains($moduleClass, 'ActiveRecord::EVENT_AFTER_INSERT')
+    || str_contains($moduleClass, 'ActiveRecord::EVENT_AFTER_UPDATE')) {
+    $errors[] = 'Entry events must be registered exactly through config.php.';
+}
+
+if (!str_contains($entryController, 'Space::findOne((int)$model->current_organ)')
+    || !str_contains($entryController, '$model->isAwaitingTakeover()')
+    || !str_contains($entryModel, 'function isAwaitingTakeover()')
+    || !str_contains($entryModel, 'function getOrganSpaceId(Organ $organ)')
+    || !str_contains($entryModel, "'is_organ_space' => 1")) {
+    $errors[] = 'Forwarding and takeover must use the stable target Space ID.';
+}
+
+if (!str_contains($events, '->distinct()')
+    || !str_contains($events, '->each(200)')
+    || !str_contains($events, "['<>', 'user.id', (int)\$actor->id]")) {
+    $errors[] = 'Notification recipients must be unique, batched and exclude the actor.';
+}
+
 if (is_file($root . '/permissions/ViewEntry.php')
     || str_contains($moduleClass, 'ViewEntry')
     || str_contains((string)file_get_contents($root . '/module.json'), 'ViewEntry')) {
