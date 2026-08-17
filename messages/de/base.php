@@ -1,5 +1,14 @@
 <?php
 return [
+    'Empfänger der Benachrichtigungen' => 'Empfänger der Benachrichtigungen',
+    'Keine Benachrichtigungen' => 'Keine Benachrichtigungen',
+    'Nur Mitglieder ausgewählter Gruppen' => 'Nur Mitglieder ausgewählter Gruppen',
+    'Nur Mitglieder des aktuell zuständigen Spaces' => 'Nur Mitglieder des aktuell zuständigen Spaces',
+    'Alle aktiven Benutzer' => 'Alle aktiven Benutzer',
+    'Die handelnde Person wird in jedem Modus automatisch ausgeschlossen.' => 'Die handelnde Person wird in jedem Modus automatisch ausgeschlossen.',
+    'Die Gruppenauswahl wird nur im Modus „Nur Mitglieder ausgewählter Gruppen“ verwendet.' => 'Die Gruppenauswahl wird nur im Modus „Nur Mitglieder ausgewählter Gruppen“ verwendet.',
+    'Beim Upgrade bleibt „Alle aktiven Benutzer“ zunächst als bisheriges Standardverhalten eingestellt.' => 'Beim Upgrade bleibt „Alle aktiven Benutzer“ zunächst als bisheriges Standardverhalten eingestellt.',
+    'Bitte mindestens eine Benachrichtigungsgruppe auswählen.' => 'Bitte mindestens eine Benachrichtigungsgruppe auswählen.',
     'Ein Organ-Space muss einem Organ zugeordnet sein.' => 'Ein Organ-Space muss einem Organ zugeordnet sein.',
     'Ein Organ-Space muss im Logbuch sichtbar sein.' => 'Ein Organ-Space muss im Logbuch sichtbar sein.',
     'Jedem Organ darf nur ein Organ-Space zugeordnet sein.' => 'Jedem Organ darf nur ein Organ-Space zugeordnet sein.',

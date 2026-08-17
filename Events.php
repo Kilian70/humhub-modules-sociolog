@@ -5,9 +5,11 @@ namespace humhub\modules\sociolog;
 use Yii;
 use humhub\modules\ui\menu\MenuLink;
 use humhub\modules\sociolog\models\Entry;
+use humhub\modules\sociolog\models\SettingsForm;
 use humhub\modules\sociolog\notifications\EntryCreated;
 use humhub\modules\sociolog\notifications\EntryUpdated;
 use humhub\modules\user\models\User;
+use humhub\modules\space\models\Membership;
 use humhub\modules\dashboard\widgets\Sidebar;
 use humhub\modules\sociolog\widgets\LatestEntries;
 use humhub\modules\sociolog\services\SociologUserDeletionService;
@@ -137,24 +139,57 @@ class Events
         }
 		
         // ============================================================
-        // 🎯 Empfänger bestimmen (notifyGroups oder alle Benutzer)
+        // 🎯 Empfänger entsprechend dem ausdrücklich gewählten Modus bestimmen
         // ============================================================
         $module   = Yii::$app->getModule('sociolog');
         $groupIds = array_filter(array_map(
             'intval',
             (array)($module->settings->getSerialized('notifyGroups') ?? [])
         ));
+        $recipientMode = (string)$module->settings->get(
+            'notificationRecipientMode',
+            SettingsForm::NOTIFICATION_MODE_ALL
+        );
+
+        if ($recipientMode === SettingsForm::NOTIFICATION_MODE_NONE) {
+            Yii::info('Sociolog: Benachrichtigungsempfänger deaktiviert.', 'sociolog');
+            return;
+        }
 
         $userQuery = User::find()
+            ->alias('user')
             ->where(['user.status' => User::STATUS_ENABLED])
             ->andWhere(['<>', 'user.id', (int)$actor->id]);
 
-        if (!empty($groupIds)) {
+        if ($recipientMode === SettingsForm::NOTIFICATION_MODE_GROUPS) {
             $userQuery
                 ->joinWith('groupUsers')
                 ->andWhere(['group_user.group_id' => $groupIds])
                 ->distinct();
-            $sourceDescription = 'notifyGroups (' . implode(',', $groupIds) . ')';
+            $sourceDescription = $groupIds === []
+                ? 'keinen ausgewählten Benachrichtigungsgruppen'
+                : 'notifyGroups (' . implode(',', $groupIds) . ')';
+        } elseif ($recipientMode === SettingsForm::NOTIFICATION_MODE_SPACE) {
+            $spaceId = (int)$entry->getDecisionOrgan();
+            if ($spaceId <= 0) {
+                Yii::warning(
+                    "Sociolog: Entry #{$entry->id} hat keinen zuständigen Space; keine Benachrichtigung versendet.",
+                    'sociolog'
+                );
+                return;
+            }
+
+            $userQuery
+                ->innerJoin(
+                    ['notification_membership' => Membership::tableName()],
+                    'notification_membership.user_id = user.id'
+                )
+                ->andWhere([
+                    'notification_membership.space_id' => $spaceId,
+                    'notification_membership.status' => Membership::STATUS_MEMBER,
+                ])
+                ->distinct();
+            $sourceDescription = "dem zuständigen Space #{$spaceId}";
         } else {
             $sourceDescription = 'allen aktiven Benutzern';
         }

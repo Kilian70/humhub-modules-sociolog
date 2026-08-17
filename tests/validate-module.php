@@ -84,6 +84,7 @@ if (!str_contains($moduleClass, 'User::EVENT_BEFORE_DELETE')
 $config = (string)file_get_contents($root . '/config.php');
 $entryController = (string)file_get_contents($root . '/controllers/EntryController.php');
 $entryModel = (string)file_get_contents($root . '/models/Entry.php');
+$settingsForm = (string)file_get_contents($root . '/models/SettingsForm.php');
 $events = (string)file_get_contents($root . '/Events.php');
 
 if (!str_contains($config, 'ActiveRecord::EVENT_AFTER_INSERT')
@@ -105,6 +106,16 @@ if (!str_contains($events, '->distinct()')
     || !str_contains($events, '->each(200)')
     || !str_contains($events, "['<>', 'user.id', (int)\$actor->id]")) {
     $errors[] = 'Notification recipients must be unique, batched and exclude the actor.';
+}
+
+if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")
+    || !str_contains($settingsForm, "NOTIFICATION_MODE_GROUPS = 'groups'")
+    || !str_contains($settingsForm, "NOTIFICATION_MODE_SPACE = 'space'")
+    || !str_contains($settingsForm, "NOTIFICATION_MODE_ALL = 'all'")
+    || !str_contains($settingsForm, 'validateNotificationGroups')
+    || !str_contains($events, "'notificationRecipientMode'")
+    || !str_contains($events, 'Membership::STATUS_MEMBER')) {
+    $errors[] = 'The explicit notification recipient modes are incomplete.';
 }
 
 if (is_file($root . '/permissions/ViewEntry.php')

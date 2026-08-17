@@ -9,6 +9,10 @@ use humhub\modules\user\models\User;
 
 class SettingsForm extends Model
 {
+    public const NOTIFICATION_MODE_NONE = 'none';
+    public const NOTIFICATION_MODE_GROUPS = 'groups';
+    public const NOTIFICATION_MODE_SPACE = 'space';
+    public const NOTIFICATION_MODE_ALL = 'all';
 
     /* ============================================================
      * Allgemeine Einstellungen
@@ -77,6 +81,7 @@ class SettingsForm extends Model
     public $managerGroups = [];
 
     public $notifyGroups = [];
+    public $notificationRecipientMode;
     public $lockPublishedEntries;
     public $statusManagersOnly;
     public $extendedStatusesEnabled;
@@ -107,6 +112,13 @@ class SettingsForm extends Model
 			[['infoPageTitle'], 'string', 'max' => 150],
 			[['infoDocumentUrl'], 'string', 'max' => 1000],
 			[['infoDocumentUrl'], 'validateInfoDocumentUrl'],
+			[['notificationRecipientMode'], 'in', 'range' => [
+				self::NOTIFICATION_MODE_NONE,
+				self::NOTIFICATION_MODE_GROUPS,
+				self::NOTIFICATION_MODE_SPACE,
+				self::NOTIFICATION_MODE_ALL,
+			]],
+			[['notifyGroups'], 'validateNotificationGroups'],
 			[[
 				'decisionDateLabel',
 				'topicOwnerLabel',
@@ -197,6 +209,17 @@ class SettingsForm extends Model
 	
 		];
 	}
+
+    public function validateNotificationGroups(string $attribute): void
+    {
+        if ($this->notificationRecipientMode === self::NOTIFICATION_MODE_GROUPS
+            && array_values(array_filter((array)$this->$attribute)) === []) {
+            $this->addError(
+                $attribute,
+                Yii::t('SociologModule.base', 'Bitte mindestens eine Benachrichtigungsgruppe auswählen.')
+            );
+        }
+    }
 
     public function validateArchiveUser(string $attribute): void
     {
@@ -304,6 +327,9 @@ class SettingsForm extends Model
 
             'notifyGroups' =>
                 Yii::t('SociologModule.base', 'Benachrichtigungsgruppen'),
+
+            'notificationRecipientMode' =>
+                Yii::t('SociologModule.base', 'Empfänger der Benachrichtigungen'),
 
             'managerUsers' =>
                 Yii::t('SociologModule.base', 'Logbuch-Verantwortliche'),
@@ -564,6 +590,11 @@ class SettingsForm extends Model
 	
 		$this->notifyGroups =
 			$settings->getSerialized('notifyGroups') ?? [];
+
+        $this->notificationRecipientMode = (string)$settings->get(
+            'notificationRecipientMode',
+            self::NOTIFICATION_MODE_ALL
+        );
 	
 	}
 
@@ -704,6 +735,11 @@ class SettingsForm extends Model
 			'notifyGroups',
 			array_values(array_filter((array)$this->notifyGroups))
 		);
+
+        $settings->set(
+            'notificationRecipientMode',
+            (string)$this->notificationRecipientMode
+        );
 	
 	
 		return true;

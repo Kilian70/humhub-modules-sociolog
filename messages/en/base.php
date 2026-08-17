@@ -1,5 +1,14 @@
 <?php
 return [
+    'Empfänger der Benachrichtigungen' => 'Notification recipients',
+    'Keine Benachrichtigungen' => 'No notifications',
+    'Nur Mitglieder ausgewählter Gruppen' => 'Only members of selected groups',
+    'Nur Mitglieder des aktuell zuständigen Spaces' => 'Only members of the currently responsible space',
+    'Alle aktiven Benutzer' => 'All active users',
+    'Die handelnde Person wird in jedem Modus automatisch ausgeschlossen.' => 'The acting user is automatically excluded in every mode.',
+    'Die Gruppenauswahl wird nur im Modus „Nur Mitglieder ausgewählter Gruppen“ verwendet.' => 'The group selection is only used in the “Only members of selected groups” mode.',
+    'Beim Upgrade bleibt „Alle aktiven Benutzer“ zunächst als bisheriges Standardverhalten eingestellt.' => 'After upgrading, “All active users” initially remains selected to preserve the previous default behavior.',
+    'Bitte mindestens eine Benachrichtigungsgruppe auswählen.' => 'Please select at least one notification group.',
     'Ein Organ-Space muss einem Organ zugeordnet sein.' => 'An organ space must be assigned to a body.',
     'Ein Organ-Space muss im Logbuch sichtbar sein.' => 'An organ space must be visible in the logbook.',
     'Jedem Organ darf nur ein Organ-Space zugeordnet sein.' => 'Only one organ space may be assigned to each body.',

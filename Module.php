@@ -141,6 +141,7 @@ public function init()
             'effectiveDateAddExtraDay' => true,
             'preserveEntriesOnUserDelete' => false,
             'archiveUserId' => 0,
+            'notificationRecipientMode' => 'all',
         ];
 
         foreach ($defaults as $key => $value) {

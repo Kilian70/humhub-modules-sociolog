@@ -14,6 +14,8 @@ Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentier
 ### Events und Benachrichtigungen
 - Entry-Events einheitlich über `config.php` registriert
 - Die jeweils handelnde Person erhält keine eigene Benachrichtigung
+- Empfängerkreis ausdrücklich wählbar: keine Benachrichtigungen, ausgewählte Gruppen, aktuell zuständiger Space oder alle aktiven Benutzer
+- Bei ausgewählten Gruppen muss mindestens eine Gruppe hinterlegt sein; ein unbeabsichtigter Versand an alle findet nicht mehr statt
 - Empfänger aus mehreren Benachrichtigungsgruppen werden dedupliziert und blockweise verarbeitet
 - Duplikatschutz gilt pro Eintrag und Request auch bei mehreren Modellinstanzen
 
