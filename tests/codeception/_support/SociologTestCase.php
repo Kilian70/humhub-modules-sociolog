@@ -12,7 +12,10 @@ abstract class SociologTestCase extends HumHubDbTestCase
 {
     protected function disableNotifications(): void
     {
-        Yii::$app->getModule('sociolog')->settings->set('notificationsEnabled', false);
+        $settings = Yii::$app->getModule('sociolog')->settings;
+        $settings->set('notificationsEnabled', false);
+        $settings->set('defaultEffectiveDays', 10);
+        $settings->set('effectiveDateAddExtraDay', true);
     }
 
     protected function createEntry(Space $space, string $title = 'Runtime test entry'): Entry
