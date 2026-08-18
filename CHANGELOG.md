@@ -3,7 +3,7 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
-## [1.0.17] – in Vorbereitung
+## [1.0.17] – 2026-08-18
 
 ### Automatisierte Laufzeittests
 - Offizielle HumHub-Codeception-Teststruktur ergänzt
