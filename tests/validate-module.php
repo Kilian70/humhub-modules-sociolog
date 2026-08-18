@@ -86,6 +86,9 @@ $entryController = (string)file_get_contents($root . '/controllers/EntryControll
 $entryModel = (string)file_get_contents($root . '/models/Entry.php');
 $settingsForm = (string)file_get_contents($root . '/models/SettingsForm.php');
 $events = (string)file_get_contents($root . '/Events.php');
+$runtimeWorkflow = (string)file_get_contents($root . '/.github/workflows/runtime-tests.yml');
+$lifecycleTest = (string)file_get_contents($root . '/tests/codeception/unit/EntryLifecycleTest.php');
+$migrationTest = (string)file_get_contents($root . '/tests/codeception/unit/MigrationSchemaTest.php');
 
 if (!str_contains($config, 'ActiveRecord::EVENT_AFTER_INSERT')
     || !str_contains($config, 'ActiveRecord::EVENT_AFTER_UPDATE')
@@ -116,6 +119,14 @@ if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")
     || !str_contains($events, "'notificationRecipientMode'")
     || !str_contains($events, 'Membership::STATUS_MEMBER')) {
     $errors[] = 'The explicit notification recipient modes are incomplete.';
+}
+
+if (!str_contains($runtimeWorkflow, 'humhub-branch: v1.18.4')
+    || !str_contains($runtimeWorkflow, 'humhub-branch: v1.19.0-beta.1')
+    || !str_contains($lifecycleTest, 'testCreateEditAndSoftDelete')
+    || !str_contains($lifecycleTest, 'testConfiguredWriteAndDeleteRights')
+    || !str_contains($migrationTest, 'testCompleteMigrationResult')) {
+    $errors[] = 'HumHub runtime coverage for lifecycle, permissions and migrations is incomplete.';
 }
 
 if (is_file($root . '/permissions/ViewEntry.php')
