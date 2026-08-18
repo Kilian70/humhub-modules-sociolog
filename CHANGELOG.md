@@ -3,7 +3,7 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
-## [1.0.18] – in Vorbereitung
+## [1.0.18] – 2026-08-18
 
 ### Systemanforderungen
 - PHP-Mindestversion passend zu HumHub 1.18 von 8.1 auf 8.2 angehoben
