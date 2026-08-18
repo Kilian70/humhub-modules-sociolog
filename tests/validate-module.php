@@ -55,6 +55,10 @@ if (($composer['license'] ?? null) !== 'AGPL-3.0-or-later') {
     $errors[] = 'composer.json must use license=AGPL-3.0-or-later.';
 }
 
+if (($composer['require']['php'] ?? null) !== '>=8.2') {
+    $errors[] = 'composer.json must require PHP >=8.2 for HumHub 1.18+.';
+}
+
 if (($module['humhub']['minVersion'] ?? null) !== '1.18.0') {
     $errors[] = 'The declared minimum HumHub version must remain 1.18.0.';
 }
@@ -87,6 +91,7 @@ $entryModel = (string)file_get_contents($root . '/models/Entry.php');
 $settingsForm = (string)file_get_contents($root . '/models/SettingsForm.php');
 $events = (string)file_get_contents($root . '/Events.php');
 $runtimeWorkflow = (string)file_get_contents($root . '/.github/workflows/runtime-tests.yml');
+$moduleChecksWorkflow = (string)file_get_contents($root . '/.github/workflows/module-checks.yml');
 $lifecycleTest = (string)file_get_contents($root . '/tests/codeception/unit/EntryLifecycleTest.php');
 $migrationTest = (string)file_get_contents($root . '/tests/codeception/unit/MigrationSchemaTest.php');
 
@@ -127,6 +132,11 @@ if (!str_contains($runtimeWorkflow, 'humhub-branch: v1.18.4')
     || !str_contains($lifecycleTest, 'testConfiguredWriteAndDeleteRights')
     || !str_contains($migrationTest, 'testCompleteMigrationResult')) {
     $errors[] = 'HumHub runtime coverage for lifecycle, permissions and migrations is incomplete.';
+}
+
+if (!str_contains($moduleChecksWorkflow, "php-version: ['8.2', '8.3']")
+    || str_contains($moduleChecksWorkflow, "php-version: ['8.1'")) {
+    $errors[] = 'Static module checks must use the supported PHP 8.2 and 8.3 matrix.';
 }
 
 if (is_file($root . '/permissions/ViewEntry.php')

@@ -10,7 +10,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.17
+**Version:** 1.0.18
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  
@@ -101,7 +101,7 @@ nicht verwendet werden, wenn die Sociolog-Einträge erhalten bleiben sollen.
 1. **Ordner kopieren** nach protected/modules/sociolog  
 
 2. Stelle sicher, dass dein Server folgende Anforderungen erfüllt:
-   - PHP ≥ 8.1  
+   - PHP ≥ 8.2
    - MySQL/MariaDB  
    - Aktivierte HumHub-Cronjobs (`php protected/yii cron/run`) 
    - Schreibrechte im HumHub-Modulverzeichnis 
