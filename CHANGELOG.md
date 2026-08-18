@@ -3,6 +3,15 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.17] – in Vorbereitung
+
+### Automatisierte Laufzeittests
+- Offizielle HumHub-Codeception-Teststruktur ergänzt
+- Datenbank-Laufzeittests für Erstellen, Bearbeiten und den HumHub-Soft-Delete-Lifecycle ergänzt
+- Rechteprüfung für ausdrücklich konfigurierte Schreib- und Löschberechtigte ergänzt
+- Vollständige Ausführung der Modul-Migrationskette und Prüfung des resultierenden Datenbankschemas ergänzt
+- GitHub Actions testet das Modul gegen HumHub 1.18.4 und 1.19.0-beta.1 mit PHP 8.2 und 8.3
+
 ## [1.0.16] – 2026-08-17
 
 ### Workflow
