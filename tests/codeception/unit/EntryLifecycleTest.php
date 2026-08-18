@@ -2,7 +2,6 @@
 
 namespace humhub\modules\sociolog\tests\codeception\unit;
 
-use humhub\modules\content\models\Content;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
@@ -31,7 +30,7 @@ class EntryLifecycleTest extends SociologTestCase
         $content = $entry->content;
         $this->assertTrue($content->softDelete());
         $this->assertTrue($content->refresh());
-        $this->assertSame(Content::STATUS_DELETED, (int)$content->status);
+        $this->assertTrue($content->getStateService()->isDeleted());
         $this->assertFalse(
             Entry::find()->publishedOrLegacy()->andWhere([Entry::tableName() . '.id' => $entry->id])->exists()
         );
