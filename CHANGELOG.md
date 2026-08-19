@@ -3,6 +3,12 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.19] – in Vorbereitung
+
+### Kalender
+- Automatisch erzeugte Überprüfungstermine als reine Information ohne Zu-/Absage und Teilnehmerliste gekennzeichnet
+- Vorhandene Teilnehmerzuordnungen älterer automatisch erzeugter Überprüfungstermine werden beim nächsten Abgleich entfernt
+
 ## [1.0.18] – 2026-08-18
 
 ### Systemanforderungen

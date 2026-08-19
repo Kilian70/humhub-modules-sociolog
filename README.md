@@ -6,11 +6,12 @@
 - Ein zusätzlicher Modul-Cronjob ist **nicht erforderlich**; `run.php` steht bei Bedarf als Fallback zur Verfügung
 - Das Modul nutzt HumHub-Events (`EVENT_ON_DAILY_RUN`) für automatische Statuswechsel
 - Kalendertermine werden automatisch im **Space des zuständigen Organs** erstellt
+- Automatisch erzeugte Überprüfungstermine sind reine Informationen ohne Teilnahmefunktion
 - Der Cron-Mechanismus ist **Shared-Hosting-kompatibel** (z. B. Cyon) und benötigt nur die regulären HumHub-Cronjobs
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.18
+**Version:** 1.0.19
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  

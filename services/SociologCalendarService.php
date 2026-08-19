@@ -4,6 +4,7 @@ namespace humhub\modules\sociolog\services;
 
 use Yii;
 use humhub\modules\calendar\models\CalendarEntry;
+use humhub\modules\calendar\models\participation\CalendarEntryParticipation;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\space\models\Space;
 use humhub\modules\content\models\Content;
@@ -171,6 +172,14 @@ class SociologCalendarService
 
             $calendar->all_day = 1;
 
+            // Review dates are informational reminders, not events that
+            // require registrations or participation responses.
+            $calendar->participation_mode = CalendarEntryParticipation::PARTICIPATION_MODE_NONE;
+            $calendar->allow_decline = 0;
+            $calendar->allow_maybe = 0;
+            $calendar->max_participants = 0;
+            $calendar->participant_info = '';
+
 
             /**
              * ------------------------------------------------------------
@@ -191,6 +200,10 @@ class SociologCalendarService
                 "✔️ CalendarEntry gespeichert (#{$calendar->id})",
                 'sociolog.calendar'
             );
+
+            // Remove participant records left by entries created before the
+            // informational-only mode was introduced.
+            $calendar->participation->deleteAll();
 
 
             /**
