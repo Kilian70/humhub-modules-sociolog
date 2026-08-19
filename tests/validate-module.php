@@ -90,6 +90,7 @@ $entryController = (string)file_get_contents($root . '/controllers/EntryControll
 $entryModel = (string)file_get_contents($root . '/models/Entry.php');
 $settingsForm = (string)file_get_contents($root . '/models/SettingsForm.php');
 $events = (string)file_get_contents($root . '/Events.php');
+$calendarService = (string)file_get_contents($root . '/services/SociologCalendarService.php');
 $runtimeWorkflow = (string)file_get_contents($root . '/.github/workflows/runtime-tests.yml');
 $moduleChecksWorkflow = (string)file_get_contents($root . '/.github/workflows/module-checks.yml');
 $lifecycleTest = (string)file_get_contents($root . '/tests/codeception/unit/EntryLifecycleTest.php');
@@ -114,6 +115,11 @@ if (!str_contains($events, '->distinct()')
     || !str_contains($events, '->each(200)')
     || !str_contains($events, "['<>', 'user.id', (int)\$actor->id]")) {
     $errors[] = 'Notification recipients must be unique, batched and exclude the actor.';
+}
+
+if (!str_contains($calendarService, 'CalendarEntryParticipation::PARTICIPATION_MODE_NONE')
+    || !str_contains($calendarService, '$calendar->participation->deleteAll()')) {
+    $errors[] = 'Automatically generated review dates must remain informational calendar entries without participants.';
 }
 
 if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")
