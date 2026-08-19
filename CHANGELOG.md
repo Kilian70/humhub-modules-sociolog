@@ -3,7 +3,7 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
-## [1.0.19] – in Vorbereitung
+## [1.0.19] – 2026-08-19
 
 ### Kalender
 - Automatisch erzeugte Überprüfungstermine als reine Information ohne Zu-/Absage und Teilnehmerliste gekennzeichnet
