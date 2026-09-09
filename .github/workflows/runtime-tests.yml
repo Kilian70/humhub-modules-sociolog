@@ -17,12 +17,12 @@ jobs:
     uses: humhub/module-coding-standards/.github/workflows/codeception-base.yml@main
     with:
       module-id: sociolog
-      humhub-branch: v1.18.4
+      humhub-branch: v1.18.5
       php: "['8.2', '8.3']"
 
   humhub-1-19:
     uses: humhub/module-coding-standards/.github/workflows/codeception-base.yml@main
     with:
       module-id: sociolog
-      humhub-branch: v1.19.0-beta.1
+      humhub-branch: v1.19.0-beta.2
       php: "['8.2', '8.3']"
