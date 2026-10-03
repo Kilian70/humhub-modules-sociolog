@@ -17,14 +17,24 @@ class EntryQuery extends ActiveQueryContent
      */
     public function publishedOrLegacy(): self
     {
-        $contentTable = Content::tableName();
+        $contentAlias = 'sociolog_content_state';
+        $entryTable = Entry::tableName();
 
         return $this
-            ->joinWith('content')
+            // ContentActiveRecord::getContent() contains a relation-level
+            // WHERE condition. Used through joinWith(), that condition turns
+            // the intended LEFT JOIN into an effective INNER JOIN and drops
+            // genuine legacy rows. Keep the model condition in the JOIN
+            // clause so rows without Content remain visible.
+            ->leftJoin(
+                [$contentAlias => Content::tableName()],
+                "{$contentAlias}.object_id = {$entryTable}.id AND {$contentAlias}.object_model = :sociologObjectModel",
+                [':sociologObjectModel' => Entry::class]
+            )
             ->andWhere([
                 'or',
-                ['!=', $contentTable . '.state', Content::STATE_DELETED],
-                [$contentTable . '.id' => null],
+                ['!=', $contentAlias . '.state', Content::STATE_DELETED],
+                [$contentAlias . '.id' => null],
             ]);
     }
 

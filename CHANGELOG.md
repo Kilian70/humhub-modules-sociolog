@@ -3,6 +3,22 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.20] – 2026-10-03
+
+### Sicherheit und Datenintegrität
+- Verwaltung der Logbuch-Organe zusätzlich auf Systemadministrator:innen beschränkt
+- Kreisförmige Organ-Hierarchien werden bei der Validierung verhindert
+- Pro Eintrag werden höchstens 50 Protokoll-Links verarbeitet; ungültige Link-Protokolle bleiben gesperrt
+- Historischer CSV-Import prüft auch die maximale Titellänge und validiert Einträge vor dem Speichern erneut
+- Verwendete Entscheidungstypen melden beim Löschversuch nun korrekt, weshalb sie erhalten bleiben
+- Echte historische Einträge ohne HumHub-Content-Zeile werden wieder berücksichtigt, weich gelöschte Inhalte weiterhin ausgeschlossen
+
+### Leistung und Tests
+- Tägliche Statusprüfung liest grosse Logbücher speicherschonend in Blöcken von 500 Einträgen
+- Laufzeittests für Eingabevalidierung, sichere Protokoll-URLs und Organ-Hierarchien ergänzt
+- Wiederholbarer Belastungstest mit standardmässig 750 und lokal erfolgreich mit 5’000 Einträgen ergänzt
+- Lokale Testkonfiguration für getrennte MAMP-Datenbanken portabel gemacht
+
 ## [1.0.19] – 2026-08-19
 
 ### Kalender

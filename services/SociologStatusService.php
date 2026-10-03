@@ -36,13 +36,15 @@ public static function run(): void
 				Entry::tableName() . '.forwarded_to'
 			])
             ->andWhere(['!=', Entry::tableName() . '.status', 'expired'])
-            ->asArray()
-            ->all();
+            ->asArray();
 
-        $total = count($rows);
+        $total = 0;
         $updated = 0;
 
-        foreach ($rows as $row) {
+        // In Batches lesen, damit der tägliche Lauf auch bei grossen
+        // Logbüchern keinen proportional wachsenden PHP-Speicher benötigt.
+        foreach ($rows->each(500) as $row) {
+            $total++;
 
 			// Wenn Entscheid weitergeleitet ist → Status NICHT ändern
 			if (!empty($row['forwarded_to'])) {

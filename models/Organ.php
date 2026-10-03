@@ -21,6 +21,9 @@ class Organ extends ActiveRecord
 
         [['parent_id', 'sort_order', 'created_by', 'updated_by', 'organ_space_id'], 'integer'],
 
+        [['parent_id'], 'exist', 'targetClass' => self::class, 'targetAttribute' => ['parent_id' => 'id'], 'skipOnEmpty' => true],
+        [['parent_id'], 'validateParentHierarchy'],
+
         [['created_at', 'updated_at'], 'safe'],
 
         [['name'], 'string', 'max' => 255],
@@ -28,6 +31,34 @@ class Organ extends ActiveRecord
         [['color'], 'string', 'max' => 20],
     ];
 }
+
+    public function validateParentHierarchy(string $attribute): void
+    {
+        if (empty($this->$attribute)) {
+            return;
+        }
+
+        $visited = [];
+        $parentId = (int)$this->$attribute;
+
+        while ($parentId > 0) {
+            if (($this->id !== null && $parentId === (int)$this->id) || isset($visited[$parentId])) {
+                $this->addError(
+                    $attribute,
+                    Yii::t('SociologModule.base', 'Die Organ-Hierarchie darf keinen Kreis enthalten.')
+                );
+                return;
+            }
+
+            $visited[$parentId] = true;
+            $parent = self::findOne($parentId);
+            if ($parent === null) {
+                return;
+            }
+
+            $parentId = (int)$parent->parent_id;
+        }
+    }
 
     public function attributeLabels(): array
     {

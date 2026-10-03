@@ -13,6 +13,10 @@ return [
     'Ein Organ-Space muss im Logbuch sichtbar sein.' => 'An organ space must be visible in the logbook.',
     'Jedem Organ darf nur ein Organ-Space zugeordnet sein.' => 'Only one organ space may be assigned to each body.',
     'Der Entscheid muss zuerst vom Zielorgan übernommen werden.' => 'The decision must first be accepted by the target body.',
+    'Titel ist zu lang (maximal 255 Zeichen).' => 'The title is too long (maximum 255 characters).',
+    'Der Entscheid-Typ "{name}" wird noch verwendet und kann nicht gelöscht werden.' => 'The decision type "{name}" is still in use and cannot be deleted.',
+    'Nur Administrator:innen dürfen die Logbuch-Organe verwalten.' => 'Only administrators may manage logbook bodies.',
+    'Die Organ-Hierarchie darf keinen Kreis enthalten.' => 'The body hierarchy must not contain a cycle.',
 
     // ============================================================
     // 🔹 General

@@ -95,6 +95,8 @@ $runtimeWorkflow = (string)file_get_contents($root . '/.github/workflows/runtime
 $moduleChecksWorkflow = (string)file_get_contents($root . '/.github/workflows/module-checks.yml');
 $lifecycleTest = (string)file_get_contents($root . '/tests/codeception/unit/EntryLifecycleTest.php');
 $migrationTest = (string)file_get_contents($root . '/tests/codeception/unit/MigrationSchemaTest.php');
+$securityTest = (string)file_get_contents($root . '/tests/codeception/unit/SecurityValidationTest.php');
+$stressTest = (string)file_get_contents($root . '/tests/codeception/unit/StatusBatchStressTest.php');
 
 if (!str_contains($config, 'ActiveRecord::EVENT_AFTER_INSERT')
     || !str_contains($config, 'ActiveRecord::EVENT_AFTER_UPDATE')
@@ -132,12 +134,19 @@ if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")
     $errors[] = 'The explicit notification recipient modes are incomplete.';
 }
 
-if (!str_contains($runtimeWorkflow, 'humhub-branch: v1.18.4')
-    || !str_contains($runtimeWorkflow, 'humhub-branch: v1.19.0-beta.1')
+if (!str_contains($runtimeWorkflow, 'codeception-master.yml@main')
+    || !str_contains($runtimeWorkflow, 'codeception-develop.yml@main')
     || !str_contains($lifecycleTest, 'testCreateEditAndSoftDelete')
     || !str_contains($lifecycleTest, 'testConfiguredWriteAndDeleteRights')
     || !str_contains($migrationTest, 'testCompleteMigrationResult')) {
     $errors[] = 'HumHub runtime coverage for lifecycle, permissions and migrations is incomplete.';
+}
+
+if (!str_contains($securityTest, 'testProtocolRejectsUnsafeAndOversizedUrls')
+    || !str_contains($securityTest, 'testOrganRejectsHierarchyCycle')
+    || !str_contains($stressTest, 'testStatusRunProcessesLargeLogbookInBatches')
+    || !str_contains($stressTest, 'SOCIOLOG_STRESS_ENTRY_COUNT')) {
+    $errors[] = 'Security validation and configurable batch stress coverage are incomplete.';
 }
 
 if (!str_contains($moduleChecksWorkflow, "php-version: ['8.2', '8.3']")

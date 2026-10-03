@@ -115,7 +115,18 @@ class DecisionTypeController extends Controller
 
         $model = $this->findModel($id);
         $name = $model->name;
-        $model->delete();
+        if ($model->delete() === false) {
+            Yii::$app->session->setFlash(
+                'warning',
+                Yii::t(
+                    'SociologModule.base',
+                    'Der Entscheid-Typ "{name}" wird noch verwendet und kann nicht gelöscht werden.',
+                    ['name' => $name]
+                )
+            );
+
+            return $this->redirect(['index']);
+        }
 
         Yii::$app->session->setFlash('info',
             Yii::t('SociologModule.base', 'Der Entscheid-Typ "{name}" wurde gelöscht.', ['name' => $name])

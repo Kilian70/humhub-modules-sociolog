@@ -29,6 +29,8 @@ use humhub\modules\sociolog\models\ReviewForm;
  */
 class EntryController extends Controller
 {
+    private const MAX_PROTOCOLS_PER_ENTRY = 50;
+
     // ============================================================
     // 🔐 Zugriff & HTTP-Methoden
     // ============================================================
@@ -802,10 +804,18 @@ public function actionReview($id)
      */
     private function replaceProtocols(int $entryId): void
     {
-        Protocol::deleteAll(['entry_id' => $entryId]);
-
         $titles = Yii::$app->request->post('protocol_title', []);
         $urls = Yii::$app->request->post('protocol_url', []);
+
+        if (!is_array($titles) || !is_array($urls)) {
+            throw new \RuntimeException('Invalid protocol input.');
+        }
+
+        if (max(count($titles), count($urls)) > self::MAX_PROTOCOLS_PER_ENTRY) {
+            throw new \RuntimeException('Too many protocol links.');
+        }
+
+        Protocol::deleteAll(['entry_id' => $entryId]);
 
         foreach ($titles as $index => $rawTitle) {
             $title = trim((string)$rawTitle);

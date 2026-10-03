@@ -108,6 +108,8 @@ class SociologImportService
 
         if ($clean['title'] === '') {
             $errors[] = Yii::t('SociologModule.base', 'Titel fehlt.');
+        } elseif (mb_strlen($clean['title']) > 255) {
+            $errors[] = Yii::t('SociologModule.base', 'Titel ist zu lang (maximal 255 Zeichen).');
         }
         if ($clean['decision'] === '') {
             $errors[] = Yii::t('SociologModule.base', 'Beschluss fehlt.');
@@ -216,8 +218,11 @@ class SociologImportService
                 $entry->review_date = $row['reviewDate'];
                 $entry->status = Entry::STATUS_AUTO;
 
-                if (!$entry->save(false)) {
-                    throw new \RuntimeException('Historical entry could not be saved.');
+                if (!$entry->save()) {
+                    throw new \RuntimeException(
+                        'Historical entry could not be saved: '
+                        . json_encode($entry->getErrors(), JSON_UNESCAPED_UNICODE)
+                    );
                 }
 
                 $timestamp = $decisionDate->setTime(12, 0)->getTimestamp();

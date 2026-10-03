@@ -403,6 +403,8 @@ return $this->render('spaces', [
 
 public function actionOrgans()
 {
+    $this->requireSystemAdmin();
+
     $organs = Organ::find()
         ->orderBy([
             'sort_order' => SORT_ASC,
@@ -422,6 +424,8 @@ public function actionOrgans()
 
 public function actionCreateOrgan()
 {
+    $this->requireSystemAdmin();
+
     $model = new Organ();
 
     if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -440,6 +444,8 @@ public function actionCreateOrgan()
 
 public function actionUpdateOrgan($id)
 {
+    $this->requireSystemAdmin();
+
     $model = Organ::findOne($id);
 
     if (!$model) {
@@ -462,6 +468,8 @@ public function actionUpdateOrgan($id)
 
 public function actionDeleteOrgan($id)
 {
+    $this->requireSystemAdmin();
+
     $model = Organ::findOne($id);
 
     if ($model) {
@@ -469,5 +477,14 @@ public function actionDeleteOrgan($id)
     }
 
     return $this->redirect(['organs']);
+}
+
+private function requireSystemAdmin(): void
+{
+    if (!Yii::$app->user->isAdmin()) {
+        throw new ForbiddenHttpException(
+            Yii::t('SociologModule.base', 'Nur Administrator:innen dürfen die Logbuch-Organe verwalten.')
+        );
+    }
 }
 }
