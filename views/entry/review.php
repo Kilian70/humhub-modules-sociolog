@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use humhub\modules\content\widgets\richtext\RichTextField;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 use humhub\modules\sociolog\models\EntryReview;
 
 /** @var yii\web\View $this */
@@ -29,7 +31,11 @@ $this->title = Yii::t('SociologModule.base', 'Überprüfung dokumentieren');
 
         <?= $form->field($formModel, 'result')->dropDownList(EntryReview::resultOptions()) ?>
 
-        <?= $form->field($formModel, 'justification')->textarea(['rows' => 5]) ?>
+        <?= $form->field($formModel, 'justification')->widget(RichTextField::class, [
+            'id' => 'sociolog-review-justification',
+            'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+            'pluginOptions' => ['maxHeight' => '320px'],
+        ]) ?>
 
         <?= $form->field($formModel, 'reviewDate')->input('date')->hint(
             Yii::t('SociologModule.base', 'Nur erforderlich, wenn der Entscheid bestehen bleibt.')

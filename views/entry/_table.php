@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 use humhub\modules\sociolog\models\Entry;
 
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -127,9 +128,7 @@ $topicOwnerLabel = $module->getCustomLabel(
 
             <!-- Beschluss -->
             <td>
-              <?= Html::encode(
-                  mb_strimwidth(strip_tags($decision), 0, 120, ' …')
-              ) ?>
+              <?= Html::encode(RichTextHelper::preview($decision, 120)) ?>
             </td>
 
             <!-- Inkrafttreten -->

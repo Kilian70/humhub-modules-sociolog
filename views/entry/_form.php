@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use humhub\modules\content\widgets\richtext\RichTextField;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 use humhub\modules\sociolog\models\Entry;
 
 /* @var yii\web\View $this */
@@ -172,11 +174,19 @@ $allowedOrgans,
 <div class="col-12 col-md-6">
 
 <?= $form->field($model,'decision')
-->textarea(['rows'=>4])
+->widget(RichTextField::class, [
+    'id' => 'sociolog-entry-decision',
+    'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+    'pluginOptions' => ['maxHeight' => '320px'],
+])
 ->label(Yii::t('SociologModule.base','Beschluss')) ?>
 
 <?= $form->field($model,'description')
-->textarea(['rows'=>4])
+->widget(RichTextField::class, [
+    'id' => 'sociolog-entry-description',
+    'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+    'pluginOptions' => ['maxHeight' => '320px'],
+])
 ->label(Yii::t('SociologModule.base','Begründung')) ?>
 
 </div>

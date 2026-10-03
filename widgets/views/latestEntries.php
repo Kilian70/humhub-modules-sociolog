@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use humhub\modules\sociolog\assets\SociologAsset;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 
 /** @var humhub\modules\sociolog\models\Entry[] $entries */
 
@@ -119,7 +120,7 @@ $showDecisionTypeHeader = $module
         $typeTextColor = \humhub\modules\sociolog\models\DecisionType::getAccessibleTextColor($typeColor);
         $url   = Url::to(['/sociolog/entry/view', 'id' => $entry->id]);
         $date  = Yii::$app->formatter->asDate($entry->decision_date, 'php:d.m.Y');
-        $short = Html::encode(mb_strimwidth(strip_tags((string)$entry->decision), 0, 130, ' …'));
+        $short = Html::encode(RichTextHelper::preview((string)$entry->decision, 130));
       ?>
       <div class="sociolog-widget-card" style="--oval-color: <?= $colorOrgan ?>;">
         <div class="sociolog-widget-bar" style="background: <?= $colorOrgan ?>;"></div>

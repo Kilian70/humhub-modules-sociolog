@@ -14,6 +14,7 @@ use humhub\modules\sociolog\models\EntryFlow;
 use humhub\modules\sociolog\models\Protocol;
 use humhub\modules\sociolog\models\ReviewForm;
 use humhub\modules\sociolog\models\EntryReview;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 
 /**
  * ============================================================
@@ -977,8 +978,8 @@ public function actionReview($id)
                 $entry->decisionType->name ?? '',
                 $entry->organName ?? '',
                 $entry->topic_owner ?? '',
-                strip_tags($entry->decision ?? ''),
-                strip_tags($entry->description ?? ''),
+                RichTextHelper::plainText($entry->decision ?? ''),
+                RichTextHelper::plainText($entry->description ?? ''),
                 $entry->decision_date ?? '',
                 $entry->effective_date ?? '',
                 $entry->review_date ?? '',

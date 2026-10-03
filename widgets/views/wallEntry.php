@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
+use humhub\modules\content\widgets\richtext\RichText;
 use humhub\modules\sociolog\assets\SociologAsset;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 
 /** @var humhub\modules\sociolog\models\Entry $entry */
 SociologAsset::register($this);
@@ -29,7 +31,10 @@ SociologAsset::register($this);
 </div>
 
     <div class="sociolog-description">
-        <?= nl2br(Html::encode($entry->decision)) ?>
+        <?= RichText::widget([
+            'text' => $entry->decision,
+            'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+        ]) ?>
     </div>
 
     <div class="mt-2 small text-muted">

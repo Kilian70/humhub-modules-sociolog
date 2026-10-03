@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use humhub\modules\content\widgets\richtext\RichText;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 
 /* @var $this yii\web\View */
 /* @var $model humhub\modules\sociolog\models\Entry */
@@ -102,7 +104,12 @@ $protocolsLabel = $module->getCustomLabel(
     ============================================================ -->
     <h4><?= Yii::t('SociologModule.base', 'Beschluss') ?></h4>
     <div class="print-text">
-        <?= nl2br(Html::encode($model->decision ?: '–')) ?>
+        <?= $model->decision
+            ? RichText::widget([
+                'text' => $model->decision,
+                'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+            ])
+            : '–' ?>
     </div>
 
     <!-- ============================================================
@@ -111,7 +118,10 @@ $protocolsLabel = $module->getCustomLabel(
     <?php if (!empty($model->description)): ?>
         <h4><?= Yii::t('SociologModule.base', 'Begründung') ?></h4>
         <div class="print-text">
-            <?= nl2br(Html::encode($model->description)) ?>
+            <?= RichText::widget([
+                'text' => $model->description,
+                'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+            ]) ?>
         </div>
     <?php endif; ?>
 

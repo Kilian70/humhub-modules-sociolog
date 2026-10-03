@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\models\SpaceConfig;
 use humhub\modules\space\models\Space;
@@ -105,14 +106,7 @@ if ($container instanceof Space) {
         <!-- Text-Snippet -->
         <?php if (trim($decisionText) !== ''): ?>
             <div class="sociolog-snippet mt-2">
-                <?= Html::encode(
-                    mb_strimwidth(
-                        strip_tags($decisionText),
-                        0,
-                        140,
-                        ' …'
-                    )
-                ) ?>
+                <?= Html::encode(RichTextHelper::preview($decisionText, 140)) ?>
             </div>
         <?php endif; ?>
 

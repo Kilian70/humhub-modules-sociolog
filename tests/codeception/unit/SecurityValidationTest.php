@@ -8,6 +8,7 @@ use humhub\modules\sociolog\models\Protocol;
 use humhub\modules\sociolog\models\EntryReview;
 use humhub\modules\sociolog\models\ReviewForm;
 use humhub\modules\sociolog\models\SpaceConfig;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 use sociolog\SociologTestCase;
 
 class SecurityValidationTest extends SociologTestCase
@@ -83,5 +84,19 @@ class SecurityValidationTest extends SociologTestCase
         $config->setWriterUserGuids(['guid-a', 'guid-a', '', 'guid-b']);
 
         $this->assertSame(['guid-a', 'guid-b'], $config->getWriterUserGuids());
+    }
+
+    public function testRichTextPreviewRemovesFormattingMarkup(): void
+    {
+        $richText = "**Wichtiger Entscheid**\n\n- Erster Punkt\n- [Zweiter Punkt](https://example.org)";
+
+        $plainText = RichTextHelper::plainText($richText, true);
+        $preview = RichTextHelper::preview($richText, 32);
+
+        $this->assertStringContainsString('Wichtiger Entscheid', $plainText);
+        $this->assertStringContainsString('Erster Punkt', $plainText);
+        $this->assertStringNotContainsString('**', $plainText);
+        $this->assertStringNotContainsString('](', $plainText);
+        $this->assertLessThanOrEqual(32, mb_strwidth($preview));
     }
 }

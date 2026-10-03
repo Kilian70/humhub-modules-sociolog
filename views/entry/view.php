@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use humhub\modules\content\widgets\richtext\RichText;
 use humhub\modules\user\widgets\Image as UserImage;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\models\EntryFlow;
 use humhub\modules\sociolog\models\EntryReview;
@@ -378,7 +380,12 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
       <i class="fa fa-file-text-o me-2 text-primary"></i>
       <strong><?= Yii::t('SociologModule.base', 'Beschluss') ?>:</strong>
     </h6>
-    <p class="ps-4"><?= nl2br(Html::encode($model->decision)) ?></p>
+    <div class="ps-4">
+      <?= RichText::widget([
+          'text' => $model->decision,
+          'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+      ]) ?>
+    </div>
 
     <!-- Begründung -->
     <?php if ($model->description): ?>
@@ -386,7 +393,12 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
         <i class="fa fa-quote-left me-2 text-primary"></i>
         <strong><?= Yii::t('SociologModule.base', 'Begründung') ?>:</strong>
       </h6>
-      <p class="ps-4"><?= nl2br(Html::encode($model->description)) ?></p>
+      <div class="ps-4">
+        <?= RichText::widget([
+            'text' => $model->description,
+            'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+        ]) ?>
+      </div>
     <?php endif; ?>
 
     <?php if (!empty($model->reviews)): ?>
@@ -405,7 +417,12 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
                   · <?= Html::encode($review->creator->displayName) ?>
                 <?php endif; ?>
               </span>
-              <p class="mb-1 mt-2"><?= nl2br(Html::encode($review->justification)) ?></p>
+              <div class="mb-1 mt-2">
+                <?= RichText::widget([
+                    'text' => $review->justification,
+                    'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+                ]) ?>
+              </div>
               <?php if ($review->next_review_date): ?>
                 <div class="small text-muted">
                   <?= Yii::t('SociologModule.base', 'Nächste Überprüfung ab') ?>:

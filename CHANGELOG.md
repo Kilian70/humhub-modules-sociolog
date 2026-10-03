@@ -3,6 +3,17 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.26] – 2026-10-03
+
+### Bedienung
+- Reduzierten HumHub-Texteditor für Beschluss, Begründung und Begründung der Überprüfung ergänzt
+- Datei-Uploads, Erwähnungen, eingebettete Inhalte und Emojis in den formellen Logbuchfeldern deaktiviert
+- Formatierte Texte in Detail-, Druck- und Streamansicht sicher dargestellt
+- Karten, Tabelle, Dashboard-Widget und CSV-Export in sauberen unformatierten Text umgewandelt
+
+### Tests
+- Automatisierte Prüfung für die Entfernung von Formatierungszeichen in Kurzansichten ergänzt
+
 ## [1.0.25] – 2026-10-03
 
 ### Administration
