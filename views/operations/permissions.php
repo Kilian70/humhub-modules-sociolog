@@ -33,6 +33,22 @@ $this->title = Yii::t('SociologModule.base', 'Zuständige Personen der Kreise');
           </tr>
         </thead>
         <tbody>
+          <?php if ($configs === []): ?>
+            <tr>
+              <td colspan="3">
+                <div class="alert alert-info mb-0">
+                  <?= Yii::t('SociologModule.base', 'Es ist noch kein sichtbarer Logbuch-Space eingerichtet.') ?>
+                  <?php if (Yii::$app->user->isAdmin()): ?>
+                    <?= Html::a(
+                      Yii::t('SociologModule.base', 'Spaces jetzt zuordnen'),
+                      ['/sociolog/admin/spaces'],
+                      ['class' => 'alert-link ms-1']
+                    ) ?>
+                  <?php endif; ?>
+                </div>
+              </td>
+            </tr>
+          <?php endif; ?>
           <?php foreach ($configs as $config): ?>
             <tr>
               <td>

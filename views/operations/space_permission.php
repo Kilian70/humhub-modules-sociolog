@@ -22,9 +22,11 @@ $this->title = Yii::t('SociologModule.base', 'Schreibberechtigung für {space}',
       SpaceConfig::WRITER_MODE_SELECTED => Yii::t('SociologModule.base', 'Nur ausgewählte zuständige Personen'),
     ])->hint(Yii::t('SociologModule.base', 'Bei der zweiten Variante verlieren nicht ausgewählte Space-Administrator:innen ihr automatisches Schreibrecht im Logbuch.')) ?>
 
-    <?= $form->field($model, 'writerUsers')->widget(UserPickerField::class, [
-      'maxSelection' => 0,
-    ])->hint(Yii::t('SociologModule.base', 'Die ausgewählten Personen müssen Mitglied dieses Spaces sein.')) ?>
+    <div id="sociolog-selected-writers">
+      <?= $form->field($model, 'writerUsers')->widget(UserPickerField::class, [
+        'maxSelection' => 0,
+      ])->hint(Yii::t('SociologModule.base', 'Die ausgewählten Personen müssen Mitglied dieses Spaces sein.')) ?>
+    </div>
 
     <?= Html::submitButton(
       '<i class="fa fa-save me-1" aria-hidden="true"></i>' . Yii::t('SociologModule.base', 'Speichern'),
@@ -35,3 +37,23 @@ $this->title = Yii::t('SociologModule.base', 'Schreibberechtigung für {space}',
     <?php ActiveForm::end(); ?>
   </div>
 </div>
+
+<?php
+$selectedMode = json_encode(SpaceConfig::WRITER_MODE_SELECTED);
+$this->registerJs(<<<JS
+(function () {
+    const container = document.getElementById('sociolog-selected-writers');
+    const radios = document.querySelectorAll('input[name="SpaceWriterForm[writerMode]"]');
+
+    function updateWriterPickerVisibility() {
+        const selected = document.querySelector('input[name="SpaceWriterForm[writerMode]"]:checked');
+        container.hidden = !selected || selected.value !== {$selectedMode};
+    }
+
+    radios.forEach(function (radio) {
+        radio.addEventListener('change', updateWriterPickerVisibility);
+    });
+    updateWriterPickerVisibility();
+})();
+JS);
+?>

@@ -253,6 +253,21 @@ echo Html::encode(implode(', ', $names));
   <i class="fa fa-lock me-1" aria-hidden="true"></i>
   <?= Yii::t('SociologModule.base', 'Berechtigungen') ?>
 </legend>
+
+<div class="alert alert-info d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <strong><?= Yii::t('SociologModule.base', 'Zuständige Personen der Kreise') ?></strong><br>
+    <span class="small">
+      <?= Yii::t('SociologModule.base', 'Lege je Space fest, ob alle Space-Administrator:innen oder ausgewählte zuständige Personen Logbucheinträge erfassen dürfen.') ?>
+    </span>
+  </div>
+  <?= Html::a(
+      '<i class="fa fa-users me-1" aria-hidden="true"></i>' . Yii::t('SociologModule.base', 'Zuständige Personen verwalten'),
+      ['/sociolog/operations/permissions'],
+      ['class' => 'btn btn-info']
+  ) ?>
+</div>
+
 <div class="row g-3">
 
 

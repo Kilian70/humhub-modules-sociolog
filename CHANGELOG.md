@@ -3,6 +3,13 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.23] – 2026-10-03
+
+### Bedienung der Berechtigungen
+- Direkten Zugang zur Verwaltung der zuständigen Personen im Abschnitt „Berechtigungen“ ergänzt
+- Personenauswahl wird nur im Modus „Nur ausgewählte zuständige Personen“ angezeigt
+- Leere Berechtigungsübersicht erklärt, dass zuerst ein sichtbarer Logbuch-Space eingerichtet werden muss, und verlinkt für Administrator:innen direkt zur Space-Zuordnung
+
 ## [1.0.22] – 2026-10-03
 
 ### Rollen und Schreibberechtigungen
