@@ -7,14 +7,18 @@ use yii\helpers\Html;
 /** @var SpaceConfig[] $configs */
 
 $this->title = Yii::t('SociologModule.base', 'Zuständige Personen der Kreise');
+$isSystemAdmin = Yii::$app->user->isAdmin();
 ?>
 
 <div class="panel panel-default">
   <div class="panel-heading d-flex justify-content-between align-items-center">
     <h1 class="h5 mb-0"><?= Html::encode($this->title) ?></h1>
     <?= Html::a(
-      '<i class="fa fa-arrow-left me-1" aria-hidden="true"></i>' . Yii::t('SociologModule.base', 'Zurück zum Logbuch'),
-      ['/sociolog/entry/index'],
+      '<i class="fa fa-arrow-left me-1" aria-hidden="true"></i>' . Yii::t(
+        'SociologModule.base',
+        $isSystemAdmin ? 'Zurück zum Adminbereich' : 'Zurück zum Logbuch'
+      ),
+      $isSystemAdmin ? ['/sociolog/admin/index'] : ['/sociolog/entry/index'],
       ['class' => 'btn btn-sm btn-outline-secondary']
     ) ?>
   </div>
@@ -38,7 +42,7 @@ $this->title = Yii::t('SociologModule.base', 'Zuständige Personen der Kreise');
               <td colspan="3">
                 <div class="alert alert-info mb-0">
                   <?= Yii::t('SociologModule.base', 'Es ist noch kein sichtbarer Logbuch-Space eingerichtet.') ?>
-                  <?php if (Yii::$app->user->isAdmin()): ?>
+                  <?php if ($isSystemAdmin): ?>
                     <?= Html::a(
                       Yii::t('SociologModule.base', 'Spaces jetzt zuordnen'),
                       ['/sociolog/admin/spaces'],

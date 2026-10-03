@@ -711,6 +711,7 @@ return [
 'Der ursprüngliche Beschlusstext bleibt unverändert. Dokumentiere hier das Ergebnis und die Begründung der Überprüfung.' => 'The original decision text remains unchanged. Document the review result and justification here.',
 'Dokumentierte Überprüfungen' => 'Documented reviews',
 'Zurück zum Logbuch' => 'Back to the logbook',
+'Zurück zum Adminbereich' => 'Back to administration',
 'Die Schreibberechtigung wird je Space auf alle Space-Administrator:innen oder auf ausgewählte zuständige Personen festgelegt.' => 'Write access is configured per space for either all space administrators or selected responsible members.',
 
 ];

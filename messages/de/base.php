@@ -711,6 +711,7 @@ return [
 'Der ursprüngliche Beschlusstext bleibt unverändert. Dokumentiere hier das Ergebnis und die Begründung der Überprüfung.' => 'Der ursprüngliche Beschlusstext bleibt unverändert. Dokumentiere hier das Ergebnis und die Begründung der Überprüfung.',
 'Dokumentierte Überprüfungen' => 'Dokumentierte Überprüfungen',
 'Zurück zum Logbuch' => 'Zurück zum Logbuch',
+'Zurück zum Adminbereich' => 'Zurück zum Adminbereich',
 'Die Schreibberechtigung wird je Space auf alle Space-Administrator:innen oder auf ausgewählte zuständige Personen festgelegt.' => 'Die Schreibberechtigung wird je Space auf alle Space-Administrator:innen oder auf ausgewählte zuständige Personen festgelegt.',
 
 ];

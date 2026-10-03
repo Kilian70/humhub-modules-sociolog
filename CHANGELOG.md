@@ -3,6 +3,12 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.24] – 2026-10-03
+
+### Navigation
+- Systemadministrator:innen kehren von der Verwaltung der zuständigen Personen direkt zu den Moduleinstellungen zurück
+- Mitglieder des Betriebs Logbuch ohne Systemadministrationsrecht kehren weiterhin sicher zur Logbuchübersicht zurück
+
 ## [1.0.23] – 2026-10-03
 
 ### Bedienung der Berechtigungen
