@@ -228,7 +228,7 @@ public function actionSpaces()
      * Seitentitel
      * -------------------------------------------------------- */
 
-    $this->view->title = 'Sociolog – Spaces & Bereiche';
+    $this->view->title = Yii::t('SociologModule.base', 'Organe, Bereiche und Spaces verwalten');
 
 
 /* --------------------------------------------------------
@@ -405,16 +405,9 @@ public function actionOrgans()
 {
     $this->requireSystemAdmin();
 
-    $organs = Organ::find()
-        ->orderBy([
-            'sort_order' => SORT_ASC,
-            'name' => SORT_ASC
-        ])
-        ->all();
-
-    return $this->render('organs', [
-        'organs' => $organs
-    ]);
+    // Bestehende Links bleiben gültig. Die Verwaltung von Organen und Spaces
+    // befindet sich neu bewusst auf einer gemeinsamen Seite.
+    return $this->redirect(['spaces']);
 }
 
 
@@ -429,7 +422,7 @@ public function actionCreateOrgan()
     $model = new Organ();
 
     if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['organs']);
+        return $this->redirect(['spaces']);
     }
 
     return $this->render('organ_form', [
@@ -453,7 +446,7 @@ public function actionUpdateOrgan($id)
     }
 
     if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['organs']);
+        return $this->redirect(['spaces']);
     }
 
     return $this->render('organ_form', [
@@ -476,7 +469,7 @@ public function actionDeleteOrgan($id)
         $model->delete();
     }
 
-    return $this->redirect(['organs']);
+    return $this->redirect(['spaces']);
 }
 
 private function requireSystemAdmin(): void

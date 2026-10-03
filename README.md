@@ -11,7 +11,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.20
+**Version:** 1.0.21
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  
@@ -32,7 +32,7 @@ Das Modul wurde speziell für gemeinschaftliche Wohn- und Organisationsprojekte 
 - **Benachrichtigungen:** Glocken- und E-Mail-Benachrichtigungen bei neuen oder geänderten Einträgen  
 - **Filter & Suche:** Jahr, Organ, Entscheidungsart, Status und Volltextsuche  
 - **Darstellung:** Karten- und Tabellenansicht, Druck-Ansicht, CSV-Export  
-- **Verwaltung:** Eigene Admin-Seite zur Konfiguration von Organen, Farben, Links und Standardwerten  
+- **Verwaltung:** Gemeinsame hierarchische Admin-Liste für Organe, Space-Zuordnungen, Rechte, Sichtbarkeit und Links
 - **Mehrsprachigkeit:** Deutsch und Englisch (UK)  
 - **Kalender-Integration** (Überprüfungstermine sichtbar)  
 - **Stream-Integration**
@@ -126,6 +126,7 @@ nicht aktiviert werden.
 Administrator:innen können unter **Administration → Module → Logbuch → Konfigurieren**
 unter anderem festlegen:
 
+- wie Organe hierarchisch aufgebaut und welche Spaces ihnen in der gemeinsamen Verwaltung zugeordnet sind
 - ob eine Informationsseite zur Benutzung und zu den Regeln des Logbuchs angezeigt wird
 - welche Entscheidungstypen bei neuen Einträgen und in den Filtern sichtbar sind
 - ob neue Einträge immer eine feste Entscheidungsart erhalten

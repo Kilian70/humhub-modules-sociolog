@@ -2,7 +2,7 @@
 
 /**
  * ============================================================
- * 🔹 Admin-View: Spaces & Bereiche
+ * 🔹 Gemeinsame Verwaltung von Organen, Bereichen und Spaces
  * ------------------------------------------------------------
  * Diese Seite erlaubt Administrator:innen:
  *
@@ -32,63 +32,13 @@ use yii\widgets\ActiveForm;
  * Seitentitel (übersetzbar)
  * ------------------------------------------------------------ */
 
-$this->title = Yii::t('SociologModule.base', 'Spaces & Bereiche');
+$this->title = Yii::t('SociologModule.base', 'Organe, Bereiche und Spaces verwalten');
 
 
 /* ------------------------------------------------------------
- * Bereiche aus Modul-Einstellungen laden
- *
- * SettingsForm speichert diese im Modul unter:
- *
- * sociolog.settings → organs
- *
- * Beispiel:
- *
- * Hausverein
- * Leitungskreis
- * Gemeinschaftsräume
+ * Spaces nach Organen gruppieren und Organe hierarchisch ordnen.
+ * Auch Organe ohne zugeordneten Space bleiben sichtbar.
  * ------------------------------------------------------------ */
-
-$organs = Yii::$app->getModule('sociolog')->settings->get('organs', '');
-
-$bereicheRaw = array_filter(
-    preg_split('/\r\n|\r|\n/', trim($organs))
-);
-
-$bereiche = [];
-
-foreach ($bereicheRaw as $line) {
-
-    if (preg_match('/^(\d+)\s+(.*)$/', trim($line), $m)) {
-
-        $bereiche[$m[2]] = (int)$m[1];
-
-    } else {
-
-        $bereiche[$line] = 9999;
-
-    }
-
-}
-
-
-/* ------------------------------------------------------------
- * Spaces nach Bereichen gruppieren
- *
- * Dadurch wird die Tabelle übersichtlicher:
- *
- * Hausverein
- *   BG Vereinsverwaltung
- *
- * Gemeinschaftsräume
- *   BG Musikraum
- *
- * – ohne Bereich –
- *   BG ICT
- *
- * ------------------------------------------------------------ */
-
-
 
 $groupedSpaces = [];
 
@@ -102,40 +52,52 @@ foreach ($spaces as $space) {
 }
 
 
-/* ------------------------------------------------------------
- * Organe sortieren
- * ------------------------------------------------------------ */
-
-$organSort = [];
-
+$organsByParent = [];
 foreach ($organe as $organ) {
-    $organSort[$organ->id] = $organ->sort_order;
+    $organsByParent[(int)($organ->parent_id ?: 0)][] = $organ;
 }
 
-$organSort[0] = -1; // ohne Organ immer zuletzt
+$orderedOrgans = [];
+$visitedOrgans = [];
+$walkOrgans = static function (int $parentId, int $level = 0) use (&$walkOrgans, &$organsByParent, &$orderedOrgans, &$visitedOrgans): void {
+    foreach ($organsByParent[$parentId] ?? [] as $organ) {
+        if (isset($visitedOrgans[$organ->id])) {
+            continue;
+        }
 
+        $visitedOrgans[$organ->id] = true;
+        $orderedOrgans[] = ['model' => $organ, 'level' => $level];
+        $walkOrgans((int)$organ->id, $level + 1);
+    }
+};
+$walkOrgans(0);
 
-uksort($groupedSpaces, function ($a, $b) use ($organSort) {
-
-    $orderA = $organSort[$a] ?? 9999;
-    $orderB = $organSort[$b] ?? 9999;
-
-    return $orderA <=> $orderB;
-
-});
-
-
-/* ------------------------------------------------------------
- * Organ Namen Map (ID → Name)
- * ------------------------------------------------------------ */
-
-$organNames = [];
-
+// Verwaiste Altdaten nicht aus der Verwaltung verschwinden lassen.
 foreach ($organe as $organ) {
-    $organNames[$organ->id] = $organ->name;
+    if (!isset($visitedOrgans[$organ->id])) {
+        $orderedOrgans[] = ['model' => $organ, 'level' => 0];
+    }
 }
 
-$organNames[0] = Yii::t('SociologModule.base', '– kein Organ –');
+$organGroups = [];
+foreach ($orderedOrgans as $item) {
+    $organ = $item['model'];
+    $organGroups[] = [
+        'id' => (int)$organ->id,
+        'model' => $organ,
+        'level' => (int)$item['level'],
+        'spaces' => $groupedSpaces[$organ->id] ?? [],
+    ];
+}
+
+if (!empty($groupedSpaces[0])) {
+    $organGroups[] = [
+        'id' => 0,
+        'model' => null,
+        'level' => 0,
+        'spaces' => $groupedSpaces[0],
+    ];
+}
 
 ?>
 
@@ -158,16 +120,20 @@ $form = ActiveForm::begin();
 
  <div class="panel-heading d-flex justify-content-between align-items-center">
 
-    <h1 class="h5 mb-0">
-        <?= Yii::t('SociologModule.base', 'Spaces und Logbuch-Bereiche') ?>
-    </h1>
+    <h1 class="h5 mb-0"><?= Html::encode($this->title) ?></h1>
 
-    <?= Html::a(
-        '<i class="fa fa-arrow-left me-1"></i> ' .
-        Yii::t('SociologModule.base', 'Zurück zu Einstellungen'),
-        ['/sociolog/admin/index'],
-        ['class' => 'btn btn-sm btn-outline-secondary']
-    ) ?>
+    <div>
+        <?= Html::a(
+            '<i class="fa fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück zu Einstellungen'),
+            ['/sociolog/admin/index'],
+            ['class' => 'btn btn-sm btn-outline-secondary']
+        ) ?>
+        <?= Html::a(
+            '<i class="fa fa-plus me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Neues Organ'),
+            ['create-organ'],
+            ['class' => 'btn btn-sm btn-success']
+        ) ?>
+    </div>
 
 </div>
 
@@ -185,21 +151,11 @@ $form = ActiveForm::begin();
 
 <p class="text-muted">
 
-<?= Yii::t(
-    'SociologModule.base',
-    'Hier kannst du festlegen, welcher {space} zu welchem {bereich} gehört.',
-    [
-        'space' => '<strong>' . Yii::t('SociologModule.base', 'Space') . '</strong>',
-        'bereich' => '<strong>' . Yii::t('SociologModule.base', 'Bereich im Logbuch') . '</strong>',
-    ]
-) ?>
+<?= Yii::t('SociologModule.base', 'Die Organisationsstruktur und alle zugehörigen Spaces werden hier gemeinsam dargestellt. Organe bilden die Überschriften; die eingerückten Spaces gehören zum jeweiligen Organ.') ?>
 
 <br><br>
 
-<?= Yii::t(
-    'SociologModule.base',
-    'Administrator:innen eines Spaces dürfen automatisch im Logbuch ihres Bereichs schreiben.'
-) ?>
+<?= Yii::t('SociologModule.base', 'Administrator:innen eines Spaces dürfen automatisch im Logbuch ihres Organs schreiben.') ?>
 
 <br>
 
@@ -234,11 +190,11 @@ $form = ActiveForm::begin();
 			<tr>
 			
 				<th scope="col" style="width:22%">
-			<?= Yii::t('SociologModule.base', 'Space') ?>
+			<?= Yii::t('SociologModule.base', 'Organ / Space') ?>
 			</th>
 			
 				<th scope="col" style="width:22%">
-			<?= Yii::t('SociologModule.base', 'Bereich') ?>
+			<?= Yii::t('SociologModule.base', 'Zugeordnet zu') ?>
 			</th>
 			
 				<th scope="col" style="width:8%" class="text-center">
@@ -273,27 +229,59 @@ $form = ActiveForm::begin();
             <tbody>
 
 
-            <?php foreach ($groupedSpaces as $bereich => $spaceList): ?>
+            <?php foreach ($organGroups as $group): ?>
 
 
                 <!-- ==========================================
                      Bereichsüberschrift
                      ========================================== -->
 
-                <tr class="table-secondary">
+                <?php $organ = $group['model']; ?>
+                <tr class="table-secondary sociolog-organ-row">
 
                     <th scope="rowgroup" colspan="8">
 
-                        <strong>
-                            <?= Html::encode($organNames[$bereich] ?? $bereich) ?>
-                        </strong>
+                        <div class="d-flex justify-content-between align-items-center" style="padding-left:<?= (int)$group['level'] * 18 ?>px">
+                            <span>
+                                <i class="fa <?= $organ ? 'fa-sitemap' : 'fa-inbox' ?> me-1" aria-hidden="true"></i>
+                                <strong><?= Html::encode($organ ? $organ->name : Yii::t('SociologModule.base', 'Noch nicht zugeordnet')) ?></strong>
+                                <?php if ($organ && $organ->parent): ?>
+                                    <small class="text-muted ms-2">
+                                        <?= Yii::t('SociologModule.base', 'unter {parent}', ['parent' => Html::encode($organ->parent->name)]) ?>
+                                    </small>
+                                <?php endif; ?>
+                            </span>
+
+                            <?php if ($organ): ?>
+                                <span class="sociolog-organ-actions">
+                                    <?= Html::a(
+                                        '<i class="fa fa-pencil" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Bearbeiten'),
+                                        ['update-organ', 'id' => $organ->id],
+                                        [
+                                            'class' => 'btn btn-primary btn-xs',
+                                            'aria-label' => Yii::t('SociologModule.base', '{organ} bearbeiten', ['organ' => $organ->name]),
+                                        ]
+                                    ) ?>
+                                    <?= Html::a(
+                                        '<i class="fa fa-trash" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Löschen'),
+                                        ['delete-organ', 'id' => $organ->id],
+                                        [
+                                            'class' => 'btn btn-danger btn-xs',
+                                            'aria-label' => Yii::t('SociologModule.base', '{organ} löschen', ['organ' => $organ->name]),
+                                            'data-confirm' => Yii::t('SociologModule.base', 'Organ wirklich löschen?'),
+                                            'data-method' => 'post',
+                                        ]
+                                    ) ?>
+                                </span>
+                            <?php endif; ?>
+                        </div>
 
                     </th>
 
                 </tr>
 
 
-                <?php foreach ($spaceList as $space): ?>
+                <?php foreach ($group['spaces'] as $space): ?>
 
 
                     <?php
@@ -311,6 +299,8 @@ $form = ActiveForm::begin();
 
                         <td>
 
+                            <span class="sociolog-space-indent" style="padding-left:<?= ((int)$group['level'] + 1) * 18 ?>px">
+                            <i class="fa fa-users text-muted me-1" aria-hidden="true"></i>
                             <strong>
                                 <?= Html::encode($space->name) ?>
                             </strong>
@@ -326,6 +316,7 @@ $form = ActiveForm::begin();
                                     'rel' => 'noopener noreferrer',
                                 ]
                             ) ?>
+                            </span>
 
                         </td>
 
@@ -346,14 +337,15 @@ $form = ActiveForm::begin();
 						<?= Yii::t('SociologModule.base', '– kein Organ –') ?>
 						</option>
 						
-						<?php foreach ($organe as $organ): ?>
+						<?php foreach ($orderedOrgans as $organItem): ?>
+						<?php $optionOrgan = $organItem['model']; ?>
 						
 						<option
-							value="<?= $organ->id ?>"
-							<?= ($config && $config->organ_id == $organ->id) ? 'selected' : '' ?>
+							value="<?= $optionOrgan->id ?>"
+							<?= ($config && $config->organ_id == $optionOrgan->id) ? 'selected' : '' ?>
 						>
 						
-						<?= Html::encode($organ->name) ?>
+						<?= Html::encode(str_repeat('— ', (int)$organItem['level']) . $optionOrgan->name) ?>
 						
 						</option>
 						
@@ -516,6 +508,18 @@ $this->registerCss(<<<CSS
 
 .sociolog-admin-table-scroll:focus:not(:focus-visible) {
     outline: none;
+}
+
+.sociolog-organ-row > th {
+    border-left: 4px solid var(--bs-info, #17a2b8);
+}
+
+.sociolog-organ-actions {
+    white-space: nowrap;
+}
+
+.sociolog-space-indent {
+    display: inline-block;
 }
 CSS);
 ?>

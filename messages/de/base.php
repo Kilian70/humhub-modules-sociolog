@@ -458,6 +458,20 @@ return [
 'Steuert Weitergabe, Entscheidungs-Buttons und Entscheidungsverlauf.'
 => 'Steuert Weitergabe, Entscheidungs-Buttons und Entscheidungsverlauf.',
 'Organe und Bereiche' => 'Organe und Bereiche',
+'Organe, Bereiche und Spaces verwalten' => 'Organe, Bereiche und Spaces verwalten',
+'Hier werden die Organisationsstruktur und die zugehörigen Spaces gemeinsam in einer hierarchischen Liste verwaltet. Auch Schreib- und Löschrechte, Sichtbarkeit und optionale Links werden dort festgelegt.'
+=> 'Hier werden die Organisationsstruktur und die zugehörigen Spaces gemeinsam in einer hierarchischen Liste verwaltet. Auch Schreib- und Löschrechte, Sichtbarkeit und optionale Links werden dort festgelegt.',
+'Verwaltung öffnen' => 'Verwaltung öffnen',
+'Die Organisationsstruktur und alle zugehörigen Spaces werden hier gemeinsam dargestellt. Organe bilden die Überschriften; die eingerückten Spaces gehören zum jeweiligen Organ.'
+=> 'Die Organisationsstruktur und alle zugehörigen Spaces werden hier gemeinsam dargestellt. Organe bilden die Überschriften; die eingerückten Spaces gehören zum jeweiligen Organ.',
+'Administrator:innen eines Spaces dürfen automatisch im Logbuch ihres Organs schreiben.'
+=> 'Administrator:innen eines Spaces dürfen automatisch im Logbuch ihres Organs schreiben.',
+'Organ / Space' => 'Organ / Space',
+'Zugeordnet zu' => 'Zugeordnet zu',
+'Noch nicht zugeordnet' => 'Noch nicht zugeordnet',
+'unter {parent}' => 'unter {parent}',
+'Der zugehörige Organ-Space wird in der gemeinsamen Übersicht festgelegt.'
+=> 'Der zugehörige Organ-Space wird in der gemeinsamen Übersicht festgelegt.',
 'Spaces und Logbuch-Bereiche' => 'Spaces und Logbuch-Bereiche',
 'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
 => 'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.',

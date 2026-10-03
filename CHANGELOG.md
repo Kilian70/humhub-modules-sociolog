@@ -3,6 +3,19 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.21] – 2026-10-03
+
+### Administration
+- Verwaltung der Logbuch-Organe und der Space-Zuordnungen zu einer gemeinsamen hierarchischen Liste zusammengeführt
+- Organe können direkt in dieser Übersicht erstellt, bearbeitet und gelöscht werden; zugehörige Spaces stehen eingerückt darunter
+- Nicht zugeordnete Spaces werden in einem eigenen Abschnitt angezeigt
+- Alte Links zur separaten Organverwaltung bleiben als Weiterleitung funktionsfähig
+- Doppelte Auswahl des Organ-Spaces aus dem Organformular entfernt; die eindeutige Zuordnung erfolgt zentral in der Übersicht
+
+### Übersetzungen und Tests
+- Deutsche und englische Texte der gemeinsamen Verwaltung ergänzt
+- Gemeinsame Oberfläche mit HumHub 1.18 und 1.19 unter MAMP geprüft
+
 ## [1.0.20] – 2026-10-03
 
 ### Sicherheit und Datenintegrität

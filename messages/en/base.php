@@ -458,6 +458,20 @@ return [
 'Steuert Weitergabe, Entscheidungs-Buttons und Entscheidungsverlauf.'
 => 'Controls forwarding, decision buttons and decision history.',
 'Organe und Bereiche' => 'Bodies and areas',
+'Organe, Bereiche und Spaces verwalten' => 'Manage bodies, areas and spaces',
+'Hier werden die Organisationsstruktur und die zugehörigen Spaces gemeinsam in einer hierarchischen Liste verwaltet. Auch Schreib- und Löschrechte, Sichtbarkeit und optionale Links werden dort festgelegt.'
+=> 'Manage the organisational structure and its spaces together in one hierarchical list. Write and delete permissions, visibility and optional links are configured there as well.',
+'Verwaltung öffnen' => 'Open management',
+'Die Organisationsstruktur und alle zugehörigen Spaces werden hier gemeinsam dargestellt. Organe bilden die Überschriften; die eingerückten Spaces gehören zum jeweiligen Organ.'
+=> 'The organisational structure and all associated spaces are shown together. Bodies form the headings, and indented spaces belong to the respective body.',
+'Administrator:innen eines Spaces dürfen automatisch im Logbuch ihres Organs schreiben.'
+=> 'Space administrators may automatically write in the logbook of their body.',
+'Organ / Space' => 'Body / Space',
+'Zugeordnet zu' => 'Assigned to',
+'Noch nicht zugeordnet' => 'Not assigned yet',
+'unter {parent}' => 'under {parent}',
+'Der zugehörige Organ-Space wird in der gemeinsamen Übersicht festgelegt.'
+=> 'The associated body space is selected in the combined overview.',
 'Spaces und Logbuch-Bereiche' => 'Spaces and logbook areas',
 'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
 => 'Enable spaces for the logbook, assign them to areas and bodies, and configure write and delete permissions and optional links here.',

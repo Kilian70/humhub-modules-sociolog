@@ -172,13 +172,13 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
 </legend>
 <div class="row g-3">
 
-<div class="col-md-6">
+<div class="col-12">
 
-<div class="p-3 rounded" style="background:#eef6ff;border-left:5px solid #007bff;">
+<div class="p-3 rounded" style="background:#eef6ff;border-left:5px solid #17a2b8;">
 
 <strong>
-<i class="fa fa-object-group text-primary me-1"></i>
-<?= Yii::t('SociologModule.base', 'Logbuch-Organe verwalten') ?>
+<i class="fa fa-sitemap text-info me-1" aria-hidden="true"></i>
+<?= Yii::t('SociologModule.base', 'Organe, Bereiche und Spaces verwalten') ?>
 </strong>
 
 <br><br>
@@ -186,48 +186,17 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
 <small class="text-muted">
 <?= Yii::t(
 'SociologModule.base',
-'Hier wird die Organisationsstruktur des Logbuchs definiert (Verein → Hausverein → Leitungskreis → BK → BG). Spaces können danach den Organen zugeordnet werden.'
+'Hier werden die Organisationsstruktur und die zugehörigen Spaces gemeinsam in einer hierarchischen Liste verwaltet. Auch Schreib- und Löschrechte, Sichtbarkeit und optionale Links werden dort festgelegt.'
 ) ?>
 </small>
 
 <br><br>
 
 <?= Html::a(
-'<i class="fa fa-sitemap me-1"></i> ' .
-Yii::t('SociologModule.base', 'Organe verwalten'),
-['/sociolog/admin/organs'],
-['class'=>'btn btn-sm btn-primary']
-) ?>
-
-</div>
-
-</div>
-
-<div class="col-md-6">
-
-<div class="p-3 rounded h-100" style="background:#eef6ff;border-left:5px solid #17a2b8;">
-
-<strong>
-<i class="fa fa-th-large text-info me-1" aria-hidden="true"></i>
-<?= Yii::t('SociologModule.base', 'Spaces und Logbuch-Bereiche') ?>
-</strong>
-
-<br><br>
-
-<small class="text-muted">
-<?= Yii::t(
-    'SociologModule.base',
-    'Hier werden Spaces für das Logbuch aktiviert, Bereichen und Organen zugeordnet sowie Schreib- und Löschrechte und optionale Links festgelegt.'
-) ?>
-</small>
-
-<br><br>
-
-<?= Html::a(
-    '<i class="fa fa-th-large me-1" aria-hidden="true"></i> '
-        . Yii::t('SociologModule.base', 'Spaces und Bereiche verwalten'),
-    ['/sociolog/admin/spaces'],
-    ['class' => 'btn btn-sm btn-info']
+'<i class="fa fa-sitemap me-1" aria-hidden="true"></i> ' .
+Yii::t('SociologModule.base', 'Verwaltung öffnen'),
+['/sociolog/admin/spaces'],
+['class'=>'btn btn-sm btn-info']
 ) ?>
 
 </div>
