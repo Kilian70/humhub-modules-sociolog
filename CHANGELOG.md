@@ -3,6 +3,13 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.28] – 2026-10-03
+
+### Informationsseite
+- Reduzierten HumHub-Texteditor für Einleitung und alle acht Informationsbereiche ergänzt
+- Formatierte Informationsinhalte über den sicheren HumHub-Rich-Text-Renderer ausgegeben
+- Datei-Uploads, Erwähnungen, eingebettete Inhalte und Emojis auch auf der Informationsseite deaktiviert
+
 ## [1.0.27] – 2026-10-03
 
 ### Sicherheit

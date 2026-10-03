@@ -5,8 +5,10 @@ use yii\helpers\ArrayHelper;
 
 use yii\widgets\ActiveForm;
 
+use humhub\modules\content\widgets\richtext\RichTextField;
 use humhub\modules\user\models\User;
 use humhub\modules\user\models\Group;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 use humhub\modules\sociolog\models\DecisionType;
 
 $this->title = Yii::t('SociologModule.base', 'Sociolog – Einstellungen');
@@ -615,68 +617,29 @@ echo Html::encode(implode(', ', $names));
               )) ?>
             </div>
 
-            <div class="col-12">
-              <?= $form->field($model, 'infoIntroText')->textarea([
-                  'rows' => 3,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
+            <?php
+            $infoTextFields = [
+                'infoIntroText' => 'col-12',
+                'infoProcessText' => 'col-md-6',
+                'infoPermissionsText' => 'col-md-6',
+                'infoStatusText' => 'col-md-6',
+                'infoObjectionText' => 'col-md-6',
+                'infoReviewText' => 'col-md-6',
+                'infoDocumentsText' => 'col-md-6',
+                'infoGuidelineText' => 'col-md-6',
+                'infoExamplesText' => 'col-md-6',
+            ];
+            ?>
 
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoProcessText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
-
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoPermissionsText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
-
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoStatusText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
-
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoObjectionText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
-
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoReviewText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
-
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoDocumentsText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
-
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoGuidelineText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
-
-            <div class="col-md-6">
-              <?= $form->field($model, 'infoExamplesText')->textarea([
-                  'rows' => 5,
-                  'maxlength' => 5000,
-              ]) ?>
-            </div>
+            <?php foreach ($infoTextFields as $attribute => $columnClass): ?>
+              <div class="<?= Html::encode($columnClass) ?>">
+                <?= $form->field($model, $attribute)->widget(RichTextField::class, [
+                    'id' => 'sociolog-' . strtolower($attribute),
+                    'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+                    'pluginOptions' => ['maxHeight' => '280px'],
+                ]) ?>
+              </div>
+            <?php endforeach; ?>
         </div>
       </fieldset>
     </div>

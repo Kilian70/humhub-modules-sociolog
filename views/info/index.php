@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use humhub\modules\content\widgets\richtext\RichText;
+use humhub\modules\sociolog\helpers\RichTextHelper;
 
 /** @var yii\web\View $this */
 /** @var string $title */
@@ -12,33 +14,11 @@ use yii\helpers\Url;
 $hasDocument = $documentUrl !== '';
 $isExternalDocument = $hasDocument && preg_match('#^https?://#i', $documentUrl) === 1;
 
-/**
- * Gibt Informationstexte sicher aus und macht enthaltene E-Mail-Adressen
- * automatisch anklickbar. Andere HTML-Eingaben bleiben vollständig escaped.
- */
 $renderInfoText = static function (string $text): string {
-    $parts = preg_split(
-        '/([A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,})/iu',
-        trim($text),
-        -1,
-        PREG_SPLIT_DELIM_CAPTURE
-    );
-
-    if ($parts === false) {
-        return nl2br(Html::encode(trim($text)));
-    }
-
-    $html = '';
-
-    foreach ($parts as $part) {
-        if (filter_var($part, FILTER_VALIDATE_EMAIL) !== false) {
-            $html .= Html::mailto(Html::encode($part), $part);
-        } else {
-            $html .= Html::encode($part);
-        }
-    }
-
-    return nl2br($html);
+    return RichText::widget([
+        'text' => $text,
+        'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+    ]);
 };
 ?>
 
@@ -51,9 +31,9 @@ $renderInfoText = static function (string $text): string {
             </h1>
 
             <?php if (trim($introText) !== ''): ?>
-                <p class="lead text-muted mb-0 sociolog-info-intro">
+                <div class="lead text-muted mb-0 sociolog-info-intro">
                     <?= $renderInfoText($introText) ?>
-                </p>
+                </div>
             <?php endif; ?>
         </div>
 
