@@ -955,6 +955,15 @@ public function isAwaitingTakeover(): bool
  */
 private static function getOrganSpaceId(Organ $organ): ?int
 {
+    // Die ausdrückliche Zuordnung am Organ ist eindeutig. Sie darf nicht aus
+    // der hierarchischen Space-Zuordnung abgeleitet werden: Einem Organ können
+    // mehrere untergeordnete Bereichs-Spaces angehören.
+    if ($organ->organ_space_id) {
+        return (int)$organ->organ_space_id;
+    }
+
+    // Rückwärtskompatibilität für Installationen, die noch keine
+    // ausdrückliche Organ-Space-Zuordnung gespeichert haben.
     $config = SpaceConfig::find()
         ->where([
             'organ_id' => (int)$organ->id,
@@ -968,7 +977,7 @@ private static function getOrganSpaceId(Organ $organ): ?int
         return (int)$config->space_id;
     }
 
-    return $organ->organ_space_id ? (int)$organ->organ_space_id : null;
+    return null;
 }
 
 /**

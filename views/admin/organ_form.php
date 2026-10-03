@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use humhub\modules\sociolog\models\Organ;
+use humhub\modules\space\models\Space;
 
 $this->title = $model->isNewRecord
     ? Yii::t('SociologModule.base', 'Organ erstellen')
@@ -36,11 +37,19 @@ $parents = ArrayHelper::map(
     ['prompt' => Yii::t('SociologModule.base', 'Kein übergeordnetes Organ')]
 ) ?>
 
-<?= $form->field($model, 'sort_order')->input('number') ?>
+<?= $form->field($model, 'organ_space_id')->dropDownList(
+    ArrayHelper::map(
+        Space::find()->orderBy(['name' => SORT_ASC])->all(),
+        'id',
+        'name'
+    ),
+    ['prompt' => Yii::t('SociologModule.base', 'Kein Weiterleitungsziel ausgewählt')]
+)->hint(Yii::t(
+    'SociologModule.base',
+    'Dieser Space ist das eindeutige Ziel, wenn ein Entscheid an dieses Organ weitergeleitet wird. Mehrere Organ-Spaces dürfen demselben Organ zugeordnet sein.'
+))->label(Yii::t('SociologModule.base', 'Weiterleitungsziel')) ?>
 
-<p class="help-block">
-    <?= Yii::t('SociologModule.base', 'Der zugehörige Organ-Space wird in der gemeinsamen Übersicht festgelegt.') ?>
-</p>
+<?= $form->field($model, 'sort_order')->input('number') ?>
 
 <div class="form-group mt-3 organ-form-actions">
     <?= Html::submitButton(

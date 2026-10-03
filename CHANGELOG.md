@@ -3,6 +3,16 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.30] – 2026-10-03
+
+### Organ-Hierarchie und Space-Zuordnung
+- Zugehörigkeit eines Spaces zu einem Organ und zuständiger Organ-Space sind wieder eindeutig getrennt
+- Mehrere Spaces und Bereichskreise dürfen demselben übergeordneten Organ zugeordnet sein
+- Der zuständige Organ-Space wird beim Bearbeiten des Organs ausdrücklich ausgewählt und in der gemeinsamen Übersicht angezeigt
+- Die Weiterleitung verwendet vorrangig diese eindeutige Organ-Space-Zuordnung
+- Das Speichern einzelner Space-Zeilen überschreibt bestehende Organ-Space-Zuordnungen nicht mehr
+- Kontraste der Organ-Zeilen, Tabellenköpfe und hellen Administrationshinweise in der Dunkelansicht verbessert
+
 ## [1.0.29] – 2026-10-03
 
 ### Space-Verwaltung

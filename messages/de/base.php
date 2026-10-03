@@ -472,6 +472,13 @@ return [
 'Zugeordnet zu' => 'Zugeordnet zu',
 'Noch nicht zugeordnet' => 'Noch nicht zugeordnet',
 'unter {parent}' => 'unter {parent}',
+'Kein Weiterleitungsziel ausgewählt' => 'Kein Weiterleitungsziel ausgewählt',
+'Weiterleitungsziel' => 'Weiterleitungsziel',
+'Weiterleitungsziel: {space}' => 'Weiterleitungsziel: {space}',
+'Dieser Space ist das eindeutige Ziel, wenn ein Entscheid an dieses Organ weitergeleitet wird. Mehrere Organ-Spaces dürfen demselben Organ zugeordnet sein.'
+=> 'Dieser Space ist das eindeutige Ziel, wenn ein Entscheid an dieses Organ weitergeleitet wird. Mehrere Organ-Spaces dürfen demselben Organ zugeordnet sein.',
+'„Zugeordnet zu“ legt fest, zu welchem Organ ein Space gehört. Mehrere Organ-Spaces und Bereichskreise dürfen demselben Organ zugeordnet sein. Das eindeutige Weiterleitungsziel wird beim Bearbeiten des Organs ausgewählt.'
+=> '„Zugeordnet zu“ legt fest, zu welchem Organ ein Space gehört. Mehrere Organ-Spaces und Bereichskreise dürfen demselben Organ zugeordnet sein. Das eindeutige Weiterleitungsziel wird beim Bearbeiten des Organs ausgewählt.',
 'Der zugehörige Organ-Space wird in der gemeinsamen Übersicht festgelegt.'
 => 'Der zugehörige Organ-Space wird in der gemeinsamen Übersicht festgelegt.',
 'Spaces und Logbuch-Bereiche' => 'Spaces und Logbuch-Bereiche',

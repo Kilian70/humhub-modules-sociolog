@@ -174,6 +174,13 @@ $form = ActiveForm::begin([
     ]
 ) ?>
 
+<br><br>
+
+<?= Yii::t(
+    'SociologModule.base',
+    '„Zugeordnet zu“ legt fest, zu welchem Organ ein Space gehört. Mehrere Organ-Spaces und Bereichskreise dürfen demselben Organ zugeordnet sein. Das eindeutige Weiterleitungsziel wird beim Bearbeiten des Organs ausgewählt.'
+) ?>
+
 </p>
 
 
@@ -255,6 +262,11 @@ $form = ActiveForm::begin([
                                 <?php if ($organ && $organ->parent): ?>
                                     <small class="text-muted ms-2">
                                         <?= Yii::t('SociologModule.base', 'unter {parent}', ['parent' => Html::encode($organ->parent->name)]) ?>
+                                    </small>
+                                <?php endif; ?>
+                                <?php if ($organ && $organ->organSpace): ?>
+                                    <small class="text-muted ms-2">
+                                        <?= Yii::t('SociologModule.base', 'Weiterleitungsziel: {space}', ['space' => Html::encode($organ->organSpace->name)]) ?>
                                     </small>
                                 <?php endif; ?>
                             </span>

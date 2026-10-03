@@ -176,7 +176,7 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
 
 <div class="col-12">
 
-<div class="p-3 rounded" style="background:#eef6ff;border-left:5px solid #17a2b8;">
+<div class="p-3 rounded sociolog-admin-callout sociolog-admin-callout-info">
 
 <strong>
 <i class="fa fa-sitemap text-info me-1" aria-hidden="true"></i>
@@ -212,7 +212,7 @@ Yii::t('SociologModule.base', 'Verwaltung öffnen'),
 <?php if (!empty($globaleSpaces)): ?>
 <div class="col-12">
 
-<div class="p-3 rounded" style="background:#e9f0ff;border-left:5px solid #6a5af9;">
+<div class="p-3 rounded sociolog-admin-callout sociolog-admin-callout-primary">
 
 <strong>
 <i class="fa fa-pencil-square-o text-primary me-1"></i>
@@ -466,7 +466,7 @@ echo Html::encode(implode(', ', $names));
       <p class="form-text small">
         <?= Yii::t('SociologModule.base','Diese Typen werden in den Einträgen als „Art der Entscheidung“ angezeigt (z. B. Grundsatzentscheid, Prozessentscheid …).') ?>
       </p>
-      <div class="p-3 rounded" style="background:#f8f9fa;border:1px solid #ddd;">
+      <div class="p-3 rounded sociolog-admin-soft-panel">
         <?= Html::a(
             '<i class="fa fa-sliders me-1"></i> ' . Yii::t('SociologModule.base','Entscheidungstypen verwalten'),
             ['/sociolog/decision-type/index'],

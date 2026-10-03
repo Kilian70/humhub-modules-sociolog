@@ -4,6 +4,7 @@ namespace humhub\modules\sociolog\tests\codeception\unit;
 
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\models\EntryReview;
+use humhub\modules\sociolog\models\Organ;
 use humhub\modules\sociolog\models\SpaceConfig;
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
@@ -12,6 +13,15 @@ use Yii;
 
 class EntryLifecycleTest extends SociologTestCase
 {
+    public function testExplicitForwardingTargetTakesPrecedence(): void
+    {
+        $organ = new Organ(['organ_space_id' => 42]);
+        $method = new \ReflectionMethod(Entry::class, 'getOrganSpaceId');
+        $method->setAccessible(true);
+
+        $this->assertSame(42, $method->invoke(null, $organ));
+    }
+
     public function testCreateEditAndSoftDelete(): void
     {
         $this->disableNotifications();

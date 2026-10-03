@@ -544,6 +544,66 @@ html[data-bs-theme="dark"] ::placeholder {
 }
 
 /* ------------------------------------------------------------
+   Administration
+   ------------------------------------------------------------ */
+.sociolog-admin-callout-info {
+  background: #eef6ff;
+  border-left: 5px solid #17a2b8;
+}
+
+.sociolog-admin-callout-primary {
+  background: #e9f0ff;
+  border-left: 5px solid #6a5af9;
+}
+
+.sociolog-admin-soft-panel {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+}
+
+html[data-bs-theme="dark"] .sociolog-organ-row > th {
+  background-color: #303640 !important;
+  color: var(--sociolog-text-main) !important;
+}
+
+html[data-bs-theme="dark"] #sociologTable > thead.table-light > tr > th {
+  --bs-table-bg: #303640;
+  --bs-table-color: #f1f3f5;
+  background-color: #303640 !important;
+  color: #f1f3f5 !important;
+  border-color: #495057 !important;
+}
+
+html[data-bs-theme="dark"] .sociolog-admin-callout,
+html[data-bs-theme="dark"] .sociolog-admin-soft-panel,
+html[data-bs-theme="dark"] .sociolog-settings-form .alert-light {
+  background: #252a30 !important;
+  border-color: #495057 !important;
+  color: var(--sociolog-text-main) !important;
+}
+
+html[data-bs-theme="dark"] .sociolog-admin-callout-info {
+  border-left-color: #35b7c8 !important;
+}
+
+html[data-bs-theme="dark"] .sociolog-admin-callout-primary {
+  border-left-color: #8f83ff !important;
+}
+
+html[data-bs-theme="dark"] .sociolog-admin-callout .text-muted,
+html[data-bs-theme="dark"] .sociolog-admin-soft-panel .text-muted,
+html[data-bs-theme="dark"] .sociolog-settings-form .alert-light .text-muted,
+html[data-bs-theme="dark"] .sociolog-settings-form .form-text,
+html[data-bs-theme="dark"] .sociolog-settings-form .help-block {
+  color: var(--sociolog-text-soft) !important;
+}
+
+html[data-bs-theme="dark"] .sociolog-admin-soft-panel label,
+html[data-bs-theme="dark"] .sociolog-admin-soft-panel .control-label {
+  color: var(--sociolog-text-main) !important;
+}
+
+/* ------------------------------------------------------------
    Status-Badges (Beispiel)
    ------------------------------------------------------------ */
 html[data-bs-theme="dark"] .badge {

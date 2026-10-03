@@ -4,6 +4,7 @@ namespace humhub\modules\sociolog\models;
 
 use Yii;
 use humhub\components\ActiveRecord;
+use humhub\modules\space\models\Space;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 
@@ -109,6 +110,14 @@ class Organ extends ActiveRecord
     public function getSpaces()
     {
         return $this->hasMany(SpaceConfig::class, ['organ_id' => 'id']);
+    }
+
+    /**
+     * Der ausdrücklich gewählte Space, in dem dieses Organ arbeitet.
+     */
+    public function getOrganSpace()
+    {
+        return $this->hasOne(Space::class, ['id' => 'organ_space_id']);
     }
     
     public static function getParentOptions($excludeId = null)

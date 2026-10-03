@@ -93,6 +93,8 @@ $events = (string)file_get_contents($root . '/Events.php');
 $calendarService = (string)file_get_contents($root . '/services/SociologCalendarService.php');
 $adminController = (string)file_get_contents($root . '/controllers/AdminController.php');
 $spacesView = (string)file_get_contents($root . '/views/admin/spaces.php');
+$organForm = (string)file_get_contents($root . '/views/admin/organ_form.php');
+$sociologCss = (string)file_get_contents($root . '/resources/css/sociolog.css');
 $runtimeWorkflow = (string)file_get_contents($root . '/.github/workflows/runtime-tests.yml');
 $moduleChecksWorkflow = (string)file_get_contents($root . '/.github/workflows/module-checks.yml');
 $lifecycleTest = (string)file_get_contents($root . '/tests/codeception/unit/EntryLifecycleTest.php');
@@ -132,6 +134,18 @@ if (!str_contains($adminController, "post('space_rows', [])")
     || !str_contains($spacesView, "row.dataset.changed = '1'")
     || !str_contains($spacesView, 'control.disabled = true')) {
     $errors[] = 'Large Space configuration forms must submit only changed, complete rows.';
+}
+
+if (str_contains($adminController, 'Jedem Organ darf nur ein Organ-Space zugeordnet sein.')
+    || !str_contains($organForm, "field(\$model, 'organ_space_id')")
+    || !str_contains($entryModel, 'if ($organ->organ_space_id)')) {
+    $errors[] = 'Multiple hierarchical organ spaces and the explicit forwarding target must remain separate.';
+}
+
+if (!str_contains($sociologCss, 'html[data-bs-theme="dark"] .sociolog-organ-row > th')
+    || !str_contains($sociologCss, 'html[data-bs-theme="dark"] #sociologTable > thead.table-light > tr > th')
+    || !str_contains($sociologCss, 'html[data-bs-theme="dark"] .sociolog-admin-soft-panel')) {
+    $errors[] = 'Dark mode must keep administration rows, settings panels and logbook table headers readable.';
 }
 
 if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")

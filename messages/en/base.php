@@ -472,6 +472,13 @@ return [
 'Zugeordnet zu' => 'Assigned to',
 'Noch nicht zugeordnet' => 'Not assigned yet',
 'unter {parent}' => 'under {parent}',
+'Kein Weiterleitungsziel ausgewählt' => 'No forwarding target selected',
+'Weiterleitungsziel' => 'Forwarding target',
+'Weiterleitungsziel: {space}' => 'Forwarding target: {space}',
+'Dieser Space ist das eindeutige Ziel, wenn ein Entscheid an dieses Organ weitergeleitet wird. Mehrere Organ-Spaces dürfen demselben Organ zugeordnet sein.'
+=> 'This space is the unique target when a decision is forwarded to this body. Multiple organ spaces may be assigned to the same body.',
+'„Zugeordnet zu“ legt fest, zu welchem Organ ein Space gehört. Mehrere Organ-Spaces und Bereichskreise dürfen demselben Organ zugeordnet sein. Das eindeutige Weiterleitungsziel wird beim Bearbeiten des Organs ausgewählt.'
+=> '“Assigned to” defines which body a space belongs to. Multiple organ spaces and area circles may be assigned to the same body. The unique forwarding target is selected when editing the body.',
 'Der zugehörige Organ-Space wird in der gemeinsamen Übersicht festgelegt.'
 => 'The associated body space is selected in the combined overview.',
 'Spaces und Logbuch-Bereiche' => 'Spaces and logbook areas',
