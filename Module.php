@@ -33,7 +33,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.24';
+    public string $version = '1.0.25';
     public string $humhubMinVersion = '1.18';
     
   

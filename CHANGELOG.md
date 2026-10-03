@@ -3,6 +3,11 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.25] – 2026-10-03
+
+### Administration
+- Selten benötigten Abschnitt „Archiv“ ans Ende der Moduleinstellungen unmittelbar vor Speichern und Wartung verschoben
+
 ## [1.0.24] – 2026-10-03
 
 ### Navigation

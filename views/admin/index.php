@@ -426,45 +426,6 @@ echo Html::encode(implode(', ', $names));
 </div>
 </fieldset>
 
-    <fieldset class="card border-warning p-3 mb-4">
-      <legend class="h5 fw-semibold text-warning mb-3">
-        <i class="fa fa-archive me-1" aria-hidden="true"></i>
-        <?= Yii::t('SociologModule.base', 'Archiv') ?>
-      </legend>
-
-      <div class="alert alert-light border mb-3">
-        <?= Yii::t(
-            'SociologModule.base',
-            'Diese Funktion überträgt Logbucheinträge, Protokoll-Verknüpfungen und Verlauf auf das Archiv-Benutzerkonto. Von der Person in HumHub hochgeladene Protokolldateien werden dadurch nicht übertragen.'
-        ) ?>
-        <br><strong><?= Yii::t(
-            'SociologModule.base',
-            'Wichtig: Übertrage vor dem Löschen der Person deren hochgeladene Dokumente mit dem HumHub-Modul „Move content and users“ auf das Archiv-Benutzerkonto. Andernfalls können die Dateien beim Löschen aller Beiträge verloren gehen.'
-        ) ?></strong>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-md-6">
-          <?= $form->field($model, 'preserveEntriesOnUserDelete')->checkbox([
-              'uncheck' => 0,
-          ])->hint(Yii::t(
-              'SociologModule.base',
-              'Die Funktion greift nur bei der vollständigen Löschung eines Benutzers. Das normale Löschen einzelner Logbucheinträge bleibt unverändert.'
-          )) ?>
-        </div>
-
-        <div class="col-md-6">
-          <?= $form->field($model, 'archiveUserId')->dropDownList(
-              $archiveUserOptions,
-              ['prompt' => Yii::t('SociologModule.base', 'Archiv-Benutzerkonto auswählen ...')]
-          )->hint(Yii::t(
-              'SociologModule.base',
-              'Verwende ein dauerhaftes System- oder Vereinskonto. Dieses Konto darf nicht gelöscht werden, solange es als Archivkonto eingetragen ist.'
-          )) ?>
-        </div>
-      </div>
-    </fieldset>
-
     <!-- Benachrichtigungen -->
     <fieldset class="card border-secondary p-3 mb-4">
       <h2 class="h6 fw-semibold text-info">
@@ -719,6 +680,45 @@ echo Html::encode(implode(', ', $names));
         </div>
       </fieldset>
     </div>
+
+    <fieldset class="card border-warning p-3 mb-4">
+      <legend class="h5 fw-semibold text-warning mb-3">
+        <i class="fa fa-archive me-1" aria-hidden="true"></i>
+        <?= Yii::t('SociologModule.base', 'Archiv') ?>
+      </legend>
+
+      <div class="alert alert-light border mb-3">
+        <?= Yii::t(
+            'SociologModule.base',
+            'Diese Funktion überträgt Logbucheinträge, Protokoll-Verknüpfungen und Verlauf auf das Archiv-Benutzerkonto. Von der Person in HumHub hochgeladene Protokolldateien werden dadurch nicht übertragen.'
+        ) ?>
+        <br><strong><?= Yii::t(
+            'SociologModule.base',
+            'Wichtig: Übertrage vor dem Löschen der Person deren hochgeladene Dokumente mit dem HumHub-Modul „Move content and users“ auf das Archiv-Benutzerkonto. Andernfalls können die Dateien beim Löschen aller Beiträge verloren gehen.'
+        ) ?></strong>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <?= $form->field($model, 'preserveEntriesOnUserDelete')->checkbox([
+              'uncheck' => 0,
+          ])->hint(Yii::t(
+              'SociologModule.base',
+              'Die Funktion greift nur bei der vollständigen Löschung eines Benutzers. Das normale Löschen einzelner Logbucheinträge bleibt unverändert.'
+          )) ?>
+        </div>
+
+        <div class="col-md-6">
+          <?= $form->field($model, 'archiveUserId')->dropDownList(
+              $archiveUserOptions,
+              ['prompt' => Yii::t('SociologModule.base', 'Archiv-Benutzerkonto auswählen ...')]
+          )->hint(Yii::t(
+              'SociologModule.base',
+              'Verwende ein dauerhaftes System- oder Vereinskonto. Dieses Konto darf nicht gelöscht werden, solange es als Archivkonto eingetragen ist.'
+          )) ?>
+        </div>
+      </div>
+    </fieldset>
 
     <!-- Buttons -->
     <div class="col-12 text-end mt-4">
