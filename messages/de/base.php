@@ -1,5 +1,7 @@
 <?php
 return [
+    'Es wurden keine vollständigen Space-Änderungen übermittelt. Bitte lade die Seite neu und versuche es erneut.'
+        => 'Es wurden keine vollständigen Space-Änderungen übermittelt. Bitte lade die Seite neu und versuche es erneut.',
     'Empfänger der Benachrichtigungen' => 'Empfänger der Benachrichtigungen',
     'Keine Benachrichtigungen' => 'Keine Benachrichtigungen',
     'Nur Mitglieder ausgewählter Gruppen' => 'Nur Mitglieder ausgewählter Gruppen',

@@ -108,7 +108,9 @@ if (!empty($groupedSpaces[0])) {
  * Alle Werte der Tabelle werden über POST
  * an AdminController::actionSpaces() gesendet.
  * ------------------------------------------------------------ */
-$form = ActiveForm::begin();
+$form = ActiveForm::begin([
+    'id' => 'sociolog-space-config-form',
+]);
 ?>
 
 
@@ -295,7 +297,7 @@ $form = ActiveForm::begin();
                     ?>
 
 
-                    <tr>
+                    <tr data-space-config-row="<?= (int)$space->id ?>">
 
 
                         <!-- ==================================
@@ -303,6 +305,8 @@ $form = ActiveForm::begin();
                              ================================== -->
 
                         <td>
+
+                            <?= Html::hiddenInput('space_rows[' . (int)$space->id . ']', '1') ?>
 
                             <span class="sociolog-space-indent" style="padding-left:<?= ((int)$group['level'] + 1) * 18 ?>px">
                             <i class="fa fa-users text-muted me-1" aria-hidden="true"></i>
@@ -458,6 +462,8 @@ style="width:100%"
 placeholder="<?= Yii::t('SociologModule.base','https://... (optional)') ?>"
 >
 
+<?= Html::hiddenInput('space_rows_complete[' . (int)$space->id . ']', '1') ?>
+
 </td>
 
 
@@ -486,7 +492,11 @@ placeholder="<?= Yii::t('SociologModule.base','https://... (optional)') ?>"
             <?= Html::submitButton(
                 '<i class="fa fa-save me-1"></i> ' .
                 Yii::t('SociologModule.base', 'Speichern'),
-                ['class' => 'btn btn-primary']
+                [
+                    'class' => 'btn btn-primary',
+                    'id' => 'sociolog-space-config-save',
+                    'disabled' => true,
+                ]
             ) ?>
 
         </div>
@@ -502,6 +512,48 @@ placeholder="<?= Yii::t('SociologModule.base','https://... (optional)') ?>"
  * Formular beenden
  * ------------------------------------------------------------ */
 ActiveForm::end();
+
+$this->registerJs(<<<'JS'
+(function () {
+    const form = document.getElementById('sociolog-space-config-form');
+    const saveButton = document.getElementById('sociolog-space-config-save');
+
+    if (!form || !saveButton) {
+        return;
+    }
+
+    const rows = Array.from(form.querySelectorAll('[data-space-config-row]'));
+
+    rows.forEach(function (row) {
+        row.querySelectorAll('input, select, textarea').forEach(function (control) {
+            if (control.type === 'hidden') {
+                return;
+            }
+
+            control.addEventListener('change', function () {
+                row.dataset.changed = '1';
+                saveButton.disabled = false;
+            });
+            control.addEventListener('input', function () {
+                row.dataset.changed = '1';
+                saveButton.disabled = false;
+            });
+        });
+    });
+
+    form.addEventListener('submit', function () {
+        rows.forEach(function (row) {
+            if (row.dataset.changed === '1') {
+                return;
+            }
+
+            row.querySelectorAll('input, select, textarea').forEach(function (control) {
+                control.disabled = true;
+            });
+        });
+    });
+})();
+JS);
 ?>
 
 <?php

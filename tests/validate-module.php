@@ -91,6 +91,8 @@ $entryModel = (string)file_get_contents($root . '/models/Entry.php');
 $settingsForm = (string)file_get_contents($root . '/models/SettingsForm.php');
 $events = (string)file_get_contents($root . '/Events.php');
 $calendarService = (string)file_get_contents($root . '/services/SociologCalendarService.php');
+$adminController = (string)file_get_contents($root . '/controllers/AdminController.php');
+$spacesView = (string)file_get_contents($root . '/views/admin/spaces.php');
 $runtimeWorkflow = (string)file_get_contents($root . '/.github/workflows/runtime-tests.yml');
 $moduleChecksWorkflow = (string)file_get_contents($root . '/.github/workflows/module-checks.yml');
 $lifecycleTest = (string)file_get_contents($root . '/tests/codeception/unit/EntryLifecycleTest.php');
@@ -122,6 +124,14 @@ if (!str_contains($events, '->distinct()')
 if (!str_contains($calendarService, 'CalendarEntryParticipation::PARTICIPATION_MODE_NONE')
     || !str_contains($calendarService, '$calendar->participation->deleteAll()')) {
     $errors[] = 'Automatically generated review dates must remain informational calendar entries without participants.';
+}
+
+if (!str_contains($adminController, "post('space_rows', [])")
+    || !str_contains($adminController, "post('space_rows_complete', [])")
+    || !str_contains($spacesView, 'data-space-config-row')
+    || !str_contains($spacesView, "row.dataset.changed = '1'")
+    || !str_contains($spacesView, 'control.disabled = true')) {
+    $errors[] = 'Large Space configuration forms must submit only changed, complete rows.';
 }
 
 if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")

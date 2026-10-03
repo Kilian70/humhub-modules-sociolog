@@ -244,8 +244,29 @@ if (Yii::$app->request->isPost) {
 		$linkMode    = Yii::$app->request->post('link_mode', []);
 		$link        = Yii::$app->request->post('link', []);
 		$isOrganSpace = Yii::$app->request->post('is_organ_space', []);
+		$startedRows = Yii::$app->request->post('space_rows', []);
+		$completedRows = Yii::$app->request->post('space_rows_complete', []);
+
+    // Nur vollstaendig uebertragene Zeilen verarbeiten. Die Verwaltungsseite
+    // kann bei Installationen mit vielen Spaces sonst an max_input_vars
+    // stossen. Unvollstaendig abgeschnittene Zeilen duerfen niemals bestehende
+    // Einstellungen mit vermeintlich leeren Checkboxen ueberschreiben.
+    $submittedSpaceIds = array_values(array_unique(array_filter(array_map(
+        'intval',
+        array_intersect(array_keys((array)$startedRows), array_keys((array)$completedRows))
+    ))));
+
+    if ($submittedSpaceIds === []) {
+        Yii::$app->session->setFlash(
+            'warning',
+            Yii::t('SociologModule.base', 'Es wurden keine vollständigen Space-Änderungen übermittelt. Bitte lade die Seite neu und versuche es erneut.')
+        );
+
+        return $this->redirect(['spaces']);
+    }
 
     $spaces = Space::find()
+        ->andWhere(['id' => $submittedSpaceIds])
         ->orderBy(['name' => SORT_ASC])
         ->all();
 
@@ -253,6 +274,17 @@ if (Yii::$app->request->isPost) {
 
     try {
     $organSpaceIds = [];
+    $existingOrganSpaces = SpaceConfig::find()
+        ->select(['space_id', 'organ_id'])
+        ->where(['is_organ_space' => 1])
+        ->andWhere(['not in', 'space_id', $submittedSpaceIds])
+        ->andWhere(['not', ['organ_id' => null]])
+        ->asArray()
+        ->all();
+
+    foreach ($existingOrganSpaces as $existingOrganSpace) {
+        $organSpaceIds[(int)$existingOrganSpace['organ_id']] = (int)$existingOrganSpace['space_id'];
+    }
 
     foreach ($spaces as $space) {
 
@@ -323,7 +355,19 @@ if (Yii::$app->request->isPost) {
     }
 
     // Das historische Feld im Organ bleibt synchron, damit bestehende
-    // Integrationen und ältere Modulstände dieselbe Zuordnung sehen.
+    // Integrationen und ältere Modulstände dieselbe Zuordnung sehen. Nach der
+    // Teilaktualisierung wird die Zuordnung bewusst aus allen gespeicherten
+    // Space-Konfigurationen neu aufgebaut.
+    $organSpaceIds = [];
+    foreach (SpaceConfig::find()
+        ->select(['space_id', 'organ_id'])
+        ->where(['is_organ_space' => 1])
+        ->andWhere(['not', ['organ_id' => null]])
+        ->asArray()
+        ->all() as $organSpaceConfig) {
+        $organSpaceIds[(int)$organSpaceConfig['organ_id']] = (int)$organSpaceConfig['space_id'];
+    }
+
     \humhub\modules\sociolog\models\Organ::updateAll(['organ_space_id' => null]);
     foreach ($organSpaceIds as $organId => $spaceId) {
         \humhub\modules\sociolog\models\Organ::updateAll(

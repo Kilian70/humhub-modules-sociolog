@@ -3,6 +3,13 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.29] – 2026-10-03
+
+### Space-Verwaltung
+- Beim Speichern werden nur noch tatsächlich geänderte Space-Zeilen übertragen
+- Vollständigkeitsmarkierungen verhindern, dass serverseitig abgeschnittene Formulareinstellungen bestehende Konfigurationen überschreiben
+- Zuordnung, Sichtbarkeit und Organ-Space-Einstellung funktionieren dadurch auch in Installationen mit sehr vielen Spaces zuverlässig
+
 ## [1.0.28] – 2026-10-03
 
 ### Informationsseite
