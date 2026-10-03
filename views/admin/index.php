@@ -287,7 +287,7 @@ echo Html::encode(implode(', ', $names));
 
 </div>
 
-<!-- Logbuch-Verantwortliche -->
+<!-- Betrieb des Logbuches -->
 <div class="col-md-6">
 
     <?= $form->field($model, 'managerUsers')->widget(
@@ -297,7 +297,7 @@ echo Html::encode(implode(', ', $names));
         ]
     )->hint(Yii::t(
         'SociologModule.base',
-        'Diese Personen dürfen veröffentlichte Einträge bearbeiten, wenn der Veröffentlichungsschutz aktiviert ist.'
+        'Diese Personen verwalten die zuständigen Personen der Kreise und dürfen notwendige administrative Korrekturen an Einträgen vornehmen. Löschrechte werden weiterhin separat vergeben.'
     )) ?>
 
 </div>

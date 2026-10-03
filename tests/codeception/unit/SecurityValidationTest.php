@@ -5,6 +5,9 @@ namespace humhub\modules\sociolog\tests\codeception\unit;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\models\Organ;
 use humhub\modules\sociolog\models\Protocol;
+use humhub\modules\sociolog\models\EntryReview;
+use humhub\modules\sociolog\models\ReviewForm;
+use humhub\modules\sociolog\models\SpaceConfig;
 use sociolog\SociologTestCase;
 
 class SecurityValidationTest extends SociologTestCase
@@ -52,5 +55,33 @@ class SecurityValidationTest extends SociologTestCase
 
         $this->assertFalse($organ->validate());
         $this->assertArrayHasKey('parent_id', $organ->getErrors());
+    }
+
+    public function testReviewRequiresJustificationAndNextDateWhenConfirmed(): void
+    {
+        $confirmed = new ReviewForm([
+            'result' => EntryReview::RESULT_CONFIRMED,
+            'justification' => 'Der Entscheid bleibt weiterhin notwendig.',
+        ]);
+        $this->assertFalse($confirmed->validate());
+        $this->assertArrayHasKey('reviewDate', $confirmed->getErrors());
+
+        $confirmed->reviewDate = date('Y-m-d');
+        $this->assertFalse($confirmed->validate());
+        $this->assertArrayHasKey('reviewDate', $confirmed->getErrors());
+
+        $repealed = new ReviewForm([
+            'result' => EntryReview::RESULT_REPEALED,
+            'justification' => 'Der Entscheid wird nicht mehr benötigt.',
+        ]);
+        $this->assertTrue($repealed->validate());
+    }
+
+    public function testSelectedWriterGuidsAreStoredAsUniqueJsonValues(): void
+    {
+        $config = new SpaceConfig();
+        $config->setWriterUserGuids(['guid-a', 'guid-a', '', 'guid-b']);
+
+        $this->assertSame(['guid-a', 'guid-b'], $config->getWriterUserGuids());
     }
 }

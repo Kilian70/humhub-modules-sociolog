@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use humhub\modules\user\widgets\Image as UserImage;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\models\EntryFlow;
+use humhub\modules\sociolog\models\EntryReview;
 use humhub\modules\space\models\Space;
 
 /** @var yii\web\View $this */
@@ -386,6 +387,44 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
         <strong><?= Yii::t('SociologModule.base', 'Begründung') ?>:</strong>
       </h6>
       <p class="ps-4"><?= nl2br(Html::encode($model->description)) ?></p>
+    <?php endif; ?>
+
+    <?php if (!empty($model->reviews)): ?>
+      <h6 class="mt-4 mb-2">
+        <i class="fa fa-history me-2 text-primary" aria-hidden="true"></i>
+        <strong><?= Yii::t('SociologModule.base', 'Dokumentierte Überprüfungen') ?>:</strong>
+      </h6>
+      <div class="ps-4">
+        <?php foreach ($model->reviews as $review): ?>
+          <div class="card mb-2">
+            <div class="card-body py-2">
+              <strong><?= Html::encode(EntryReview::resultOptions()[$review->result] ?? $review->result) ?></strong>
+              <span class="text-muted small ms-2">
+                <?= Yii::$app->formatter->asDatetime($review->created_at) ?>
+                <?php if ($review->creator): ?>
+                  · <?= Html::encode($review->creator->displayName) ?>
+                <?php endif; ?>
+              </span>
+              <p class="mb-1 mt-2"><?= nl2br(Html::encode($review->justification)) ?></p>
+              <?php if ($review->next_review_date): ?>
+                <div class="small text-muted">
+                  <?= Yii::t('SociologModule.base', 'Nächste Überprüfung ab') ?>:
+                  <?= Yii::$app->formatter->asDate($review->next_review_date) ?>
+                </div>
+              <?php endif; ?>
+              <?php if ($review->protocol && $review->protocol->safeUrl): ?>
+                <div class="small">
+                  <?= Html::a(
+                    '<i class="fa fa-file-text-o me-1" aria-hidden="true"></i>' . Html::encode($review->protocol->title),
+                    $review->protocol->safeUrl,
+                    ['target' => '_blank', 'rel' => 'noopener noreferrer']
+                  ) ?>
+                </div>
+              <?php endif; ?>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
     <?php endif; ?>
     
     <!-- ============================================================

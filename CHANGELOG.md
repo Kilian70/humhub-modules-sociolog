@@ -3,6 +3,21 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.22] – 2026-10-03
+
+### Rollen und Schreibberechtigungen
+- Rolle „Logbuch-Verantwortliche“ fachlich in „Betrieb des Logbuches“ überführt
+- Der Betrieb des Logbuches kann die zuständigen Personen der Kreise ohne allgemeine HumHub-Administratorrechte verwalten
+- Je Space kann zwischen allen Space-Administrator:innen und ausdrücklich ausgewählten zuständigen Personen gewählt werden
+- Bestehende Installationen verwenden nach dem Update weiterhin den bisherigen Modus mit Space-Administrator:innen
+- Ausgewählte Personen müssen Mitglied des betreffenden Spaces sein; nicht ausgewählte Space-Administrator:innen erhalten im Auswahlmodus kein automatisches Schreibrecht
+
+### Dokumentierte Überprüfungen
+- Überprüfungen erhalten ein Ergebnis „bleibt bestehen“ oder „wird ausser Kraft gesetzt“ sowie eine eigene Begründung
+- Bei bestätigten Entscheiden wird ein neues Überprüfungsdatum verlangt, bei aufgehobenen Entscheiden der Status „Nicht mehr gültig“ gesetzt
+- Überprüfungsbegründung, Ergebnis, Datum, handelnde Person und optionales Protokoll bleiben als Historie erhalten
+- Der ursprüngliche Beschlusstext und die ursprüngliche Begründung werden bei einer Überprüfung nicht verändert
+
 ## [1.0.21] – 2026-10-03
 
 ### Administration

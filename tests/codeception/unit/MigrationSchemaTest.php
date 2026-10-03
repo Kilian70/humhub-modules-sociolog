@@ -16,6 +16,7 @@ class MigrationSchemaTest extends SociologTestCase
             'sociolog_organ',
             'sociolog_entry_flow',
             'sociolog_protocol',
+            'sociolog_entry_review',
         ];
 
         foreach ($requiredTables as $table) {
@@ -44,5 +45,9 @@ class MigrationSchemaTest extends SociologTestCase
 
         $this->assertArrayNotHasKey('content_id', $entrySchema->columns);
         $this->assertArrayNotHasKey('protocol_link', $entrySchema->columns);
+
+        $spaceConfigSchema = Yii::$app->db->schema->getTableSchema('sociolog_space_config', true);
+        $this->assertArrayHasKey('writer_mode', $spaceConfigSchema->columns);
+        $this->assertArrayHasKey('writer_user_guids', $spaceConfigSchema->columns);
     }
 }

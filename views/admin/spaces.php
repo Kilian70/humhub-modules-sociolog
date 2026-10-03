@@ -124,6 +124,11 @@ $form = ActiveForm::begin();
 
     <div>
         <?= Html::a(
+            '<i class="fa fa-users me-1" aria-hidden="true"></i> ' . Yii::t('SociologModule.base', 'Zuständige Personen'),
+            ['/sociolog/operations/permissions'],
+            ['class' => 'btn btn-sm btn-info']
+        ) ?>
+        <?= Html::a(
             '<i class="fa fa-arrow-left me-1"></i> ' . Yii::t('SociologModule.base', 'Zurück zu Einstellungen'),
             ['/sociolog/admin/index'],
             ['class' => 'btn btn-sm btn-outline-secondary']
@@ -155,7 +160,7 @@ $form = ActiveForm::begin();
 
 <br><br>
 
-<?= Yii::t('SociologModule.base', 'Administrator:innen eines Spaces dürfen automatisch im Logbuch ihres Organs schreiben.') ?>
+<?= Yii::t('SociologModule.base', 'Die Schreibberechtigung wird je Space auf alle Space-Administrator:innen oder auf ausgewählte zuständige Personen festgelegt.') ?>
 
 <br>
 

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use humhub\modules\sociolog\models\EntryReview;
 
 /** @var yii\web\View $this */
 /** @var humhub\modules\sociolog\models\Entry $model */
@@ -20,13 +21,19 @@ $this->title = Yii::t('SociologModule.base', 'Überprüfung dokumentieren');
         <p class="text-muted">
             <?= Yii::t(
                 'SociologModule.base',
-                'Hier können ausschließlich das nächste Überprüfungsdatum angepasst und ein zusätzliches Protokoll verlinkt werden.'
+                'Der ursprüngliche Beschlusstext bleibt unverändert. Dokumentiere hier das Ergebnis und die Begründung der Überprüfung.'
             ) ?>
         </p>
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($formModel, 'reviewDate')->input('date') ?>
+        <?= $form->field($formModel, 'result')->dropDownList(EntryReview::resultOptions()) ?>
+
+        <?= $form->field($formModel, 'justification')->textarea(['rows' => 5]) ?>
+
+        <?= $form->field($formModel, 'reviewDate')->input('date')->hint(
+            Yii::t('SociologModule.base', 'Nur erforderlich, wenn der Entscheid bestehen bleibt.')
+        ) ?>
 
         <fieldset class="mt-4">
             <legend class="h5">

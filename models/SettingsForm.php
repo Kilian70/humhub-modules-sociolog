@@ -332,16 +332,16 @@ class SettingsForm extends Model
                 Yii::t('SociologModule.base', 'Empfänger der Benachrichtigungen'),
 
             'managerUsers' =>
-                Yii::t('SociologModule.base', 'Logbuch-Verantwortliche'),
+                Yii::t('SociologModule.base', 'Betrieb des Logbuches'),
 
             'managerGroups' =>
-                Yii::t('SociologModule.base', 'Verantwortliche Gruppen'),
+                Yii::t('SociologModule.base', 'Gruppen für den Betrieb des Logbuches'),
 
             'lockPublishedEntries' =>
                 Yii::t('SociologModule.base', 'Veröffentlichte Einträge für Erfasser:innen sperren'),
 
             'statusManagersOnly' =>
-                Yii::t('SociologModule.base', 'Manuelle Statusänderung nur für Logbuch-Verantwortliche'),
+                Yii::t('SociologModule.base', 'Manuelle Statusänderung nur für den Betrieb des Logbuches'),
 
             'extendedStatusesEnabled' =>
                 Yii::t('SociologModule.base', 'Zusätzliche Status „Schwerwiegender Einwand“ und „Ersetzt“ aktivieren'),

@@ -108,6 +108,13 @@ foreach ($dataProvider->models as $entry) {
   </div>
 
   <div class="btn-group">
+    <?php if (Yii::$app->user->isAdmin() || Entry::isLogbookManager(Yii::$app->user->identity)): ?>
+      <?= Html::a(
+        '<i class="fa fa-users me-1" aria-hidden="true"></i>' . Yii::t('SociologModule.base', 'Zuständige Personen'),
+        ['/sociolog/operations/permissions'],
+        ['class' => 'btn btn-sm btn-outline-primary']
+      ) ?>
+    <?php endif; ?>
     <?php if ($infoPageEnabled): ?>
       <?= Html::a(
         '<i class="fa fa-info-circle me-1" aria-hidden="true"></i>'

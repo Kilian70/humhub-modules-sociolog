@@ -5,9 +5,12 @@ namespace humhub\modules\sociolog\models;
 use Yii;
 use humhub\components\ActiveRecord;
 use humhub\modules\space\models\Space;
+use humhub\modules\user\models\User;
 
 class SpaceConfig extends ActiveRecord
 {
+    public const WRITER_MODE_SPACE_ADMINS = 'space_admins';
+    public const WRITER_MODE_SELECTED = 'selected';
 
     public static function tableName()
     {
@@ -49,7 +52,29 @@ class SpaceConfig extends ActiveRecord
 
             [['global_write', 'can_delete', 'enabled', 'is_organ_space'], 'boolean'],
 
+            [['writer_mode'], 'in', 'range' => [self::WRITER_MODE_SPACE_ADMINS, self::WRITER_MODE_SELECTED]],
+
+            [['writer_user_guids'], 'string'],
+
         ];
+    }
+
+    public function getWriterUserGuids(): array
+    {
+        $decoded = json_decode((string)$this->writer_user_guids, true);
+        return is_array($decoded) ? array_values(array_unique(array_filter($decoded))) : [];
+    }
+
+    public function setWriterUserGuids(array $guids): void
+    {
+        $guids = array_values(array_unique(array_filter(array_map('strval', $guids))));
+        $this->writer_user_guids = $guids === [] ? null : json_encode($guids, JSON_UNESCAPED_SLASHES);
+    }
+
+    public function allowsSelectedWriter(User $user): bool
+    {
+        return $this->writer_mode === self::WRITER_MODE_SELECTED
+            && in_array((string)$user->guid, $this->getWriterUserGuids(), true);
     }
 
     public function attributeLabels()

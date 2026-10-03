@@ -13,6 +13,7 @@ use humhub\modules\sociolog\models\SpaceConfig;
 use humhub\modules\sociolog\models\EntryFlow;
 use humhub\modules\sociolog\models\Protocol;
 use humhub\modules\sociolog\models\ReviewForm;
+use humhub\modules\sociolog\models\EntryReview;
 
 /**
  * ============================================================
@@ -714,17 +715,26 @@ public function actionReview($id)
     }
 
     $form = new ReviewForm([
-        'reviewDate' => $model->review_date,
+        'result' => EntryReview::RESULT_CONFIRMED,
+        'reviewDate' => null,
     ]);
 
     if ($form->load(Yii::$app->request->post()) && $form->validate()) {
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
-            $model->review_date = $form->reviewDate;
-            if (!$model->save(false, ['review_date'])) {
-                throw new \RuntimeException('Review date could not be saved.');
+            $previousReviewDate = $model->review_date;
+            $model->review_date = $form->result === EntryReview::RESULT_CONFIRMED
+                ? $form->reviewDate
+                : null;
+            $model->status = $form->result === EntryReview::RESULT_CONFIRMED
+                ? Entry::STATUS_VALID
+                : Entry::STATUS_EXPIRED;
+            if (!$model->save(false, ['review_date', 'status'])) {
+                throw new \RuntimeException('Review result could not be saved.');
             }
+
+            $protocolId = null;
 
             if (trim((string)$form->protocolTitle) !== '') {
                 $protocol = new Protocol([
@@ -736,6 +746,22 @@ public function actionReview($id)
                 if (!$protocol->save()) {
                     throw new \RuntimeException(json_encode($protocol->getErrors()));
                 }
+
+                $protocolId = (int)$protocol->id;
+            }
+
+            $review = new EntryReview([
+                'entry_id' => (int)$model->id,
+                'result' => $form->result,
+                'justification' => trim((string)$form->justification),
+                'previous_review_date' => $previousReviewDate,
+                'next_review_date' => $model->review_date,
+                'protocol_id' => $protocolId,
+                'created_at' => time(),
+                'created_by' => Yii::$app->user->id,
+            ]);
+            if (!$review->save()) {
+                throw new \RuntimeException(json_encode($review->getErrors()));
             }
 
             if (!EntryFlow::log(

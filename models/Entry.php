@@ -44,7 +44,14 @@ class Entry extends EntryBase
     private static array $spaceCache = [];
 
     // Cache für SpaceConfig
-    private static array $spaceConfigCache = [];
+private static array $spaceConfigCache = [];
+
+public static function resetRuntimeCaches(): void
+{
+    self::$organCache = null;
+    self::$spaceCache = [];
+    self::$spaceConfigCache = [];
+}
 
     private static function getSpaceByName(string $name)
     {
@@ -169,6 +176,12 @@ public function getDecisionType()
 {
     return $this->hasOne(DecisionType::class, ['id' => 'decision_type_id']);
 }
+
+public function getReviews()
+{
+    return $this->hasMany(EntryReview::class, ['entry_id' => 'id'])
+        ->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC]);
+}
  
 
     // ============================================================
@@ -251,6 +264,12 @@ public function canWrite($user = null): bool
         return true;
     }
 
+    // Die Personen des Betriebs Logbuch dürfen die fachlich vorgesehenen
+    // administrativen Korrekturen unabhängig vom zuständigen Space ausführen.
+    if (static::isLogbookManager($user)) {
+        return true;
+    }
+
     // Optionaler Veröffentlichungs-Schutz. Standardmässig ist er aus,
     // damit das bisherige Rechteverhalten vollständig erhalten bleibt.
     $lockPublished = (bool)Yii::$app->getModule('sociolog')
@@ -295,18 +314,21 @@ public function canWrite($user = null): bool
     // --------------------------------------------------------
     // 4️⃣ AKTUELLES ENTSCHEIDUNGSORGAN
     // --------------------------------------------------------
-    if (static::canCreateGlobal($user, $this->getDecisionOrgan())) {
-        return true;
-    }
-
     $currentSpace = self::getSpaceById((int)$this->getDecisionOrgan());
-
-    if ($currentSpace instanceof Space
-        && self::canInSpace($currentSpace, UpdateEntry::class, $user)) {
-        return true;
+    if (!$currentSpace instanceof Space) {
+        return false;
     }
 
-    return false;
+    $config = self::getSpaceConfigBySpaceId((int)$currentSpace->id);
+    if (!$config || !$config->enabled) {
+        return false;
+    }
+
+    if ($config->writer_mode === SpaceConfig::WRITER_MODE_SELECTED) {
+        return $config->allowsSelectedWriter($user);
+    }
+
+    return self::canInSpace($currentSpace, UpdateEntry::class, $user);
 }
 
 public static function isLogbookManager($user = null): bool
@@ -350,8 +372,8 @@ public function canEdit($user = null): bool
 }
 
 /**
- * Darf ausschließlich das nächste Überprüfungsdatum pflegen und ein
- * zusätzliches Protokoll verlinken.
+ * Darf eine fällige Überprüfung mit Ergebnis, Begründung, nächstem Datum
+ * und optionalem Protokoll dokumentieren.
  */
 public function canMaintainReview($user = null): bool
 {
@@ -696,9 +718,13 @@ foreach ($memberships as $membership) {
         continue;
     }
 
-    // HumHub-Container-Permission entscheidet. Standardmässig sind
-    // Space-Eigentümer und Space-Administratoren berechtigt.
-    if (!self::canInSpace($space, CreateEntry::class, $user)) {
+    if ($config->writer_mode === SpaceConfig::WRITER_MODE_SELECTED) {
+        if (!$config->allowsSelectedWriter($user)) {
+            continue;
+        }
+    } elseif (!self::canInSpace($space, CreateEntry::class, $user)) {
+        // Im kompatiblen Standardmodus entscheiden weiterhin die HumHub-
+        // Space-Rechte (standardmässig Eigentümer und Administrator:innen).
         continue;
     }
 
