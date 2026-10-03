@@ -3,6 +3,16 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.27] – 2026-10-03
+
+### Sicherheit
+- Beschluss und Begründung auf jeweils 15.000 Zeichen begrenzt, damit übergrosse utf8mb4-Eingaben vor dem Datenbankschreiben kontrolliert abgewiesen werden
+- Automatisierte Prüfung gegen ausführbare Script-, Bild- und `javascript:`-Inhalte im Rich-Text ergänzt
+
+### Belastungstests
+- Rich-Text-Kurzansichten mit 5.000 formatierten Texten geprüft
+- Stapelverarbeitung der Statuspflege mit 2.000 Einträgen geprüft
+
 ## [1.0.26] – 2026-10-03
 
 ### Bedienung

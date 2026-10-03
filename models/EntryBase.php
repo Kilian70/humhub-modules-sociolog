@@ -19,6 +19,9 @@ use humhub\modules\sociolog\models\EntryQuery;
  */
 class EntryBase extends ContentActiveRecord
 {
+    /** TEXT-Spalten unter utf8mb4 sicher innerhalb des 64-KiB-Limits halten. */
+    public const MAX_RICH_TEXT_LENGTH = 15000;
+
     /**
      * Associates this ContentActiveRecord explicitly with the Sociolog module.
      */
@@ -102,7 +105,7 @@ class EntryBase extends ContentActiveRecord
         [['title', 'decision', 'organ', 'decision_date', 'decision_type_id'], 'required'],
 
         // Textfelder
-        [['decision', 'description'], 'string'],
+        [['decision', 'description'], 'string', 'max' => self::MAX_RICH_TEXT_LENGTH],
 
         // Datum
         [['decision_date', 'effective_date', 'review_date'], 'safe'],

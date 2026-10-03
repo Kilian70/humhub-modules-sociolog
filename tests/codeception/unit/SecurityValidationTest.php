@@ -3,6 +3,7 @@
 namespace humhub\modules\sociolog\tests\codeception\unit;
 
 use humhub\modules\sociolog\models\Entry;
+use humhub\modules\sociolog\models\EntryBase;
 use humhub\modules\sociolog\models\Organ;
 use humhub\modules\sociolog\models\Protocol;
 use humhub\modules\sociolog\models\EntryReview;
@@ -25,6 +26,22 @@ class SecurityValidationTest extends SociologTestCase
 
         $this->assertFalse($entry->validate());
         $this->assertArrayHasKey('title', $entry->getErrors());
+    }
+
+    public function testEntryRejectsOversizedRichTextBeforeDatabaseWrite(): void
+    {
+        $entry = new Entry([
+            'title' => 'Oversized rich text',
+            'decision' => str_repeat('🚀', EntryBase::MAX_RICH_TEXT_LENGTH + 1),
+            'description' => str_repeat('x', EntryBase::MAX_RICH_TEXT_LENGTH + 1),
+            'organ' => 1,
+            'decision_type_id' => 1,
+            'decision_date' => date('Y-m-d'),
+        ]);
+
+        $this->assertFalse($entry->validate());
+        $this->assertArrayHasKey('decision', $entry->getErrors());
+        $this->assertArrayHasKey('description', $entry->getErrors());
     }
 
     public function testProtocolRejectsUnsafeAndOversizedUrls(): void
