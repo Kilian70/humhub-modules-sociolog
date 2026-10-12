@@ -58,6 +58,27 @@ class Entry extends EntryBase
         return $deadline !== null && ($now ?? time()) >= $deadline;
     }
 
+    /** Display policy only: an unknown historical time is not an exact deadline. */
+    public function shouldDisplayObjectionDeadline(?int $now = null): bool
+    {
+        $now ??= time();
+        $deadline = $this->getObjectionDeadlineTimestamp();
+        if ($deadline !== null) {
+            return $now < $deadline;
+        }
+
+        $date = $this->getObjectionDeadlineDate();
+        if ($date === null) {
+            return false;
+        }
+
+        // Use the same time zone as the displayed date. Keep legacy hints for
+        // the entire last day without inventing a publication timestamp.
+        $zone = new \DateTimeZone(Yii::$app->formatter->timeZone ?: Yii::$app->timeZone);
+        $endOfDay = new \DateTimeImmutable($date, $zone);
+        return $now < $endOfDay->modify('+1 day')->getTimestamp();
+    }
+
     public function canView($user = null): bool
     {
         return \humhub\modules\sociolog\services\ReadAccess::canRead($this, $user)

@@ -101,3 +101,8 @@ Für eine vollständige Rückkehr deshalb passenden Modulstand und komplette
 Testdatenbanksicherung gemeinsam wiederherstellen. Nur die dafür neu angelegten
 Testdatenbanken verwenden, niemals gebaeudemanagement. Ein Code-Downgrade allein
 stellt Zeitpunkte nicht wieder her. Es wurde keine Rückmigration durchgeführt.
+
+AKTUALISIERUNG VOM 12.10.2026
+
+Die frühere Anzeige nach Ablauf ist durch das automatische Ausblenden ersetzt.
+Details, Prüfungen und Testanleitung: docs/ai/FRISTANZEIGE_AUSBLENDEN.txt.

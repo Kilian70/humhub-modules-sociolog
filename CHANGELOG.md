@@ -3,6 +3,14 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.32] – 2026-10-12
+
+- Einwandsfrist samt Altdaten-Hinweis nach Ablauf in Karten und Detailansicht automatisch ausblenden.
+- Bei erfasster Uhrzeit endet die Anzeige exakt nach 240 Stunden. Ohne historische Uhrzeit bleibt sie bis zum Ende des angezeigten letzten Tages sichtbar.
+- Keine Änderung an Veröffentlichungsdaten, Fristberechnung, Inkrafttreten oder Berechtigungen; Anzeige aktualisiert sich beim nächsten Seitenaufruf.
+
+- Je 49 Tests / 5.414 Assertions auf HumHub 1.18.6 und 1.19.0-beta.3 mit PHP 8.3.30 bestanden. Keine neue Migration beim Update von 1.0.31.
+
 ## [1.0.31] – 2026-10-12
 
 ### Leserechte und Übersetzungen
