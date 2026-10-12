@@ -28,7 +28,9 @@ class EntrySearch extends Model
     public function rules()
     {
         return [
-            [['organ', 'status', 'query'], 'safe'],
+            [['organ'], 'integer'],
+            [['query'], 'string', 'max' => 255],
+            [['status'], 'in', 'range' => array_keys(Entry::getStatusConfig())],
             [['decision_type_id', 'year'], 'integer'],
         ];
     }
@@ -72,8 +74,15 @@ class EntrySearch extends Model
 			$this->load($params);
 		
 			if (!$this->validate()) {
-				return $dataProvider;
-			}
+				$query->andWhere('0=1');
+                // Avoid passing array values to form input rendering.
+                foreach ($this->attributes as $attribute => $value) {
+                    if (!is_scalar($value) && $value !== null) {
+                        $this->$attribute = null;
+                    }
+                }
+                return $dataProvider;
+            }
 		
 			// 🔹 Organ
 			if (!empty($this->organ)) {
@@ -107,61 +116,12 @@ class EntrySearch extends Model
 			]);
 		}
 
-        // 🔹 Statusfilter (automatisch + manuell)
         if (!empty($this->status)) {
-            $today  = date('Y-m-d');
-            $manual = ['status' => $this->status];
-            $auto   = null;
-
-            switch ($this->status) {
-                case 'pending': // Nicht in Kraft
-                    $auto = [
-                        'and',
-                        ['not', ['effective_date' => null]],
-                        ['>', 'effective_date', $today],
-                    ];
-                    break;
-
-                case 'valid': // Gültig
-                    $auto = [
-                        'and',
-                        [
-                            'or',
-                            ['<=', 'effective_date', $today],
-                            ['effective_date' => null],
-                        ],
-                        [
-                            'or',
-                            ['review_date' => null],
-                            ['>', 'review_date', $today],
-                        ],
-                    ];
-                    break;
-
-                case 'review': // In Überprüfung
-                    $auto = [
-                        'and',
-                        ['not', ['review_date' => null]],
-                        ['<=', 'review_date', $today],
-                    ];
-                    break;
-
-                case 'expired': // Nicht mehr gültig
-                    $auto = [
-                        'and',
-                        ['not', ['review_date' => null]],
-                        ['<', 'review_date', $today],
-                    ];
-                    break;
-            }
-
-            if ($auto) {
-                // Manuell ODER automatisch
-                $query->andWhere(['or', $manual, $auto]);
-            } else {
-                // Nur manuell gesetzter Status
-                $query->andWhere($manual);
-            }
+            $query->andWhere([
+                '=',
+                \humhub\modules\sociolog\services\SociologStatusService::statusExpression(),
+                $this->status,
+            ]);
         }
 
         return $dataProvider;

@@ -203,7 +203,7 @@ return [
     'Alle Beschlüsse anzeigen' => 'Alle Beschlüsse anzeigen',
 
     // Status (Badge translations – technische Labels)
-    'NOT IN FORCE' => 'NOT IN FORCE',
+    'NOT IN FORCE' => 'NICHT IN KRAFT',
     'VALID' => 'VALID',
     'REVIEW' => 'REVIEW',
     'PENDING' => 'PENDING',

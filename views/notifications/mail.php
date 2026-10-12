@@ -8,7 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $module = Yii::$app->getModule('sociolog');
-$moduleName = $module->settings->get('moduleTitle', 'Logbuch');
+$moduleName = Html::encode($module->settings->get('moduleTitle', 'Logbuch'));
 $title = Html::encode($entry->title ?? Yii::t('SociologModule.base', 'Eintrag'));
 $userName = Html::encode($entry->creator->displayName ?? Yii::t('SociologModule.base', 'Unbekannt'));
 $url = Url::to(['/sociolog/entry/view', 'id' => $entry->id], true);

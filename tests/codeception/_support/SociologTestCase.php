@@ -10,6 +10,12 @@ use Yii;
 
 abstract class SociologTestCase extends HumHubDbTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        \humhub\modules\sociolog\models\ReadScope::deleteAll();
+    }
+
     protected function disableNotifications(): void
     {
         $settings = Yii::$app->getModule('sociolog')->settings;

@@ -20,3 +20,10 @@
 
 # Local historical import files may contain private association data
 /import-preview/
+
+
+# Generated Codeception output
+/tests/codeception/_output/*
+!/tests/codeception/_output/.gitignore
+/tests/codeception/_support/_generated/*
+!/tests/codeception/_support/_generated/.gitignore

@@ -11,7 +11,9 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.30
+**Version:** 1.0.31
+
+Beim Update von 1.0.30: Modul und Datenbank vollständig sichern, beide neuen Migrationen ausführen und die Leseeinstellungen einmal speichern. Geprüft auf HumHub 1.18.6 und 1.19.0-beta.3 mit PHP 8.3.30, ohne Tabellenpräfix. Eingeschränkte Leserechte begrenzen native Space-Streams und Kalendererinnerungen. Details und Testanleitung: [aktueller Prüfbericht](docs/ai/AKTUELLER_TESTSTAND.txt).
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  

@@ -1,0 +1,210 @@
+KONFIGURIERBARE LESEBERECHTIGUNG – 11.10.2026
+
+Umfang und Voreinstellung
+
+Die globale Einstellung „Wer darf Einträge lesen?“ bietet drei Alternativen:
+1. Alle angemeldeten Mitglieder (Voreinstellung für den Hausverein).
+2. Nur Mitglieder des jeweiligen ursprünglichen Spaces.
+3. Ausgewählte Benutzer und Benutzergruppen; Benutzer ODER Gruppenmitgliedschaft genügt.
+Die Einstellung gilt für vorhandene und neue Einträge, nicht einzeln pro Eintrag.
+Administratoren mit Inhaltsverwaltungsrechten sowie die jeweiligen Autoren behalten
+HumHubs eigenes Leserecht. Andere Schreibberechtigungen gewähren kein zusätzliches
+Leserecht; zum Bearbeiten fremder Einträge benötigen Schreibende auch Lesezugang.
+Eine leere Auswahl in Modus 3 erlaubt nur Administratoren und Autoren Zugriff.
+Gäste erhalten kein Logbuch-Leserecht. Aktive, vollständige Space-Mitgliedschaft
+ist erforderlich; eine Einladung oder ausgetretene Mitgliedschaft genügt nicht.
+
+Bestätigte Umsetzung
+
+- ReadAccess.php prüft Benutzer, Gruppen und Space-Mitgliedschaften am Server.
+  Berechtigungsrelevante Einstellungen werden ohne Settings-Zwischenspeicher gelesen;
+  Gruppenmitgliedschaften werden aktuell abgefragt.
+- EntryQuery::publishedOrLegacy() begrenzt Liste, Detail, Logbuchsuche, Jahresauswahl,
+  Widget und CSV-Export. Nur der tägliche interne Statuslauf umgeht den Leserfilter.
+- Entry::canView() und der WallEntry-Renderer prüfen denselben Zugriff.
+- Benachrichtigungen werden nur an berechtigte Empfänger gesendet. HumHubs zusätzliche
+  Nachrichten bei Inhaltserstellung werden unterdrückt, weil Sociolog eigene Nachrichten hat.
+- ReadScope ist ein persistenter privater HumHub-Inhaltscontainer pro geschütztem Eintrag.
+  Content::canView() delegiert damit bei direkten Inhaltslinks, Kommentaren und Inhaltsdateien
+  an die Logbuch-Zugriffskontrolle, auch außerhalb der eigenen Modulcontroller.
+- Content-Speicherereignisse verhindern, dass die Einschränkung über einen nativen
+  Wechsel des Inhaltscontainers bzw. der Sichtbarkeit umgangen wird.
+- Einstellungen und Inhaltszugriff werden in einer Transaktion umgestellt. Ein fehlgeschlagener
+  Abgleich nimmt Einstellungen und Inhaltsänderungen zurück. Nur Zugriffsfelder werden
+  beim Abgleich gespeichert; Beschlussdaten und Veröffentlichungszeit bleiben erhalten.
+- 1.19 bietet eine zusätzliche Impersonation-Funktion. Die Prüfung verwendet diese nur,
+  wenn die passende API existiert; HumHub 1.18.6 funktioniert ohne diese neue API.
+
+Integrationsgrenzen
+
+Eingeschränkt lesbare Einträge werden über Logbuch, Logbuchsuche und Logbuch-Widget
+angeboten. Der allgemeine HumHub-Space-Stream und die allgemeine HumHub-Suche
+unterstützen die zusätzlichen Inhaltscontainer nicht als normale Space-Inhalte.
+Auch für berechtigte Lesende ist dort keine vollständige Anzeige zugesichert.
+Das Logbuch selbst und seine eigene Suche funktionieren für berechtigte Lesende.
+
+Automatische Space-Kalendererinnerungen haben eigene Leserechte. Vor eingeschränktem
+Lesen muss „Überprüfungsdaten im Kalender anzeigen“ ausgeschaltet sein. Wenn noch
+automatisch erzeugte Logbuch-Kalendererinnerungen vorhanden sind, verweigert das
+Formular den Wechsel mit einer Erklärung. Diese Erinnerungen müssen zuerst entfernt
+werden. Es werden keine Erinnerungen stillschweigend gelöscht. Die Kalenderintegration
+ist in den beiden Testinstanzen nicht installiert und wird dort nicht als getestet behauptet.
+
+In für Gäste sichtbaren Spaces nutzt auch „Alle angemeldeten Mitglieder“ einen privaten
+Logbuch-Inhaltscontainer, damit Gäste nicht über HumHub-Kommentare/Inhaltslinks zugreifen
+können. Dadurch gelten dort ebenfalls die genannten Grenzen von Space-Stream und
+allgemeiner HumHub-Suche. Die eingerichteten Hausverein-Testspaces sind nur für
+registrierte Benutzer sichtbar; ihr voreingestellter allgemeiner Lesezugang bleibt bestehen.
+
+Datenbank und Wiederherstellung
+
+Neue additive Migration m261011_170000_add_read_scope: neue Tabelle sociolog_read_scope,
+Originalcontainer und ursprüngliche Stream-Ausblendung bleiben gespeichert.
+Die vorherigen 22 Migrationen (einschließlich der Einwandsfrist-Migration) sind bytegleich.
+Zurückstellen auf „Alle angemeldeten Mitglieder“ ist im Formular unterstützt.
+Migration safeDown verweigert das Entfernen der Zugriffstabelle. Ein Wechsel auf eine alte
+Modulversion erfordert die vollständige vor dem Update gesicherte Testdatenbank und den
+zugehörigen Modulstand. Nur den alten Programmcode zurückkopieren ist kein Downgrade.
+Nach einem Modulupdate die Einstellungen einmal speichern, damit auch bestehende
+Inhalte auf die neue Zugriffskontrolle abgeglichen werden. Keine Tabellenpräfix-Unterstützung.
+
+Automatische Ergebnisse
+
+HumHub 1.18.6 (870e35a44dd8ec03c659bc698e75a9a8ec244dc3):
+45 Tests / 5.370 Assertions bestanden, PHP 8.3.30, isoliertes MySQL 5.7.
+HumHub 1.19.0-beta.3 (2dadb68b8dfbae25243584d8ff877a3ca5311b30):
+45 Tests / 5.370 Assertions bestanden, PHP 8.3.30, isoliertes MySQL 5.7.
+10 neue Regressionstests prüfen aktive Nichtmitglieder, Gäste, für Gäste sichtbare Spaces,
+Entzug der Space-Mitgliedschaft, ausgewählte Benutzer/Gruppen, sofortigen Rechteentzug,
+veralteten Settings-Cache, native Inhaltsprüfung, Detailansicht, Logbuchsuche, CSV,
+native Kommentar-Endpunkte beider Versionen, direkte Stream-Abfrage, neue Einträge,
+Umgehungsversuch über native Inhaltseinstellungen, Alteinträge ohne Content sowie
+Rücknahme eines fehlgeschlagenen Einstellungswechsels.
+Fresh-Install: je Version 23 Modulmigrationen in einer neuen, getrennten leeren Datenbank.
+Syntax: alle 116 PHP-Dateien mit PHP 8.3.30, 8.4.17 und 8.5.2 fehlerfrei; Metadaten gültig.
+Neuere Änderungen an drei PHP-Dateien anschließend ebenfalls auf allen drei Versionen geprüft.
+Modulversion bleibt 1.0.30; keine Veröffentlichung, kein Commit oder Push.
+
+Gezielte Kernquellen, beide oben genannten Refs, gelesen am 11.10.2026:
+content/components/ContentContainerActiveRecord.php, ContentActiveRecord.php,
+ActiveQueryContent.php und ContentContainerSettingsManager.php;
+content/models/Content.php und ContentContainer.php; content/controllers/PermaController.php;
+comment/controllers/CommentController.php; stream/models/StreamQuery.php und dessen Filter;
+user/helpers/UserHelper.php; user/components/User.php (1.19 getImpersonation);
+libs/BaseSettingsManager.php; space/models/Space.php und Membership.php.
+Yii Query, Event und JSON werden verwendet, weil keine passendere HumHub-Alternative
+für diese Basisklassen vorliegt. Es gibt keine Änderungen am HumHub-Kern.
+
+Manuelle Testanleitung für MAMP
+
+A. Als testadmin anmelden. Administration > Module > Logbuch > Einstellungen öffnen.
+   Im Bereich Berechtigungen „Wer darf Einträge lesen?“ suchen. Voreinstellung: alle.
+   Der Entscheidungsprozess bleibt ausgeschaltet, die optionale Einwandsfrist bleibt angezeigt.
+B. „Nur Mitglieder des jeweiligen Spaces“ wählen und speichern. Als leser anmelden:
+   Eintrag 3 sowie seine Detailansicht und Titel sollen nicht sichtbar sein, da dieser
+   Benutzer kein Mitglied von „Hausverein – Test“ ist. Als schreiber soll er zugänglich sein.
+C. Als testadmin auf „Ausgewählte Benutzer und Benutzergruppen“ wechseln, zunächst ohne
+   Auswahl speichern. leser bleibt ausgeschlossen, testadmin und schreiber als Autor behalten
+   Zugriff. Dann „Test Lesen“ in der Benutzerauswahl auswählen und speichern: leser darf lesen.
+D. Benutzerauswahl entfernen und stattdessen eine tatsächliche Gruppe von leser wählen:
+   leser darf lesen. Die Auswahl entfernen: der Zugriff entfällt nach Neuladen.
+E. Als ausgeschlossener leser Direktlink zu Eintrag 3 öffnen, Logbuchsuche und CSV-Export prüfen.
+   Titel und Beschlusstext dürfen nicht erscheinen. Auch ein nativer HumHub-Inhaltslink muss
+   abgewiesen werden. Bei vorhandenen Kommentaren/Anhängen deren direkte URLs zusätzlich
+   prüfen. Der native Kommentar-Zugriffscheck wurde automatisch getestet; echte angehängte
+   Dateien und eine installierte Kalenderintegration wurden nicht praktisch getestet.
+F. Als testadmin wieder „Alle angemeldeten Mitglieder“ einstellen und speichern. leser soll
+   wieder lesen können. Veröffentlichung, Zehn-Tage-Einwandsfrist und Beschlusstext dürfen
+   sich durch die Wechsel nicht ändern. Schreib- und Löschrechte separat kontrollieren.
+
+Nachrichtentransport der Testinstallationen bleibt lokal; kein echter E-Mail-Versand.
+
+Zusätzliche Prüfung der tatsächlichen MAMP-Testinstallationen
+
+Beide nativen MAMP-Testinstanzen wurden vorher als Modul- und Datenbankstand gesichert.
+Die neue 23. Modulmigration wurde in beiden Instanzen erfolgreich ausgeführt.
+Je Instanz 15 zusätzliche Prüfungen mit PHP 8.3.30 und MySQL 8.0.44 bestanden:
+Standardleser ohne Space-Mitgliedschaft, Space-Modus, leere Auswahl, Autor/Administrator,
+ausgewählter Benutzer, ausgewählte Gruppe, unmittelbarer Rechteentzug und native
+Content::canView-Prüfung. Alle drei Einträge einschließlich Veröffentlichungszeit und
+Einwandsfrist blieben unverändert. Entscheidungsprozess bleibt aus; Einwandsfrist bleibt an.
+
+Browserprüfung HumHub 1.19: alle drei Modi über das echte Einstellungsformular gespeichert,
+Gruppenauswahl gespeichert, leere Auswahl korrekt verarbeitet, nach Neuladen geprüft.
+Browserprüfung HumHub 1.18: als angemeldeter leser direkter Eintragslink bei leerer
+Leserauswahl abgewiesen; nach gezielter Auswahl wieder zugelassen, Frist unverändert.
+Zum Abschluss beide Instanzen auf „Alle angemeldeten Mitglieder“ mit leerer Benutzer-/
+Gruppenauswahl zurückgestellt. Nur neu eingerichtete Testdatenbanken verwendet.
+Die vorhandene Anwendung „gebaeudemanagement“ wurde nicht geändert.
+
+Beobachteter und behobener Formularfehler: leere Picker-/Checkbox-Felder werden als
+leere Zeichenkette übertragen. Die zusätzliche Validierung normalisiert dies zu einer
+leeren Liste und läuft ausdrücklich auch bei leeren Werten. Ein Regressionstest deckt
+beide Felder ab. Abschließende komplette Tests: je Version 45 Tests / 5.370 Assertions.
+
+Bericht und Screenshots der lokalen Prüfungen liegen im privaten Arbeitsordner
+Leseberechtigung-2026-10-11. Das ZIP enthält den geprüften Modulcode und Berichte,
+keine Datenbanksicherungen oder Anmeldedaten.
+
+Ergänzende Browserprüfung HumHub 1.19 mit dem normalen Testleser
+
+Am 11.10.2026 zusätzlich im Browser mit dem Konto leser geprüft:
+- Leere ausgewählte Lesendenliste: direkter Aufruf von Eintrag 3 abgewiesen.
+- Gezielte Freigabe von Test Lesen: Eintrag 3 sichtbar, keine Bearbeitungs- oder Löschaktion.
+- Freigabe wieder entfernt: derselbe Direktlink nach Neuladen sofort abgewiesen.
+- Standard Alle angemeldeten Mitglieder wiederhergestellt: Eintrag 3 wieder sichtbar.
+Die Einwandsfrist blieb 21.10.2026, 13:59:06 MESZ, der Entscheidungsprozess ausgeschaltet.
+Die Browser-Sitzung wurde abschließend wieder auf testadmin zurückgestellt.
+Keine zusätzlichen Modulcodeänderungen; die letzten vollständigen automatischen
+Prüfungen bleiben 45 Tests / 5.370 Assertions je HumHub-Version.
+Screenshots: Leseberechtigung-2026-10-11/1.19/Leser-*.png.
+
+Ergänzende Browserprüfung Suche, Export und nativer Inhaltslink
+
+Am 11.10.2026 in beiden tatsächlichen MAMP-Installationen als Test Lesen geprüft:
+- Bei ausgewähltem Lesen ohne Freigabe: Logbuchliste und Suche nach
+  Schwerwiegender Einwand enthalten keinen Eintrag.
+- Tatsächlich über den Browser heruntergeladener CSV-Export enthält ausschließlich
+  die Kopfzeile (0 Datenzeilen); keine Titel oder Beschlusstexte.
+- Native Inhaltslinks content/perma zu Eintrag 3 (Content-ID 6 in 1.18, ID 3 in 1.19)
+  werden mit Konnte den angeforderten Inhalt nicht finden abgewiesen.
+- Nach Wiederherstellung von Alle angemeldeten Mitglieder: Suche liefert genau
+  den gesuchten Eintrag; tatsächlicher CSV-Download enthält alle 3 Testeinträge.
+  Der CSV-Export exportiert grundsätzlich alle lesbaren Einträge, nicht nur den Suchfilter.
+- Zusätzlich in 1.19: gezielte Freigabe des Testlesers öffnet denselben nativen
+  Inhaltslink erfolgreich. In 1.18 funktioniert er nach Wiederherstellung des Standards.
+Beide Instanzen stehen abschließend auf Alle angemeldeten Mitglieder;
+1.19-Browsersitzung wieder testadmin. Keine zusätzlichen Modulcodeänderungen.
+Belege im privaten Ordner Leseberechtigung-2026-10-11 je Version:
+Suche-ohne-Leserecht.png, Export-ohne-Leserecht.csv, Export-mit-Leserecht.csv;
+zusätzlich 1.19/Suche-mit-Leserecht.png und Nativer-Inhaltslink-abgewiesen.png.
+
+Abschließende Sprachkorrektur: aktueller Stand je Version 47 Tests / 5.402 Assertions.
+Details und verbleibende Grenzen: docs/ai/AKTUELLER_TESTSTAND.txt.
+
+Ergänzende Prüfung privater Dateianhänge vom 11.10.2026
+
+In beiden tatsächlichen MAMP-Instanzen eine harmlose Textdatei als native private
+HumHub-Datei (public=0) an den fiktiven Logbucheintrag 3 angehängt. Keine Vereinsdaten.
+Je Version 5 Prüfungen von File::canView mit frisch geladenen Beziehungen bestanden:
+Standardleserecht, Sperre, Autorzugriff, gezielte Freigabe und Entzug.
+Je Version zusätzlich 3 Prüfungen der echten nativen DownloadAction-Initialisierung
+im lokalen Prüfskript: Freigabe erfolgreich, fehlendes Leserecht HTTP 401,
+gezielte Auswahl erfolgreich. Tatsächliche gespeicherte Datei vorhanden.
+
+Ein tatsächlicher Browserdownload unter 1.18 als Test Lesen mit Standardleserecht
+war erfolgreich; der heruntergeladene Text wurde exakt abgeglichen. Der eingebettete
+Browser zeigte beim verweigerten Download keine auswertbare Fehlerseite. Deshalb
+ist die HTTP-401-Aussage durch die native DownloadAction-Prüfung belegt, nicht durch
+eine Browser-Fehlerseite. Kein vollständiger Browser-Downloadtest für 1.19 behauptet.
+Uploads über die Oberfläche, öffentliche Dateien, Download-Tokens und externe
+Protokoll-Links waren nicht Gegenstand dieser Prüfung. Externe Links und Dateien
+an anderen HumHub-Inhalten behalten die Berechtigung ihres tatsächlichen Ursprungs.
+
+Die harmlose Datei Sociolog-Testdatei-Leserecht.txt bleibt als reproduzierbarer
+Testanhang nur in den beiden neuen lokalen Testinstanzen. Belege je Version im
+privaten Arbeitsordner Leseberechtigung-2026-10-11:
+Dateiberechtigung.json und Download-Aktion-Pruefung.json.
+Beide Instanzen wieder Alle angemeldeten Mitglieder; Einträge und Einwandsfristen
+unverändert. Keine neuen Modulcodeänderungen. Letzte vollständige Tests weiterhin
+47 Tests / 5.402 Assertions je Version, dazu diese 8 nativen Dateiprüfungen je Version.

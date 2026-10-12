@@ -165,8 +165,8 @@ return [
     'Wenn ein Überprüfungsdatum gesetzt ist, wird automatisch ein Kalendereintrag erstellt.'
     => 'If a review date is set, a calendar entry is created automatically.',
 
-    
-    
+
+
     // ============================================================
     // 🔧 Debug / UX
     // ============================================================
@@ -220,7 +220,7 @@ return [
     'Darf Einträge kommentieren' => 'May comment on entries',
     'Darf eigene Einträge verwalten' => 'May manage own entries',
         'Darf Einträge global verwalten' => 'May manage entries globally',
-    
+
         // ============================================================
     // 🔹 widgets
     // ============================================================
@@ -257,7 +257,7 @@ return [
     'Zurück zu den Einstellungen' => 'Back to settings',
     'Widget-Position' => 'Widget position',
     'Je kleiner die Zahl, desto weiter oben erscheint das Logbuch-Widget im Dashboard.' => 'The smaller the number, the higher the logbook widget appears on the dashboard.',
-    'Ein Organ pro Zeile oder mit Komma getrennt. Diese werden in Auswahlfeldern verwendet.' 
+    'Ein Organ pro Zeile oder mit Komma getrennt. Diese werden in Auswahlfeldern verwendet.'
     => 'One organ per line or separated by commas. These are used in selection fields.',
     'Status jetzt prüfen' => 'Run status check',
 'Wartung' => 'Maintenance',
@@ -270,19 +270,19 @@ return [
 'Hier kannst du die automatische Statusprüfung manuell auslösen. Es wird exakt dieselbe Logik wie beim täglichen Cron verwendet.' =>
     'Here you can manually trigger the automatic status check. It uses exactly the same logic as the daily cron job.',
 
-    
+
 
     // ============================================================
     // 🔹 Integrations
     // ============================================================
     'Überprüfungsdaten im Kalender anzeigen' => 'Show review dates in calendar',
-    'Wenn aktiviert, werden alle Überprüfungsdaten automatisch als Termine im Kalender angezeigt.' 
+    'Wenn aktiviert, werden alle Überprüfungsdaten automatisch als Termine im Kalender angezeigt.'
         => 'If enabled, all review dates are automatically displayed as events in the calendar.',
     'Stream-Integration' => 'Stream integration',
-    'Die Anzeige von Einträgen im Stream ist dauerhaft aktiviert, um Transparenz und Benachrichtigungen sicherzustellen.' 
-        => 'Display of entries in the stream is permanently enabled to ensure transparency and notifications.',
+    'Einträge werden im Space-Stream angezeigt, sofern die Leseberechtigung dies erlaubt. Bei eingeschränktem Lesen sind sie im Logbuch und im Logbuch-Widget zugänglich.'
+        => 'Entries are displayed in the Space stream where read permissions allow it. With restricted reading, they are available in the logbook and logbook widget.',
     'Organfarben' => 'Organ colors',
-    'Optional: Eintrag im Format Organname:#Farbe pro Zeile (z. B. Hausverein:#FF8800).' 
+    'Optional: Eintrag im Format Organname:#Farbe pro Zeile (z. B. Hausverein:#FF8800).'
         => 'Optional: Entry in the format OrganName:#Color per line (e.g. House Association:#FF8800).',
     'Aktuelle Organe mit Schreibrecht:' => 'Current organs with write permission:',
     'Aktuelle globale Organe mit Schreibrecht:' => 'Current global organs with write permission:',
@@ -305,11 +305,11 @@ return [
     // ============================================================
     // 🔹 Notifications
     // ============================================================
-    'Benachrichtigungen bei neuen oder geänderten Einträgen' 
+    'Benachrichtigungen bei neuen oder geänderten Einträgen'
         => 'Notifications for new or updated entries',
-    'Nur Mitglieder dieser Gruppen erhalten eine Mitteilung, wenn ein Eintrag erstellt oder geändert wird.' 
+    'Nur Mitglieder dieser Gruppen erhalten eine Mitteilung, wenn ein Eintrag erstellt oder geändert wird.'
         => 'Only members of these groups will receive a notification when an entry is created or updated.',
-    'Wenn keine Gruppe ausgewählt ist, erhalten alle aktiven Benutzer Benachrichtigungen (Standardverhalten).' 
+    'Wenn keine Gruppe ausgewählt ist, erhalten alle aktiven Benutzer Benachrichtigungen (Standardverhalten).'
         => 'If no group is selected, all active users will receive notifications (default behavior).',
     'Neuer Eintrag im {module}' => 'New entry in {module}',
     'Neuer Eintrag im {module}: {title}' => 'New entry in {module}: {title}',
@@ -326,73 +326,73 @@ return [
     // 🔹 Decision Type Management
     // ============================================================
     'Entscheidungstypen' => 'Decision types',
-    'Diese Typen werden in den Einträgen als „Art der Entscheidung“ angezeigt (z. B. Grundsatzentscheid, Prozessentscheid …).' 
+    'Diese Typen werden in den Einträgen als „Art der Entscheidung“ angezeigt (z. B. Grundsatzentscheid, Prozessentscheid …).'
         => 'These types appear in entries as “Type of decision” (e.g., fundamental decision, process decision …).',
     'Entscheidungstypen verwalten' => 'Manage decision types',
-    'Diese Entscheidungstypen können von Administrator:innen angepasst oder erweitert werden.' 
+    'Diese Entscheidungstypen können von Administrator:innen angepasst oder erweitert werden.'
         => 'These decision types can be modified or extended by administrators.',
-    'Wähle die Art des Entscheids, um Einträge besser zu kategorisieren.' 
+    'Wähle die Art des Entscheids, um Einträge besser zu kategorisieren.'
         => 'Select the type of decision to better categorize entries.',
-    'Standardtypen sind: Grundsatzentscheid, Prozessentscheid und Richtlinie.' 
+    'Standardtypen sind: Grundsatzentscheid, Prozessentscheid und Richtlinie.'
         => 'Default types are: Fundamental decision, process decision, and guideline.',
-    'Neue Entscheidungstypen werden automatisch in allen Bereichen verfügbar.' 
+    'Neue Entscheidungstypen werden automatisch in allen Bereichen verfügbar.'
         => 'New decision types are automatically available across all areas.',
 
 // ============================================================
 // 🔹 Cronjob / Automation (Full Extended Block)
 // ============================================================
 'Automatische Status-Updates' => 'Automatic status updates',
-'Das Modul prüft täglich alle Einträge und passt deren Status automatisch an:' 
+'Das Modul prüft täglich alle Einträge und passt deren Status automatisch an:'
     => 'The module checks all entries daily and automatically updates their status:',
-'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.' 
+'Nach dem Entscheid wechselt der Status von „Nicht in Kraft“ automatisch auf „Gültig“, sobald das Inkrafttretedatum erreicht ist.'
     => 'After the decision, the status automatically changes from “Not in force” to “Valid” once the effective date is reached.',
-'Wenn kein Überprüfungsdatum eingetragen ist, wird automatisch zwei Jahre nach dem Inkrafttreten eine Überprüfung fällig.' 
+'Wenn kein Überprüfungsdatum eingetragen ist, wird automatisch zwei Jahre nach dem Inkrafttreten eine Überprüfung fällig.'
     => 'If no review date is entered, a review is automatically scheduled two years after the effective date.',
-'Der Status „Nicht mehr gültig“ wird nicht automatisch gesetzt, sondern manuell nach einem neuen Entscheid oder einer Überprüfung.' 
+'Der Status „Nicht mehr gültig“ wird nicht automatisch gesetzt, sondern manuell nach einem neuen Entscheid oder einer Überprüfung.'
     => 'The status “No longer valid” is not set automatically, but manually after a new decision or review.',
-'Für diese automatische Prüfung ist ein eigener Cronjob erforderlich. Richte dafür im Hosting-Control-Panel (z. B. bei Cyon) folgenden Eintrag ein:' 
+'Für diese automatische Prüfung ist ein eigener Cronjob erforderlich. Richte dafür im Hosting-Control-Panel (z. B. bei Cyon) folgenden Eintrag ein:'
     => 'A dedicated cron job is required for this automatic check. Set it up in your hosting control panel (e.g., at Cyon) using the following command:',
-'Ersetze IHRBENUTZER durch deinen Hosting-Benutzernamen und ORDNERNAME durch den Namen deines HumHub-Verzeichnisses innerhalb von public_html (z. B. humlab oder staging_humlab).' 
+'Ersetze IHRBENUTZER durch deinen Hosting-Benutzernamen und ORDNERNAME durch den Namen deines HumHub-Verzeichnisses innerhalb von public_html (z. B. humlab oder staging_humlab).'
     => 'Replace IHRBENUTZER with your hosting username and ORDNERNAME with the name of your HumHub directory within public_html (e.g., humlab or staging_humlab).',
 'Tipp:' => 'Tip:',
-'Im Hosting-Control-Panel kannst du die Ausführungszeit einstellen, um den Job täglich um Mitternacht auszuführen:' 
+'Im Hosting-Control-Panel kannst du die Ausführungszeit einstellen, um den Job täglich um Mitternacht auszuführen:'
     => 'In the hosting control panel, you can schedule it to run daily at midnight:',
 'Minute' => 'Minute',
 'Stunde' => 'Hour',
 'Tag' => 'Day',
 'Monat' => 'Month',
 'Wochentag' => 'Weekday',
-'So wird der Statuslauf einmal täglich um Mitternacht gestartet. Die beiden regulären HumHub-Cronjobs (yii cron/run und yii queue/run) bleiben davon unberührt.' 
+'So wird der Statuslauf einmal täglich um Mitternacht gestartet. Die beiden regulären HumHub-Cronjobs (yii cron/run und yii queue/run) bleiben davon unberührt.'
     => 'This ensures the status update runs once daily at midnight. The regular HumHub cron jobs (yii cron/run and yii queue/run) remain unaffected.',
 
 // ============================================================
 // 🔹 Path Definition & Log Output
 // ============================================================
-'Pfad definieren:' 
+'Pfad definieren:'
     => 'Define path:',
-'In der Datei <code>protected/modules/sociolog/run.php</code> muss der Pfad zur jeweiligen HumHub-Installation angegeben werden. Der Abschnitt heisst <strong>📁 Pfade definieren – Instanzabhängig</strong> und enthält die Variable <code>$root</code>.' 
+'In der Datei <code>protected/modules/sociolog/run.php</code> muss der Pfad zur jeweiligen HumHub-Installation angegeben werden. Der Abschnitt heisst <strong>📁 Pfade definieren – Instanzabhängig</strong> und enthält die Variable <code>$root</code>.'
     => 'In the file <code>protected/modules/sociolog/run.php</code>, define the path to the corresponding HumHub installation. The section is called <strong>📁 Define path – instance specific</strong> and contains the variable <code>$root</code>.',
-'Beispiel (Cyon-Hosting):' 
+'Beispiel (Cyon-Hosting):'
     => 'Example (Cyon hosting):',
-'$root = \'/home/IHRBENUTZER/public_html/ORDNERNAME\';' 
+'$root = \'/home/IHRBENUTZER/public_html/ORDNERNAME\';'
     => '$root = \'/home/IHRBENUTZER/public_html/ORDNERNAME\';',
-'Ersetze <code>IHRBENUTZER</code> durch deinen Hosting-Benutzernamen (z.&nbsp;B.&nbsp;zunagoqe) und <code>ORDNERNAME</code> durch den Namen deiner HumHub-Installation (z.&nbsp;B.&nbsp;logbuch_humlab oder staging_humlab).' 
+'Ersetze <code>IHRBENUTZER</code> durch deinen Hosting-Benutzernamen (z.&nbsp;B.&nbsp;zunagoqe) und <code>ORDNERNAME</code> durch den Namen deiner HumHub-Installation (z.&nbsp;B.&nbsp;logbuch_humlab oder staging_humlab).'
     => 'Replace <code>IHRBENUTZER</code> with your hosting username (e.g. zunagoqe) and <code>ORDNERNAME</code> with the name of your HumHub installation (e.g. logbuch_humlab or staging_humlab).',
-'Logdatei:' 
+'Logdatei:'
     => 'Log file:',
-'Nach der ersten Ausführung findest du unter <code>/home/IHRBENUTZER/sociolog_cron.log</code> alle Statusmeldungen, z.&nbsp;B.:' 
+'Nach der ersten Ausführung findest du unter <code>/home/IHRBENUTZER/sociolog_cron.log</code> alle Statusmeldungen, z.&nbsp;B.:'
     => 'After the first execution, you will find all status messages under <code>/home/IHRBENUTZER/sociolog_cron.log</code>, for example:',
-'Sociolog Statuslauf gestartet (Tage bis Aktivierung: {days})' 
+'Sociolog Statuslauf gestartet (Tage bis Aktivierung: {days})'
     => 'Sociolog status run started (days until activation: {days})',
-'Sociolog Statuslauf abgeschlossen – {count} Einträge aktualisiert.' 
+'Sociolog Statuslauf abgeschlossen – {count} Einträge aktualisiert.'
     => 'Sociolog status run completed – {count} entries updated.',
-'Sociolog Statuslauf gestartet (Tage bis Aktivierung: 5)' 
+'Sociolog Statuslauf gestartet (Tage bis Aktivierung: 5)'
     => 'Sociolog status run started (days until activation: 5)',
-'Sociolog Statuslauf abgeschlossen – 2 Einträge aktualisiert.' 
+'Sociolog Statuslauf abgeschlossen – 2 Einträge aktualisiert.'
     => 'Sociolog status run completed – 2 entries updated.',
-'Logdatei: Nach der ersten Ausführung findest du unter /home/IHRBENUTZER/sociolog_cron.log alle Statusmeldungen, z. B.:' 
+'Logdatei: Nach der ersten Ausführung findest du unter /home/IHRBENUTZER/sociolog_cron.log alle Statusmeldungen, z. B.:'
     => 'Log file: After the first execution, you will find all status messages under /home/IHRBENUTZER/sociolog_cron.log, for example:',
-    
+
 
 'Spaces & Bereiche' => 'Spaces & Sections',
 
@@ -723,4 +723,20 @@ return [
 'Zurück zum Adminbereich' => 'Back to administration',
 'Die Schreibberechtigung wird je Space auf alle Space-Administrator:innen oder auf ausgewählte zuständige Personen festgelegt.' => 'Write access is configured per space for either all space administrators or selected responsible members.',
 
+'Ein Protokoll aus einer dokumentierten Überprüfung muss unverändert erhalten bleiben. Ergänze bei Bedarf einen neuen Link.' => 'A protocol referenced by a documented review must be kept unchanged. Add a new link if necessary.',
+
+'Einwandsfrist anzeigen' => 'Show objection deadline',
+'Schwerwiegender Einwand möglich bis' => 'Serious objection possible until',
+'Einwandsfrist abgelaufen' => 'Objection period expired',
+'Die Uhrzeit der Veröffentlichung wurde bei diesem älteren Eintrag nicht erfasst.' => 'The publication time was not recorded for this older entry.',
+'Zeigt die Frist für schwerwiegende Einwände: 10 volle Tage ab Veröffentlichung. Der Zusatztag beim Inkrafttreten verlängert diese Frist nicht. Ausblenden verändert keine Fristen oder Berechtigungen.' => 'Shows the deadline for serious objections: 10 full days from publication. The extra day before taking effect does not extend this period. Hiding the display does not change deadlines or permissions.',
+    'Wer darf Einträge lesen?' => 'Who may read entries?',
+    'Benutzer mit Leserecht' => 'Users with read access',
+    'Gruppen mit Leserecht' => 'Groups with read access',
+    'Alle angemeldeten Mitglieder' => 'All signed-in members',
+    'Nur Mitglieder des jeweiligen Spaces' => 'Only members of the respective Space',
+    'Ausgewählte Benutzer und Benutzergruppen' => 'Selected users and user groups',
+    'Gilt für alle vorhandenen und neuen Einträge. Administratoren und die jeweiligen Autoren behalten Leserecht. Bei eingeschränktem Lesen erfolgt die Anzeige im Logbuch und im Logbuch-Widget; Space-Stream und automatische Space-Kalendererinnerungen werden nicht unterstützt.' => 'Applies to all existing and new entries. Administrators and the respective authors retain access. With restricted reading, entries are displayed in the logbook and logbook widget; the Space stream and automatic Space calendar reminders are not supported.',
+    'Gilt nur bei ausgewählten Lesenden. Eine Benutzer- oder Gruppenauswahl genügt. Eine leere Auswahl gewährt nur Administratoren und Autoren Zugang.' => 'Applies only to selected readers. Either user or group membership is sufficient. An empty selection grants access only to administrators and authors.',
+    'Die Leseberechtigung konnte nicht vollständig gespeichert werden. Die bisherigen Einstellungen gelten weiterhin.' => 'Read access could not be saved completely. The previous settings remain in effect.',
 ];

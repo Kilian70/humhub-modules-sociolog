@@ -231,13 +231,13 @@ class SociologImportService
                     'updated_at' => $timestamp,
                 ], ['id' => (int)$entry->id]);
 
-                if (!empty($entry->content_id)) {
+                if (!empty($entry->content->id)) {
                     Content::updateAll([
-                        'visibility' => Content::VISIBILITY_PUBLIC,
+                        'visibility' => $entry->content->visibility,
                         'state' => Content::STATE_PUBLISHED,
                         'created_at' => date('Y-m-d H:i:s', $timestamp),
                         'updated_at' => date('Y-m-d H:i:s', $timestamp),
-                    ], ['id' => (int)$entry->content_id]);
+                    ], ['id' => (int)$entry->content->id]);
                 }
 
                 $imported++;

@@ -152,14 +152,6 @@ public function actionCreate()
 
         if ($fixedDecisionTypeId > 0) {
             $model->decision_type_id = $fixedDecisionTypeId;
-        } elseif (!array_key_exists(
-            (int)$model->decision_type_id,
-            Entry::getDecisionTypeList()
-        )) {
-            $model->addError(
-                'decision_type_id',
-                Yii::t('SociologModule.base', 'Dieser Entscheidungstyp ist derzeit ausgeblendet.')
-            );
         }
 
         // Das Dropdown ist nur eine UI-Hilfe. Die Berechtigung muss
@@ -206,7 +198,7 @@ public function actionCreate()
             if (!$model->hasErrors()) {
                 $model->addError(
                     'protocol_error',
-                    Yii::t('SociologModule.base', 'Die Protokoll-Links konnten nicht gespeichert werden.')
+                    $e instanceof \DomainException ? $e->getMessage() : Yii::t('SociologModule.base', 'Die Protokoll-Links konnten nicht gespeichert werden.')
                 );
             }
 
@@ -244,7 +236,6 @@ public function actionUpdate($id)
     $user = Yii::$app->user->identity;
     $originalOrgan = (int)$model->organ;
     $originalStatus = (string)$model->status;
-    $originalDecisionTypeId = (int)$model->decision_type_id;
     $originView = Yii::$app->request->get('view', 'cards');
 
     $this->view->params['backUrl'] = Yii::$app->request->referrer;
@@ -273,19 +264,6 @@ public function actionUpdate($id)
             && in_array($model->status, [Entry::STATUS_OBJECTION, Entry::STATUS_REPLACED], true)
         ) {
             $model->status = $originalStatus;
-        }
-
-        if (
-            (int)$model->decision_type_id !== $originalDecisionTypeId
-            && !array_key_exists(
-                (int)$model->decision_type_id,
-                Entry::getDecisionTypeList()
-            )
-        ) {
-            $model->addError(
-                'decision_type_id',
-                Yii::t('SociologModule.base', 'Dieser Entscheidungstyp ist derzeit ausgeblendet.')
-            );
         }
 
         $targetOrgan = (int)$model->organ;
@@ -329,7 +307,7 @@ public function actionUpdate($id)
             if (!$model->hasErrors()) {
                 $model->addError(
                     'protocol_error',
-                    Yii::t('SociologModule.base', 'Die Protokoll-Links konnten nicht gespeichert werden.')
+                    $e instanceof \DomainException ? $e->getMessage() : Yii::t('SociologModule.base', 'Die Protokoll-Links konnten nicht gespeichert werden.')
                 );
             }
 
@@ -825,7 +803,7 @@ public function actionReview($id)
     }
 
     /**
-     * Ersetzt alle Protokoll-Links eines Eintrags innerhalb der aktiven Transaktion.
+     * Synchronisiert Protokoll-Links und erhält ihre Kennungen und Review-Bezüge.
      *
      * @throws \RuntimeException wenn ein Link nicht gespeichert werden kann
      */
@@ -842,24 +820,38 @@ public function actionReview($id)
             throw new \RuntimeException('Too many protocol links.');
         }
 
-        Protocol::deleteAll(['entry_id' => $entryId]);
-
+        $existing = Protocol::find()->where(['entry_id' => $entryId])->indexBy('id')->all();
+        $retained = [];
         foreach ($titles as $index => $rawTitle) {
+            $rawUrl = $urls[$index] ?? '';
+            if (!is_scalar($rawTitle) || !is_scalar($rawUrl)) {
+                throw new \RuntimeException('Invalid protocol input.');
+            }
             $title = trim((string)$rawTitle);
-            $url = trim((string)($urls[$index] ?? ''));
-
+            $url = trim((string)$rawUrl);
             if ($title === '' && $url === '') {
                 continue;
             }
-
-            $protocol = new Protocol([
-                'entry_id' => $entryId,
-                'title' => $title,
-                'url' => $url,
-            ]);
-
+            foreach ($existing as $id => $old) {
+                if (!isset($retained[$id]) && $old->title === $title && $old->url === $url) {
+                    $retained[$id] = true;
+                    continue 2;
+                }
+            }
+            $protocol = new Protocol(['entry_id' => $entryId, 'title' => $title, 'url' => $url]);
             if (!$protocol->save()) {
                 throw new \RuntimeException(json_encode($protocol->getErrors()));
+            }
+        }
+        foreach ($existing as $id => $old) {
+            if (isset($retained[$id])) {
+                continue;
+            }
+            if (EntryReview::find()->where(['protocol_id' => $id])->exists()) {
+                throw new \DomainException(Yii::t('SociologModule.base', 'Ein Protokoll aus einer dokumentierten Überprüfung muss unverändert erhalten bleiben. Ergänze bei Bedarf einen neuen Link.'));
+            }
+            if ($old->delete() === false) {
+                throw new \RuntimeException('Protocol could not be deleted.');
             }
         }
     }

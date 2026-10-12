@@ -66,7 +66,7 @@ class StatusBatchStressTest extends SociologTestCase
         );
         $this->assertSame(
             $entryCount,
-            (int)Entry::find()->publishedOrLegacy()->andWhere($prefixCondition)->count(),
+            (int)Entry::find()->publishedOrLegacy(false)->andWhere($prefixCondition)->count(),
             'Legacy rows without HumHub content must be included in the status run.'
         );
 

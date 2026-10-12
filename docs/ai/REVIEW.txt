@@ -1,0 +1,185 @@
+Historischer Teilbericht der ursprünglichen Fehlerkorrekturen.
+Aktueller Gesamtstand: docs/ai/AKTUELLER_TESTSTAND.txt.
+
+Sociolog – Fehlerkorrekturen vom 11.10.2026
+=========================================
+
+Dies ist ein lokaler Arbeitsstand auf Grundlage von Version 1.0.30, kein Release.
+Die vorhandenen MAMP-Installationen wurden nicht geändert. Es gab keine Commits,
+Pushes oder Veröffentlichungen. Die gemeinsame Lesbarkeit für angemeldete
+Vereinsmitglieder bleibt erhalten. Die zusätzliche einstellbare Leseberechtigung
+ist in diesem Fehlerkorrektur-Schritt noch nicht enthalten.
+
+KORRIGIERTE BESTÄTIGTE FEHLER
+
+1. Ausgewählte Schreibberechtigte behalten nach einem Space-Austritt keine
+   Rechte mehr. Zusätzlich werden Einladungen und deaktivierte Konten abgewiesen.
+   Dateien: models/SpaceConfig.php, models/SpaceWriterForm.php, models/Entry.php.
+   Erstellen und Bearbeiten verwenden dieselbe aktive Mitgliedschaftsprüfung.
+   Globale, ausdrücklich konfigurierte Schreibrechte behalten ihre Bedeutung.
+
+2. Inkrafttreten wird nur noch einmal berechnet: Veröffentlichung plus eingestellte
+   Frist und gegebenenfalls ein Zusatztag. Das Beschlussdatum überschreibt diese
+   Berechnung nicht mehr. Explizit gespeicherte Inkrafttretensdaten bleiben erhalten.
+   Dateien: models/EntryBase.php, models/Entry.php.
+
+3. Suche, Speichern und täglicher Statuslauf verwenden übereinstimmende Regeln.
+   Abgelaufene, ersetzte, mit schwerwiegendem Einwand markierte und weitergeleitete
+   Entscheide behalten ihren Status. Ein fälliges Überprüfungsdatum bedeutet
+   Überprüfung fällig, nicht automatisch Nicht mehr gültig. Die bisher im Cron
+   enthaltene Zweijahresfrist bei fehlendem Überprüfungsdatum gilt jetzt auch in
+   der Suche und beim Speichern. Die Kalenderregel berücksichtigt Schaltjahre.
+   Dateien: models/Entry.php, models/EntrySearch.php,
+   services/SociologStatusService.php.
+
+4. Beschluss-, Inkrafttretens- und Überprüfungsdatum werden streng als tatsächlich
+   gültiges Datum im Format JJJJ-MM-TT validiert. Auch Array-Eingaben werden abgewiesen.
+   Datei: models/EntryBase.php.
+
+5. Ausgeblendete Entscheidungstypen können nicht mehr durch manipulierte Formulare
+   neu gewählt werden. Die Prüfung ist Teil der Modellvalidierung und wird beim
+   Speichern nicht mehr gelöscht. Ein bisher verwendeter, später ausgeblendeter
+   Typ darf unverändert erhalten bleiben; bestehende historische Importe und
+   der ausdrücklich festgelegte Typ bleiben möglich. Nicht existierende Typen
+   werden abgewiesen.
+   Dateien: models/Entry.php, controllers/EntryController.php.
+
+6. Organ-Zeitstempel werden als Unix-Zahl statt als Datumszeichenkette gespeichert,
+   passend zu den bereits vorhandenen INTEGER-Spalten.
+   Datei: models/Organ.php.
+
+7. Beim Bearbeiten werden unveränderte Protokolle nicht gelöscht und neu angelegt.
+   Ihre Kennungen und Verknüpfungen mit dokumentierten Überprüfungen bleiben erhalten.
+   Protokolle, die Teil einer solchen Überprüfung sind, können nicht entfernt oder
+   überschrieben werden. Stattdessen kann ein neuer Link ergänzt werden. Die
+   Oberfläche erklärt einen abgewiesenen Löschversuch. Nicht referenzierte Links
+   können weiterhin bearbeitet oder entfernt werden. Fehler werden in der
+   bestehenden Transaktion zurückgerollt.
+   Dateien: controllers/EntryController.php, messages/en/base.php.
+
+8. Historischer Import aktualisiert den tatsächlichen HumHub-Content-Datensatz.
+   Er greift nicht mehr auf die bereits entfernte Spalte content_id zu.
+   Datei: services/SociologImportService.php.
+
+9. Beim Archivieren von Benutzerbezügen werden auch Autor:innen dokumentierter
+   Überprüfungen erfasst, einschließlich Personen, die nur dort referenziert sind.
+   Datei: services/SociologUserDeletionService.php.
+
+10. Suchparameter sind typisiert. Ungültige bzw. als Array manipulierte Werte
+    liefern eine Validierungsmeldung und keine Treffer statt eines PHP-Abbruchs.
+    Datei: models/EntrySearch.php.
+
+11. Konsolenläufe laden keine Oberflächendateien mehr. Der Ressourcenpfad verwendet
+    den Modulalias, sodass auch externe Modulverzeichnisse aufgelöst werden können.
+    Dateien: Module.php, assets/SociologAsset.php.
+
+12. Der frei konfigurierbare Modultitel wird auch in der zusätzlichen HTML-Mailvorlage
+    escaped. Diese ergänzende Korrektur betrifft die Vorlage, nicht einen bestätigten
+    aktuell verwendeten Versandpfad.
+    Datei: views/notifications/mail.php.
+
+MIGRATIONEN / VERBLEIBENDE GRENZE
+
+Die alten Migrationen mischen Tabellen mit und ohne Präfix. Die Unterstützung
+für Präfixdatenbanken ist weiterhin offen. Ein späterer Reparaturschritt allein
+kann einen davor scheiternden Installationslauf nicht heilen.
+
+Als Absicherung prüfen Module::enable() und SociologMigrationService das Präfix
+vor der Modulregistrierung bzw. vor dem Migrationslauf. Der Lauf wird verständlich
+abgebrochen. Der Test bestätigt, dass dabei weder eine Modultabelle angelegt noch
+die Registrierung verändert wird. Dieser Schutz ersetzt keine Präfixunterstützung.
+Direkte manuelle Migrationen oder der globale Kern-Migrationsbefehl umgehen ihn.
+
+Dateien: Module.php, services/SociologMigrationService.php.
+Alle 21 veröffentlichten Migrationen wurden unverändert belassen, entsprechend
+humhub-ai-dev/docs/REGELN.md: „Bereits veröffentlichte Migrationen nicht rückwirkend
+ändern.“ Es gibt keine automatische Korrektur historischer Datensätze. Bereits
+verlorene Referenzen oder alte gelöschte Einstellungen benötigen eine geeignete
+Sicherung; ein Code-Downgrade stellt sie nicht wieder her.
+
+AUTOMATISCHE PRÜFUNGEN
+
+Die Laufzeittests wurden mit realen HumHub-Kernklassen und MySQL 5.7 in getrennten
+Testkopien ausgeführt. Die vorhandenen MAMP-Datenbanken wurden nicht angesprochen.
+Die CLI verwendete MAMP PHP 8.3.30. Eine Browserprüfung und die tatsächlich vom
+Webserver verwendete PHP-Version werden dadurch nicht bestätigt.
+
+- HumHub 1.18.6: 29 Tests, 5.232 Assertions, erfolgreich.
+- HumHub 1.19.0-beta.3: 29 Tests, 5.232 Assertions, erfolgreich.
+- 13 neue Regressionstests in tests/codeception/unit/RegressionTest.php.
+- Zusätzlich bestehende Lebenszyklus-, Schema-, Rich-Text-, Validierungs- und
+  Lasttests, darunter ein Statuslauf mit 750 Einträgen.
+- Metadaten-/Assetprüfung: tests/validate-module.php erfolgreich.
+- 108 PHP-Dateien: Syntaxprüfung mit MAMP PHP 8.3.30, 8.4.17 und 8.5.2 erfolgreich.
+- 6 JavaScript-Dateien: Syntaxprüfung mit Node 24.19.0 erfolgreich.
+- Die veröffentlichten Migrationsdateien wurden byteweise mit dem Ausgangsstand
+  verglichen und sind identisch.
+
+Die exakten abschließenden Testzahlen und Protokolle liegen neben diesem Bericht
+unter tests/verification/ im gelieferten Arbeitsstand. Ergebnisse für weitere
+PHP-Versionen sind Syntaxergebnisse, keine Integrationstests dieser Versionen.
+
+Reproduzierbarer Lauf (nur gegen eine vorbereitete, separate Testdatenbank):
+
+HUMHUB_PATH=/pfad/zur/isolierten/humhub-kopie
+HUMHUB_TEST_DB_PORT=33079
+HUMHUB_TEST_DB_NAME=eigene_testdatenbank
+HUMHUB_TEST_DB_USER=root
+HUMHUB_TEST_DB_PASSWORD=''
+
+Diese Umgebungswerte beim Start von Codeception setzen:
+php /pfad/zur/humhub-kopie/protected/vendor/bin/codecept run unit \
+    -c /pfad/zum/modul/tests/codeception.yml --no-colors
+
+Die Datenbank muss vorher mit den offiziellen HumHub-Kernmigrationen inklusive
+Kernmodulen und den offiziellen Installationsgrunddaten aufgebaut werden. Die
+Codeception-Fixtures verändern Daten. Niemals die Vereinsdatenbank verwenden.
+
+NOCH NÖTIGE MANUELLE PRÜFUNGEN IN MAMP
+
+Die folgenden Schritte auf BEIDEN Testinstallationen ausführen:
+1. MAMP starten. Die verwendete Web-PHP-Version in der jeweiligen HumHub-
+   Systeminformation nachsehen. Vor dem Austausch eine Sicherung der jeweiligen
+   Testdatenbank und des vorhandenen sociolog-Modulordners erstellen.
+2. Den Inhalt des gelieferten Ordners sociolog in den externen Modulordner der
+   gewählten Testinstallation kopieren: protected/modules/sociolog. Keinen
+   zusätzlichen verschachtelten Ordner sociolog/sociolog erzeugen. Bestehende
+   installationsspezifische Daten außerhalb des gelieferten Codes erhalten.
+3. Das Modul aktivieren bzw. den bestehenden Code ersetzen. Den HumHub-Cache über
+   die Administration leeren. Die Versionsanzeige bleibt bewusst 1.0.30.
+4. Als zuständige Person einen Eintrag anlegen. Bei Frist 10 und eingeschaltetem
+   Zusatztag muss Inkrafttreten 11 Tage nach Veröffentlichung liegen. Ein älteres
+   Beschlussdatum darf diese Berechnung nicht verändern. Ohne Zusatztag: 10 Tage.
+5. Unmögliches Datum wie 30.02.2026 eingeben. Speichern muss mit einer Meldung
+   scheitern. Einen gültigen Eintrag anschließend normal bearbeiten.
+6. Entscheidungstyp ausblenden. Er darf neu nicht wählbar sein; ein bestehender
+   Eintrag mit diesem Typ muss ohne Typwechsel weiterhin bearbeitbar sein.
+7. Einen ausgewählten Space-Schreiber testen: erstellen und bearbeiten erlaubt.
+   Dann seine Space-Mitgliedschaft entfernen und erneut anmelden. Ohne zusätzlich
+   konfigurierte globale Rechte müssen beide Schreibaktionen abgewiesen werden.
+   Einladungen dürfen die Rechte ebenfalls nicht aktivieren.
+8. Statusfilter prüfen: Einträge mit Nicht mehr gültig, Ersetzt oder schwerwiegendem
+   Einwand dürfen nicht allein wegen alter Daten in Gültig oder Überprüfung fällig
+   erscheinen. Überfällige normale Entscheide erscheinen in Überprüfung fällig.
+   Einen weitergeleiteten Eintrag ebenfalls prüfen. Nach dem täglichen Cron sollen
+   Suche und gespeicherter Status übereinstimmen.
+9. Eine Überprüfung mit Protokoll dokumentieren. Den Eintrag ohne Änderung des
+   Protokolls speichern. Der Link muss in der Überprüfung erhalten bleiben.
+   Entfernen oder Ändern genau dieses Links muss verständlich abgewiesen werden;
+   Ergänzen eines neuen Protokolls muss funktionieren. Einen nicht referenzierten
+   Link hinzufügen und wieder entfernen.
+10. Kleinen historischen CSV-Import ausführen. Beim importierten Eintrag müssen
+    historische Zeitangaben und Inkrafttreten stimmen. Der Import soll keine
+    aktuellen Benachrichtigungen auslösen.
+11. Archivschutz nur auf einer separaten Wegwerf-Testkopie prüfen: aktives
+    Archivkonto wählen, einen Benutzer mit einer dokumentierten Überprüfung
+    vollständig löschen und danach Autorbezüge sowie den Entscheid kontrollieren.
+12. Als normales Vereinsmitglied Liste, Detailansicht, Dashboard und CSV-Export
+    prüfen. Die bisherige gemeinsame Lesbarkeit soll erhalten bleiben.
+
+Nicht automatisiert geprüft wurden Browserdarstellung, echte E-Mail-Zustellung,
+Kalendermodul-Integration, eine vollständige Benutzerlöschung über die Oberfläche
+und Datenbankupdates aus jeder älteren Modulversion. Es wurde kein vollständiges
+Browser-Testsystem installiert. Die neue konfigurierbare Leseberechtigung ist
+noch offen und muss vor Einführung auch Stream, Benachrichtigungen und Dateien
+berücksichtigen; ein bloßes Ausblenden des Menüeintrags reicht nicht.

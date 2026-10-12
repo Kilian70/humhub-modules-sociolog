@@ -3,6 +3,43 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.31] – 2026-10-12
+
+### Leserechte und Übersetzungen
+
+- Lesen für alle angemeldeten Mitglieder, Mitglieder des ursprünglichen Spaces oder ausgewählte Benutzer/Gruppen einstellen.
+- Private native HumHub-Container schützen eingeschränkte Inhalte einschließlich Direktlinks; serverseitige Filter für Logbuchsuche, Widget und CSV.
+- Additive Migration für den Lesecontainer; Veröffentlichung und Einwandsfrist unverändert.
+- Bei eingeschränkten Leserechten sind native Space-Streams und automatische Space-Kalendererinnerungen begrenzt; Details in `docs/ai/LESERECHTE.txt`.
+- Deutsche Ausgangssprache korrekt registrieren; Englisch, Deutsch und regionale Sprachvarianten prüfen.
+- Standardbeschriftungen sprachunabhängig speichern; individuell gesetzte Beschriftungen erhalten.
+
+### Einwandsfrist
+
+- Optional „Schwerwiegender Einwand möglich bis“ in Karten und Detailansicht anzeigen.
+- Zehn volle Tage ab Veröffentlichungszeitpunkt; unabhängig vom Zusatztag beim Inkrafttreten.
+- Veröffentlichungszeitpunkt serverseitig festhalten; Bearbeiten verlängert die Frist nicht.
+- Additive Migration für den Zeitpunkt; bei Alteinträgen bleibt die unbekannte Uhrzeit leer.
+- Sechs neue Regressionstests; je Zielversion 35 Tests / 5.278 Assertions bestanden.
+
+### Fehlerkorrekturen
+
+- Aktive Space-Mitgliedschaft bei ausgewählten Schreibberechtigten prüfen.
+- Datumswerte und Suchparameter validieren; versteckte Entscheidungstypen im Modell abweisen.
+- Inkrafttreten aus Veröffentlichung berechnen und Statusregeln für Suche, Speichern und Cron vereinheitlichen.
+- Organ-Zeitstempel, historischen Content-Import und Archivierung von Review-Autorbezügen korrigieren.
+- Protokollkennungen und Verknüpfungen mit dokumentierten Überprüfungen beim Bearbeiten erhalten.
+- Konsolenläufe ohne Oberflächen-Assets; Ressourcen über den Modulalias auflösen; Mail-Modultitel escapen.
+- Nicht unterstützte Tabellenpräfixe vor Modulaktivierung und Modul-Migrationslauf abweisen. Die geprüften HumHub-Kernversionen unterstützen Präfixe nicht durchgängig; veröffentlichte Migrationen bleiben unverändert. Details in `docs/ai/PRAEFIXPRUEFUNG.txt`.
+- 13 Regressionstests ergänzen. Quellen und Prüfgrenzen: `docs/ai/PROJEKT.md`, `docs/ai/REVIEW.txt`.
+
+### Update und Prüfung
+
+- Vor dem Update Modul und Datenbank vollständig sichern. Beide neuen Migrationen ausführen und Leseeinstellungen einmal speichern.
+- Je 47 Tests / 5.402 Assertions bestanden auf HumHub 1.18.6 und 1.19.0-beta.3 mit PHP 8.3.30; ergänzende native Tests mit MySQL 8.0.44.
+- Kalenderintegration und echte E-Mail-Zustellung bleiben ungeprüft. Einzelheiten und Testanleitung: `docs/ai/AKTUELLER_TESTSTAND.txt`.
+- Für eine Rückkehr zum vorherigen Modulstand die passende vollständige Sicherung wiederherstellen; alleiniger Code-Downgrade reicht nicht.
+
 ## [1.0.30] – 2026-10-03
 
 ### Organ-Hierarchie und Space-Zuordnung

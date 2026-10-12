@@ -64,9 +64,10 @@ class SpaceWriterForm extends Model
 
         foreach ($guids as $guid) {
             $user = User::findOne(['guid' => $guid]);
-            if (!$user || !Membership::find()->where([
+            if (!$user || (int)$user->status !== User::STATUS_ENABLED || !Membership::find()->where([
                 'space_id' => (int)$this->config->space_id,
                 'user_id' => (int)$user->id,
+                'status' => Membership::STATUS_MEMBER,
             ])->exists()) {
                 $this->addError(
                     $attribute,

@@ -45,7 +45,7 @@ public static function onAfterSave(Entry $entry): void
             $entry->content->setContainer($space);
         }
 
-        $entry->content->visibility = Content::VISIBILITY_PUBLIC;
+        ReadAccess::apply($entry);
         $entry->content->state = Content::STATE_PUBLISHED;
 
         // Content-Felder werden kontrolliert gesetzt; Rückgabewert trotzdem

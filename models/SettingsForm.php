@@ -30,6 +30,7 @@ class SettingsForm extends Model
 
     public $defaultEffectiveDays;
     public $effectiveDateAddExtraDay;
+    public $showObjectionDeadline;
 	public $showReviewInCalendar;
 	
 	public $decisionWorkflowEnabled;
@@ -72,6 +73,10 @@ class SettingsForm extends Model
      * Rechte
      * ============================================================ */
 
+    public $readerMode = \humhub\modules\sociolog\services\ReadAccess::ALL;
+    public $readerUsers = [];
+    public $readerGroups = [];
+
     public $writerUsers = [];
     public $deleterUsers = [];
 
@@ -96,6 +101,9 @@ class SettingsForm extends Model
 	public function rules()
 	{
 		return [
+            [['readerMode'], 'in', 'range' => ['all', 'space', 'selected']],
+            [['readerUsers', 'readerGroups'], 'validateReaders', 'skipOnEmpty' => false],
+            [['readerMode'], 'validateReaderIntegrations'],
 
 			[[
 				'moduleTitle',
@@ -202,6 +210,7 @@ class SettingsForm extends Model
 					'statusManagersOnly',
 					'extendedStatusesEnabled',
 					'effectiveDateAddExtraDay',
+                    'showObjectionDeadline',
 					'preserveEntriesOnUserDelete'
 				],
 				'boolean'
@@ -310,8 +319,15 @@ class SettingsForm extends Model
             'effectiveDateAddExtraDay' =>
                 Yii::t('SociologModule.base', 'Inkrafttreten erst am Folgetag der vollständigen Frist'),
 
+            'showObjectionDeadline' =>
+                Yii::t('SociologModule.base', 'Einwandsfrist anzeigen'),
+
             'showReviewInCalendar' =>
                 Yii::t('SociologModule.base', 'Überprüfungsdaten im Kalender anzeigen'),
+
+            'readerMode' => Yii::t('SociologModule.base', 'Wer darf Einträge lesen?'),
+            'readerUsers' => Yii::t('SociologModule.base', 'Benutzer mit Leserecht'),
+            'readerGroups' => Yii::t('SociologModule.base', 'Gruppen mit Leserecht'),
 
             'writerUsers' =>
                 Yii::t('SociologModule.base', 'Benutzer mit Schreibrecht'),
@@ -436,6 +452,10 @@ class SettingsForm extends Model
 		$settings = Yii::$app->getModule('sociolog')->settings;
 	
 	
+        $this->readerMode = $settings->get('readerMode', 'all');
+        $this->readerUsers = (array)$settings->getSerialized('readerUsers');
+        $this->readerGroups = (array)$settings->getSerialized('readerGroups');
+
 		/* normale Werte */
 	
 		$this->moduleTitle =
@@ -464,6 +484,9 @@ class SettingsForm extends Model
 	
 		$this->defaultEffectiveDays =
 			$settings->get('defaultEffectiveDays', 10);
+
+        $this->showObjectionDeadline =
+            (bool)$settings->get('showObjectionDeadline', false);
 
         $this->effectiveDateAddExtraDay =
             (bool)$settings->get('effectiveDateAddExtraDay', true);
@@ -529,19 +552,19 @@ class SettingsForm extends Model
             (bool)$settings->get('limitedReviewMaintenanceEnabled', false);
 
         $this->decisionDateLabel =
-            $settings->get('decisionDateLabel', Yii::t('SociologModule.base', 'Beschlussdatum'));
+            $settings->get('decisionDateLabel', 'Beschlussdatum');
 
         $this->topicOwnerLabel =
-            $settings->get('topicOwnerLabel', Yii::t('SociologModule.base', 'Themenhüter:in'));
+            $settings->get('topicOwnerLabel', 'Themenhüter:in');
 
         $this->topicOwnerPlaceholder =
             $settings->get('topicOwnerPlaceholder', '');
 
         $this->protocolsLabel =
-            $settings->get('protocolsLabel', Yii::t('SociologModule.base', 'Protokolle'));
+            $settings->get('protocolsLabel', 'Protokolle');
 
         $this->pendingStatusLabel =
-            $settings->get('pendingStatusLabel', Yii::t('SociologModule.base', 'Nicht in Kraft'));
+            $settings->get('pendingStatusLabel', 'Nicht in Kraft');
 	
 	
 	
@@ -604,6 +627,50 @@ class SettingsForm extends Model
      * FINAL — GroupPicker liefert IDs direkt
      * ============================================================ */
 
+
+    public function validateReaders(string $attribute): void
+    {
+        $values = $this->$attribute;
+        if ($values === '' || $values === null) {
+            $this->$attribute = [];
+            return;
+        }
+        if (!is_array($values)) {
+            $this->addError($attribute, 'Bitte Benutzer oder Gruppen aus der Auswahl verwenden.');
+            return;
+        }
+        $normalized = [];
+        foreach ($values as $value) {
+            if ($attribute === 'readerUsers') {
+                $valid = is_string($value) && User::find()->where(['guid' => $value, 'status' => User::STATUS_ENABLED])->exists();
+            } else {
+                $valid = (is_int($value) || (is_string($value) && ctype_digit($value))) && Group::findOne((int)$value) !== null;
+                $value = $valid ? (int)$value : $value;
+            }
+            if (!$valid) {
+                $this->addError($attribute, 'Die Auswahl enthält einen ungültigen oder deaktivierten Benutzer bzw. eine ungültige Gruppe.');
+                return;
+            }
+            $normalized[] = $value;
+        }
+        $this->$attribute = array_values(array_unique($normalized));
+    }
+
+    public function validateReaderIntegrations(string $attribute): void
+    {
+        if ($this->readerMode === 'all') {
+            return;
+        }
+        if ($this->showReviewInCalendar) {
+            $this->addError($attribute, 'Bitte die automatische Anzeige von Überprüfungsterminen im Space-Kalender ausschalten, bevor das Leserecht eingeschränkt wird.');
+        }
+        $calendar = '\humhub\modules\calendar\models\CalendarEntry';
+        if (class_exists($calendar) && Yii::$app->db->schema->getTableSchema($calendar::tableName()) !== null
+            && $calendar::find()->where(['like', 'uid', 'sociolog-entry-%', false])->exists()) {
+            $this->addError($attribute, 'Bitte vorhandene automatisch erzeugte Logbuch-Kalendererinnerungen zuerst entfernen. Sie enthalten Eintragstitel und haben eigene Space-Leserechte.');
+        }
+    }
+
 	public function save()
 	{
 		if (!$this->validate()) {
@@ -614,6 +681,12 @@ class SettingsForm extends Model
 	
 	
 	
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+        $settings->set('readerMode', $this->readerMode);
+        $settings->setSerialized('readerUsers', array_values($this->readerUsers));
+        $settings->setSerialized('readerGroups', array_values($this->readerGroups));
+
 		/* normale Werte */
 	
 		$settings->set('moduleTitle', $this->moduleTitle);
@@ -634,6 +707,7 @@ class SettingsForm extends Model
 	
 		$settings->set('defaultEffectiveDays', $this->defaultEffectiveDays);
         $settings->set('effectiveDateAddExtraDay', (bool)$this->effectiveDateAddExtraDay);
+        $settings->set('showObjectionDeadline', (bool)$this->showObjectionDeadline);
 	
 		$settings->set('showReviewInCalendar', $this->showReviewInCalendar);
 	
@@ -742,6 +816,23 @@ class SettingsForm extends Model
         );
 	
 	
+        if ($settings->getUncached('readerMode') !== $this->readerMode
+            || $settings->getUncached('readerUsers') !== \yii\helpers\Json::encode(array_values($this->readerUsers))
+            || $settings->getUncached('readerGroups') !== \yii\helpers\Json::encode(array_values($this->readerGroups))) {
+            throw new \RuntimeException('Read policy could not be persisted.');
+        }
+        \humhub\modules\sociolog\services\ReadAccess::synchronize();
+        $transaction->commit();
+        $settings->reload();
+        } catch (\Throwable $error) {
+            if ($transaction->isActive) {
+                $transaction->rollBack();
+            }
+            $settings->reload();
+            Yii::error('Sociolog read settings could not be saved: ' . $error->getMessage(), 'sociolog');
+            $this->addError('readerMode', Yii::t('SociologModule.base', 'Die Leseberechtigung konnte nicht vollständig gespeichert werden. Die bisherigen Einstellungen gelten weiterhin.'));
+            return false;
+        }
 		return true;
 	
 	}

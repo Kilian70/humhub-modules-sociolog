@@ -32,7 +32,7 @@ class EntryLifecycleTest extends SociologTestCase
 
         $entry = $this->createEntry($space);
         $this->assertNotNull($entry->content);
-        $this->assertSame((int)$space->contentcontainer_id, (int)$entry->content->contentcontainer_id);
+        $this->assertSame((int)$space->contentcontainer_id, (int)\humhub\modules\sociolog\services\ReadAccess::originalContainerId($entry));
         $this->assertSame(Entry::STATUS_PENDING, $entry->status);
 
         $entry->title = 'Updated runtime test entry';

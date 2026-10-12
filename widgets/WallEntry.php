@@ -17,6 +17,9 @@ class WallEntry extends WallStreamEntryWidget
     public function renderContent()
     {
         $entry = $this->model;   // statt $this->contentObject
+        if (!\humhub\modules\sociolog\services\ReadAccess::canRead($entry)) {
+            return '';
+        }
         return $this->render('wallEntry', ['entry' => $entry]);
     }
 }

@@ -1,0 +1,65 @@
+Codeception PHP Testing Framework v5.3.5 https://stand-with-ukraine.pp.ua
+
+Sociolog.unit Tests (29) -------------------------------------------------------
+- EntryLifecycleTest: Explicit forwarding target takes precedence
+✔ EntryLifecycleTest: Explicit forwarding target takes precedence (0.08s)
+- EntryLifecycleTest: Create edit and soft delete
+✔ EntryLifecycleTest: Create edit and soft delete (0.11s)
+- EntryLifecycleTest: Configured write and delete rights
+✔ EntryLifecycleTest: Configured write and delete rights (0.07s)
+- EntryLifecycleTest: Review history persists without changing decision text
+✔ EntryLifecycleTest: Review history persists without changing decision text (0.06s)
+- EntryLifecycleTest: Selected writers replace automatic space admin access
+✔ EntryLifecycleTest: Selected writers replace automatic space admin access (0.04s)
+- MigrationSchemaTest: Complete migration result
+✔ MigrationSchemaTest: Complete migration result (0.02s)
+- RegressionTest: Module installation rejects unsupported prefix before migrations
+✔ RegressionTest: Module installation rejects unsupported prefix before migrations (0.06s)
+- RegressionTest: Date validation rejects invalid and array values
+✔ RegressionTest: Date validation rejects invalid and array values (0.08s)
+- RegressionTest: Hidden type cannot be saved but existing type can be retained
+✔ RegressionTest: Hidden type cannot be saved but existing type can be retained (0.22s)
+- RegressionTest: Effective date uses publication and configured extra day
+✔ RegressionTest: Effective date uses publication and configured extra day (0.20s)
+- RegressionTest: Former invited and disabled members have no selected writer access
+✔ RegressionTest: Former invited and disabled members have no selected writer access (0.09s)
+- RegressionTest: Search rejects malformed inputs without throwing
+✔ RegressionTest: Search rejects malformed inputs without throwing (0.09s)
+- RegressionTest: Status search keeps protected and forwarded states
+✔ RegressionTest: Status search keeps protected and forwarded states (0.27s)
+- RegressionTest: Implicit review of leap day uses calendar anniversary
+✔ RegressionTest: Implicit review of leap day uses calendar anniversary (0.08s)
+- RegressionTest: Search and daily run use the same date fallbacks
+✔ RegressionTest: Search and daily run use the same date fallbacks (0.41s)
+- RegressionTest: Organ stores integer timestamps
+✔ RegressionTest: Organ stores integer timestamps (0.05s)
+- RegressionTest: Unchanged protocols retain review reference and removal is rejected
+✔ RegressionTest: Unchanged protocols retain review reference and removal is rejected (0.13s)
+- RegressionTest: Historical import updates actual content record
+✔ RegressionTest: Historical import updates actual content record (0.17s)
+- RegressionTest: Review only author is transferred to archive account
+✔ RegressionTest: Review only author is transferred to archive account (0.08s)
+- RichTextSecurityStressTest: Active content is not rendered
+✔ RichTextSecurityStressTest: Active content is not rendered (0.13s)
+- RichTextSecurityStressTest: Many formatted previews can be converted
+✔ RichTextSecurityStressTest: Many formatted previews can be converted (0.21s)
+- SecurityValidationTest: Entry rejects oversized title
+✔ SecurityValidationTest: Entry rejects oversized title (0.09s)
+- SecurityValidationTest: Entry rejects oversized rich text before database write
+✔ SecurityValidationTest: Entry rejects oversized rich text before database write (0.05s)
+- SecurityValidationTest: Protocol rejects unsafe and oversized urls
+✔ SecurityValidationTest: Protocol rejects unsafe and oversized urls (0.05s)
+- SecurityValidationTest: Organ rejects hierarchy cycle
+✔ SecurityValidationTest: Organ rejects hierarchy cycle (0.08s)
+- SecurityValidationTest: Review requires justification and next date when confirmed
+✔ SecurityValidationTest: Review requires justification and next date when confirmed (0.08s)
+- SecurityValidationTest: Selected writer guids are stored as unique json values
+✔ SecurityValidationTest: Selected writer guids are stored as unique json values (0.05s)
+- SecurityValidationTest: Rich text preview removes formatting markup
+✔ SecurityValidationTest: Rich text preview removes formatting markup (0.08s)
+- StatusBatchStressTest: Status run processes large logbook in batches
+✔ StatusBatchStressTest: Status run processes large logbook in batches (0.52s)
+--------------------------------------------------------------------------------
+Time: 00:26.818, Memory: 20.00 MB
+
+OK (29 tests, 5232 assertions)
