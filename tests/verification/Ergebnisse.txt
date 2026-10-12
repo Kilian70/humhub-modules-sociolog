@@ -1,0 +1,9 @@
+PHP 8.3.30: 108 PHP-Dateien ohne Syntaxfehler.
+PHP 8.4.17: 108 PHP-Dateien ohne Syntaxfehler.
+PHP 8.5.2: 108 PHP-Dateien ohne Syntaxfehler.
+6 JavaScript-Dateien: Syntaxprüfung erfolgreich (Node 24.19.0).
+Sociolog module metadata and asset policy are valid (version 1.0.30).
+Alle 21 veröffentlichten Migrationen bytegleich zum Ausgangscode.
+HumHub 1.18.6 / PHP 8.3.30: OK (29 tests, 5232 assertions).
+HumHub 1.19.0-beta.3 / PHP 8.3.30: OK (29 tests, 5232 assertions).
+Änderungspatch erfolgreich auf unveränderten Ausgangscode angewandt und byteweise geprüft.

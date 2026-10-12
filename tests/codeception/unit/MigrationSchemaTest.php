@@ -10,6 +10,7 @@ class MigrationSchemaTest extends SociologTestCase
     public function testCompleteMigrationResult(): void
     {
         $requiredTables = [
+            'sociolog_read_scope',
             'sociolog_entry',
             'sociolog_decision_type',
             'sociolog_space_config',
@@ -35,6 +36,7 @@ class MigrationSchemaTest extends SociologTestCase
             'organ_id',
             'decision_type_id',
             'published_at',
+            'published_timestamp',
             'forwarded_at',
             'forwarded_to',
             'organ_link_mode',

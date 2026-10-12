@@ -74,7 +74,14 @@ class SpaceConfig extends ActiveRecord
     public function allowsSelectedWriter(User $user): bool
     {
         return $this->writer_mode === self::WRITER_MODE_SELECTED
-            && in_array((string)$user->guid, $this->getWriterUserGuids(), true);
+            && (bool)$this->enabled
+            && (int)$user->status === User::STATUS_ENABLED
+            && in_array((string)$user->guid, $this->getWriterUserGuids(), true)
+            && \humhub\modules\space\models\Membership::find()->where([
+                'space_id' => (int)$this->space_id,
+                'user_id' => (int)$user->id,
+                'status' => \humhub\modules\space\models\Membership::STATUS_MEMBER,
+            ])->exists();
     }
 
     public function attributeLabels()

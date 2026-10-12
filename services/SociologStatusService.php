@@ -26,7 +26,7 @@ public static function run(): void
         $today = new DateTimeImmutable('today');
 
         $rows = Entry::find()
-            ->publishedOrLegacy()
+            ->publishedOrLegacy(false)
             ->select([
 				Entry::tableName() . '.id',
 				Entry::tableName() . '.status',
@@ -108,65 +108,53 @@ public static function run(): void
     );
 }
 
-    private static function calculateStatus(array $row, DateTimeImmutable $today): ?string
-{
-    $status = (string)($row['status'] ?? '');
-
-		// Wenn weitergeleitet → Status nicht automatisch ändern
-		if (!empty($row['forwarded_to'])) {
-			return null;
-		}
-
-    // Endzustand: nie automatisch ändern
-    if (Entry::isManualProtectedStatus($status)) {
-        return null;
-    }
-
-    $effective = !empty($row['effective_date'])
-        ? new DateTimeImmutable((string)$row['effective_date'])
-        : null;
-
-    // 🔹 Fallback: effective_date aus published_at berechnen
-    if ($effective === null && !empty($row['published_at'])) {
-
-        $days = (int)Yii::$app->getModule('sociolog')->settings->get('defaultEffectiveDays', 10);
-        $addExtraDay = (bool)Yii::$app->getModule('sociolog')
-            ->settings
-            ->get('effectiveDateAddExtraDay', true);
-
-        $published = new DateTimeImmutable((string)$row['published_at']);
-
-        $effective = $published->modify("+{$days} days");
-        if ($addExtraDay) {
-            $effective = $effective->modify('+1 day');
+    public static function calculateStatus(array $row, DateTimeImmutable $today): ?string
+    {
+        $status = (string)($row['status'] ?? '');
+        if (!empty($row['forwarded_to']) || Entry::isManualProtectedStatus($status)) {
+            return null;
         }
-    }
-
-    $review = !empty($row['review_date'])
-        ? new DateTimeImmutable((string)$row['review_date'])
-        : null;
-
-        // optional: auto → pending / valid
-        if ($status === 'auto') {
-            $status = $effective ? 'pending' : 'valid';
+        $effective = !empty($row['effective_date']) ? new DateTimeImmutable((string)$row['effective_date']) : null;
+        if ($effective === null && !empty($row['published_at'])) {
+            $effective = (new DateTimeImmutable((string)$row['published_at']))->modify('+' . self::effectiveDays() . ' days');
         }
-
-        // pending → valid
-        if ($status === 'pending' && $effective && $effective <= $today) {
-            $status = 'valid';
+        $review = !empty($row['review_date']) ? new DateTimeImmutable((string)$row['review_date']) : $effective?->modify('+2 years');
+        // MySQL DATE_ADD clamps leap days; use the same calendar rule in PHP.
+        if (empty($row['review_date']) && $effective !== null && $review !== null
+            && $review->format('m') !== $effective->format('m')) {
+            $review = $review->modify('last day of previous month');
         }
-
-        // Review-Datum bestimmen
-        if ($review === null && $effective !== null) {
-            $review = $effective->modify('+2 years');
+        if ($review !== null && $review <= $today) {
+            return Entry::STATUS_REVIEW;
         }
-
-        // valid → review (nur valid!)
-        if ($status === 'valid' && $review !== null && $review <= $today) {
-            $status = 'review';
+        if ($effective !== null) {
+            return $effective > $today ? Entry::STATUS_PENDING : Entry::STATUS_VALID;
         }
-
         return $status;
     }
 
+    private static function effectiveDays(): int
+    {
+        $settings = Yii::$app->getModule('sociolog')->settings;
+        return (int)$settings->get('defaultEffectiveDays', 10)
+            + ((bool)$settings->get('effectiveDateAddExtraDay', true) ? 1 : 0);
+    }
+
+    /** MySQL expression matching calculateStatus(), including legacy date fallbacks. */
+    public static function statusExpression(): \yii\db\Expression
+    {
+        $table = Yii::$app->db->quoteTableName(Entry::tableName());
+        $days = self::effectiveDays();
+        $effective = "COALESCE({$table}.effective_date, DATE_ADD({$table}.published_at, INTERVAL {$days} DAY))";
+        $review = "COALESCE({$table}.review_date, DATE_ADD({$effective}, INTERVAL 2 YEAR))";
+        return new \yii\db\Expression(
+            "CASE WHEN {$table}.status IN ('expired', 'objection', 'replaced') "
+            . "OR COALESCE({$table}.forwarded_to, '') <> '' THEN {$table}.status "
+            . "WHEN {$review} <= :sociologStatusToday THEN 'review' "
+            . "WHEN {$effective} > :sociologStatusToday THEN 'pending' "
+            . "WHEN {$effective} <= :sociologStatusToday THEN 'valid' "
+            . "ELSE {$table}.status END",
+            [':sociologStatusToday' => date('Y-m-d')]
+        );
+    }
 }

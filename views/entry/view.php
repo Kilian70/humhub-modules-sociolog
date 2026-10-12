@@ -227,7 +227,9 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
     <?php if ($model->published_at): ?>
       <div>
         <strong><?= Yii::t('SociologModule.base', 'Veröffentlicht am') ?>:</strong>
-        <?= Yii::$app->formatter->asDate($model->published_at) ?>
+        <?= Html::encode($model->published_timestamp
+            ? Yii::$app->formatter->asDatetime($model->published_timestamp, 'php:d.m.Y, H:i:s T')
+            : Yii::$app->formatter->asDate($model->published_at)) ?>
       </div>
     <?php endif; ?>
 
@@ -237,6 +239,8 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 
 <?php endif; ?>
 
+
+<?= $this->render('_objectionDeadline', ['model' => $model]) ?>
 
 <!-- ============================================================
  🔹 BUTTONS

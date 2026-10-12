@@ -1,0 +1,1345 @@
+Yii Migration Tool (based on Yii v2.0.55)
+
+Creating migration history table "hh_migration"...Done.
+Total 218 new migrations to be applied:
+	m131023_164513_initial
+	m131023_165411_initial
+	m131023_165625_initial
+	m131023_165755_initial
+	m131023_165835_initial
+	m131023_170033_initial
+	m131023_170135_initial
+	m131023_170159_initial
+	m131023_170253_initial
+	m131023_170339_initial
+	m131203_110444_oembed
+	m131213_165552_user_optimize
+	m140226_111945_ldap
+	m140303_125031_password
+	m140304_142711_memberautoadd
+	m140321_000917_content
+	m140324_170617_membership
+	m140507_150421_create_settings_table
+	m140507_171527_create_settings_table
+	m140512_141414_i18n_profilefields
+	m140513_180317_createlogging
+	m140701_000611_profile_genderfield
+	m140701_074404_protect_default_profilefields
+	m140702_143912_notify_notification_unify
+	m140703_104527_profile_birthdayfield
+	m140704_080659_installationid
+	m140705_065525_emailing_settings
+	m140706_135210_lastlogin
+	m140829_122906_delete
+	m140830_145504_following
+	m140901_080147_indizies
+	m140901_080432_indices
+	m140901_112246_addState
+	m140901_153403_addState
+	m140901_170329_group_create_space
+	m140902_091234_session_key_length
+	m140907_140822_zip_field_to_text
+	m140930_205511_fix_default
+	m140930_205859_fix_default
+	m140930_210142_fix_default
+	m140930_210635_fix_default
+	m140930_212528_fix_default
+	m141015_173305_follow_notifications
+	m141019_093319_mentioning
+	m141020_162639_fix_default
+	m141020_193920_rm_alsocreated
+	m141020_193931_rm_alsoliked
+	m141021_162639_oembed_setting
+	m141022_094635_addDefaults
+	m141106_185632_log_init
+	m150204_103433_html5_notified
+	m150210_190006_user_invite_lang
+	m150302_114347_add_visibility
+	m150322_194403_remove_type_field
+	m150322_195619_allowedExt2Text
+	m150429_223856_optimize
+	m150629_220311_change
+	m150703_012735_typelength
+	m150703_024635_activityTypes
+	m150703_033650_namespace
+	m150703_130157_migrate
+	m150704_005338_namespace
+	m150704_005418_namespace
+	m150704_005434_namespace
+	m150704_005452_namespace
+	m150704_005504_namespace
+	m150713_054441_timezone
+	m150714_093525_activity
+	m150714_100355_cleanup
+	m150831_061628_notifications
+	m150910_223305_fix_user_follow
+	m150924_133344_update_notification_fix
+	m150924_154635_user_invite_add_first_lastname
+	m150927_190830_create_contentcontainer
+	m150928_103711_permissions
+	m150928_134934_groups
+	m150928_140718_setColorVariables
+	m151010_124437_group_permissions
+	m151010_175000_default_visibility
+	m151013_223814_include_dashboard
+	m151022_131128_module_fix
+	m151106_090948_addColor
+	m151223_171310_fix_notifications
+	m151226_164234_authclient
+	m160125_053702_stored_filename
+	m160205_203840_foreign_keys
+	m160205_203913_foreign_keys
+	m160205_203939_foreign_keys
+	m160205_203955_foreign_keys
+	m160205_204000_foreign_keys
+	m160205_204010_foreign_keys
+	m160205_205540_foreign_keys
+	m160216_160119_initial
+	m160217_161220_addCanLeaveFlag
+	m160220_013525_contentcontainer_id
+	m160221_222312_public_permission_change
+	m160225_180229_remove_website
+	m160227_073020_birthday_date
+	m160229_162959_multiusergroups
+	m160309_141222_longerUserName
+	m160408_100725_rename_groupadmin_to_manager
+	m160415_180332_wall_remove
+	m160501_220850_activity_pk_int
+	m160507_202611_settings
+	m160508_005740_settings_cleanup
+	m160509_214811_spaceurl
+	m160517_132535_group
+	m160523_105732_profile_searchable
+	m160714_142827_remove_space_id
+	m161031_161947_file_directories
+	m170110_151419_membership_notifications
+	m170110_152425_space_follow_reset_send_notification
+	m170111_190400_disable_web_notifications
+	m170112_115052_settings
+	m170118_162332_streamchannel
+	m170119_160740_initial
+	m170123_125622_pinned
+	m170211_105743_show_in_stream
+	m170224_100937_fix_default_modules
+	m170723_133337_content_tag
+	m170723_133338_content_tag_sort_order
+	m170805_211208_authclient_id
+	m170810_220543_group_sort
+	m171015_155102_contentcontainer_module
+	m171025_142030_queue_update
+	m171025_200312_utf8mb4_fixes
+	m171027_220519_exclusive_jobs
+	m180305_084435_membership_pk
+	m180315_112748_fix_email_length
+	m181029_160453_collation
+	m190211_133045_channel_length
+	m190309_201944_rename_settings
+	m190920_142605_fix_language_codes
+	m200217_122108_profile_translation_fix
+	m200218_122109_profile_translation_fix2
+	m200323_162006_fix_visibility
+	m200604_204445_remove_post_field
+	m200715_171721_defaultOption
+	m200715_184207_commentIndex
+	m200729_080349_commentIndex_fix_order
+	m200930_151639_add_about
+	m201020_130431_fix_default_file_setting_value
+	m201025_095247_spaces_of_users_group
+	m201115_083832_add_notify_users_to_group
+	m201130_073907_default_permissions
+	m201130_073908_disable_legacy_richtextparser
+	m201217_081828_fix_oembed_setting
+	m201228_064513_default_group
+	m210111_105355_hash
+	m210203_122333_profilePermissions
+	m210204_054203_fix_settings_unique_index
+	m210211_051243_container_tag
+	m210217_055359_protected_group
+	m210310_103412_fix_hash
+	m210331_115144_default_timezone
+	m210506_060737_profile_field_directory_filter
+	m210721_055137_content_locked_comments
+	m210727_102150_follow_friend
+	m210924_114847_container_blocked_users
+	m210928_162609_stream_sort_idx
+	m211022_152413_file_history
+	m211124_180441_admin_group_label
+	m220121_193617_oembed_setting_update
+	m220207_183901_add_payload_column_to_notification_table
+	m220302_135158_add_content_id
+	m220606_205507_mailer_settings
+	m220608_125539_displaysubformat
+	m220919_104234_auth_key
+	m221111_100450_rename_profile_url
+	m221117_214310_rename_setting
+	m230127_195245_content_state
+	m230130_140944_rename_auth_invite_setting
+	m230217_112400_content_scheduled_at
+	m230217_175411_content_hidden
+	m230419_102455_add_sort_order_column_to_space_table
+	m230618_135508_file_add_sorting_column
+	m230618_135509_file_add_category_column
+	m230618_135510_file_add_metadata_column
+	m230618_135511_file_add_state_column
+	m230618_135512_file_add_guid_unique_index
+	m231024_062218_content_was_published
+	m240203_112155_search
+	m240419_095931_fix_user_profile_country_code
+	m240422_162959_new_is_untouched_settings
+	m240423_170311_profile_checkbox_list_field
+	m240425_144905_unique_index
+	m240523_081438_fix_null_password
+	m240622_082606_fix_captcha_in_registration
+	m240715_150726_fulltext_index
+	m240807_230603_add_permissions_to_existing_user_groups
+	m240916_150536_extend_language
+	m241004_093044_server_timezone
+	m241022_084028_delete_desktop_notified
+	m250226_125226_rename_mailer_vars
+	m250405_072758_1_18_switch_to_humhub_theme_and_disable_themes
+	m250514_125129_reduce_dynamic_config
+	m250715_070647_group_name_length
+	m250807_194741_remove_cache_settings
+	m250829_135404_parent_group
+	m250913_221050_drop_logging_table
+	m251007_133345_fulltext_index_primary_key
+	m251201_073817_rename_proxy_settings
+	m251209_212949_update_checkboxlist_config_directory_filter
+	m251215_120928_alter_checkboxlist_columns_to_profile_table
+	m251230_140508_content_id
+	m260105_094333_like_contentid
+	m260106_160017_record_map
+	m260106_175102_like_record_map
+	m260108_115053_new_structure
+	m260122_075627_activity_grouping
+	m260327_092412_module_version
+	m260502_000001_add_user_source
+	m260502_000002_ldap_migration
+	m260522_185040_add_post_title
+	m260701_111824_move_mobile_whitelisted_domains_to_urls
+	m260716_100000_file_add_public_standalone_columns
+	m260915_101543_user_follow_unique_index
+	m260918_112000_disable_stale_webroot_core_theme
+
+*** applying m131023_164513_initial
+    > create table group ... done (time: 0.006s)
+    > create table group_admin ... done (time: 0.006s)
+    > create table profile ... done (time: 0.005s)
+    > add primary key pk_profile on profile (user_id) ... done (time: 0.009s)
+    > create table profile_field ... done (time: 0.005s)
+    > create table profile_field_category ... done (time: 0.006s)
+    > create table user ... done (time: 0.006s)
+    > create table user_content ... done (time: 0.006s)
+    > create table user_follow ... done (time: 0.005s)
+    > add primary key pk_user_follow on user_follow (user_follower_id,user_followed_id) ... done (time: 0.007s)
+    > create table user_http_session ... done (time: 0.006s)
+    > add primary key pk_user_http_session on user_http_session (id) ... done (time: 0.007s)
+    > create table user_invite ... done (time: 0.005s)
+    > create table user_space_membership ... done (time: 0.004s)
+    > create table user_module ... done (time: 0.006s)
+    > add primary key pk_user_space_membership on user_space_membership (space_id,user_id) ... done (time: 0.007s)
+*** applied m131023_164513_initial (time: 0.100s)
+
+*** applying m131023_165411_initial
+    > create table space ... done (time: 0.005s)
+    > create table space_follow ... done (time: 0.004s)
+    > add primary key pk_space_follow on space_follow (user_id,space_id) ... done (time: 0.007s)
+    > create table space_module ... done (time: 0.006s)
+*** applied m131023_165411_initial (time: 0.025s)
+
+*** applying m131023_165625_initial
+    > create table wall ... done (time: 0.006s)
+    > create table wall_entry ... done (time: 0.005s)
+    > create table content ... done (time: 0.005s)
+*** applied m131023_165625_initial (time: 0.017s)
+
+*** applying m131023_165755_initial
+    > create table setting ... done (time: 0.005s)
+    > create table module_enabled ... done (time: 0.004s)
+    > add primary key pk_module_enabled on module_enabled (module_id) ... done (time: 0.007s)
+*** applied m131023_165755_initial (time: 0.017s)
+
+*** applying m131023_165835_initial
+    > create table post ... done (time: 0.005s)
+*** applied m131023_165835_initial (time: 0.006s)
+
+*** applying m131023_170033_initial
+    > create table notification ... done (time: 0.006s)
+*** applied m131023_170033_initial (time: 0.007s)
+
+*** applying m131023_170135_initial
+    > create table like ... done (time: 0.006s)
+*** applied m131023_170135_initial (time: 0.007s)
+
+*** applying m131023_170159_initial
+    > create table file ... done (time: 0.005s)
+*** applied m131023_170159_initial (time: 0.007s)
+
+*** applying m131023_170253_initial
+    > create table comment ... done (time: 0.006s)
+*** applied m131023_170253_initial (time: 0.007s)
+
+*** applying m131023_170339_initial
+    > create table activity ... done (time: 0.005s)
+*** applied m131023_170339_initial (time: 0.007s)
+
+*** applying m131203_110444_oembed
+    > create table url_oembed ... done (time: 0.005s)
+    > rename column message in table post to message_2trash ... done (time: 0.006s)
+    > rename column original_message in table post to message ... done (time: 0.005s)
+*** applied m131203_110444_oembed (time: 0.020s)
+
+*** applying m131213_165552_user_optimize
+    > create unique index unique_email on user (email) ... done (time: 0.006s)
+    > create unique index unique_username on user (username) ... done (time: 0.006s)
+    > create unique index unique_guid on user (guid) ... done (time: 0.006s)
+    > create unique index unique_wall_id on user (wall_id) ... done (time: 0.005s)
+    > create unique index unique_admin on group_admin (user_id,group_id) ... done (time: 0.006s)
+    > create index index_profile_field_category on profile_field (profile_field_category_id) ... done (time: 0.007s)
+    > create index index_user on user_content (user_id) ... done (time: 0.005s)
+    > create index index_object on user_content (object_model, object_id) ... done (time: 0.006s)
+    > create index index_status on user_space_membership (status) ... done (time: 0.007s)
+    > create unique index unique_token on user_invite (token) ... done (time: 0.007s)
+    > create unique index unique_email on user_invite (email) ... done (time: 0.006s)
+*** applied m131213_165552_user_optimize (time: 0.069s)
+
+*** applying m140226_111945_ldap
+    > add column ldap_attribute string to table profile_field ... done (time: 0.007s)
+    > add column ldap_dn string to table space ... done (time: 0.007s)
+    > add column ldap_dn string to table group ... done (time: 0.006s)
+    > update profile_field ... done (time: 0.002s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+*** applied m140226_111945_ldap (time: 0.023s)
+
+*** applying m140303_125031_password
+    > create table user_password ... done (time: 0.006s)
+    > create index idx_user_id on user_password (user_id) ... done (time: 0.006s)
+    > drop column password from table user ... done (time: 0.008s)
+*** applied m140303_125031_password (time: 0.022s)
+
+*** applying m140304_142711_memberautoadd
+    > add column auto_add_new_members int(4) DEFAULT NULL to table space ... done (time: 0.007s)
+*** applied m140304_142711_memberautoadd (time: 0.009s)
+
+*** applying m140321_000917_content
+    > create unique index index_object_model on content (object_model, object_id) ... done (time: 0.006s)
+    > create unique index index_guid on content (guid) ... done (time: 0.005s)
+    > create index index_space_id on content (space_id) ... done (time: 0.006s)
+    > create index index_user_id on content (user_id) ... done (time: 0.006s)
+*** applied m140321_000917_content (time: 0.026s)
+
+*** applying m140324_170617_membership
+    > rename table user_space_membership to space_membership ... done (time: 0.001s)
+*** applied m140324_170617_membership (time: 0.003s)
+
+*** applying m140507_150421_create_settings_table
+    > create table user_setting ... done (time: 0.005s)
+    > create unique index idx_user_setting on user_setting (user_id, module_id, name) ... done (time: 0.006s)
+*** applied m140507_150421_create_settings_table (time: 0.013s)
+
+*** applying m140507_171527_create_settings_table
+    > create table space_setting ... done (time: 0.006s)
+    > create unique index idx_space_setting on space_setting (space_id, module_id, name) ... done (time: 0.006s)
+*** applied m140507_171527_create_settings_table (time: 0.014s)
+
+*** applying m140512_141414_i18n_profilefields
+    > add column translation_category varchar(255) DEFAULT NULL to table profile_field ... done (time: 0.008s)
+    > add column is_system int(1) DEFAULT NULL to table profile_field ... done (time: 0.006s)
+    > add column translation_category varchar(255) DEFAULT NULL to table profile_field_category ... done (time: 0.007s)
+    > update profile_field ... done (time: 0.002s)
+*** applied m140512_141414_i18n_profilefields (time: 0.025s)
+
+*** applying m140513_180317_createlogging
+    > create table logging ... done (time: 0.005s)
+*** applied m140513_180317_createlogging (time: 0.007s)
+
+*** applying m140701_000611_profile_genderfield
+*** applied m140701_000611_profile_genderfield (time: 0.002s)
+
+*** applying m140701_074404_protect_default_profilefields
+    > add column is_system int(1) DEFAULT NULL to table profile_field_category ... done (time: 0.007s)
+    > update profile_field ... done (time: 0.001s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+*** applied m140701_074404_protect_default_profilefields (time: 0.011s)
+
+*** applying m140702_143912_notify_notification_unify
+    > delete from notification ... done (time: 0.000s)
+    > delete from notification ... done (time: 0.000s)
+    > delete from notification ... done (time: 0.000s)
+    > delete from notification ... done (time: 0.000s)
+*** applied m140702_143912_notify_notification_unify (time: 0.002s)
+
+*** applying m140703_104527_profile_birthdayfield
+*** applied m140703_104527_profile_birthdayfield (time: 0.002s)
+
+*** applying m140704_080659_installationid
+*** applied m140704_080659_installationid (time: 0.002s)
+
+*** applying m140705_065525_emailing_settings
+    > drop column receive_email_notifications from table user ... done (time: 0.007s)
+    > drop column receive_email_messaging from table user ... done (time: 0.010s)
+    > drop column receive_email_activities from table user ... done (time: 0.008s)
+*** applied m140705_065525_emailing_settings (time: 0.027s)
+
+*** applying m140706_135210_lastlogin
+    > add column last_login DATETIME DEFAULT NULL to table user ... done (time: 0.009s)
+*** applied m140706_135210_lastlogin (time: 0.010s)
+
+*** applying m140829_122906_delete
+    > delete from user ... done (time: 0.000s)
+    > drop column user_invite_id from table user ... done (time: 0.007s)
+    > alter column status in table user to tinyint(4) ... done (time: 0.008s)
+*** applied m140829_122906_delete (time: 0.017s)
+
+*** applying m140830_145504_following
+    > create table follow ... done (time: 0.006s)
+    > create index index_user on follow (user_id) ... done (time: 0.006s)
+    > create index index_object on follow (object_model, object_id) ... done (time: 0.006s)
+    > drop table space_follow ... done (time: 0.001s)
+    > drop table user_follow ... done (time: 0.001s)
+*** applied m140830_145504_following (time: 0.021s)
+
+*** applying m140901_080147_indizies
+    > create index index_object on like (object_model, object_id) ... done (time: 0.006s)
+*** applied m140901_080147_indizies (time: 0.007s)
+
+*** applying m140901_080432_indices
+    > create index index_object on file (object_model, object_id) ... done (time: 0.006s)
+*** applied m140901_080432_indices (time: 0.007s)
+
+*** applying m140901_112246_addState
+    > add column state int(4) to table space_module ... done (time: 0.006s)
+    > drop column created_at from table space_module ... done (time: 0.008s)
+    > drop column created_by from table space_module ... done (time: 0.007s)
+    > drop column updated_at from table space_module ... done (time: 0.007s)
+    > drop column updated_by from table space_module ... done (time: 0.006s)
+    > update space_module ... done (time: 0.002s)
+*** applied m140901_112246_addState (time: 0.037s)
+
+*** applying m140901_153403_addState
+    > add column state int(4) to table user_module ... done (time: 0.008s)
+    > drop column created_at from table user_module ... done (time: 0.007s)
+    > drop column created_by from table user_module ... done (time: 0.007s)
+    > drop column updated_at from table user_module ... done (time: 0.007s)
+    > drop column updated_by from table user_module ... done (time: 0.007s)
+    > update user_module ... done (time: 0.001s)
+*** applied m140901_153403_addState (time: 0.039s)
+
+*** applying m140901_170329_group_create_space
+    > add column can_create_public_spaces INT(1) DEFAULT 1 to table group ... done (time: 0.008s)
+    > add column can_create_private_spaces INT(1) DEFAULT 1 to table group ... done (time: 0.011s)
+*** applied m140901_170329_group_create_space (time: 0.021s)
+
+*** applying m140902_091234_session_key_length
+    > alter column id in table user_http_session to char(64) NOT NULL ... done (time: 0.008s)
+*** applied m140902_091234_session_key_length (time: 0.009s)
+
+*** applying m140907_140822_zip_field_to_text
+*** applied m140907_140822_zip_field_to_text (time: 0.002s)
+
+*** applying m140930_205511_fix_default
+    > alter column module in table activity to varchar(100) DEFAULT '' ... done (time: 0.008s)
+    > alter column object_model in table activity to varchar(100) DEFAULT '' ... done (time: 0.007s)
+    > alter column object_id in table activity to varchar(100) DEFAULT '' ... done (time: 0.007s)
+*** applied m140930_205511_fix_default (time: 0.023s)
+
+*** applying m140930_205859_fix_default
+    > alter column target_user_id in table like to int(11) DEFAULT NULL ... done (time: 0.007s)
+*** applied m140930_205859_fix_default (time: 0.008s)
+
+*** applying m140930_210142_fix_default
+    > alter column object_model in table file to varchar(100) DEFAULT '' ... done (time: 0.007s)
+    > alter column object_id in table file to varchar(100) DEFAULT '' ... done (time: 0.008s)
+*** applied m140930_210142_fix_default (time: 0.016s)
+
+*** applying m140930_210635_fix_default
+    > alter column super_admin in table user to tinyint(4) NOT NULL DEFAULT '0' ... done (time: 0.005s)
+    > alter column language in table user to varchar(5) DEFAULT NULL ... done (time: 0.007s)
+    > alter column sort_order in table profile_field to int(11) NOT NULL DEFAULT '100' ... done (time: 0.005s)
+    > alter column visible in table profile_field to tinyint(4) NOT NULL DEFAULT '1' ... done (time: 0.005s)
+    > alter column sort_order in table profile_field_category to int(11) NOT NULL DEFAULT '100' ... done (time: 0.005s)
+    > alter column visibility in table profile_field_category to tinyint(4) NOT NULL DEFAULT '1' ... done (time: 0.005s)
+    > alter column updated_by in table user_content to int(11) DEFAULT NULL ... done (time: 0.007s)
+    > alter column created_by in table user_content to int(11) DEFAULT NULL ... done (time: 0.007s)
+*** applied m140930_210635_fix_default (time: 0.049s)
+
+*** applying m140930_212528_fix_default
+    > alter column emailed in table notification to tinyint(4) NOT NULL DEFAULT '0' ... done (time: 0.005s)
+    > alter column updated_by in table notification to int(11) DEFAULT NULL ... done (time: 0.007s)
+    > alter column created_by in table notification to int(11) DEFAULT NULL ... done (time: 0.006s)
+*** applied m140930_212528_fix_default (time: 0.020s)
+
+*** applying m141015_173305_follow_notifications
+    > rename table follow to user_follow ... done (time: 0.001s)
+    > add column send_notifications boolean default "1" to table user_follow ... done (time: 0.007s)
+    > drop table user_content ... done (time: 0.001s)
+*** applied m141015_173305_follow_notifications (time: 0.011s)
+
+*** applying m141019_093319_mentioning
+    > create table user_mentioning ... done (time: 0.004s)
+    > create index i_user on user_mentioning (user_id) ... done (time: 0.005s)
+    > create index i_object on user_mentioning (object_model, object_id) ... done (time: 0.005s)
+*** applied m141019_093319_mentioning (time: 0.016s)
+
+*** applying m141020_162639_fix_default
+    > alter column value in table setting to varchar(255) DEFAULT NULL ... done (time: 0.007s)
+    > alter column updated_by in table setting to int(11) DEFAULT NULL ... done (time: 0.006s)
+    > alter column created_by in table setting to int(11) DEFAULT NULL ... done (time: 0.007s)
+    > alter column created_at in table setting to datetime DEFAULT NULL ... done (time: 0.006s)
+    > alter column updated_at in table setting to datetime DEFAULT NULL ... done (time: 0.007s)
+*** applied m141020_162639_fix_default (time: 0.035s)
+
+*** applying m141020_193920_rm_alsocreated
+    > delete from notification ... done (time: 0.000s)
+*** applied m141020_193920_rm_alsocreated (time: 0.001s)
+
+*** applying m141020_193931_rm_alsoliked
+    > delete from notification ... done (time: 0.000s)
+*** applied m141020_193931_rm_alsoliked (time: 0.001s)
+
+*** applying m141021_162639_oembed_setting
+    > insert into setting ... done (time: 0.001s)
+*** applied m141021_162639_oembed_setting (time: 0.004s)
+
+*** applying m141022_094635_addDefaults
+    > insert into setting ... done (time: 0.001s)
+    > insert into setting ... done (time: 0.000s)
+*** applied m141022_094635_addDefaults (time: 0.002s)
+
+*** applying m141106_185632_log_init
+    > create table {{%log}} ... done (time: 0.006s)
+    > create index idx_log_level on {{%log}} (level) ... done (time: 0.005s)
+    > create index idx_log_category on {{%log}} (category) ... done (time: 0.006s)
+*** applied m141106_185632_log_init (time: 0.020s)
+
+*** applying m150204_103433_html5_notified
+    > add column desktop_notified tinyint(1) DEFAULT 0 to table notification ... done (time: 0.007s)
+    > update notification ... done (time: 0.001s)
+*** applied m150204_103433_html5_notified (time: 0.010s)
+
+*** applying m150210_190006_user_invite_lang
+    > add column language varchar(10) DEFAULT NULL to table user_invite ... done (time: 0.008s)
+*** applied m150210_190006_user_invite_lang (time: 0.009s)
+
+*** applying m150302_114347_add_visibility
+    > add column visibility INT(1) DEFAULT 1 to table user ... done (time: 0.008s)
+*** applied m150302_114347_add_visibility (time: 0.009s)
+
+*** applying m150322_194403_remove_type_field
+    > drop column type from table wall ... done (time: 0.007s)
+*** applied m150322_194403_remove_type_field (time: 0.008s)
+
+*** applying m150322_195619_allowedExt2Text
+*** applied m150322_195619_allowedExt2Text (time: 0.002s)
+
+*** applying m150429_223856_optimize
+    > create index index_user_id on notification (user_id) ... done (time: 0.005s)
+    > create index index_seen on notification (seen) ... done (time: 0.005s)
+    > create index index_desktop_notified on notification (desktop_notified) ... done (time: 0.006s)
+    > create index index_desktop_emailed on notification (emailed) ... done (time: 0.006s)
+*** applied m150429_223856_optimize (time: 0.024s)
+
+*** applying m150629_220311_change
+    > rename column source_object_model in table notification to source_class ... done (time: 0.005s)
+    > rename column source_object_id in table notification to source_pk ... done (time: 0.005s)
+    > rename column target_object_id in table notification to obsolete_target_object_id ... done (time: 0.004s)
+    > rename column target_object_model in table notification to obsolete_target_object_model ... done (time: 0.005s)
+    > add column originator_user_id int(11) DEFAULT NULL to table notification ... done (time: 0.007s)
+*** applied m150629_220311_change (time: 0.028s)
+
+*** applying m150703_012735_typelength
+    > rename column type in table activity to class ... done (time: 0.006s)
+    > alter column class in table activity to varchar(100) NOT NULL ... done (time: 0.007s)
+*** applied m150703_012735_typelength (time: 0.015s)
+
+*** applying m150703_024635_activityTypes
+    > update activity ... done (time: 0.001s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+*** applied m150703_024635_activityTypes (time: 0.003s)
+
+*** applying m150703_033650_namespace
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+*** applied m150703_033650_namespace (time: 0.011s)
+
+*** applying m150703_130157_migrate
+*** applied m150703_130157_migrate (time: 0.010s)
+
+*** applying m150704_005338_namespace
+*** applied m150704_005338_namespace (time: 0.009s)
+
+*** applying m150704_005418_namespace
+*** applied m150704_005418_namespace (time: 0.009s)
+
+*** applying m150704_005434_namespace
+*** applied m150704_005434_namespace (time: 0.009s)
+
+*** applying m150704_005452_namespace
+*** applied m150704_005452_namespace (time: 0.008s)
+
+*** applying m150704_005504_namespace
+    > update profile_field ... done (time: 0.001s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+*** applied m150704_005504_namespace (time: 0.015s)
+
+*** applying m150713_054441_timezone
+    > add column time_zone VARCHAR(100) DEFAULT NULL to table user ... done (time: 0.008s)
+*** applied m150713_054441_timezone (time: 0.010s)
+
+*** applying m150714_093525_activity
+    > drop column created_by from table activity ... done (time: 0.008s)
+    > drop column created_at from table activity ... done (time: 0.008s)
+    > drop column updated_by from table activity ... done (time: 0.007s)
+    > drop column updated_at from table activity ... done (time: 0.007s)
+    > update activity ... done (time: 0.001s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+    > update activity ... done (time: 0.000s)
+*** applied m150714_093525_activity (time: 0.033s)
+
+*** applying m150714_100355_cleanup
+    > drop column obsolete_target_object_model from table notification ... done (time: 0.007s)
+    > drop column obsolete_target_object_id from table notification ... done (time: 0.008s)
+    > drop column created_by from table notification ... done (time: 0.005s)
+    > drop column updated_by from table notification ... done (time: 0.007s)
+    > drop column updated_at from table notification ... done (time: 0.006s)
+    > add column module varchar(100) DEFAULT '' to table notification ... done (time: 0.006s)
+    > update notification ... done (time: 0.001s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+*** applied m150714_100355_cleanup (time: 0.043s)
+
+*** applying m150831_061628_notifications
+    > update notification ... done (time: 0.001s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+*** applied m150831_061628_notifications (time: 0.004s)
+
+*** applying m150910_223305_fix_user_follow
+*** applied m150910_223305_fix_user_follow (time: 0.003s)
+
+*** applying m150924_133344_update_notification_fix
+    > update notification ... done (time: 0.001s)
+*** applied m150924_133344_update_notification_fix (time: 0.002s)
+
+*** applying m150924_154635_user_invite_add_first_lastname
+    > add column firstname varchar(255) to table user_invite ... done (time: 0.008s)
+    > add column lastname varchar(255) to table user_invite ... done (time: 0.007s)
+*** applied m150924_154635_user_invite_add_first_lastname (time: 0.016s)
+
+*** applying m150927_190830_create_contentcontainer
+    > create table contentcontainer ... done (time: 0.006s)
+    > alter column guid in table contentcontainer to char(36) NOT NULL ... done (time: 0.006s)
+    > alter column class in table contentcontainer to char(60) NOT NULL ... done (time: 0.008s)
+    > create unique index unique_target on contentcontainer (class,pk) ... done (time: 0.006s)
+    > create unique index unique_guid on contentcontainer (guid) ... done (time: 0.005s)
+    > add column contentcontainer_id integer to table space ... done (time: 0.006s)
+    > add column contentcontainer_id integer to table user ... done (time: 0.007s)
+*** applied m150927_190830_create_contentcontainer (time: 0.045s)
+
+*** applying m150928_103711_permissions
+    > create table contentcontainer_permission ... done (time: 0.005s)
+    > add primary key contentcontainer_permission_pk on contentcontainer_permission (permission_id,group_id,module_id,contentcontainer_id) ... done (time: 0.007s)
+*** applied m150928_103711_permissions (time: 0.014s)
+
+*** applying m150928_134934_groups
+    > add column group_id string DEFAULT 'member' to table space_membership ... done (time: 0.006s)
+    > update space_membership ... done (time: 0.001s)
+    > drop column admin_role from table space_membership ... done (time: 0.007s)
+    > drop column share_role from table space_membership ... done (time: 0.007s)
+    > drop column invite_role from table space_membership ... done (time: 0.007s)
+*** applied m150928_134934_groups (time: 0.030s)
+
+*** applying m150928_140718_setColorVariables
+*** applied m150928_140718_setColorVariables (time: 0.001s)
+
+*** applying m151010_124437_group_permissions
+    > create table group_permission ... done (time: 0.005s)
+    > add primary key permission_pk on group_permission (permission_id,group_id,module_id) ... done (time: 0.007s)
+    > drop column can_create_public_spaces from table group ... done (time: 0.008s)
+    > drop column can_create_private_spaces from table group ... done (time: 0.006s)
+*** applied m151010_124437_group_permissions (time: 0.028s)
+
+*** applying m151010_175000_default_visibility
+    > add column default_content_visibility boolean to table space ... done (time: 0.007s)
+*** applied m151010_175000_default_visibility (time: 0.009s)
+
+*** applying m151013_223814_include_dashboard
+    > add column show_at_dashboard boolean DEFAULT 1 to table space_membership ... done (time: 0.007s)
+*** applied m151013_223814_include_dashboard (time: 0.009s)
+
+*** applying m151022_131128_module_fix
+    > update notification ... done (time: 0.001s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.000s)
+    > update notification ... done (time: 0.001s)
+*** applied m151022_131128_module_fix (time: 0.004s)
+
+*** applying m151106_090948_addColor
+    > add column color varchar(7) to table space ... done (time: 0.034s)
+*** applied m151106_090948_addColor (time: 0.046s)
+
+*** applying m151223_171310_fix_notifications
+*** applied m151223_171310_fix_notifications (time: 0.024s)
+
+*** applying m151226_164234_authclient
+    > create table user_auth ... done (time: 0.012s)
+    > add foreign key fk_user_id: user_auth (user_id) references user (id) ... done (time: 0.028s)
+*** applied m151226_164234_authclient (time: 0.046s)
+
+*** applying m160125_053702_stored_filename
+*** applied m160125_053702_stored_filename (time: 0.012s)
+
+*** applying m160205_203840_foreign_keys
+    > add foreign key fk_user_follow-user_id: user_follow (user_id) references user (id) ... done (time: 0.012s)
+    > add foreign key fk_group-space_id: group (space_id) references space (id) ... done (time: 0.011s)
+    > add foreign key fk_group_permission-group_id: group_permission (group_id) references group (id) ... done (time: 0.011s)
+    > add foreign key fk_user_mentioning-user_id: user_mentioning (user_id) references user (id) ... done (time: 0.008s)
+    > alter column user_id in table user_module to integer NULL DEFAULT NULL ... done (time: 0.007s)
+    > update user_module ... done (time: 0.001s)
+    > add foreign key fk_user_module-user_id: user_module (user_id) references user (id) ... done (time: 0.007s)
+    > add foreign key fk_user_password-user_id: user_password (user_id) references user (id) ... done (time: 0.007s)
+    > add foreign key fk_profile-user_id: profile (user_id) references user (id) ... done (time: 0.006s)
+    > add foreign key fk_profile_field-profile_field_category_id: profile_field (profile_field_category_id) references profile_field_category (id) ... done (time: 0.008s)
+    > add foreign key fk_user_http_session-user_id: user_http_session (user_id) references user (id) ... done (time: 0.008s)
+*** applied m160205_203840_foreign_keys (time: 0.088s)
+
+*** applying m160205_203913_foreign_keys
+    > add foreign key fk_space_membership-user_id: space_membership (user_id) references user (id) ... done (time: 0.008s)
+    > add foreign key fk_space_membership-space_id: space_membership (space_id) references space (id) ... done (time: 0.008s)
+    > alter column space_id in table space_module to integer NULL DEFAULT NULL ... done (time: 0.006s)
+    > update space_module ... done (time: 0.001s)
+    > add foreign key fk_space-wall_id: space (wall_id) references wall (id) ... done (time: 0.008s)
+*** applied m160205_203913_foreign_keys (time: 0.033s)
+
+*** applying m160205_203939_foreign_keys
+    > add foreign key fk_notification-user_id: notification (user_id) references user (id) ... done (time: 0.007s)
+*** applied m160205_203939_foreign_keys (time: 0.009s)
+
+*** applying m160205_203955_foreign_keys
+    > add foreign key fk_like-created_by: like (created_by) references user (id) ... done (time: 0.008s)
+    > add foreign key fk_like-target_user_id: like (target_user_id) references user (id) ... done (time: 0.008s)
+*** applied m160205_203955_foreign_keys (time: 0.018s)
+
+*** applying m160205_204000_foreign_keys
+    > add foreign key fk_file-created_by: file (created_by) references user (id) ... done (time: 0.008s)
+*** applied m160205_204000_foreign_keys (time: 0.009s)
+
+*** applying m160205_204010_foreign_keys
+    > add foreign key fk_comment-created_by: comment (created_by) references user (id) ... done (time: 0.006s)
+*** applied m160205_204010_foreign_keys (time: 0.008s)
+
+*** applying m160205_205540_foreign_keys
+    > add foreign key fk_wall_entry-wall_id: wall_entry (wall_id) references wall (id) ... done (time: 0.007s)
+*** applied m160205_205540_foreign_keys (time: 0.008s)
+
+*** applying m160216_160119_initial
+    > create table user_friendship ... done (time: 0.006s)
+    > create unique index idx-friends on user_friendship (user_id,friend_user_id) ... done (time: 0.006s)
+    > add foreign key fk-user: user_friendship (user_id) references user (id) ... done (time: 0.008s)
+    > add foreign key fk-friend: user_friendship (friend_user_id) references user (id) ... done (time: 0.008s)
+*** applied m160216_160119_initial (time: 0.029s)
+
+*** applying m160217_161220_addCanLeaveFlag
+    > add column can_cancel_membership integer DEFAULT 1 to table space_membership ... done (time: 0.008s)
+    > add column members_can_leave integer DEFAULT 1 to table space ... done (time: 0.007s)
+*** applied m160217_161220_addCanLeaveFlag (time: 0.017s)
+
+*** applying m160220_013525_contentcontainer_id
+    > add column contentcontainer_id integer to table content ... done (time: 0.007s)
+    > update content ... done (time: 0.001s)
+    > update content ... done (time: 0.000s)
+    > update content ... done (time: 0.000s)
+    > update content ... done (time: 0.000s)
+    > add foreign key fk-contentcontainer: content (contentcontainer_id) references contentcontainer (id) ... done (time: 0.009s)
+    > add foreign key fk-create-user: content (created_by) references user (id) ... done (time: 0.009s)
+    > add foreign key fk-update-user: content (updated_by) references user (id) ... done (time: 0.009s)
+    > drop column space_id from table content ... done (time: 0.008s)
+    > drop foreign key fk_content-user_id from table content ...    > drop column user_id from table content ... done (time: 0.008s)
+*** applied m160220_013525_contentcontainer_id (time: 0.058s)
+
+*** applying m160221_222312_public_permission_change
+    > update contentcontainer_permission ... done (time: 0.001s)
+*** applied m160221_222312_public_permission_change (time: 0.002s)
+
+*** applying m160225_180229_remove_website
+    > drop column website from table space ... done (time: 0.007s)
+*** applied m160225_180229_remove_website (time: 0.009s)
+
+*** applying m160227_073020_birthday_date
+*** applied m160227_073020_birthday_date (time: 0.002s)
+
+*** applying m160229_162959_multiusergroups
+    > create table group_user ... done (time: 0.006s)
+    > create unique index idx-group_user on group_user (user_id,group_id) ... done (time: 0.005s)
+    > add foreign key fk-user-group: group_user (user_id) references user (id) ... done (time: 0.007s)
+    > add foreign key fk-group-group: group_user (group_id) references `group` (id) ... done (time: 0.008s)
+    > execute SQL: INSERT INTO group_user (user_id, group_id) SELECT DISTINCT user.id, user.group_id FROM user LEFT JOIN `group` ON user.group_id=group.id WHERE group.id IS NOT NULL ... done (time: 0.001s)
+    > execute SQL: UPDATE group_user u SET is_group_admin = :value WHERE EXISTS (Select 1 FROM group_admin a WHERE u.user_id = a.user_id); ... done (time: 0.000s)
+    > add column is_admin_group boolean NOT NULL DEFAULT 0 to table group ... done (time: 0.008s)
+    > add column show_at_registration boolean NOT NULL DEFAULT 1 to table group ... done (time: 0.007s)
+    > add column show_at_directory boolean NOT NULL DEFAULT 1 to table group ... done (time: 0.007s)
+    > drop table group_admin ... done (time: 0.001s)
+    > drop column super_admin from table user ... done (time: 0.008s)
+    > drop column group_id from table user ... done (time: 0.007s)
+*** applied m160229_162959_multiusergroups (time: 0.070s)
+
+*** applying m160309_141222_longerUserName
+    > alter column username in table user to VARCHAR(50) ... done (time: 0.005s)
+*** applied m160309_141222_longerUserName (time: 0.006s)
+
+*** applying m160408_100725_rename_groupadmin_to_manager
+    > rename column is_group_admin in table group_user to is_group_manager ... done (time: 0.005s)
+*** applied m160408_100725_rename_groupadmin_to_manager (time: 0.006s)
+
+*** applying m160415_180332_wall_remove
+    > add column show_in_stream boolean DEFAULT TRUE to table content ... done (time: 0.007s)
+    > add column stream_sort_date datetime to table content ... done (time: 0.008s)
+    > update content ... done (time: 0.001s)
+    > drop foreign key fk_space-wall_id from table space ... done (time: 0.005s)
+    > drop foreign key fk_wall_entry-wall_id from table wall_entry ... done (time: 0.005s)
+    > drop column wall_id from table user ... done (time: 0.008s)
+    > drop column wall_id from table space ... done (time: 0.007s)
+    > drop column wall_id from table contentcontainer ... done (time: 0.007s)
+    > drop table wall_entry ... done (time: 0.001s)
+    > drop table wall ... done (time: 0.001s)
+*** applied m160415_180332_wall_remove (time: 0.051s)
+
+*** applying m160501_220850_activity_pk_int
+    > alter column object_id in table activity to INT(11) NOT NULL ... done (time: 0.008s)
+*** applied m160501_220850_activity_pk_int (time: 0.010s)
+
+*** applying m160507_202611_settings
+    > create table contentcontainer_setting ... done (time: 0.005s)
+    > create unique index settings-unique on contentcontainer_setting (module_id,contentcontainer_id,name) ... done (time: 0.007s)
+    > add foreign key fk-contentcontainerx: contentcontainer_setting (contentcontainer_id) references contentcontainer (id) ... done (time: 0.009s)
+    > drop table user_setting ... done (time: 0.001s)
+    > drop table space_setting ... done (time: 0.001s)
+*** applied m160507_202611_settings (time: 0.025s)
+
+*** applying m160508_005740_settings_cleanup
+    > drop column created_at from table setting ... done (time: 0.035s)
+    > drop column created_by from table setting ... done (time: 0.031s)
+    > drop column updated_at from table setting ... done (time: 0.034s)
+    > drop column updated_by from table setting ... done (time: 0.034s)
+    > alter column value in table setting to text ... done (time: 0.008s)
+    > update setting ... done (time: 0.002s)
+    > drop column value_text from table setting ... done (time: 0.034s)
+    > create index unique-setting on setting (name,module_id) ... done (time: 0.010s)
+    > update setting ... done (time: 0.002s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update contentcontainer_setting ... done (time: 0.002s)
+    > update contentcontainer_setting ... done (time: 0.000s)
+    > update contentcontainer_setting ... done (time: 0.000s)
+    > update contentcontainer_setting ... done (time: 0.000s)
+*** applied m160508_005740_settings_cleanup (time: 0.203s)
+
+*** applying m160509_214811_spaceurl
+    > add column url string(45) to table space ... done (time: 0.007s)
+    > create unique index url-unique on space (url) ... done (time: 0.006s)
+*** applied m160509_214811_spaceurl (time: 0.016s)
+
+*** applying m160517_132535_group
+    > add column group_key string(75) to table notification ... done (time: 0.008s)
+    > create index index_groupuser on notification (user_id,class,group_key) ... done (time: 0.006s)
+*** applied m160517_132535_group (time: 0.015s)
+
+*** applying m160523_105732_profile_searchable
+    > add column searchable boolean DEFAULT TRUE to table profile_field ... done (time: 0.008s)
+*** applied m160523_105732_profile_searchable (time: 0.010s)
+
+*** applying m160714_142827_remove_space_id
+    > drop column space_id from table comment ... done (time: 0.008s)
+*** applied m160714_142827_remove_space_id (time: 0.010s)
+
+*** applying m161031_161947_file_directories
+*** applied m161031_161947_file_directories (time: 0.002s)
+
+*** applying m170110_151419_membership_notifications
+    > add column send_notifications boolean default "0" to table space_membership ... done (time: 0.008s)
+*** applied m170110_151419_membership_notifications (time: 0.009s)
+
+*** applying m170110_152425_space_follow_reset_send_notification
+*** applied m170110_152425_space_follow_reset_send_notification (time: 0.003s)
+
+*** applying m170111_190400_disable_web_notifications
+    > add column send_web_notifications boolean default "1" to table notification ... done (time: 0.007s)
+*** applied m170111_190400_disable_web_notifications (time: 0.009s)
+
+*** applying m170112_115052_settings
+    > update setting ... done (time: 0.001s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update contentcontainer_setting ... done (time: 0.001s)
+    > update contentcontainer_setting ... done (time: 0.000s)
+    > update contentcontainer_setting ... done (time: 0.000s)
+    > update contentcontainer_setting ... done (time: 0.000s)
+    > update contentcontainer_setting ... done (time: 0.000s)
+    > drop column last_activity_email from table user ... done (time: 0.008s)
+*** applied m170112_115052_settings (time: 0.013s)
+
+*** applying m170118_162332_streamchannel
+    > add column stream_channel char(15) NULL DEFAULT NULL to table content ... done (time: 0.006s)
+    > update content ... done (time: 0.001s)
+    > update content ... done (time: 0.000s)
+    > drop column show_in_stream from table content ... done (time: 0.007s)
+    > create index stream_channe on content (stream_channel) ... done (time: 0.005s)
+*** applied m170118_162332_streamchannel (time: 0.022s)
+
+*** applying m170119_160740_initial
+    > create table live ... done (time: 0.006s)
+    > add foreign key contentcontainer: live (contentcontainer_id) references contentcontainer (id) ... done (time: 0.008s)
+*** applied m170119_160740_initial (time: 0.015s)
+
+*** applying m170123_125622_pinned
+    > rename column sticked in table content to pinned ... done (time: 0.006s)
+*** applied m170123_125622_pinned (time: 0.008s)
+
+*** applying m170211_105743_show_in_stream
+    > add column show_in_stream boolean DEFAULT TRUE to table file ... done (time: 0.007s)
+*** applied m170211_105743_show_in_stream (time: 0.009s)
+
+*** applying m170224_100937_fix_default_modules
+    > alter column space_id in table space_module to integer NULL DEFAULT NULL ... done (time: 0.004s)
+    > alter column user_id in table user_module to integer NULL DEFAULT NULL ... done (time: 0.005s)
+    > update space_module ... done (time: 0.001s)
+    > update user_module ... done (time: 0.001s)
+*** applied m170224_100937_fix_default_modules (time: 0.013s)
+
+*** applying m170723_133337_content_tag
+    > create table content_tag ... done (time: 0.007s)
+    > create index idx-content-tag on content_tag (module_id,contentcontainer_id,name) ... done (time: 0.006s)
+    > add foreign key fk-content-tag-container-id: content_tag (contentcontainer_id) references contentcontainer (id) ... done (time: 0.008s)
+    > add foreign key fk-content-tag-parent-id: content_tag (parent_id) references content_tag (id) ... done (time: 0.008s)
+    > create table content_tag_relation ... done (time: 0.005s)
+    > add foreign key fk-content-tag-rel-content-id: content_tag_relation (content_id) references content (id) ... done (time: 0.007s)
+    > add foreign key fk-content-tag-rel-tag-id: content_tag_relation (tag_id) references content_tag (id) ... done (time: 0.008s)
+*** applied m170723_133337_content_tag (time: 0.052s)
+
+*** applying m170723_133338_content_tag_sort_order
+    > add column sort_order int(11) DEFAULT 0 to table content_tag ... done (time: 0.008s)
+*** applied m170723_133338_content_tag_sort_order (time: 0.010s)
+
+*** applying m170805_211208_authclient_id
+    > add column authclient_id string(60) NULL DEFAULT NULL to table user ... done (time: 0.008s)
+    > create unique index unique_authclient_id on user (authclient_id) ... done (time: 0.006s)
+*** applied m170805_211208_authclient_id (time: 0.016s)
+
+*** applying m170810_220543_group_sort
+    > add column sort_order integer NOT NULL DEFAULT 100 to table group ... done (time: 0.067s)
+*** applied m170810_220543_group_sort (time: 0.070s)
+
+*** applying m171015_155102_contentcontainer_module
+    > create table contentcontainer_module ... done (time: 0.013s)
+    > add primary key pk_contentcontainer_module on contentcontainer_module (contentcontainer_id,module_id) ... done (time: 0.008s)
+    > add foreign key fk_contentcontainer: contentcontainer_module (contentcontainer_id) references contentcontainer (id) ... done (time: 0.007s)
+    > drop table user_module ... done (time: 0.001s)
+    > drop table space_module ... done (time: 0.002s)
+*** applied m171015_155102_contentcontainer_module (time: 0.034s)
+
+*** applying m171025_142030_queue_update
+    > create table {{%queue}} ... done (time: 0.005s)
+    > create index channel on {{%queue}} (channel) ... done (time: 0.013s)
+    > create index reserved_at on {{%queue}} (reserved_at) ... done (time: 0.006s)
+    > create index priority on {{%queue}} (priority) ... done (time: 0.006s)
+*** applied m171025_142030_queue_update (time: 0.033s)
+
+*** applying m171025_200312_utf8mb4_fixes
+    > alter column id in table user_http_session to char(64) NOT NULL ... done (time: 0.005s)
+    > alter column guid in table contentcontainer to char(36) NOT NULL ... done (time: 0.005s)
+    > alter column class in table contentcontainer to char(60) NOT NULL ... done (time: 0.005s)
+*** applied m171025_200312_utf8mb4_fixes (time: 0.017s)
+
+*** applying m171027_220519_exclusive_jobs
+    > create table {{queue_exclusive}} ... done (time: 0.006s)
+    > add primary key pk_queue_exclusive on {{queue_exclusive}} (id) ... done (time: 0.009s)
+*** applied m171027_220519_exclusive_jobs (time: 0.017s)
+
+*** applying m180305_084435_membership_pk
+    > drop foreign key fk_space_membership-space_id from table space_membership ... done (time: 0.004s)
+    > drop foreign key fk_space_membership-user_id from table space_membership ... done (time: 0.005s)
+    > drop primary key PRIMARY ... done (time: 0.007s)
+    > add column id pk to table space_membership ... done (time: 0.009s)
+    > add foreign key fk_space_membership-space_id: space_membership (space_id) references space (id) ... done (time: 0.019s)
+    > add foreign key fk_space_membership-user_id: space_membership (user_id) references user (id) ... done (time: 0.008s)
+*** applied m180305_084435_membership_pk (time: 0.053s)
+
+*** applying m180315_112748_fix_email_length
+    > alter column email in table user to char(150) NULL DEFAULT NULL ... done (time: 0.008s)
+    > alter column email in table user_invite to char(150) NOT NULL ... done (time: 0.007s)
+*** applied m180315_112748_fix_email_length (time: 0.017s)
+
+*** applying m181029_160453_collation
+*** applied m181029_160453_collation (time: 0.507s)
+
+*** applying m190211_133045_channel_length
+    > alter column channel in table queue to string(50) NOT NULL ...
+      - Skipped: Unknown error 1146
+*** applied m190211_133045_channel_length (time: 0.002s)
+
+*** applying m190309_201944_rename_settings
+    > update setting ... done (time: 0.001s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+*** applied m190309_201944_rename_settings (time: 0.006s)
+
+*** applying m190920_142605_fix_language_codes
+    > update user ... done (time: 0.001s)
+    > update setting ... done (time: 0.001s)
+    > update user ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update user ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update user ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update user ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update user ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update user ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+    > update user ... done (time: 0.000s)
+    > update setting ... done (time: 0.000s)
+*** applied m190920_142605_fix_language_codes (time: 0.006s)
+
+*** applying m200217_122108_profile_translation_fix
+    > update profile_field ... done (time: 0.001s)
+    > update profile_field ... done (time: 0.000s)
+    > update profile_field ... done (time: 0.000s)
+*** applied m200217_122108_profile_translation_fix (time: 0.003s)
+
+*** applying m200218_122109_profile_translation_fix2
+    > update profile_field ... done (time: 0.001s)
+*** applied m200218_122109_profile_translation_fix2 (time: 0.003s)
+
+*** applying m200323_162006_fix_visibility
+    > update space ... done (time: 0.001s)
+*** applied m200323_162006_fix_visibility (time: 0.002s)
+
+*** applying m200604_204445_remove_post_field
+    > drop column message_2trash from table post ... done (time: 0.007s)
+*** applied m200604_204445_remove_post_field (time: 0.009s)
+
+*** applying m200715_171721_defaultOption
+*** applied m200715_171721_defaultOption (time: 0.007s)
+
+*** applying m200715_184207_commentIndex
+*** applied m200715_184207_commentIndex (time: 0.002s)
+
+*** applying m200729_080349_commentIndex_fix_order
+    > drop index idx_comment_target on comment ...    > create index idx_comment_target on comment (object_id,object_model) ... done (time: 0.007s)
+*** applied m200729_080349_commentIndex_fix_order (time: 0.009s)
+
+*** applying m200930_151639_add_about
+    > add column about text after description to table space ... done (time: 0.008s)
+*** applied m200930_151639_add_about (time: 0.009s)
+
+*** applying m201020_130431_fix_default_file_setting_value
+    > update setting ... done (time: 0.001s)
+*** applied m201020_130431_fix_default_file_setting_value (time: 0.003s)
+
+*** applying m201025_095247_spaces_of_users_group
+    > create table group_space ... done (time: 0.006s)
+    > create unique index idx-group_space on group_space (space_id,group_id) ... done (time: 0.006s)
+    > add foreign key fk-group_space-space: group_space (space_id) references space (id) ... done (time: 0.007s)
+    > add foreign key fk-group_space-group: group_space (group_id) references `group` (id) ... done (time: 0.009s)
+    > drop foreign key fk_group-space_id from table group ... done (time: 0.008s)
+    > drop column space_id from table group ... done (time: 0.035s)
+*** applied m201025_095247_spaces_of_users_group (time: 0.072s)
+
+*** applying m201115_083832_add_notify_users_to_group
+    > add column notify_users integer NOT NULL DEFAULT 0 to table group ... done (time: 0.039s)
+*** applied m201115_083832_add_notify_users_to_group (time: 0.041s)
+
+*** applying m201130_073907_default_permissions
+    > create table contentcontainer_default_permission ... done (time: 0.006s)
+    > add primary key contentcontainer_default_permission_pk on contentcontainer_default_permission (permission_id,group_id,module_id,contentcontainer_class) ... done (time: 0.007s)
+*** applied m201130_073907_default_permissions (time: 0.018s)
+
+*** applying m201130_073908_disable_legacy_richtextparser
+    > insert into setting ... done (time: 0.000s)
+*** applied m201130_073908_disable_legacy_richtextparser (time: 0.004s)
+
+*** applying m201217_081828_fix_oembed_setting
+*** applied m201217_081828_fix_oembed_setting (time: 0.004s)
+
+*** applying m201228_064513_default_group
+    > add column is_default_group boolean NOT NULL DEFAULT 0 AFTER `is_admin_group` to table group ... done (time: 0.032s)
+*** applied m201228_064513_default_group (time: 0.036s)
+
+*** applying m210111_105355_hash
+    > add column hash_sha1 string(32) NULL DEFAULT NULL to table file ... done (time: 0.009s)
+*** applied m210111_105355_hash (time: 0.011s)
+
+*** applying m210203_122333_profilePermissions
+*** applied m210203_122333_profilePermissions (time: 0.003s)
+
+*** applying m210204_054203_fix_settings_unique_index
+    > drop index unique-setting on setting ... done (time: 0.008s)
+    > create unique index unique-setting on setting (name,module_id) ... done (time: 0.011s)
+*** applied m210204_054203_fix_settings_unique_index (time: 0.021s)
+
+*** applying m210211_051243_container_tag
+    > create table contentcontainer_tag ... done (time: 0.007s)
+    > create unique index unique-contentcontainer-tag on contentcontainer_tag (contentcontainer_class,name) ... done (time: 0.006s)
+    > create table contentcontainer_tag_relation ... done (time: 0.008s)
+    > add primary key pk-contentcontainer-tag-rel on contentcontainer_tag_relation (contentcontainer_id,tag_id) ... done (time: 0.011s)
+    > add foreign key fk-contentcontainer-tag-rel-contentcontainer-id: contentcontainer_tag_relation (contentcontainer_id) references contentcontainer (id) ... done (time: 0.013s)
+    > add foreign key fk-contentcontainer-tag-rel-tag-id: contentcontainer_tag_relation (tag_id) references contentcontainer_tag (id) ... done (time: 0.015s)
+    > add column tags_cached string NULL DEFAULT NULL to table contentcontainer ... done (time: 0.009s)
+    > drop column tags from table space ... done (time: 0.007s)
+    > drop column tags from table user ... done (time: 0.007s)
+*** applied m210211_051243_container_tag (time: 0.092s)
+
+*** applying m210217_055359_protected_group
+    > add column is_protected boolean NOT NULL DEFAULT 0 AFTER `is_default_group` to table group ... done (time: 0.036s)
+*** applied m210217_055359_protected_group (time: 0.038s)
+
+*** applying m210310_103412_fix_hash
+    > update file ... done (time: 0.002s)
+    > alter column hash_sha1 in table file to string(40) NULL DEFAULT NULL ... done (time: 0.006s)
+*** applied m210310_103412_fix_hash (time: 0.009s)
+
+*** applying m210331_115144_default_timezone
+    > execute SQL: INSERT INTO setting (name, value, module_id)
+            SELECT "defaultTimeZone", value, module_id
+              FROM setting
+             WHERE name = "timeZone"
+               AND module_id = "base" ... done (time: 0.000s)
+*** applied m210331_115144_default_timezone (time: 0.002s)
+
+*** applying m210506_060737_profile_field_directory_filter
+    > add column directory_filter tinyint(1) NOT NULL DEFAULT 0 to table profile_field ... done (time: 0.008s)
+    > create index index_directory_filter on profile_field (directory_filter) ... done (time: 0.005s)
+*** applied m210506_060737_profile_field_directory_filter (time: 0.015s)
+
+*** applying m210721_055137_content_locked_comments
+    > add column locked_comments boolean DEFAULT FALSE AFTER `archived` to table content ... done (time: 0.009s)
+*** applied m210721_055137_content_locked_comments (time: 0.011s)
+
+*** applying m210727_102150_follow_friend
+    > execute SQL: INSERT INTO user_follow (object_model, object_id, user_id, send_notifications)
+            SELECT 'humhub\\modules\\user\\models\\User', user_friendship.friend_user_id, user_friendship.user_id, 0 FROM user_friendship
+            LEFT JOIN user_follow ON user_follow.object_id = user_friendship.friend_user_id
+                                 AND user_follow.user_id = user_friendship.user_id
+                                 AND user_follow.object_model = 'humhub\\modules\\user\\models\\User'
+            WHERE user_follow.object_id IS NULL ... done (time: 0.000s)
+*** applied m210727_102150_follow_friend (time: 0.002s)
+
+*** applying m210924_114847_container_blocked_users
+    > create table contentcontainer_blocked_users ... done (time: 0.007s)
+    > add primary key pk-contentcontainer-blocked-users-rel on contentcontainer_blocked_users (contentcontainer_id,user_id) ... done (time: 0.007s)
+    > add foreign key fk-contentcontainer-blocked-users-rel-contentcontainer-id: contentcontainer_blocked_users (contentcontainer_id) references contentcontainer (id) ... done (time: 0.007s)
+    > add foreign key fk-contentcontainer-blocked-users-rel-user-id: contentcontainer_blocked_users (user_id) references user (id) ... done (time: 0.009s)
+*** applied m210924_114847_container_blocked_users (time: 0.031s)
+
+*** applying m210928_162609_stream_sort_idx
+    > create index idx_stream_created on content (created_at) ... done (time: 0.006s)
+    > create index idx_stream_updated on content (stream_sort_date) ... done (time: 0.006s)
+*** applied m210928_162609_stream_sort_idx (time: 0.014s)
+
+*** applying m211022_152413_file_history
+    > create table file_history ... done (time: 0.005s)
+    > add foreign key fk_file_history: file_history (file_id) references file (id) ... done (time: 0.008s)
+    > add foreign key fk_file_history_user: file_history (created_by) references user (id) ... done (time: 0.008s)
+*** applied m211022_152413_file_history (time: 0.023s)
+
+*** applying m211124_180441_admin_group_label
+    > update group ... done (time: 0.001s)
+    > update group ... done (time: 0.000s)
+*** applied m211124_180441_admin_group_label (time: 0.003s)
+
+*** applying m220121_193617_oembed_setting_update
+    > update setting ... done (time: 0.001s)
+*** applied m220121_193617_oembed_setting_update (time: 0.003s)
+
+*** applying m220207_183901_add_payload_column_to_notification_table
+    > add column payload text to table notification ... done (time: 0.008s)
+*** applied m220207_183901_add_payload_column_to_notification_table (time: 0.009s)
+
+*** applying m220302_135158_add_content_id
+    > add column content_id integer UNSIGNED AFTER `object_id` to table file ... done (time: 0.008s)
+    > execute SQL: UPDATE file
+            INNER JOIN content
+               ON file.object_model = content.object_model
+              AND file.object_id = content.object_id
+              SET file.content_id = content.id ... done (time: 0.000s)
+    > execute SQL: UPDATE file
+            INNER JOIN comment
+               ON file.object_model = :commentModel
+              AND file.object_id = comment.id
+            INNER JOIN content
+               ON comment.object_model = content.object_model
+              AND comment.object_id = content.object_id
+              SET file.content_id = content.id ... done (time: 0.000s)
+    > execute SQL: UPDATE file
+            INNER JOIN comment AS c1
+               ON file.object_model = :commentModel
+              AND file.object_id = c1.id
+              AND c1.object_model = :commentModel
+            INNER JOIN comment AS c2
+              ON c1.object_id = c2.id
+            INNER JOIN content
+               ON c2.object_model = content.object_model
+              AND c2.object_id = content.object_id
+              SET file.content_id = content.id ... done (time: 0.000s)
+*** applied m220302_135158_add_content_id (time: 0.011s)
+
+*** applying m220606_205507_mailer_settings
+*** applied m220606_205507_mailer_settings (time: 0.003s)
+
+*** applying m220608_125539_displaysubformat
+*** applied m220608_125539_displaysubformat (time: 0.003s)
+
+*** applying m220919_104234_auth_key
+    > add column auth_key string(32) NULL DEFAULT NULL to table user ... done (time: 0.008s)
+*** applied m220919_104234_auth_key (time: 0.009s)
+
+*** applying m221111_100450_rename_profile_url
+    > update profile_field ... done (time: 0.001s)
+*** applied m221111_100450_rename_profile_url (time: 0.003s)
+
+*** applying m221117_214310_rename_setting
+    > update contentcontainer_setting ... done (time: 0.001s)
+*** applied m221117_214310_rename_setting (time: 0.002s)
+
+*** applying m230127_195245_content_state
+    > add column state tinyint NOT NULL DEFAULT 1 AFTER `visibility` to table content ... done (time: 0.009s)
+*** applied m230127_195245_content_state (time: 0.011s)
+
+*** applying m230130_140944_rename_auth_invite_setting
+*** applied m230130_140944_rename_auth_invite_setting (time: 0.002s)
+
+*** applying m230217_112400_content_scheduled_at
+    > add column scheduled_at datetime NULL DEFAULT NULL AFTER `locked_comments` to table content ... done (time: 0.008s)
+*** applied m230217_112400_content_scheduled_at (time: 0.010s)
+
+*** applying m230217_175411_content_hidden
+    > alter column contentcontainer_id in table content to integer AFTER `object_id` ... done (time: 0.008s)
+    > alter column stream_sort_date in table content to datetime AFTER `contentcontainer_id` ... done (time: 0.009s)
+    > alter column stream_channel in table content to string(15) DEFAULT 'default' AFTER `contentcontainer_id` ... done (time: 0.009s)
+    > alter column visibility in table content to tinyint NOT NULL DEFAULT 0 ... done (time: 0.010s)
+    > alter column pinned in table content to boolean NOT NULL DEFAULT FALSE ... done (time: 0.010s)
+    > alter column archived in table content to boolean NOT NULL DEFAULT FALSE ... done (time: 0.008s)
+    > update content ... done (time: 0.001s)
+    > alter column locked_comments in table content to boolean NOT NULL DEFAULT FALSE AFTER `archived` ... done (time: 0.009s)
+    > add column hidden boolean NOT NULL DEFAULT FALSE AFTER `archived` to table content ... done (time: 0.009s)
+*** applied m230217_175411_content_hidden (time: 0.076s)
+
+*** applying m230419_102455_add_sort_order_column_to_space_table
+    > add column sort_order integer NOT NULL DEFAULT 100 AFTER `status` to table {{%space}} ...Exception: SQLSTATE[42S02]: Base table or view not found: 1146 Unknown error 1146
+The SQL being executed was: ALTER TABLE `hh_space` ADD `sort_order` int(11) NOT NULL DEFAULT 100 AFTER `status` (/Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/db/Schema.php:677)
+#0 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/db/Command.php(1325): yii\db\Schema->convertException(Object(PDOException), 'ALTER TABLE `hh...')
+#1 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/db/Command.php(1120): yii\db\Command->internalExecute('ALTER TABLE `hh...')
+#2 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/db/Migration.php(388): yii\db\Command->execute()
+#3 /private/tmp/sociolog-runtime/1.19/protected/humhub/modules/space/migrations/m230419_102455_add_sort_order_column_to_space_table.php(15): yii\db\Migration->addColumn('{{%space}}', 'sort_order', Object(yii\db\mysql\ColumnSchemaBuilder))
+#4 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/db/Migration.php(114): m230419_102455_add_sort_order_column_to_space_table->safeUp()
+#5 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/console/controllers/BaseMigrateController.php(765): yii\db\Migration->up()
+#6 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/console/controllers/BaseMigrateController.php(223): yii\console\controllers\BaseMigrateController->migrateUp('m230419_102455_...')
+#7 [internal function]: yii\console\controllers\BaseMigrateController->actionUp(0)
+#8 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/base/InlineAction.php(60): call_user_func_array(Array, Array)
+#9 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/base/Controller.php(182): yii\base\InlineAction->runWithParams(Array)
+#10 /Applications/MAMP/htdocs/humhub-test-1.19/protected/vendor/yiisoft/yii2/console/Controller.php(187): yii\base\Controller->runAction('up', Array)
+#11 /private/tmp/sociolog-runtime/prefix-prepare.php(15): yii\console\Controller->runAction('up')
+#12 {main}
+*** failed to apply m230419_102455_add_sort_order_column_to_space_table (time: 0.001s)
+
+
+174 from 218 migrations were applied.
+
+Migration failed. The rest of the migrations are canceled.

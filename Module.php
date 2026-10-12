@@ -33,7 +33,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.30';
+    public string $version = '1.0.31';
     public string $humhubMinVersion = '1.18';
     
   
@@ -69,15 +69,16 @@ public function init()
     // ============================================================
     // 🔹 Übersetzungen registrieren
     // ============================================================
-    Yii::$app->i18n->translations['SociologModule.*'] = [
-        'class'          => 'yii\i18n\PhpMessageSource',
-        'basePath'       => '@sociolog/messages',
-        'sourceLanguage' => 'en',
-        'fileMap'        => [
-            'SociologModule.base'        => 'base.php',
-            'SociologModule.permissions' => 'permissions.php',
-        ],
-    ];
+    // Exact instances retain the German source language when HumHub's I18N
+    // automatically registers module categories. Native overrides remain supported.
+    foreach (['base', 'permissions'] as $category) {
+        Yii::$app->i18n->translations['SociologModule.' . $category] =
+            new \humhub\components\i18n\ModuleMessageSource([
+                'module' => $this,
+                'sourceLanguage' => 'de',
+                'forceTranslation' => true,
+            ]);
+    }
 
     // ============================================================
     // ⚙️ Standardwerte setzen
@@ -87,7 +88,7 @@ public function init()
     // ============================================================
     // 🏷️ Modul-Titel für JavaScript verfügbar machen
     // ============================================================
-    if (Yii::$app->has('view')) {
+    if (Yii::$app instanceof \yii\web\Application && Yii::$app->has('view')) {
 
         $moduleTitle = $this->settings->get('moduleTitle')
             ?: Yii::t('SociologModule.base', 'Logbuch');
@@ -151,12 +152,24 @@ public function init()
         }
     }
 
+    public function enable()
+    {
+        // Check before HumHub registers the module as enabled.
+        \humhub\modules\sociolog\services\SociologMigrationService::assertSupportedDatabase();
+        return parent::enable();
+    }
+
+    public function getMigrationService(): \humhub\services\MigrationService
+    {
+        return \humhub\modules\sociolog\services\SociologMigrationService::create($this);
+    }
+
     // ============================================================
     // 🧩 Asset-Registrierung
     // ============================================================
     public function beforeAction($action)
     {
-        if (Yii::$app->has('view')) {
+        if (Yii::$app instanceof \yii\web\Application && Yii::$app->has('view')) {
             \humhub\modules\sociolog\assets\SociologAsset::register(Yii::$app->view);
         }
 

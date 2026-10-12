@@ -11,16 +11,15 @@ class EntryQuery extends ActiveQueryContent
      * Excludes soft-deleted HumHub content while retaining historical Sociolog
      * rows which were created without an associated content record.
      *
-     * We intentionally do not use readable() here: Sociolog entries are global
-     * logbook records and must be readable by every authenticated user,
-     * independently of membership in the entry's Space.
+     * Use the module's configurable read ACL. Core readable() only supports
+     * Space/Profile membership and would also drop genuine legacy rows.
      */
-    public function publishedOrLegacy(): self
+    public function publishedOrLegacy(bool $applyReadAccess = true): self
     {
         $contentAlias = 'sociolog_content_state';
         $entryTable = Entry::tableName();
 
-        return $this
+        $this
             // ContentActiveRecord::getContent() contains a relation-level
             // WHERE condition. Used through joinWith(), that condition turns
             // the intended LEFT JOIN into an effective INNER JOIN and drops
@@ -36,6 +35,10 @@ class EntryQuery extends ActiveQueryContent
                 ['!=', $contentAlias . '.state', Content::STATE_DELETED],
                 [$contentAlias . '.id' => null],
             ]);
+        if ($applyReadAccess) {
+            \humhub\modules\sociolog\services\ReadAccess::filterQuery($this, $entryTable);
+        }
+        return $this;
     }
 
     public function visible(): self

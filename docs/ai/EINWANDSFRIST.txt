@@ -1,0 +1,103 @@
+Einwandsfrist – Umsetzung und Prüfung vom 11.10.2026
+===================================================
+
+UMSETZUNG
+
+In Karten und Detailansicht erscheint optional:
+„Schwerwiegender Einwand möglich bis: Datum, Uhrzeit, Zeitzone“.
+Nach Ablauf erscheint zusätzlich „Einwandsfrist abgelaufen“.
+Unter Moduleinstellungen > Fristen und Integrationen ist der Schalter
+„Einwandsfrist anzeigen“ vorhanden. Standardmäßig aus; in beiden lokalen
+Testinstanzen für die Vorführung eingeschaltet.
+
+Die Anzeige verwendet zehn volle Tage = 240 Stunden = 864.000 Sekunden ab dem
+serverseitig erfassten Veröffentlichungszeitpunkt des Logbuch-Entscheids. Ein
+Zeitzonen-/Sommerzeitwechsel verkürzt diese Zeit nicht. Der Zusatztag beim
+Inkrafttreten und eine Änderung dieser separaten Frist beeinflussen sie nicht.
+Die Anzeige entspricht der ausdrücklich gewünschten technischen Berechnung;
+sie prüft keine Statuten, Anwesenheitszahlen oder eingereichten Einwände.
+
+Beim Erstellen bzw. erneuten Beschluss wird der Veröffentlichungszeitpunkt
+serverseitig gesetzt. Einfaches Bearbeiten verlängert die Frist nicht. Weitergabe
+und Zurückgeben entfernen den aktuellen Zeitpunkt entsprechend dem vorhandenen
+Workflow; ein neuer Beschluss erhält einen neuen Zeitpunkt. Ausblenden hat keine
+Wirkung auf Frist, Inkrafttreten oder Berechtigungen.
+
+Das vorhandene published_at-Datum bleibt erhalten. Die neue additive Migration
+m261011_150000_add_publication_timestamp ergänzt published_timestamp, nullable
+BIGINT. Historische Uhrzeiten werden nicht aus created_at oder updated_at
+erraten. Alte Einträge zeigen das aus dem bekannten Datum berechnete Enddatum
+mit dem Hinweis „Die Uhrzeit der Veröffentlichung wurde bei diesem älteren
+Eintrag nicht erfasst.“ Ein minutengenaues Fristende und Ablaufstatus werden für
+solche Einträge nicht behauptet.
+
+BETROFFENE DATEIEN
+
+models/Entry.php: Zeitpunkterfassung und Berechnung, Workflow-Reset.
+models/SettingsForm.php: validierter Anzeigen-Schalter, Laden/Speichern.
+views/admin/index.php: Schalter mit verständlicher Erklärung.
+views/entry/_objectionDeadline.php: escaped Anzeige und Altdaten-Hinweis.
+views/entry/view.php und _card.php: Anzeige auch unabhängig vom Workflow-Schalter.
+migrations/m261011_150000_add_publication_timestamp.php: additive Spalte.
+messages/en/base.php: englische Texte.
+tests/codeception/unit/ObjectionDeadlineTest.php: sechs neue Tests.
+tests/codeception/unit/MigrationSchemaTest.php: neue Spalte geprüft.
+CHANGELOG.md, docs/ai/PROJEKT.md: Arbeitsstand dokumentiert.
+
+Alle 21 bisherigen veröffentlichten Migrationen unverändert. Modulversion bleibt
+1.0.30; dies ist ein lokaler Teststand, keine Veröffentlichung. Keine Commits,
+Pushes oder Änderungen an gebaeudemanagement. Tabellenpräfixe bleiben aufgrund
+der historischen Migrationsfolge nicht unterstützt.
+
+PRÜFUNGEN
+
+- HumHub 1.18.6: 35 Tests / 5.278 Assertions bestanden.
+- HumHub 1.19.0-beta.3: 35 Tests / 5.278 Assertions bestanden.
+- Echte HumHub-Klassen, PHP 8.3.30, eigener isolierter MySQL-5.7-Server.
+- Sechs neue Tests prüfen Fristgrenze, Zeitumstellung, Altdaten ohne Uhrzeit,
+  unveränderliche Veröffentlichung beim Bearbeiten, manipulierte Eingaben,
+  Weitergabe/erneuten Beschluss, Anzeige aus/ein und Speichern des Schalters.
+- Update auf beiden bestehenden isolierten Testdatenbanken erfolgreich.
+- Neuinstallation von beiden HumHub-Versionen und 22 Modulmigrationen auf je
+  einer neuen leeren isolierten Datenbank erfolgreich.
+- MAMP-Oberflächen mit PHP 8.3.30 / MySQL 8.0.44: neue Anzeige in beiden Versionen
+  als reines Lesekonto bestätigt, neue Uhrzeit korrekt plus zehn volle Tage.
+- In 1.19: als Administrator den Schalter im echten Formular aus/ein gespeichert
+  und das Verschwinden bzw. Wiedererscheinen im Entscheid bestätigt.
+- Historische Einträge 1 und 2 behalten nach dem Update published_timestamp=NULL.
+- PHP-Syntaxprüfung mit 8.3.30, 8.4.17 und 8.5.2; Modulmetadatenprüfung erfolgreich.
+
+Exakte Tests: tests/verification/Einwandsfrist-HumHub-*.txt.
+Nicht zusätzlich im Browser geprüft: Ablauf mit zehn Tagen realer Wartezeit,
+Weitergabe/erneuter Beschluss und Zeitumstellung; hierfür automatische Tests.
+CSV, Tabellenansicht und Dashboard erhalten keine zusätzliche Fristspalte.
+Die Anzeige des abgelaufenen Zeitraums aktualisiert sich beim nächsten Seitenaufruf.
+
+SELBST PRÜFEN
+
+1. Als testadmin die Moduleinstellungen öffnen, Fristen und Integrationen suchen,
+   Einwandsfrist anzeigen aktivieren und speichern.
+2. Als schreiber einen neuen Testentscheid anlegen und speichern. Veröffentlichungs-
+   zeitpunkt und Fristende ansehen: zehn volle Tage, gleicher Zeitpunkt ohne einen
+   Zeitwechsel. Das Inkrafttreten bleibt das gesonderte Datum.
+3. Als leser denselben Entscheid öffnen: Anzeige vorhanden, Schreibrechte fehlen.
+4. Einen Text bearbeiten und speichern. Veröffentlichungszeitpunkt und Fristende
+   müssen unverändert bleiben.
+5. Als testadmin den Anzeigen-Schalter ausschalten und speichern. Detail und Karten
+   neu laden: Frist ausgeblendet. Wieder einschalten: ursprüngliche Frist bleibt.
+6. Alte Beispielentscheide öffnen: Datum und Hinweis auf die unbekannte Uhrzeit.
+7. Dieselben Schritte in der anderen Testinstallation durchführen.
+
+Beispielentscheid jeweils ID 3:
+http://localhost:8888/humhub-test-1.18/index.php?r=sociolog%2Fentry%2Fview&id=3
+http://localhost:8888/humhub-test-1.19/index.php?r=sociolog%2Fentry%2Fview&id=3
+
+SICHERUNG / RÜCKKEHR
+
+Unter Einwandsfrist-2026-10-11/<Version>/ liegen der vorherige Modulstand und eine
+Sicherung der neuen lokalen Testdatenbank vor dem Update. Eine Rückmigration
+entfernt die neue Spalte und verliert die inzwischen erfassten Uhrzeiten.
+Für eine vollständige Rückkehr deshalb passenden Modulstand und komplette
+Testdatenbanksicherung gemeinsam wiederherstellen. Nur die dafür neu angelegten
+Testdatenbanken verwenden, niemals gebaeudemanagement. Ein Code-Downgrade allein
+stellt Zeitpunkte nicht wieder her. Es wurde keine Rückmigration durchgeführt.

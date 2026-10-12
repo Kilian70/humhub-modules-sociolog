@@ -1,0 +1,111 @@
+Sociolog – aktueller lokaler Teststand vom 11.10.2026
+===================================================
+
+Ausgangsversion 1.0.30; nach ausdrücklicher Freigabe zur Veröffentlichung als 1.0.31 vorbereitet.
+Die Tests beziehen sich auf den unten dokumentierten Code; danach wurden nur
+Versionsangaben und Veröffentlichungshinweise angepasst.
+Die Fehlerkorrekturen, optionale Einwandsfristanzeige und konfigurierbaren Leserechte
+sind im aktuellen Modul-ZIP enthalten. Die älteren Berichte dokumentieren einzelne
+vorherige Prüfschritte und sind keine aktuellen Statusübersichten.
+
+Aktuell geprüft: HumHub 1.18.6 und 1.19.0-beta.3; Web- und CLI-PHP 8.3.30.
+Je Version 47 Tests / 5.402 Assertions bestanden, isoliertes MySQL 5.7.
+Zusätzlich native MAMP-Prüfungen mit MySQL 8.0.44 und echte Browserprüfungen.
+Syntax der zuletzt geänderten PHP-Dateien: PHP 8.3.30, 8.4.17, 8.5.2.
+Metadaten- und Assetprüfung erfolgreich. Weitere PHP-Versionen nur syntaktisch geprüft.
+23 Modulmigrationen; frische Installation und Updates zuvor geprüft.
+Alle 21 veröffentlichten Migrationen bleiben unverändert. Die zwei zusätzlichen
+Migrationen ergänzen Veröffentlichungszeitpunkt und geschützte Lesecontainer.
+
+Zusätzlich bestätigte und korrigierte Sprachfehler
+
+1. Module.php: deutsche Übersetzungsschlüssel waren mit Ausgangssprache en
+   registriert. HumHubs automatische Registrierung überschrieb zudem den
+   Wildcard-Eintrag. Bei Sprache en erschienen deutsche Ausgangstexte.
+   Jetzt konkrete native ModuleMessageSource-Instanzen je Kategorie, sourceLanguage
+   de und forceTranslation. Native Konfigurationsüberschreibungen bleiben möglich.
+2. models/SettingsForm.php: sprachabhängig übersetzte Standardbeschriftungen wurden
+   als feste Einstellungen gespeichert. Ein späterer Sprachwechsel ließ diese
+   Begriffe unverändert. Die vier Standardbeschriftungen verwenden nun stabile
+   deutsche Schlüssel; getCustomLabel übersetzt sie bei der Anzeige. Eigene
+   Beschriftungen werden nicht automatisch umgeschrieben.
+3. messages/de/base.php: NOT IN FORCE lautet in Deutsch NICHT IN KRAFT.
+
+Zwei neue Regressionstests in tests/codeception/unit/RegressionTest.php:
+Deutsch einschließlich de-DE/de-CH, Englisch einschließlich en-US/en-GB,
+Berechtigungsübersetzungen, Speichern unter Englisch und Anzeige unter Deutsch,
+Erhalt einer eigenen Beschriftung. Vollständige Prüfprotokolle:
+tests/verification/Sprachkorrektur-HumHub-1.18.6.txt und
+Sprachkorrektur-HumHub-1.19.0-beta.3.txt.
+
+Die beiden ausdrücklich eingerichteten MAMP-Testinstanzen enthalten die Korrektur.
+Nur dort wurden drei durch die Testeinrichtung englisch gespeicherte Standardwerte
+auf Deutsch zurückgestellt. Ein allgemeines Upgrade überschreibt keine vorhandenen
+individuellen Beschriftungen. Alte Moduldateien und die vorherigen Testbeschriftungen
+liegen im privaten Arbeitsordner Sprachkorrektur-2026-10-11.
+Die deutsche Detailansicht wurde in beiden Versionen im Browser bestätigt.
+
+Gewünschter Zustand der beiden lokalen Testinstanzen
+
+- Alle angemeldeten Mitglieder dürfen lesen.
+- Soziokratischer Entscheidungsprozess ausgeschaltet.
+- Einwandsfrist sichtbar; zehn volle Tage ab Veröffentlichung, kein Zusatztag.
+- CSV exportiert alle lesbaren Einträge, unabhängig vom aktuellen Suchfilter.
+- Testmails bleiben lokal; vorhandene Anwendung gebaeudemanagement unverändert.
+
+Verbleibende Grenzen
+
+- Historische Migrationen unterstützen keine Tabellenpräfixe; Modulaktivierung
+  und Modul-Migrationsservice brechen vorher verständlich ab. Kein vollständiger
+  Teststand für Präfixdatenbanken.
+- Eingeschränktes Lesen: Anzeige über Logbuch, dessen Suche und Widget. Native
+  Space-Streams/allgemeine HumHub-Suche unterstützen die privaten Container nicht
+  vollständig. Automatische Space-Kalendererinnerungen müssen ausgeschaltet sein;
+  vorhandene Kalendererinnerungen blockieren den Wechsel.
+- Private native Dateianhänge sind ergänzend geprüft (siehe unten). Eine installierte
+  Kalenderintegration, echte E-Mail-Zustellung, Benutzerlöschung über die Oberfläche und Updates
+  aus jeder älteren Modulversion sind ebenfalls nicht vollständig geprüft.
+- Vergangene Datenverluste oder falsche historische Werte werden nicht rekonstruiert.
+- Rückkehr zum alten Modulstand benötigt passende vollständige Modul- und
+  Datenbanksicherung; alleiniger Code-Downgrade reicht bei privaten Containern nicht.
+
+Testanleitung und Einzelberichte
+
+Leserechte inklusive Suche, Export, Direktlinks: docs/ai/LESERECHTE.txt.
+Veröffentlichung und Einwandsfrist: docs/ai/EINWANDSFRIST.txt.
+Ursprüngliche Fehlerkorrekturen und ergänzende manuelle Prüfungen: docs/ai/REVIEW.txt.
+Vor Einsatz auf einer weiteren Testkopie Modul und Datenbank sichern, Modulstand
+kopieren, neue Migrationen ausführen und die Leseeinstellungen einmal speichern.
+Versionsanzeige 1.0.31. ZIP enthält keine Anmeldedaten oder Datenbanksicherungen.
+
+Ergänzende Prüfung privater Dateianhänge vom 11.10.2026
+
+In beiden tatsächlichen MAMP-Instanzen eine harmlose Textdatei als native private
+HumHub-Datei (public=0) an den fiktiven Logbucheintrag 3 angehängt. Keine Vereinsdaten.
+Je Version 5 Prüfungen von File::canView mit frisch geladenen Beziehungen bestanden:
+Standardleserecht, Sperre, Autorzugriff, gezielte Freigabe und Entzug.
+Je Version zusätzlich 3 Prüfungen der echten nativen DownloadAction-Initialisierung
+im lokalen Prüfskript: Freigabe erfolgreich, fehlendes Leserecht HTTP 401,
+gezielte Auswahl erfolgreich. Tatsächliche gespeicherte Datei vorhanden.
+
+Ein tatsächlicher Browserdownload unter 1.18 als Test Lesen mit Standardleserecht
+war erfolgreich; der heruntergeladene Text wurde exakt abgeglichen. Der eingebettete
+Browser zeigte beim verweigerten Download keine auswertbare Fehlerseite. Deshalb
+ist die HTTP-401-Aussage durch die native DownloadAction-Prüfung belegt, nicht durch
+eine Browser-Fehlerseite. Kein vollständiger Browser-Downloadtest für 1.19 behauptet.
+Uploads über die Oberfläche, öffentliche Dateien, Download-Tokens und externe
+Protokoll-Links waren nicht Gegenstand dieser Prüfung. Externe Links und Dateien
+an anderen HumHub-Inhalten behalten die Berechtigung ihres tatsächlichen Ursprungs.
+
+Die harmlose Datei Sociolog-Testdatei-Leserecht.txt bleibt als reproduzierbarer
+Testanhang nur in den beiden neuen lokalen Testinstanzen. Belege je Version im
+privaten Arbeitsordner Leseberechtigung-2026-10-11:
+Dateiberechtigung.json und Download-Aktion-Pruefung.json.
+Beide Instanzen wieder Alle angemeldeten Mitglieder; Einträge und Einwandsfristen
+unverändert. Keine neuen Modulcodeänderungen. Letzte vollständige Tests weiterhin
+47 Tests / 5.402 Assertions je Version, dazu diese 8 nativen Dateiprüfungen je Version.
+
+Ergänzende Präfixprüfung: Auch die geprüften HumHub-Kernstände verwenden feste
+Tabellennamen und scheitern mit globalem Präfix vor der Modulinstallation.
+Keine vollständige Modul-Präfixlösung behauptet; Schutz und geprüfter Code bleiben
+unverändert. Korrigierte Einordnung und Nachweise: docs/ai/PRAEFIXPRUEFUNG.txt.

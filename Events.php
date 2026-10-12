@@ -26,6 +26,31 @@ use humhub\modules\sociolog\services\SociologUserDeletionService;
  */
 class Events
 {
+    public static function onContentBeforeSave($event): void
+    {
+        $content = $event->sender;
+        if ($content->object_model !== Entry::class) {
+            return;
+        }
+        $entry = Entry::findOne((int)$content->object_id);
+        if ($entry) {
+            $entry->populateRelation('content', $content);
+            \humhub\modules\sociolog\services\ReadAccess::apply($entry);
+        }
+    }
+
+    public static function onStreamAfterFilter($event): void
+    {
+        $stream = $event->sender;
+        $entries = new \yii\db\Query();
+        $entries->select(Entry::tableName() . '.id')->from(Entry::tableName());
+        \humhub\modules\sociolog\services\ReadAccess::filterQuery($entries, Entry::tableName(), $stream->user);
+        $stream->query()->andWhere(['or',
+            ['!=', 'content.object_model', Entry::class],
+            ['in', 'content.object_id', $entries],
+        ]);
+    }
+
     /**
      * Überträgt institutionelle Logbuchdaten vor einer vollständigen
      * Benutzerlöschung auf das konfigurierte Archivkonto.
@@ -206,6 +231,10 @@ class Events
         $sent = 0;
 
 		foreach ($userQuery->each(200) as $user) {
+
+            if (!\humhub\modules\sociolog\services\ReadAccess::canRead($entry, $user)) {
+                continue;
+            }
 			try {
 		
 				$notificationClass::instance()

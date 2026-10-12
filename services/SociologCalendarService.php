@@ -25,7 +25,7 @@ class SociologCalendarService
 
     public static function onAfterSave(Entry $entry): void
     {
-        if (!self::isAvailable()) {
+        if (!self::isAvailable() || ReadAccess::mode() !== ReadAccess::ALL) {
             return;
         }
 

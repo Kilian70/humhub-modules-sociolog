@@ -11,7 +11,7 @@ use humhub\components\assets\AssetBundle;
 class SociologAsset extends AssetBundle
 {
     /** 📂 Ordner mit Ressourcen relativ zum Modul */
-    public $sourcePath = '@humhub/modules/sociolog/resources';
+    public $sourcePath = '@sociolog/resources';
 
     /** 🎨 CSS-Dateien */
     public $css = [

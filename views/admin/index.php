@@ -143,6 +143,11 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
               'uncheck' => 0,
           ])->hint(Yii::t('SociologModule.base', 'Aktiviert entspricht dem bisherigen Verhalten (+ Fristtage und anschließend ein weiterer Tag).')) ?>
         </div>
+        <div class="col-md-12">
+          <?= $form->field($model, 'showObjectionDeadline')->checkbox([
+              'uncheck' => 0,
+          ])->hint(Yii::t('SociologModule.base', 'Zeigt die Frist für schwerwiegende Einwände: 10 volle Tage ab Veröffentlichung. Der Zusatztag beim Inkrafttreten verlängert diese Frist nicht. Ausblenden verändert keine Fristen oder Berechtigungen.')) ?>
+        </div>
         <div class="col-md-6">
           <?= $form->field($model, 'showReviewInCalendar')->checkbox([
               'uncheck' => 0,
@@ -157,7 +162,7 @@ $globaleOrganeMitSchreibrecht = $globalOrgans !== '' ? preg_split('/[\r\n,]+/', 
         <div class="col-12">
           <div class="alert alert-light border mb-0">
             <strong><?= Yii::t('SociologModule.base', 'Stream-Integration') ?>:</strong>
-            <?= Yii::t('SociologModule.base', 'Die Anzeige von Einträgen im Stream ist dauerhaft aktiviert, um Transparenz und Benachrichtigungen sicherzustellen.') ?>
+            <?= Yii::t('SociologModule.base', 'Einträge werden im Space-Stream angezeigt, sofern die Leseberechtigung dies erlaubt. Bei eingeschränktem Lesen sind sie im Logbuch und im Logbuch-Widget zugänglich.') ?>
           </div>
         </div>
       </div>
@@ -272,6 +277,21 @@ echo Html::encode(implode(', ', $names));
 
 <div class="row g-3">
 
+
+<div class="col-md-12">
+    <?= $form->field($model, 'readerMode')->dropDownList([
+        'all' => Yii::t('SociologModule.base', 'Alle angemeldeten Mitglieder'),
+        'space' => Yii::t('SociologModule.base', 'Nur Mitglieder des jeweiligen Spaces'),
+        'selected' => Yii::t('SociologModule.base', 'Ausgewählte Benutzer und Benutzergruppen'),
+    ])->hint(Yii::t('SociologModule.base', 'Gilt für alle vorhandenen und neuen Einträge. Administratoren und die jeweiligen Autoren behalten Leserecht. Bei eingeschränktem Lesen erfolgt die Anzeige im Logbuch und im Logbuch-Widget; Space-Stream und automatische Space-Kalendererinnerungen werden nicht unterstützt.')) ?>
+</div>
+<div class="col-md-6">
+    <?= $form->field($model, 'readerUsers')->widget(\humhub\modules\user\widgets\UserPickerField::class, ['maxSelection' => 0])
+        ->hint(Yii::t('SociologModule.base', 'Gilt nur bei ausgewählten Lesenden. Eine Benutzer- oder Gruppenauswahl genügt. Eine leere Auswahl gewährt nur Administratoren und Autoren Zugang.')) ?>
+</div>
+<div class="col-md-6">
+    <?= $form->field($model, 'readerGroups')->checkboxList($groupOptions) ?>
+</div>
 
 <!-- Benutzer mit Schreibrecht -->
 <div class="col-md-6">

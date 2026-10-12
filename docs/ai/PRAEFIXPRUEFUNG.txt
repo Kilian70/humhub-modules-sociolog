@@ -1,0 +1,53 @@
+Präfixprüfung Sociolog / HumHub vom 11.10.2026
+=============================================
+
+Korrektur der bisherigen Einordnung
+
+Die historische Sociolog-Migrationsfolge enthält eine bestätigte Mischung aus
+festen und präfixierbaren Tabellennamen. Die Schlussfolgerung, allein dieses Modul
+müsse für eine allgemein funktionierende Präfixinstallation repariert werden,
+war für die geprüften HumHub-Versionen unvollständig.
+
+Direkt gelesene Kernquellen, HumHub 1.18.6 und 1.19.0-beta.3:
+- protected/humhub/modules/user/models/User.php: tableName() gibt user zurück.
+- protected/humhub/modules/space/models/Space.php: tableName() gibt space zurück.
+- protected/humhub/models/Setting.php: tableName() gibt setting zurück.
+- protected/humhub/modules/content/models/Content.php: tableName() gibt content zurück.
+Dies sind feste Namen, keine {{%...}}-Platzhalter. Ein globales Yii-tablePrefix
+führt in diesen Kernständen nicht zu durchgehend präfixierten HumHub-Tabellen.
+Kern-Refs wie in docs/ai/PROJEKT.md, gelesen und geprüft am 11.10.2026.
+
+Praktische Nachweise
+
+Auf dem getrennten MySQL-5.7-Testserver zwei neue, leere Datenbanken mit hh_ erstellt.
+Die offiziellen HumHub-Kernmigrationen scheitern in beiden Versionen bereits bei
+m230419_102455_add_sort_order_column_to_space_table mit fehlender Tabelle hh_space.
+Sociolog ist an dieser Stelle noch nicht installiert.
+Prüfprotokolle: tests/verification/Praefix-Kerninstallation-1.18.6.txt bzw. 1.19.0-beta.3.txt.
+
+Zusätzlich zwei separate vorhandene Kernfixtures kopiert, Sociolog-Tabellen darin
+weggelassen und die kopierten Kerntabellen auf hh_ umbenannt. Schon das Laden des
+Moduls scheitert anschließend, weil HumHubs SettingsManager über Setting::tableName()
+die nicht mehr vorhandene Tabelle setting liest. Keine Vereins- oder MAMP-Datenbank
+verändert. Keine Kernänderungen vorgenommen.
+
+Ein experimenteller Sociolog-Kompatibilitätsadapter wurde wegen dieser bestätigten
+Kerngrenze vollständig zurückgenommen und nie in die tatsächlichen MAMP-Testinstanzen
+oder das gelieferte ZIP übernommen. Die zwei vorübergehend bearbeiteten Moduldateien
+wurden bytegleich zum zuletzt geprüften Stand wiederhergestellt. Alle veröffentlichten
+Migrationen unverändert. Letzter vollständiger Modultest bleibt 47 / 5.402 je Version;
+die fehlgeschlagenen Kern-Präfixläufe werden nicht als bestandene Modulprüfungen gezählt.
+
+Ergebnis und Vorgehen
+
+- Keine vollständige Präfixunterstützung behauptet und keine unsichere Tabellenübernahme.
+- Sociolog behält den bisherigen frühen Schutz gegen ein gesetztes tablePrefix.
+- Für die zwei geprüften HumHub-Versionen normale Installation ohne tablePrefix nutzen.
+- Die Mischung in den Modulmigrationen ist eine latente Inkonsistenz, aber kein Fehler
+  im tatsächlich geprüften Betrieb ohne Präfix und kein eigenständiger Nachweis,
+  dass diese HumHub-Versionen eine funktionierende Präfixinstallation unterstützen.
+- Eine echte globale Präfixunterstützung benötigt zunächst einen passenden HumHub-Kern
+  beziehungsweise eine ausdrücklich getrennte Kernentwicklung mit vollständigen Tests.
+  Ein Modulpatch allein kann das nicht zuverlässig leisten.
+- Der geprüfte Modulstand bleibt für die beiden vorhandenen MAMP-Testinstallationen
+  unverändert; kein Commit, Push, Release oder Deployment.

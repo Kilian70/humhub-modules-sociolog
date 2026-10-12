@@ -108,7 +108,7 @@ class EntryBase extends ContentActiveRecord
         [['decision', 'description'], 'string', 'max' => self::MAX_RICH_TEXT_LENGTH],
 
         // Datum
-        [['decision_date', 'effective_date', 'review_date'], 'safe'],
+        [['decision_date', 'effective_date', 'review_date'], 'date', 'format' => 'php:Y-m-d'],
         [['review_date'], 'required',
             'when' => static function ($model): bool {
                 return $model->isNewRecord
@@ -133,41 +133,6 @@ class EntryBase extends ContentActiveRecord
         // Status
         [['status'], 'in', 'range' => array_keys(self::getStatusConfig())],
     ];
-}
-
-    // ============================================================
-    // 🔹 Status-Automatik beim Speichern
-    // ============================================================
-    public function beforeSave($insert)
-{
-    if (!parent::beforeSave($insert)) {
-        return false;
-    }
-
-    $days = (int) self::getSetting('defaultEffectiveDays', 0);
-
-    // Inkrafttreten berechnen
-    if (
-        !self::isManualProtectedStatus((string)$this->status)
-        && !empty($this->decision_date)
-        && empty($this->effective_date)
-    ) {
-
-        if ($days > 0) {
-            $this->status = self::STATUS_PENDING;
-
-            $this->effective_date = date(
-                'Y-m-d',
-                strtotime($this->decision_date . " +{$days} days")
-            );
-
-        } else {
-            $this->status = self::STATUS_VALID;
-            $this->effective_date = $this->decision_date;
-        }
-    }
-
-    return true;
 }
 
     // ============================================================

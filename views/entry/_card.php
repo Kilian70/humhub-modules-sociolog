@@ -111,6 +111,8 @@ if ($container instanceof Space) {
         <?php endif; ?>
 
         <!-- Status -->
+        <?= $this->render('_objectionDeadline', ['model' => $model]) ?>
+
         <div class="mt-2">
             <?= $model->getStatusBadge() ?>
         </div>

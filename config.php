@@ -14,6 +14,14 @@ return [
     'namespace' => 'humhub\modules\sociolog',
 
     'events' => [
+        ['class' => \humhub\modules\content\models\Content::class,
+            'event' => ActiveRecord::EVENT_BEFORE_INSERT, 'callback' => [Events::class, 'onContentBeforeSave']],
+        ['class' => \humhub\modules\content\models\Content::class,
+            'event' => ActiveRecord::EVENT_BEFORE_UPDATE, 'callback' => [Events::class, 'onContentBeforeSave']],
+        ['class' => \humhub\modules\stream\models\StreamQuery::class,
+            'event' => \humhub\modules\stream\models\StreamQuery::EVENT_AFTER_FILTER,
+            'callback' => [Events::class, 'onStreamAfterFilter']],
+
 
         // 🔹 TopMenu
         [

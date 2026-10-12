@@ -30,6 +30,40 @@ use humhub\modules\sociolog\permissions\DeleteEntry;
  */
 class Entry extends EntryBase
 {
+    public const OBJECTION_PERIOD_SECONDS = 10 * 24 * 60 * 60;
+
+    /** Exact deadline; historical entries without a publication time stay unknown. */
+    public function getObjectionDeadlineTimestamp(): ?int
+    {
+        if (empty($this->published_at) || empty($this->published_timestamp)) {
+            return null;
+        }
+
+        return (int)$this->published_timestamp + self::OBJECTION_PERIOD_SECONDS;
+    }
+
+    public function getObjectionDeadlineDate(): ?string
+    {
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', (string)$this->published_at);
+        if (!$date || $date->format('Y-m-d') !== $this->published_at) {
+            return null;
+        }
+
+        return $date->modify('+10 days')->format('Y-m-d');
+    }
+
+    public function isObjectionPeriodExpired(?int $now = null): bool
+    {
+        $deadline = $this->getObjectionDeadlineTimestamp();
+        return $deadline !== null && ($now ?? time()) >= $deadline;
+    }
+
+    public function canView($user = null): bool
+    {
+        return \humhub\modules\sociolog\services\ReadAccess::canRead($this, $user)
+            && ($this->content->isNewRecord || $this->content->canView($user));
+    }
+
     /**
      * WallEntry-Renderer für Stream-Einträge
      */
@@ -37,6 +71,33 @@ class Entry extends EntryBase
 
     /** Unterdrückt Benachrichtigungen, Kalender- und aktuelle Stream-Aktivität beim Altimport. */
     public bool $historicalImport = false;
+
+    // Sociolog sends its own notifications after checking its read ACL.
+    public $silentContentCreation = true;
+
+    public function rules(): array
+    {
+        return array_merge(parent::rules(), [
+            [['decision_type_id'], 'exist', 'targetClass' => DecisionType::class, 'targetAttribute' => 'id'],
+            [['decision_type_id'], 'validateSelectableDecisionType'],
+        ]);
+    }
+
+    public function validateSelectableDecisionType(string $attribute): void
+    {
+        // Historical imports may retain an existing, hidden type.
+        if ($this->historicalImport || (!$this->isNewRecord && !$this->isAttributeChanged($attribute))) {
+            return;
+        }
+        $settings = Yii::$app->getModule('sociolog')->settings;
+        $fixedId = (int)$settings->get('fixedDecisionTypeId', 0);
+        if ($fixedId > 0 && (int)$this->$attribute === $fixedId) {
+            return;
+        }
+        if (!array_key_exists((int)$this->$attribute, self::getDecisionTypeList())) {
+            $this->addError($attribute, Yii::t('SociologModule.base', 'Dieser Entscheidungstyp ist derzeit ausgeblendet.'));
+        }
+    }
 
     private static ?array $organCache = null;
 
@@ -698,7 +759,7 @@ if (in_array($user->guid, $writerUsers, true)) {
 // --------------------------------------------------------
 $memberships = Membership::find()
     ->with('space')
-    ->where(['user_id' => (int)$user->id])
+    ->where(['user_id' => (int)$user->id, 'status' => Membership::STATUS_MEMBER])
     ->all();
 
 $allowed = [];
@@ -787,6 +848,9 @@ public function beforeSave($insert)
 
     if (!empty($this->decision_date) && empty($this->published_at)) {
 		$this->published_at = date('Y-m-d');
+
+        // Server-controlled and not mass assignable. Editing does not restart it.
+        $this->published_timestamp = $this->historicalImport ? null : time();
 	}
 
 
@@ -814,37 +878,12 @@ public function beforeSave($insert)
 // 🔹 Automatische Statuslogik
 // =====================================================
 
-if (!self::isManualProtectedStatus((string)$this->status)) {
-
-    $today = date('Y-m-d');
-
-    // Überprüfung erreicht → REVIEW
-    if (!empty($this->review_date) && $this->review_date <= $today) {
-
-        $this->status = self::STATUS_REVIEW;
-
-    }
-
-    // Noch nicht in Kraft → PENDING
-    elseif (
-        !empty($this->effective_date) &&
-        $this->effective_date > $today
-    ) {
-
-        $this->status = self::STATUS_PENDING;
-
-    }
-
-    // Inkrafttreten erreicht → VALID
-    elseif (
-        !empty($this->effective_date) &&
-        $this->effective_date <= $today
-    ) {
-
-        $this->status = self::STATUS_VALID;
-
-    }
-
+$calculatedStatus = \humhub\modules\sociolog\services\SociologStatusService::calculateStatus(
+    $this->getAttributes(),
+    new \DateTimeImmutable('today')
+);
+if ($calculatedStatus !== null) {
+    $this->status = $calculatedStatus;
 }
 
     return true;
@@ -856,6 +895,7 @@ if (!self::isManualProtectedStatus((string)$this->status)) {
 
 public function afterSave($insert, $changedAttributes)
 {
+    \humhub\modules\sociolog\services\ReadAccess::apply($this);
     parent::afterSave($insert, $changedAttributes);
 
     if ($this->historicalImport) {
@@ -1158,6 +1198,7 @@ public function makeDecision(): void
 
     // Veröffentlichung neu berechnen lassen
     $this->published_at = null;
+    $this->published_timestamp = null;
 
     // Inkrafttreten neu berechnen lassen
     $this->effective_date = null;
@@ -1180,6 +1221,7 @@ public function reopenDecision(): void
 
     $this->decision_date = null;
     $this->published_at = null;
+    $this->published_timestamp = null;
     $this->effective_date = null;
 }
 

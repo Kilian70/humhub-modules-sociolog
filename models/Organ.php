@@ -80,7 +80,7 @@ class Organ extends ActiveRecord
         [
             'class' => TimestampBehavior::class,
             'value' => function () {
-                return date('Y-m-d H:i:s');
+                return time();
             },
         ],
         BlameableBehavior::class,

@@ -7,6 +7,7 @@ use Yii;
 use humhub\modules\content\models\Content;
 use humhub\modules\sociolog\models\Entry;
 use humhub\modules\sociolog\models\EntryFlow;
+use humhub\modules\sociolog\models\EntryReview;
 use humhub\modules\sociolog\models\Organ;
 use humhub\modules\sociolog\models\Protocol;
 use humhub\modules\user\models\User;
@@ -63,6 +64,7 @@ final class SociologUserDeletionService
             Entry::updateAll(['updated_by' => $archiveUserId], ['updated_by' => $userId]);
             Protocol::updateAll(['created_by' => $archiveUserId], ['created_by' => $userId]);
             EntryFlow::updateAll(['created_by' => $archiveUserId], ['created_by' => $userId]);
+            EntryReview::updateAll(['created_by' => $archiveUserId], ['created_by' => $userId]);
             Organ::updateAll(['created_by' => $archiveUserId], ['created_by' => $userId]);
             Organ::updateAll(['updated_by' => $archiveUserId], ['updated_by' => $userId]);
 
@@ -96,6 +98,7 @@ final class SociologUserDeletionService
             ])->exists()
             || Protocol::find()->where(['created_by' => $userId])->exists()
             || EntryFlow::find()->where(['created_by' => $userId])->exists()
+            || EntryReview::find()->where(['created_by' => $userId])->exists()
             || Organ::find()->where([
                 'or',
                 ['created_by' => $userId],
