@@ -84,7 +84,7 @@ class ObjectionDeadlineTest extends SociologTestCase
     {
         Yii::$app->language = 'de';
         $settings = Yii::$app->getModule('sociolog')->settings;
-        $entry = new Entry(['published_at' => '2026-10-11', 'published_timestamp' => time()]);
+        $entry = new Entry(['published_at' => date('Y-m-d'), 'published_timestamp' => time()]);
         $view = Yii::$app->view;
         $file = '@sociolog/views/entry/_objectionDeadline.php';
         $settings->set('showObjectionDeadline', false);
@@ -94,11 +94,50 @@ class ObjectionDeadlineTest extends SociologTestCase
         $this->assertStringContainsString('Schwerwiegender Einwand', $html);
         $this->assertStringNotContainsString('Einwandsfrist abgelaufen', $html);
         $entry->published_timestamp = time() - Entry::OBJECTION_PERIOD_SECONDS;
-        $this->assertStringContainsString('Einwandsfrist abgelaufen', $view->renderFile($file, ['model' => $entry]));
+        $this->assertSame('', $view->renderFile($file, ['model' => $entry]));
         $entry->published_timestamp = null;
         $this->assertStringContainsString('Uhrzeit', $view->renderFile($file, ['model' => $entry]));
         $entry->published_at = null;
         $this->assertSame('', $view->renderFile($file, ['model' => $entry]));
+    }
+
+    public function testDisplayUsesExactDeadlineBoundary(): void
+    {
+        $entry = new Entry(['published_at' => '2026-10-21', 'published_timestamp' => 1000000]);
+        $deadline = $entry->getObjectionDeadlineTimestamp();
+        $this->assertTrue($entry->shouldDisplayObjectionDeadline($deadline - 1));
+        $this->assertFalse($entry->shouldDisplayObjectionDeadline($deadline));
+        $this->assertFalse($entry->shouldDisplayObjectionDeadline($deadline + 1));
+
+        Yii::$app->getModule('sociolog')->settings->set('showObjectionDeadline', true);
+        $this->assertSame('', Yii::$app->view->renderFile('@sociolog/views/entry/_objectionDeadline.php', ['model' => $entry]));
+    }
+
+    public function testLegacyDisplayEndsAfterLastDayInFormatterTimeZone(): void
+    {
+        $formatter = Yii::$app->formatter;
+        $originalZone = $formatter->timeZone;
+        try {
+            $formatter->timeZone = 'Europe/Berlin';
+            // The deadline falls on the spring clock change (a 23-hour day).
+            $entry = new Entry(['published_at' => '2026-03-19']);
+            $boundary = (new \DateTimeImmutable('2026-03-30 00:00:00', new \DateTimeZone('Europe/Berlin')))->getTimestamp();
+            $this->assertTrue($entry->shouldDisplayObjectionDeadline($boundary - 1));
+            $this->assertFalse($entry->shouldDisplayObjectionDeadline($boundary));
+            $this->assertFalse($entry->shouldDisplayObjectionDeadline($boundary + 1));
+            $this->assertNull($entry->published_timestamp);
+            $this->assertFalse($entry->isObjectionPeriodExpired($boundary));
+
+            $formatter->timeZone = 'UTC';
+            $this->assertTrue($entry->shouldDisplayObjectionDeadline($boundary));
+            $entry->published_at = '2020-08-19';
+            Yii::$app->getModule('sociolog')->settings->set('showObjectionDeadline', true);
+            $this->assertSame('', Yii::$app->view->renderFile('@sociolog/views/entry/_objectionDeadline.php', ['model' => $entry]));
+            $entry->published_at = '2026-02-31';
+            $this->assertFalse($entry->shouldDisplayObjectionDeadline($boundary));
+        } finally {
+            $formatter->timeZone = $originalZone;
+        }
     }
 
     public function testDisplaySettingRoundTripsAndRejectsMalformedValues(): void

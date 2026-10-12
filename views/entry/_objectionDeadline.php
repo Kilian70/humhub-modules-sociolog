@@ -4,7 +4,8 @@ use humhub\helpers\Html;
 use humhub\modules\sociolog\models\Entry;
 
 /** @var Entry $model */
-if (!(bool)Yii::$app->getModule('sociolog')->settings->get('showObjectionDeadline', false)) {
+if (!(bool)Yii::$app->getModule('sociolog')->settings->get('showObjectionDeadline', false)
+    || !$model->shouldDisplayObjectionDeadline()) {
     return;
 }
 
@@ -22,10 +23,6 @@ if ($deadline === null && $date === null) {
     <?php if ($deadline === null): ?>
         <div class="small text-muted">
             <?= Html::encode(Yii::t('SociologModule.base', 'Die Uhrzeit der Veröffentlichung wurde bei diesem älteren Eintrag nicht erfasst.')) ?>
-        </div>
-    <?php elseif ($model->isObjectionPeriodExpired()): ?>
-        <div class="small text-muted">
-            <?= Html::encode(Yii::t('SociologModule.base', 'Einwandsfrist abgelaufen')) ?>
         </div>
     <?php endif; ?>
 </div>

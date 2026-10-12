@@ -1,0 +1,50 @@
+Einwandsfrist nach Ablauf ausblenden – 12.10.2026
+================================================
+
+Auf Wunsch wird die gesamte Anzeige „Schwerwiegender Einwand möglich bis“
+einschließlich des Hinweises auf eine unbekannte historische Uhrzeit ausgeblendet.
+Die Anzeige aktualisiert sich beim nächsten Seitenaufruf oder Neuladen.
+
+Bei erfasster Veröffentlichungsuhrzeit verschwindet sie exakt bei Erreichen
+des bisherigen Fristendes (Veröffentlichung plus 864000 Sekunden).
+Ohne historische Uhrzeit bleibt sie bis einschließlich des angezeigten letzten
+Tages sichtbar; ab dem folgenden Tag um 00:00 in der Anzeigezeitzone entfällt sie.
+Eine fehlende Uhrzeit wird weiterhin nicht erfunden oder gespeichert.
+Der fachliche Ablaufstatus isObjectionPeriodExpired bleibt bei unbekannter Uhrzeit
+unbekannt; die neue Methode steuert ausschließlich die Sichtbarkeit der Anzeige.
+
+Geändert: models/Entry.php (shouldDisplayObjectionDeadline),
+views/entry/_objectionDeadline.php (gemeinsame Karten-/Detailanzeige),
+tests/codeception/unit/ObjectionDeadlineTest.php und CHANGELOG.md.
+Keine Datenbankänderung, keine neue Migration und kein veränderter Entscheidstatus.
+Die Anzeigeeinstellung bleibt erhalten; bei ausgeschaltetem Schalter bleibt die
+Anzeige unabhängig vom Datum ausgeblendet.
+
+Prüfung auf HumHub 1.18.6 und 1.19.0-beta.3, PHP 8.3.30, isoliertes MySQL 5.7:
+Je 49 Tests / 5414 Assertions bestanden. Zwei neue Grenzfalltests prüfen die
+sekundengenaue Grenze sowie das Ende eines historischen Tages in der
+Anzeigezeitzone einschließlich Sommerzeitwechsel. Bestehende Renderingtests
+prüfen aktiven Hinweis, ausgeblendete exakte Frist, ausgeblendeten historischen
+Hinweis und ausgeschalteten Schalter. Syntax und Modulmetadaten bestanden.
+Prüfprotokolle: tests/verification/Frist-Ausblenden-HumHub-1.18.6.txt und
+Frist-Ausblenden-HumHub-1.19.0-beta.3.txt.
+
+In beiden vorhandenen MAMP-Testinstanzen ausschließlich Entry.php und die
+gemeinsame Anzeige aktualisiert. Die vorherigen Dateien liegen privat unter
+Einwandsfrist-Ausblenden-2026-10-12/<Version>/vorher/. Keine Einträge verändert.
+In der tatsächlichen 1.19-Oberfläche bleibt ein noch laufender historischer
+Eintrag mit Hinweis sichtbar. Ablauf und Rendering automatisch geprüft.
+
+Manuell prüfen:
+1. Einwandsfrist anzeigen einschalten.
+2. Einen alten Eintrag mit Enddatum 29.08.2026 öffnen: nach diesem Tag keine
+   Fristanzeige und kein Hinweis zur fehlenden Uhrzeit mehr.
+3. Einen aktuellen Eintrag öffnen: vor Ablauf ist die Fristanzeige vorhanden.
+4. Am Fristende neu laden: die komplette Fristanzeige verschwindet.
+5. Anzeigeeinstellung ausschalten: auch bei laufender Frist keine Anzeige.
+
+Diese Änderung wurde auf Basis von Version 1.0.31 geprüft und nach ausdrücklicher
+Benutzerfreigabe als Version 1.0.32 zur Veröffentlichung vorbereitet.
+Das vorherige GitHub-Release 1.0.31 und sein ZIP bleiben unverändert.
+Für eine Rückkehr in den beiden MAMP-Testinstanzen die zwei gesicherten Dateien
+zurückkopieren; für diese reine Anzeigeänderung ist keine Datenbankrückkehr nötig.

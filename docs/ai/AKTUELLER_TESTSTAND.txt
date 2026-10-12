@@ -109,3 +109,8 @@ Ergänzende Präfixprüfung: Auch die geprüften HumHub-Kernstände verwenden fe
 Tabellennamen und scheitern mit globalem Präfix vor der Modulinstallation.
 Keine vollständige Modul-Präfixlösung behauptet; Schutz und geprüfter Code bleiben
 unverändert. Korrigierte Einordnung und Nachweise: docs/ai/PRAEFIXPRUEFUNG.txt.
+
+Lokale Ergänzung vom 12.10.2026 nach Veröffentlichung von 1.0.31:
+Einwandsfrist und historischer Uhrzeithinweis werden nach Ablauf ausgeblendet.
+Je 49 Tests / 5414 Assertions bestanden. Beschreibung und Grenzen unter
+docs/ai/FRISTANZEIGE_AUSBLENDEN.txt. Nach ausdrücklicher Benutzerfreigabe als Version 1.0.32 zur Veröffentlichung vorbereitet.

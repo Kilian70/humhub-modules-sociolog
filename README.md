@@ -11,7 +11,7 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.31
+**Version:** 1.0.32
 
 Beim Update von 1.0.30: Modul und Datenbank vollständig sichern, beide neuen Migrationen ausführen und die Leseeinstellungen einmal speichern. Geprüft auf HumHub 1.18.6 und 1.19.0-beta.3 mit PHP 8.3.30, ohne Tabellenpräfix. Eingeschränkte Leserechte begrenzen native Space-Streams und Kalendererinnerungen. Details und Testanleitung: [aktueller Prüfbericht](docs/ai/AKTUELLER_TESTSTAND.txt).
 **Author & Maintainer:** Kilian Schmid 
@@ -330,3 +330,5 @@ Das sorgt für:
 - nachvollziehbare Statuswechsel
 
 - keine unerwarteten Automatismen
+
+Update von 1.0.31 auf 1.0.32: keine neue Datenbankmigration. Abgelaufene Einwandsfristen werden beim nächsten Seitenaufruf ausgeblendet, einschließlich des Altdaten-Hinweises. Ohne bekannte Uhrzeit endet die Anzeige nach dem angezeigten letzten Tag.
