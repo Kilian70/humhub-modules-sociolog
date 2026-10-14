@@ -1,0 +1,132 @@
+Cron-Fallback und Lesecontainer – lokale Korrektur
+Prüfdatum: 13.10.2026; Modulversion weiterhin 1.0.32, unveröffentlicht
+
+Auftrag und Grenzen
+
+Korrektur der bestätigten Befunde F8 (Cron-Fallback) und F4 (verwaiste
+Lesecontainer) aus Pruefung-2026-10-13/Pruefbericht.txt. Der vorherige
+Löschschutz bleibt erhalten. Keine bestehenden Vereins- oder MAMP-Daten
+verändert, keine Bestandsbereinigung, keine produktiven Migrationen,
+keine Core-Quelländerung, kein Commit/Push/Release/Deployment.
+Die vorhandenen MAMP-Installationen wurden nicht aktualisiert.
+
+Quellen
+
+Zentraler im Projekt festgelegter Regel-Commit:
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f (Kilian70/humhub-ai-dev).
+AGENTS.md, README.md, START.md, docs/REGELN.md, docs/QUELLEN.md und
+ docs/VERSIONEN.md tatsächlich am festgelegten Stand gelesen.
+Skill: humhub-development. Vorhandene Projektanweisungen erhalten.
+
+Offizielle Core-Stände der separaten Prüfinstallationen:
+HumHub 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3
+HumHub 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b
+Keine Beta-Version als Nachweis für 1.19.0 verwendet.
+
+Versionsbezogene Quellen: protected/yii, BootstrapService, ModuleManager,
+ContentActiveRecord, ContentContainerActiveRecord, ContentContainer und
+ContentStateService; in 1.19 zusätzlich docs/develop/advanced-console.md.
+Native Konsolenregistrierung mit consoleControllerMap am offiziellen
+file-Modul geprüft; gemeinsame Yii-Controller-API im echten Lauf getestet.
+
+Änderungen
+
+run.php delegiert den fest vorgegebenen Befehl sociolog/status an HumHubs
+protected/yii. Dieser lädt .env, gemeinsame und lokale Konfiguration,
+optionale dynamic.php, Aliase und Module über den nativen Bootstrap.
+Ein plain yii\console\Application mit herauskopierten Komponenten entfällt.
+Der CLI-Schutz bleibt; übergebene Argumente wählen keinen anderen Befehl.
+Ein aktiviertes Modul und die normale HumHub-Konsole sind erforderlich.
+Der Fallback führt wie bisher nur den Statuslauf aus. Kalendererinnerungen
+bleiben Aufgabe des täglichen HumHub-Crons.
+
+config.php registriert commands/MaintenanceController.php über den nativen
+consoleControllerMap. sociolog/status verwendet unverändert den vorhandenen
+SociologStatusService. sociolog/read-scopes ist eine reine Auflistung von IDs.
+
+Entry::afterDelete ruft nach der nativen Content-Bereinigung den neuen
+ReadScopeCleanupService auf. Dieser entfernt ausschließlich den zugehörigen
+unbenutzten Scope über dessen native delete()-Methode; HumHub entfernt dabei
+seinen ContentContainer. Beim Soft-Delete wird afterDelete nicht aufgerufen:
+Scope, Zugriffsprüfung und Wiederherstellung bleiben erhalten.
+
+Die Bereinigung prüft, dass der Entry fehlt, Container-ID, Klasse, Primärschlüssel
+und GUID übereinstimmen, keine mehrdeutige Containerzuordnung vorliegt und keine
+anderen Content- oder ReadScope-Datensätze diesen Container referenzieren.
+Die native Containerzeile wird innerhalb einer Transaktion gesperrt; konkurrierende
+FK-Inserts müssen warten. Widersprüchliche, fehlende oder weiterhin benutzte
+Container bleiben erhalten und erzeugen eine Warnung in der Kategorie sociolog.
+Es gibt keinen automatischen Sammellöschlauf für historische verwaiste Zeilen.
+Direkte SQL-Löschungen umgehen grundsätzlich Modellereignisse und werden hierdurch
+nicht repariert. Solche historischen Zeilen bleiben für eine spätere Prüfung stehen.
+
+Automatische Nachweise
+
+Laufzeit: MAMP CLI-PHP 8.3.30, separater MySQL-5.7-Server auf Port 33079.
+Zwei in diesem Schritt neu angelegte Datenbanken, ausschließlich künstliche Daten:
+sociolog_cronscope118_20261013 und sociolog_cronscope119_20261013.
+Fresh-Installation einschließlich der unveränderten 23 Modulmigrationen erfolgreich.
+Keine Migration der bestehenden MAMP- oder produktiven Datenbanken ausgeführt.
+
+HumHub 1.18.6: vollständige Suite 67 Tests / 5.732 Assertions erfolgreich.
+HumHub 1.19.0: vollständige Suite 67 Tests / 5.732 Assertions erfolgreich.
+Sechs neue Integrationsfälle in ReadScopeLifecycleTest:
+- endgültige Löschung entfernt nur den eigenen Scope und Container;
+- Papierkorb/Wiederherstellung behalten Scope und dessen Zugriff;
+- historische Orphans werden gemeldet, nicht mitbereinigt; Papierkorb ist kein Orphan;
+- fremde Inhaltsreferenzen verhindern die Containerlöschung;
+- falsche oder fehlende Containerzuordnungen bleiben erhalten;
+- Einträge ohne Scope bleiben normal löschbar.
+Die zwölf vorherigen Löschschutzfälle bestehen weiterhin in derselben Gesamtsuite.
+
+Zusätzliche echte Prozessprüfungen je Core-Version:
+- run.php aus /private/tmp, nicht aus dem HumHub-Verzeichnis, erfolgreich (Exit 0);
+- Datenbank aus .env bei fehlender dynamic.php, dann alternativ aus lokaler
+  common.php ohne .env/dynamic.php; beide Starts erfolgreich;
+- vier künstliche Entscheide: pending -> valid, pending -> review,
+  objection unverändert, weitergeleitetes pending unverändert;
+- nicht vorhandene Prüfdatenbank: Fehlerstatus 1 statt Erfolg;
+- native reine Auflistung mit null und mit einem künstlichen verwaisten Scope;
+  sämtliche 52 Tabellen (1.18.6) bzw. 53 Tabellen (1.19.0) vor/nach Auflistung
+  nach Zeilenanzahl und Inhalts-Hash identisch.
+
+Syntax und Modulmetadaten: 120 PHP-Dateien unter PHP 8.3.30, 8.4.17 und 8.5.2
+geprüft, ohne Syntaxfehler; tests/validate-module.php jeweils erfolgreich.
+Laufzeittests mit PHP 8.4/8.5 sind damit nicht behauptet.
+Veröffentlichte 23 Migrationen unverändert. Modulversion nicht angehoben.
+
+Die ersten Läufe fanden eine falsche Annahme über die Space-Testfixture und eine
+falsche Testkonstante. Nach Korrektur des neuen Tests wurden beide vollständigen
+Suiten erneut erfolgreich ausgeführt. Fehlgeschlagene Erstläufe bleiben als
+Prüfbelege erhalten und werden nicht als erfolgreiche Ergebnisse ausgegeben.
+
+Belege außerhalb des Modulordners:
+Cron-Lesecontainer-2026-10-13/evidence, insbesondere full118.log, full119.log,
+native-process.json, native-orphan-process.json, invalid-db.json und static.json.
+Die dort abgelegten Hilfsskripte sind auf die genannten künstlichen DB-Namen
+begrenzt; sie sind keine produktiven Wartungs- oder Bereinigungsbefehle.
+
+Manuelle Kontrolle auf einer gesicherten Testkopie
+
+1. Datenbank, Modul und uploads sichern; neue künstliche Einträge verwenden.
+2. Eingeschränkte Leserechte wählen, Testentscheid anlegen. Als berechtigter
+   und unberechtigter Benutzer Direktlink/Anhang/Kommentarzugriff prüfen.
+3. In den Papierkorb verschieben und wiederherstellen: Text, Anhänge und
+   Leserechte müssen erhalten bleiben. Nur diesen künstlichen Eintrag danach
+   endgültig löschen; andere Einträge und der ursprüngliche Space bleiben bestehen.
+4. Für den Statuslauf künstlichen Entscheid mit erreichtem Inkrafttreten und einen
+   mit erreichter Überprüfung anlegen. In der lokalen Konsole im HumHub-Ordner:
+   php protected/modules/sociolog/run.php
+   Start-/Endmeldung und korrekten Status prüfen. Schwerwiegender Einwand und
+   weitergeleitete Entscheide dürfen nicht automatisch überschrieben werden.
+5. php protected/yii sociolog/read-scopes aufrufen: zeigt nur IDs und Anzahl.
+   Bestehende Treffer nicht manuell löschen; widersprüchliche Referenzen zuerst
+   einzeln untersuchen. Ein leerer Bericht bedeutet nur, dass keine Scope-Zeile
+   ohne zugehörigen Entry gefunden wurde, keine umfassende Datenintegritätsprüfung.
+6. Regulären täglichen HumHub-Cron weiterführen, falls Kalendererinnerungen
+   verwendet werden. Nicht gleichzeitig zusätzliche Statusläufe konfigurieren,
+   wenn der normale Cron bereits zuverlässig läuft.
+
+Kein neuer GUI-Browsertest oder Hosting-Cron-Panel-Test in diesem Schritt.
+Die übrigen Auditbefunde, insbesondere Formular-JavaScript und Darstellung von
+Benachrichtigungen, sind durch diesen Auftrag nicht automatisch erledigt.

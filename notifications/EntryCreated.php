@@ -17,6 +17,8 @@ use Yii;
  */
 class EntryCreated extends BaseNotification
 {
+    use NotificationMailContent;
+
     /** Modul-ID für Filter und Kategorien */
     public $moduleId = 'sociolog';
 

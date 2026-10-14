@@ -14,13 +14,13 @@ use humhub\modules\user\widgets\Image;
 
 $entry = $source ?? $object->source ?? null;
 $module = Yii::$app->getModule('sociolog');
-$moduleName = Html::encode($module->settings->get('moduleTitle', 'Logbuch'));
+$moduleName = (string)$module->settings->get('moduleTitle', 'Logbuch');
 
 // 👤 Ersteller oder Bearbeiter bestimmen
 $user = $entry->editor ?? $entry->creator ?? null;
 $userName = Html::encode($user?->displayName ?? Yii::t('SociologModule.base', 'Unbekannt'));
 
-$title = Html::encode($entry->title ?? Yii::t('SociologModule.base', 'Eintrag im {module}', ['module' => $moduleName]));
+$title = $entry->title ?? Yii::t('SociologModule.base', 'Eintrag im {module}', ['module' => $moduleName]);
 
 $url = $entry
     ? Url::to(['/sociolog/entry/view', 'id' => $entry->id], true)

@@ -14,6 +14,14 @@ use humhub\modules\sociolog\models\Entry;
 // ============================================================
 $user = Yii::$app->user->identity;
 $allowedOrgans = Entry::getWritableOrgansForUser($user);
+// Update permission can exist independently of Create permission. Retain only
+// this entry's existing Space; the controller still guards every Space change.
+if (!$model->isNewRecord && $model->canWrite($user)) {
+    $existingSpace = \humhub\modules\space\models\Space::findOne((int)$model->organ);
+    if ($existingSpace && !isset($allowedOrgans[(int)$existingSpace->id])) {
+        $allowedOrgans[(int)$existingSpace->id] = $existingSpace->name;
+    }
+}
 
 // ============================================================
 // 🔹 Workflow-Modus laden
@@ -102,8 +110,12 @@ $canSelectStatus = !$statusManagersOnly || Entry::isLogbookManager($user);
 <?php $form = ActiveForm::begin([
 'options' => [
 'class' => 'row g-4',
-'data-ui-widget' => 'form',
-'data-ui-init'   => 'modal.form',
+// Yii ActiveForm übernimmt Validierung und normalen Submit.
+'data-sociolog-return-url' => \yii\helpers\Url::to(['/sociolog/entry/index', 'view' =>
+    in_array(Yii::$app->request->get('view'), ['cards', 'table'], true)
+        ? Yii::$app->request->get('view')
+        : (Yii::$app->session->get('sociologViewMode') === 'table' ? 'table' : 'cards'),
+]),
 ],
 ]); ?>
 
@@ -404,7 +416,9 @@ if (errorSummary && errorSummary.querySelector('li')) {
   errorSummary.focus();
 }
 
-$(document).on('click','#add-protocol',function(){
+$(document).off('click.sociologProtocols', 'form[data-sociolog-return-url] #add-protocol')
+.on('click.sociologProtocols', 'form[data-sociolog-return-url] #add-protocol', function(){
+const \$form = $(this).closest('form');
 
 const row = `
 <div class="protocol-row mb-2 d-flex gap-2 align-items-start">
@@ -434,17 +448,19 @@ aria-label="{$protocolRemoveLabel}">
 </div>
 `;
 
-const \$row = $(row).appendTo('#protocol-list');
+const \$row = $(row).appendTo(\$form.find('#protocol-list'));
 \$row.find('input[name="protocol_title[]"]').trigger('focus');
-$('#protocol-status').text({$protocolAddedMessage});
+\$form.find('#protocol-status').text({$protocolAddedMessage});
 
 });
 
 
-$(document).on('click','.remove-protocol',function(){
+$(document).off('click.sociologProtocols', 'form[data-sociolog-return-url] .remove-protocol')
+.on('click.sociologProtocols', 'form[data-sociolog-return-url] .remove-protocol', function(){
+const \$form = $(this).closest('form');
 $(this).closest('.protocol-row').remove();
-$('#protocol-status').text({$protocolRemovedMessage});
-$('#add-protocol').trigger('focus');
+\$form.find('#protocol-status').text({$protocolRemovedMessage});
+\$form.find('#add-protocol').trigger('focus');
 });
 
 JS;

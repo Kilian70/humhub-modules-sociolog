@@ -1,0 +1,200 @@
+F6/F7 – geschützter Updatepfad für historische Modulstände
+Prüfdatum: 13.10.2026; Version weiterhin 1.0.32, unveröffentlicht
+
+Ergebnis und Auftrag
+
+Ein kontrollierter Updatepfad erhält Berechtigungsauswahlen und historische
+Bereichswerte. Die 23 veröffentlichten Migrationen bleiben bytegleich.
+Keine bestehenden Vereins-/MAMP-Daten geändert oder gelöscht; alle Ausführungen
+waren auf neu angelegte künstliche Prüfdatenbanken begrenzt. Keine Coreänderung,
+kein Commit/Push/PR/Release/Deployment. Vorherige Korrekturen bleiben erhalten.
+
+Dieser Pfad verhindert künftige Verluste beim Update noch nicht migrierter
+Altbestände. Bereits früher durch F6/F7 gelöschte Werte werden nicht erraten:
+dafür ist eine passende frühere Sicherung erforderlich.
+
+Quellen
+
+Projektpin Kilian70/humhub-ai-dev:
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f.
+Zentrale AGENTS.md, README.md, START.md, docs/REGELN.md, docs/QUELLEN.md und
+ docs/VERSIONEN.md im Verlauf tatsächlich gelesen; Skill humhub-development.
+Projektdateien und historische Berichte erhalten.
+
+Offizielle Core-Refs:
+HumHub 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3
+HumHub 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b
+Jeweilige CLAUDE.md und Migrationshinweise aus der Kompatibilitätsprüfung.
+Für diesen Pfad erneut gelesen: MigrationService, MigrateController, Yii
+BaseMigrateController/MigrateController, ModuleManager, ModuleAutoLoader,
+BootstrapService/EnvHelper, BaseSettingsManager, native Setting-/User-/Group-
+Tabellenkonventionen. Offizieller nativer Modul-Updater und Migrationen als
+Vergleich; gemeinsame Methoden tatsächlich in beiden Kernständen ausgeführt.
+
+Funktionsweise
+
+upgrade.php ist ein ausschließlich über PHP-CLI erreichbarer Einstieg. Er nutzt
+protected/yii mit nativer .env-/gemeinsamer/lokaler Konfiguration. Eine nur für
+diesen Prozess konfigurierte CoreOnlyModuleManager-Unterklasse überspringt die
+Initialisierung fremder Module einschließlich Sociolog gegen das alte Schema.
+Die notwendigen Updater-Klassen werden ausdrücklich aus dem eigenen Modul geladen.
+Der SafeUpdateController verlangt diesen geschützten Einstieg und bearbeitet
+nur den eigenen Migrationsordner, keine Core- oder Fremdmodulmigrationen.
+
+Ohne Argument: Vorprüfung auf unbekannte Auswahlformate/teilweise Organ-Schemata
+und Anzeige ausstehender Migrationen. Keine Fachdatenänderung.
+--areas: reine Auflistung erhaltener Bereichswerte mit Space-/Konfigurations-IDs
+und vorhandener organ_id. Keine automatische Zuordnung oder Fachdatenänderung.
+--apply: ausdrücklich beauftragte Ausführung der kontrollierten Modulmigrationen.
+Andere Argumente und Downgrade-/Redo-/Uninstall-Aktionen sind nicht freigegeben.
+
+Normale Modulaktivierung und SociologMigrationService::migrateUp stoppen bei
+vorhandenem altem Modulschema mit ausstehenden F6/F7-Schritten vor der Aktivierung
+bzw. Datenmigration und verweisen auf upgrade.php.
+
+Neue zusätzliche Migration m260228_175900_guard_legacy_upgrade:
+- Erst am 13.10.2026 ergänzt; die Kennung liegt bewusst vor den historischen
+  Löschschritten, damit auch die normale native Migrationsfolge rechtzeitig stoppt.
+- Bei ausstehenden F6/F7-Schritten und vorhandenen Auswahlen, Bereichswerten oder
+  Einträgen Abbruch vor den destruktiven Schritten, kein falscher Erfolgsmarker.
+- Direkter Service-Include funktioniert auch beim 1.19-Core-Migrator, der externe
+  Modul-Autoloads überspringt. Keine Abhängigkeit von aktiviertem Sociolog.
+- Bei leeren Neuinstallationen bzw. bereits erledigten historischen Schritten
+  reine Vorprüfung ohne Datenbereinigung.
+
+Neue additive Migration m261013_180000_create_legacy_upgrade_archive:
+- Eigene LONGTEXT-Archivtabelle mit vollständigen JSON-Rohzeilen, Herkunftstabelle,
+  Quell-ID und Zeitstempel. Keine Änderung/Löschung bestehender Fachdaten.
+- Der geschützte Updater führt sie vor den ausstehenden historischen Schritten aus.
+- Vor den sicheren Ersatzschritten werden alle globalen Sociolog-Einstellungen,
+  Space-Konfigurationen und bestehenden Einträge roh archiviert. Auch später
+  umgestellte Altspalten eines Eintrags bleiben in dessen ursprünglicher Archivzeile.
+- Vorhandene erste Snapshots werden nicht überschrieben. Dafür während des Updates
+  Schreibzugriffe stoppen; das Archiv ersetzt keine vollständige DB-/Dateisicherung.
+- Downgrade entfernt weder Archiv noch Daten; beide neuen safeDown() verweigern dies.
+
+F6: upgrade/PreserveSettings statt des historischen Löschschritts
+- writerUsers/deleterUsers/writerGroups/deleterGroups/notifyGroups erhalten ihre
+  ursprünglichen Zeilen-IDs und Namen. Werte werden ausschließlich in-place konvertiert.
+- JSON-Listen und PHP-serialisierte Listen werden geprüft; keine PHP-Objektklassen
+  beim Deserialisieren erlaubt. NULL, leerer Wert und JSON-null bedeuten leere Auswahl.
+- Benutzer-IDs werden über vorhandene User-Zeilen zu deren GUIDs aufgelöst;
+  vorhandene GUIDs gegen dieselbe Tabelle geprüft. Gruppen-IDs bleiben vorhandene IDs.
+- Reihenfolge/Mehrfachwerte bleiben erhalten; keine gelöschten Benutzer/Gruppen
+  erraten, keine unbekannten Formate still geleert, keine Rolle pauschal erweitert.
+- Alle Werte werden vor Schreibzugriffen geprüft; Originalwerte stehen im Archiv.
+
+F7: upgrade/PreserveOrgans statt des historischen Spalten-Löschschritts
+- Erbt die ursprünglichen additiven Tabellen-, Spalten-, Index- und FK-Schritte.
+- Ausschließlich das Entfernen von sociolog_space_config.bereich wird unterbunden.
+- Die aktive Bereichsspalte und komplette Konfigurationszeilen bleiben erhalten.
+  organ_id bleibt ohne bestätigte Zuordnung NULL; kein erfundener Organname,
+  keine automatische Interpretation von Begriffen wie BG/BK/LK.
+- Ein bereits teilweise angelegtes Organ-Schema ohne passenden historischen
+  Erfolgsmarker wird vor Änderungen abgewiesen und muss einzeln geprüft werden.
+
+Notwendige Fortsetzung im historischen Schritt m260316_140000_add_is_organ_space:
+- Bei einem alten Space ohne Organzuordnung liefert der ursprüngliche Join
+  NULL als Organname; trim(NULL) scheiterte in der tatsächlichen PHP-8.3-Probe.
+- upgrade/PreserveOrganFlags ergänzt den Flag, falls noch nicht vorhanden, und
+  berücksichtigt nur bestehende ausdrückliche Organ-/Space-Zuordnungen mit Namen.
+  Unzugeordnete Bereiche bleiben unzugeordnet, kein trim(NULL), keine Datenlöschung.
+- Die veröffentlichte Migration bleibt unverändert. Ein durch diesen Schritt
+  bereits hinzugefügter Flag führt beim kontrollierten Wiederanlauf nicht zu
+  einem erneuten ADD COLUMN. Andere unklare partielle Organ-Schemata werden gestoppt.
+
+Historie und Ausführungsgrenzen
+
+Der native Migrationscontroller protokolliert die ursprünglichen F6/F7-Kennungen
+erst nach erfolgreicher Ausführung der geprüften Ersatzoperation. Dies ist keine
+pauschale Fake-/Stamp-Operation und kein Überspringen ungeprüfter Schemaarbeit.
+Die Konsolenbelege und dieser Bericht dokumentieren die Ersatzimplementierungen.
+Der Freigabestatus für den vorgeschalteten Guard gilt nur während dessen Aufruf
+im geschützten Controller und wird auch bei einer Exception sicher zurückgesetzt.
+
+Die übrigen veröffentlichten Migrationen laufen unverändert. MySQL-DDL ist nicht
+über die gesamte Folge atomar; bei Fehlern nicht blind andere Migrationswege oder
+historische safeUp()-Methoden verwenden. Erst den gesicherten Stand und die
+konkrete Fehlermeldung prüfen; den geschützten Einstieg beibehalten.
+Direkte manuelle Originalmigrationen und manipulierte Migrationshistorien können
+Modulschutz umgehen und sind kein unterstützter Updateweg. Tabellenpräfixe bleiben
+wie bisher nicht unterstützt. Core-Updates separat nach HumHub-Vorgaben ausführen.
+
+Nachweise
+
+CLI-PHP 8.3.30; isolierter MySQL-5.7-Testserver, Port 33079. Nur neue synthetische
+Datenbanken mit Namen sociolog_legacy118_*_20261013 bzw. sociolog_legacy119_*_20261013.
+Keine Migration einer vorhandenen MAMP- oder produktiven Datenbank ausgeführt.
+Frische Installation der ursprünglichen Folge plus beide neuen additiven/Guard-
+Schritte erfolgreich; jetzt 25 Dateien, die veröffentlichten 23 unverändert.
+
+Vollständige Suite: je Version 82 Tests / 5.906 Assertions erfolgreich.
+Neue sechs LegacyUpgradeTest-Fälle: ID-/Formatkonvertierung ohne Löschen;
+unbekannte Formate, Objekte und nicht auflösbare IDs ohne Änderungen abweisen;
+normalen Modul-Update-/Aktivierungsweg vor Änderungen stoppen; additive erste
+Snapshots erhalten; Guard-Freigabe bei Fehler zurücksetzen; partielles Organ-
+Schema vor Änderungen abweisen. Alle vorherigen Regressionen bestehen weiterhin.
+
+Zusätzliche echte Konsolenprozesse je Version mit aktiviertem Altmodul:
+- Ausgangsstand vor F6 mit PHP-serialisierten Berechtigungen und vorhandenen
+  Einträgen; Ausgangsstand vor F7 mit Bereichswerten und vorhandenen Einträgen.
+- Native Standardmigration stoppt mit der tatsächlichen Guard-Meldung vor F6/F7.
+- Vorprüfung bleibt ohne Fachdatenänderung; --apply läuft erfolgreich vollständig.
+- Fünf Einstellungszeilen behalten ID/Name; gültige Auswahl bleibt verfügbar;
+  originale vollständige Zeilen im Archiv nachgewiesen.
+- Bereichswert einschließlich Umlauten, Ampersand und Leerzeichen bleibt exakt
+  erhalten; keine erfundene organ_id; alle alten Konfigurationsfelder unverändert.
+- Titel, Beschlusstext, Beschreibung, Spacebezug, Autor, Status und gültige
+  Entscheid-/Inkrafttretens-/Reviewdaten eines Altentscheids unverändert.
+  Historischer Protokolllink wird übernommen; vollständiger Originaleintrag archiviert.
+- Wiederholtes --apply verändert keine Fachdaten; --areas ebenfalls rein lesend.
+Verglichen wurden Tabelleninhalte/Zeilenanzahlen; erwartete Core-Fehler-/Auditlogs
+bei absichtlich abgefangenen Fehlern sind separat behandelt, nicht als Fachdaten.
+
+Syntax: 133 PHP-Dateien unter PHP 8.3.30, 8.4.17 und 8.5.2 erfolgreich;
+Modul-/Assetmetadatenprüfer jeweils erfolgreich. Letzte geänderte Dateien
+zusätzlich erneut geprüft. PHP-8.4/8.5-Laufzeittests werden nicht behauptet.
+Modulversion nicht erhöht. Keine neue Browser-, Mail-, Remote-Storage- oder
+MySQL-8-Laufzeitprüfung in diesem Schritt behauptet.
+
+Erstproben fanden den zusätzlichen NULL-Organname-Fehler, fehlendes externes
+Service-Autoload beim 1.19-Standardmigrator und einen falschen Aktivierungs-
+Fixturewert für die 1.18-Tabellenstruktur. Adapter/Guard bzw. Testfixture wurden
+korrigiert, die veröffentlichten Dateien nicht überschrieben. Ein Testparser
+wurde an die native Konsolenüberschrift angepasst. Fehlgeschlagene Erstbelege
+bleiben getrennt erhalten; die finale Matrix zählt nur die erfolgreichen Folgeproben.
+
+Belege außerhalb des Modulordners: Sicherer-Altupdate-2026-10-13/evidence,
+insbesondere full118.log/full119.log, final-process-results.json,
+final-readonly-check.json, static.json und final-integrity.json.
+
+Anleitung für eine gesicherte Testkopie
+
+1. Datenbank, Modul, Migrationshistorie und uploads vollständig sichern. Restore
+   auf einer separaten Kopie prüfen. Schreiben/Mails/Queue-/Cronverarbeitung für
+   den Updatezeitraum stoppen; passenden HumHub-Core zuerst fertig einrichten.
+2. Diese Moduldateien zunächst auf der Testkopie bereitstellen. Keine historischen
+   Migrationen einzeln erneut ausführen oder Erfolgsmarker manuell hinzufügen.
+3. Im HumHub-Ordner: php protected/modules/sociolog/upgrade.php
+   Vorprüfung lesen. Bei unbekannter Auswahl oder teilweisem Schema stoppen und
+   den Ausgangswert/Backup untersuchen; keine pauschale leere Auswahl speichern.
+4. Erst auf dieser gesicherten Kopie ausdrücklich anwenden:
+   php protected/modules/sociolog/upgrade.php --apply
+   Ausgabe/Ergebnis prüfen. Nicht auf den globalen Originalmigrationslauf ausweichen.
+5. Erhaltene Bereichswerte auflisten:
+   php protected/modules/sociolog/upgrade.php --areas
+   Bestehende Begriffe fachlich prüfen. In der vorhandenen Organverwaltung die
+   erforderlichen Organe bewusst anlegen/wählen; unter Administration → Spaces
+   die gewünschte Organzuordnung setzen. Nicht automatisch BG/BK/LK gleichsetzen.
+   Die Legacy-Spalte und Archivzeilen bleiben erhalten, keine Bestandslöschung.
+6. Einstellungen für Schreiben, Löschen und Benachrichtigungsgruppen gegen den
+   gesicherten Ausgangsstand vergleichen. Mit berechtigtem und unberechtigtem
+   Testkonto prüfen; Leser-/Autoren-/Adminrechte wie zuvor kontrollieren.
+7. Alte Entscheide, Protokolle, Anhänge, Kommentare und Zeitwerte vergleichen.
+   Den Updater erneut aufrufen: keine erneute Umwandlung bereits erledigter Schritte.
+8. Bei bereits ausgeführtem F6/F7 und fehlenden Werten: nicht erneut migrieren.
+   Geeignete frühere Sicherung beschaffen und eine gesonderte geprüfte Übernahme
+   planen. Dieser Pfad erfindet keine verlorenen Einstellungen oder Bereichsnamen.
+
+Der Stand ist nur lokal vorbereitet und getestet. Keine bestehenden
+MAMP-Installationen aktualisiert, keine Veröffentlichung auf GitHub.

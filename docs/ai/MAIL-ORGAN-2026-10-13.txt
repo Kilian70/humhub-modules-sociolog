@@ -1,0 +1,139 @@
+F9/F10 – Native Mailinhalte und Organ-Auswahl beim Bearbeiten
+Prüfdatum: 13.10.2026; lokaler Arbeitsstand, Modulversion unverändert 1.0.32.
+
+Ergebnis
+
+Beide bestätigten Fehler aus Browser-Update-Tests-2026-10-13 sind behoben.
+HumHub 1.18.6 und offizielle 1.19.0: jeweils 85 Tests / 5.989 Assertions erfolgreich.
+Je sechs gezielte echte Browser-/HTTP-Fälle erfolgreich. Je zwei neue echte
+Benachrichtigungsjobs samt Suchindex-Jobs verarbeitet; HTML- und Textteile der
+lokal erfassten E-Mails enthalten nun den Entscheid und den passenden Ereignishinweis.
+Kein externer Mailversand, keine bestehenden Vereinsdaten gelöscht, kein Commit,
+Push, PR, Release oder Deployment. Keine neue/überarbeitete Migration, keine
+Coreänderung, keine Installation in den ursprünglichen MAMP-Sites.
+
+Quellen
+
+Regelpin Kilian70/humhub-ai-dev:
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f; Skill humhub-development.
+Zentrale AGENTS.md/README.md/START.md/docs/REGELN.md/QUELLEN.md/VERSIONEN.md im
+Aufgabenverlauf gelesen; verbindliche Regeln erneut gelesen. Vorhandene Hinweise
+und Berichte erhalten. Unterstützte Versionen weiterhin 1.18 und 1.19.
+Core 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3.
+Core 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b.
+CLAUDE.md/Migrationshinweise aus der versionsbezogenen Prüfung; für diese Änderung
+Native BaseNotification/SocialActivity, MailTarget, MailRenderer, Standard-HTML-
+und Textviews sowie offizielle Core-Notification-Rendering-Beispiele gelesen.
+Beide Versionen besitzen html(), text() und getViewParams(); keine 1.19-only-API.
+Laufzeit: MAMP PHP 8.3.30, MySQL 8.0.44, Apache 2.4.66, Chrome 155.0.8059.40.
+
+F9
+
+notifications/NotificationMailContent.php stellt die vom nativen MailTarget
+verwendeten Methoden html()/text()/getViewParams() gemeinsam für EntryCreated und
+EntryUpdated bereit. Die bisherigen getMailViewParams()-Methoden werden tatsächlich
+für das erhaltene und angepasste views/notifications/mail.php verwendet.
+HTML: dynamische Überschrift für Erstellung/Änderung, Entscheidungstitel,
+Beschreibung mit richtigem Akteur, eigener Eintragslink; Ausgabe einmal kodiert.
+Fehlende Quelle: sichere Beschreibung, keine kaputte Eintrags-URL.
+text() liefert weiterhin Klartext, auch für Live-/andere Notification-Verbraucher.
+Nur die Text-Templateparameter werden vor dem nativen strip_tags-/entity_decode-
+Schritt kodiert. Dadurch bleiben wörtliche <Tags>, Umlaute, &, und auch die Zeichen
+&amp; in Plaintext-Mails erhalten. Das ist keine doppelte HTML-Ausgabe-Kodierung.
+Glocken-render(), Kategorien, Betreffmethoden, Empfängerwahl und Leserechtsprüfung
+wurden erhalten. Keine zusätzliche Offenlegung des gesamten Beschlussinhalts:
+Mail enthält Titel, Ereignis-/Akteurhinweis und Link wie vorgesehen.
+
+F10
+
+views/entry/_form.php ergänzt nur für bestehende Einträge und tatsächlich
+berechtigte Bearbeiter den vorhandenen Space in der Organ-Auswahlliste. Der Space
+muss existieren. Erstellen bekommt keine solche Ausnahme; keine neuen globalen
+Schreibrechte und keine Änderung der bestehenden Berechtigungsauswahlen.
+Der bereits vorhandene Serverguard im EntryController verlangt bei Organwechsel
+weiterhin Create-Recht im Ziel; er wurde nicht abgeschwächt. Die neue UI-Auswahl
+kann deshalb nur das bestehende Organ ohne zusätzliche Rechte erhalten.
+Kein neuer Datenbank- oder Migrationspfad.
+
+Tests und Belege
+
+Neue drei MailAndEditCompatibilityTest-Regressionen:
+- Echter nativer HTML-/Plaintext-Mailrenderer, beide Klassen, vier Varianten mit
+  &, Unicode, Anführungszeichen, Literal &amp; und aktiven HTML-Testpayloads.
+  Titel/Ereignis/Link vorhanden; DOM ohne aktive Skripte oder Eventhandler.
+- Fehlende Quelle und sicherer Fallback ohne kaputte Mail-URL.
+- Manager ohne Create-Recht erhält ausgewähltes bestehendes Organ; Create-Form
+  und canCreateGlobal() bleiben unverändert eingeschränkt.
+
+Vollständige Suite auf ausschließlich künstlichen Wegwerf-DBs:
+sociolog_e2e118_suite_20261013 / sociolog_e2e119_suite_20261013.
+Je 85 Tests / 5.989 Assertions, Exit 0; alle älteren Regressionen weiterhin grün.
+Diese DBs dürfen von der Fixture-Vorbereitung zurückgesetzt werden; keine
+ursprüngliche MAMP-/Vereinsdatenbank ist ein Fixture-Ziel.
+
+Echte Browsertests auf den vorher gesicherten isolierten Kopien:
+/private/tmp/sociolog-mamp-e2e-20261013/118 und /119, eigene DB-Konten/-Cookies.
+Nur neue künstliche Entscheide bearbeitet. Je sechs Fälle erfolgreich:
+1. Manager ohne Create-Recht hat genau das vorhandene Organ ausgewählt.
+2. Tatsächliche Formular-Speicherung und anschließende Ansicht erfolgreich.
+3. Manipulierter Organwechsel mit gültigem CSRF liefert 403; Eintrag unverändert.
+4. Vollständige Erstellanfrage ohne Create-Recht erzeugt keine Daten.
+5. Review per Formular; nachträgliche Protokolländerung wird abgewiesen,
+   Eintrags- und Protokollzeilen bleiben unverändert.
+6. Glocke weiterhin mit Entscheidungstitel und sicher dargestellten HTML-Zeichen.
+
+Native Mail-/Queue-Ausführung je Version mit neuen künstlichen Einträgen und
+nur künstlichem .invalid-Empfänger: e2e_f9f10_notification_queue; ausschließlich
+SendNotification und eigene SearchUpdateDocument-Jobs. Originalwarteschlangen
+nicht verarbeitet. useFileTransport=true, eigenes neues runtime/e2e-mail-f9f10.
+Je zwei MIME-Dateien geprüft: Erstellung und Änderung, korrekter Betreff,
+Entscheidungstitel in HTML und Plaintext, Literal <b>Text</b> im Textteil,
+&lt;b&gt;Text&lt;/b&gt; im HTML-Teil, passende Ereignisformulierung, kein externer Versand.
+Die erfassten Mails und Testzugänge bleiben im geschützten temporären Testordner;
+keine Zugangsdaten/Backups/Originaldaten in das Git-Repository übernommen.
+
+PHP-Syntax/Metadaten: 136 PHP-Dateien (einschließlich vorhandener generierter
+Testunterstützung) unter PHP 8.3.30/8.4.17/8.5.2 erfolgreich. Native Laufzeit nur
+unter 8.3.30 belegt, keine PHP-8.4-/8.5-Laufzeitbehauptung.
+Belege: Mail-Organ-Korrektur-2026-10-13/evidence/full118.log, full119.log,
+mail-results.json, browser-results.json, static-results.json, final-integrity.json.
+
+Die erste Formular-Unitprobe hatte keine Request-URI; diese Testvorbereitung wurde
+korrigiert. Eine parallel laufende Browserprobe kollidierte mit der nativen
+Fixture-Cachebereinigung. Browser und Suite danach nacheinander ausgeführt;
+finale Ergebnisse beziehen sich auf diese ungestörten Läufe. Fehlerproben erhalten,
+kein zusätzlicher Modulfehler daraus behauptet und kein Core-Patch vorgenommen.
+
+Manuelle Nachprüfung auf einer gesicherten Testinstallation
+
+1. Aktuelle lokale Moduldateien nur auf einer getrennten Testkopie bereitstellen.
+   Keine Migration erforderlich. Neues Testkonto als Logbuch-Manager auswählen,
+   nicht als globalen/Space-Autor. Originaldaten nicht als Lösch-Test verwenden.
+2. Vorhandenen künstlichen Entscheid öffnen, bearbeiten, Titel ändern, speichern.
+   Bestehendes Organ muss ausgewählt bleiben. Erstellen anderer Einträge und
+   Wechsel in ein unberechtigtes Organ dürfen dadurch nicht möglich werden.
+3. Neues Review-Protokoll dokumentieren; dessen URL im Bearbeitungsformular zu
+   ändern versuchen. Abweisung und ursprünglicher Protokollbezug müssen bleiben.
+4. Nur eine künstliche Benachrichtigungsgruppe und lokalen Mailtransport verwenden.
+   Neu angelegten Entscheid erstellen/ändern und gezielte Testqueue verarbeiten.
+   HTML-/Textmail müssen Titel, richtigen Ereignishinweis und Link enthalten.
+   Titel mit &, Umlauten und <Test> sicher als Text darstellen; Glocke prüfen.
+5. Testsuite und Webbrowser nicht gleichzeitig denselben Runtime-Ordner nutzen.
+
+Grenzen
+
+Gezielte F9/F10-Prüfung, keine Wiederholung aller 44 früheren Browserfälle und
+keine neue historische Updateprobe erforderlich: keine Migration geändert.
+Kein externer SMTP-/Digest-/LDAP-/SAML-/S3-/Kalender-Test. Keine allgemeine
+Fehlerfreiheits- oder Produktionsfreigabe. Bestehende Sondergrenzen des vorherigen
+Prüfberichts bleiben erhalten. Veröffentlichung ausschließlich auf neuen Auftrag.
+
+Abschließender Abgleich
+
+Originale Sociolog-Fachtabellen und funktionale Moduleinstellungen werden gegen
+die erhaltene Sicherung geprüft. Lediglich die ursprünglichen technischen Werte
+lastStatusRun/lastStatusRunSuccess/lastStatusRunDuration wurden seit jener Sicherung
+aktualisiert und werden separat ausgewiesen; sie wurden nicht zurückgesetzt.
+Keine Behauptung vollständiger Bytegleichheit aller laufenden Originaldatenbanken.
+Die relevanten bestehenden Entscheide in den Testkopien bleiben unverändert.
+Details zum endgültigen Datei-/Core-/Migrationsabgleich: evidence/final-integrity.json.

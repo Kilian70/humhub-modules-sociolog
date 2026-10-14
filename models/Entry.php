@@ -956,6 +956,8 @@ public function afterSave($insert, $changedAttributes)
 public function afterDelete()
 {
     parent::afterDelete();
+    // Erst nach der nativen Content-Bereinigung; Soft-Delete ruft dies nicht auf.
+    \humhub\modules\sociolog\services\ReadScopeCleanupService::deleteForEntry((int)$this->id);
 
     Yii::info(
         "afterDelete Entry {$this->id} gestartet",

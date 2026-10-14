@@ -1,0 +1,155 @@
+B2 – Logbucheinträge im Digest, Abschluss 14.10.2026
+=================================================
+
+B2 ist lokal korrigiert und unter HumHub 1.18.6 sowie offizieller 1.19.0 geprüft.
+Neue Logbucheinträge erscheinen mit Titel und Link in der nativen Zusammenfassung,
+wenn der Empfänger sie zum Zeitpunkt der Mailerzeugung lesen darf.
+Keine bestehenden Anwendungsdaten gelöscht, keine Migration/Coreänderung,
+keine Versionsanhebung, kein Commit/Push/Release/Deployment.
+
+Anbindung und Umfang
+-------------------
+components/LogbookMailSummary.php erweitert den nativen MailSummary über Yii-DI.
+HumHubs MailSummaryProcessor erzeugt diesen in beiden Versionen mit Yii::createObject.
+Die Registrierung erfolgt bei Modulinitialisierung sowie vor Request/Queue-Ausführung
+(Module.php, Events.php, config.php). Ein frischer Worker braucht keine künstliche
+Vorinitialisierung des Moduls. Explizite fremde DI-Definitionen werden nicht überschrieben.
+
+Die vorhandenen Aktivitäten werden weiterhin vom nativen getActivities() gesammelt
+und durch den jeweiligen Core-Renderer ausgegeben: ActivityMailRenderer in 1.18,
+RenderService in 1.19. Neue Logbucheinträge werden zusätzlich abgefragt, mit den
+normalen Aktivitäten chronologisch zusammengeführt und gemeinsam auf die native
+maxActivityCount-Grenze begrenzt. HTML-Titel werden escaped, Klartext bleibt lesbar.
+Die native Mailvorlage, Betreffzeilen, Abmeldelinks und mailSummaryLast bleiben erhalten.
+Letzter Versandzeitpunkt wird nur nach erfolgreichem Versand gespeichert;
+Locale wird auch bei Fehlern zurückgesetzt. DE-/EN-Beschriftungen ergänzt.
+
+Keine künstlichen Activity-Datensätze erzeugt; silentContentCreation bleibt erhalten.
+Keine Altbestände pauschal nachversendet. Einträge ohne Content-Datensatz oder mit
+gelöschtem/nicht veröffentlichtem Content, eigene Einträge und inaktive Empfänger
+sind ausgeschlossen. Der Zeitfilter orientiert sich an Content-Erstellzeit und
+letztem Digestversand bzw. dem gewählten Intervall. Die Korrektur betrifft neue
+Einträge, keine nachträglichen Bearbeitungsereignisse alter Einträge.
+Die vorhandenen Glocken-/Einzelmail-Benachrichtigungen werden nicht ersetzt.
+
+Leserechte und persönliche Einstellungen
+---------------------------------------
+ReadAccess::filterQuery erhält explizit den Digest-Empfänger; die Identität des
+Workers oder eines Administrators wird nicht für diesen Zugriff verwendet.
+Vor Ausgabe jedes Eintrags wird ReadAccess::canRead erneut mit diesem Empfänger
+geprüft. Damit gelten all, space, selected und deren Benutzer-/Gruppenauswahl
+einschließlich entzogener Rechte auch in HTML und Klartext.
+Ein bereits versendeter Digest kann durch spätere Rechteänderung nicht zurückgerufen
+werden; die Eintragsansicht hinter dem Link prüft weiterhin die aktuellen Rechte.
+
+Persönliche Include-/Exclude-Space-Listen beziehen sich auf den ursprünglichen
+Space aus ReadScope, nicht auf einen technischen ACL-Container. Eine erhaltene
+Unterdrückung von ContentCreated wird berücksichtigt. Die native Intervall-/Opt-out-
+Prüfung bleibt beim unveränderten MailSummaryProcessor. Der Digest benötigt keinen
+zusätzlichen Cronjob und keine Änderung des Core.
+
+Quellen und Umgebung
+-------------------
+Zentrale Entwicklungsregeln, Skill humhub-development und vorhandene Projektregeln;
+Regelpin unverändert 9854ea97c1db1c82e18c7c8dcc097810b6615a4f.
+HumHub 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3.
+HumHub 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b.
+Gelesene relevante Core-Dateien: MailSummary, MailSummaryProcessor, SendMailSummary,
+Activity/ActiveQueryActivity, BaseActivity, ActivityMailRenderer/RenderService,
+MailSummaryForm, Standard-Mailvorlagen und Mailer; Core-user/post als offizielle
+Beispiele. Application-/ModuleManager-APIs und die bestehenden ReadAccess-/ReadScope-
+Prüfungen berücksichtigt. Keine API aus einem neueren Branch vorausgesetzt.
+PHP CLI/Web 8.3.30, MAMP MySQL 8.0.44; Modul weiterhin 1.0.32.
+Standardbranch main, Ausgangscommit 429554c468ca8bdad820d57eea0fa57b339cad55.
+
+Prüfungen
+---------
+Je Core vollständige isolierte Unit-Suite: 92 Tests / 6.069 Assertions bestanden.
+Danach zusätzliche Queue-Bootstrap-Assertion und DE/EN-Schlüssel ergänzt;
+endgültige Digest-Testklasse erneut: je 5 Tests / 44 Assertions bestanden.
+PHP-Syntax aller sieben geänderten/ergänzten PHP-Dateien unter PHP 8.3.30 bestanden.
+Andere PHP-Versionen in diesem Schritt nicht zur Laufzeit geprüft.
+
+Unit-Tests: Empfänger statt Workeridentität, all/space/selected, Rechteentzug,
+Gruppenauswahl, Gast/inaktiver Empfänger, native Include/Exclude-Präferenzen,
+Unterdrückung, tatsächliche lokale MIME-Mail, Escaping/Klartext, kein Wiederholen
+bereits berücksichtigter Einträge, alte/eigene/gelöschte Inhalte und frischer
+Request-/Queue-Einstieg. tests/codeception/unit/DigestCompatibilityTest.php.
+Die ersten MIME-Testversuche verwendeten den Core-Testmailer, der keine Datei
+schreibt. Für diese Prüfung wurde er nur im Test vorübergehend durch den nativen
+Dateimailer mit korrekten Core-Vorlagen ersetzt und anschließend zurückgesetzt.
+
+Zusätzlich 48 echte tägliche/wöchentliche Empfängerprüfungen auf den MAMP-Kopien:
+zwei Core-Versionen × sechs Szenarien × zwei Empfänger × zwei Intervalle.
+Native Factory, native Mailvorlagen und tatsächlich erzeugte Multipart-Dateien,
+ausschließlich lokal gespeichert, kein SMTP-Versand. Ergebnisse auf beiden Cores:
+- all: neues Lesekonto UND neues Außenkonto erhalten den Logbucheintrag;
+- space: nur das Mitglied des ursprünglichen Spaces erhält ihn;
+- selected: nur das ausgewählte Lesekonto erhält ihn;
+- ausgewähltes Außenkonto: bekommt den Eintrag trotz fehlender Space-Mitgliedschaft,
+  das nicht ausgewählte Space-Mitglied bekommt ihn nicht;
+- Rechte entzogen: keines der beiden Konten bekommt den Eintrag;
+- ursprünglichen Space ausgeschlossen: keines bekommt den Eintrag.
+HTML enthält den Titel escaped, Klartext enthält Sonderzeichen und wörtliche
+Markup-Zeichen korrekt. Titel/Link werden bei fehlenden Rechten nicht ausgegeben.
+Ein echter privater Core-Post dient als positive Kontrolle: Er erscheint weiterhin
+beim berechtigten Space-Mitglied, auch wenn das Logbuch-Leserecht fehlt, und niemals
+beim Außenkonto. Mit Space-Ausschluss verschwinden beide Einträge aus dessen Digest.
+
+Isolierung, Bestand und Grenzen
+------------------------------
+Arbeitsbeginn 13.10., Abschluss 14.10.; Nachweise unter B2-Digest-2026-10-13/evidence.
+Browser-/MAMP-Kopien /private/tmp/sociolog-mamp-e2e-20261013/118 und /119,
+eigene Datenbanken; vor neuen künstlichen Konten zusätzliche 118-before-b2.sql /
+119-before-b2.sql im privaten Testverzeichnis. Neue eigene e2e_b2_queue-Tabelle.
+Unit-Suite läuft getrennt auf *_suite_20261013-Fixture-Datenbanken. Sie darf niemals
+an eine Bestandsdatenbank angeschlossen werden. Bestehende Queues und frühere
+Archiv-Löschaufträge wurden nicht abgearbeitet. Kein neuer Benutzerlöschtest/-job
+auf der MAMP-Anwendungsdatenbank in diesem Schritt.
+
+Nach abschließendem Vergleich: acht ursprüngliche Sociolog-Tabellen und funktionale
+Einstellungen je Original unverändert, je drei ursprüngliche Beschlüsse in den Kopien
+unverändert. Core-Dateien und 23 veröffentlichte Migrationen bytegleich, insgesamt
+weiterhin 25 Migrationen. Bekannte Statuslauf-Metriken können durch andere lokale
+Aktivität abweichen; keine Gleichheit aller Originaldatenbanktabellen behauptet.
+Originalinstallationen wurden nicht aktualisiert. Lokaler Git-Mirror enthält die
+Änderung uncommittet; Git-HEAD unverändert. Kein GitHub-Upload.
+
+Geprüft wurden gezielte Zusammenfassungen für künstliche Benutzer. Der globale
+SendMailSummary-Job wurde nicht gestartet, damit bestehende Benutzer nicht berührt
+werden. Dessen Factory-/Request-/Queue-Anbindung ist separat geprüft. Echter SMTP-
+Versand, stündliches/monatliches Intervall und abweichende fremde Digest-DI-Anbindungen
+sind nicht separat Ende-zu-Ende geprüft. Eine fremde DI-Definition hat Vorrang und
+kann eine eigene Integration erfordern. Kein allgemeines Kompatibilitätsversprechen.
+
+Manuelle Testanleitung – nur auf gesicherter Testkopie
+----------------------------------------------------
+1. Korrigierten lokalen Modulstand auf der Kopie einsetzen. HumHubs normale
+   Digest-/Cron-/Queue-Konfiguration beibehalten; keine neue Migration erforderlich.
+2. Neue künstliche Konten für Autor, Space-Mitglied und Außenperson erstellen.
+   Einen privaten Space und einen neuen Logbucheintrag mit eindeutigem Prüftitel
+   anlegen. Dazu einen normalen Core-Post als Kontrollbeitrag erstellen.
+3. Für die beiden künstlichen Empfänger in HumHub die tägliche Zusammenfassung
+   einschalten. Auf der Testkopie E-Mails ausschließlich lokal ablegen.
+4. Im Lesemodus all müssen beide den neuen Logbucheintrag erhalten. Im Modus space
+   nur das Mitglied. Im Modus selected nur die ausgewählte Person/Gruppe, auch wenn
+   diese außerhalb des ursprünglichen Spaces ist.
+5. Vor Mailerzeugung das ausgewählte Leserecht entziehen. Der Eintrag darf danach
+   weder im HTML- noch im Klartextteil erscheinen. Normaler Core-Kontrollbeitrag
+   bleibt für das Space-Mitglied sichtbar, falls dessen Space-Digest weiter aktiv ist.
+6. Den ursprünglichen Space in den persönlichen Digest-Einstellungen ausschließen.
+   Weder Logbucheintrag noch Kontrollbeitrag dürfen aus diesem Space erscheinen.
+7. Mit neuen Prüftiteln für die wöchentliche Zusammenfassung wiederholen. Einen
+   Digest nicht erneut durch Manipulation realer Versandzeitpunkte erzwingen;
+   ausschließlich künstliche Empfänger/isolierte Testdaten verwenden.
+8. Titel mit &, Umlaut und <Test> prüfen: HTML zeigt Text ohne ausführbares Markup,
+   Klartext bleibt vollständig. Links dürfen nur nach erneuter Rechteprüfung öffnen.
+
+Automatische Befehle mit eigener Fixture-Testdatenbank:
+php protected/vendor/bin/codecept run unit -c protected/modules/sociolog/tests/codeception.yml
+php protected/vendor/bin/codecept run unit DigestCompatibilityTest -c protected/modules/sociolog/tests/codeception.yml
+
+Nachweise: full118.log/full119.log, endgültige Digest-Testprotokolle,
+digest-results.json und final-integrity.json im oben genannten Arbeitsordner.
+Vollständige Maildateien, Passwörter und Datenbanksicherungen nur im privaten
+temporären Testverzeichnis; keine solchen Daten im Modulrepository.

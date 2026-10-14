@@ -1,0 +1,183 @@
+Sociolog – Löschschutzkorrektur vom 13.10.2026
+=============================================
+
+Auftrag und Ergebnis
+
+Beauftragt waren die beiden Löschschutzfehler F1/F2 aus der vollständigen Prüfung:
+Archivkonto unverändert schützen und Logbuchdaten beim Löschen eines
+Space-Eigentümers erhalten. Die regulären HumHub-Löschformulare und die
+Verarbeitung der nativen Löschaufträge sind jetzt früh abgesichert.
+
+Die Einstellung preserveEntriesOnUserDelete muss dafür eingeschaltet sein.
+Das konfigurierte Archivkonto muss aktiv sein. Die Voreinstellung und bereits
+gespeicherte Einstellungen wurden nicht automatisch geändert.
+
+Ein betroffener Logbuch-Space wird nicht automatisch gelöscht oder einem
+beliebigen Konto zugeordnet. Der Löschversuch mit deleteSpaces=true wird vor
+jeder Änderung abgewiesen. Mit deleteSpaces=false verwendet das native
+HumHub-Adminformular seine bestehende Eigentumsübergabe an den löschenden
+Administrator; danach kann der Benutzer gelöscht werden. Alle Eintrags- und
+Containerkennungen bleiben erhalten. Ein eigener separater Übergabeschritt vor
+dem Löschversuch ist ebenfalls möglich.
+
+Wichtige Grenze für Fremd-/Wartungsskripte
+
+HumHub User::softDelete() löscht eigene Spaces vor seinem ersten User-Löschereignis.
+Ein Modul kann beliebige direkte Aufrufe von User::delete()/softDelete() bei
+Spacebesitz daher nicht generell mit diesem Ereignis vor allen Nebenwirkungen
+abfangen. Auch ein direkter Aufruf von CoreJob::run() umgeht die Queue-Vorprüfung.
+Solche Skripte müssen vor einer Löschung den geschützten Einstieg verwenden:
+  SociologUserDeletionService::deleteUser($user, true)  // endgültig
+  SociologUserDeletionService::deleteUser($user, false) // weich
+Dieser Einstieg prüft vor dem Core-Aufruf und weist einen noch nicht übergebenen
+Logbuch-Space ab. Keine generelle Abfanggarantie für beliebigen fremden PHP-Code
+behauptet. Coredateien oder globale Benutzerklassen wurden nicht ersetzt.
+
+Die Korrektur stellt früher bereits gelöschte Konten, Spaces, Anhänge oder
+Einträge nicht aus Vermutungen wieder her. Auch bewusst zuvor weich gelöschte
+Einträge werden nicht reaktiviert. Weitere Funde des Prüfberichts bleiben ausserhalb
+dieses Auftrags, insbesondere Cron-Fallback, JavaScript und verwaiste ReadScopes.
+
+Geänderte Dateien
+
+- Module.php: früher, priorisierter User::EVENT_BEFORE_SOFT_DELETE-Handler zusätzlich
+  zum bisherigen Harddelete-Handler; append=false vor den nativen Content-Handlern.
+- config.php und Events.php: native UserDeleteForm/AccountDelete nach erfolgreicher
+  Validierung prüfen, bevor Konto oder Space-Eigentum geändert werden. Archivkonto-
+  Statusänderungen serverseitig abweisen; Queue BEFORE_PUSH und BEFORE_EXEC nutzen.
+- services/SociologUserDeletionService.php: Vorprüfung unabhängig von vorhandenen
+  Eintragsreferenzen für das Archivkonto. Aktive Archivkonfiguration und noch
+  bestehende Logbuch-Space-Eigentümerschaft prüfen. Sichere Wartungseinstiege und
+  Datenbanktransaktionen um Übertragung und native Job-Ausführung.
+- jobs/GuardedUserDeletion.php: führt den originalen Core-Auftrag innerhalb dieses
+  Schutzes aus. Bereits serialisierte Aufträge brauchen keine Datenänderung;
+  ihr ursprünglicher Inhalt bleibt erhalten. Die exklusive Jobkennung wird delegiert.
+- tests/codeception/unit/UserDeletionProtectionTest.php: zwölf Integrationstests.
+- CHANGELOG.md und docs/ai/PROJEKT.md: unveröffentlichten Stand dokumentieren;
+  ältere Berichte und Anweisungen erhalten.
+
+Vor einem tatsächlichen Löschauftrag werden die bisherigen Autorenbezüge von
+Einträgen, Content, Protokollen, Verlauf, Reviews und Organen auf das Archivkonto
+übertragen. Zusätzlich werden direkt an bestehende Entry-Datensätze gebundene
+Dateien sowie deren Datei-Versionen geschützt: HumHubs eigener User-Handler
+würde sonst die vom Benutzer hochgeladenen Dateien löschen. Übertragung nur der
+Autorenbezüge; keine Änderung an Dateiinhalt, GUID, Sichtbarkeit oder Zuordnung.
+Auch ein Benutzer, der ausschliesslich einen solchen Anhang hochgeladen hat,
+wird berücksichtigt. Dateien ohne direkte Logbuchzuordnung folgen weiterhin
+dem nativen Löschverhalten. Es ist kein allgemeiner Archivierungsmodus für alle
+Benutzerbeiträge oder fremde Content-Typen hinzugefügt worden.
+
+Sicherheit und Daten
+
+- Bestehende native Controller-Berechtigungen, CSRF-Prüfungen, Passwortbestätigung
+  und HTTP-Abläufe bleiben zuständig. Kein neuer Web-Löschendpunkt.
+- Vorprüfungen verändern keine Benutzer-/Space-Daten. Fehler erscheinen als
+  Modellfehler; ungültige Queue-Aufträge werden vor der Core-Löschfolge abgewiesen.
+- Schutz prüft ungecachte Einstellungen erneut beim Ausführen, auch bei älteren
+  bereits eingereihten Aufträgen.
+- Transaktionen schützen die Datenbankübertragung. Allgemeine native Dateilöschungen
+  ausserhalb der Logbuchzuordnung sind nicht durch eine DB-Transaktion rückgängig
+  zu machen; deshalb müssen relevante Vorprüfungen vor der Löschfolge liegen.
+- Keine neue Migration; alle veröffentlichten Migrationen und Schema unverändert.
+- Modulversion bleibt 1.0.32 als lokaler unveröffentlichter Entwicklungsstand.
+- Keine bestehenden MAMP-/Vereinsdaten oder produktiven Datenbanken verändert.
+  Keine bestehende Installation aktualisiert. Keine Coreänderung, Commits, Pushes,
+  PRs oder Releases. Nur künstliche Testdaten in zwei neuen Prüfdatenbanken benutzt.
+
+Quellen
+
+Regel-Commit: 9854ea97c1db1c82e18c7c8dcc097810b6615a4f, Kilian70/humhub-ai-dev.
+HumHub v1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3.
+HumHub v1.19.0: 8f22a72361841404b3b442306126650fc0f8153b, offizielle Version.
+Jeweilige Coreanweisungen und versionsbezogene Migrationshinweise berücksichtigt.
+Konkret verglichen: User::beforeDelete()/softDelete()/beforeSave(), UserDeleteForm,
+AccountDelete, DeleteUser/SoftDeleteUser, Space/MembershipHelper/SpaceModelMembership,
+File- und FileHistory-Modelle und file/Events::onUserDelete.
+Native Queue-Eventregistrierung nach Core queue/config.php; tatsächliche
+Yii Queue::push()/handleMessage(), PushEvent/ExecEvent und ExclusiveJobInterface
+in den passend installierten Abhängigkeiten geprüft.
+
+Prüfumgebung und endgültige Ergebnisse
+
+PHP: MAMP CLI 8.3.30. Separater MySQL-5.7-Server auf Port 33079.
+Neue Datenbanken: sociolog_deletefix118_20261013 und sociolog_deletefix119_20261013.
+Temporäre offizielle Corekopien; keine bestehenden MAMP-Datenbanken verwendet.
+Frische Installation mit den unveränderten 23 Modulmigrationen in beiden Cores
+erfolgreich. Keine zusätzliche Migration erforderlich.
+
+Vollständige unveränderte alte Suite plus zwölf neue Tests:
+- HumHub 1.18.6: 61 Tests / 5.651 Assertions bestanden;
+  02:31.811, 38 MB.
+- HumHub 1.19.0: 61 Tests / 5.651 Assertions bestanden;
+  02:30.667, 38 MB.
+- PHP-Syntax der sechs betroffenen PHP-Dateien und Metadaten-/Assetprüfung bestanden.
+
+Neue Fälle umfassen:
+- Archivkonto mit und ohne Eintragsreferenzen: direkte weiche/harte Löschung ohne
+  Spacebesitz abgewiesen; Benutzer-, Profil-, Gruppen-, Passwort- und
+  Mitgliedschaftsdatensätze unverändert verglichen.
+- Archivkonto mit eigenem Space: Adminformular, Selbstlöschformular, neue und
+  bereits serialisierte Queue-Aufträge vor Änderungen abgewiesen.
+- Statussave auf gelöscht/deaktiviert kann Archivkonto nicht umgehen.
+- Space-Löschoption und alte Löschaufträge bei noch bestehendem Logbuch-Spacebesitz
+  abgewiesen; Benutzer, Space und publizierter Content unverändert.
+- Native Übergabe und anschliessender echter Core-Harddelete-Job mit all, space
+  und selected: Eintragsattribute ausser den vorgesehenen Autorenbezügen,
+  Kennungen, ursprünglicher Container, Protokoll-/Review-Bezüge, Verlauf,
+  Dateibytes, Datei-GUID, privates Leserecht und reale historische Dateivariante
+  erhalten. Unberechtigter Leser erhält bei eingeschränkten Modi keinen Dateizugriff.
+- Softdelete, ungültiges Archivkonto, sicherer Wartungseinstieg, reiner Anhangautor
+  sowie unverändertes natives Verhalten bei ausgeschaltetem Erhalt.
+
+Zusätzlich je Core in einer echten humhub\components\console\Application mit
+abgemeldetem User-Kontext den serialisierten Queue-Ausführungspfad getestet:
+normaler Testautor entfernt, vorhandener künstlicher Eintrag samt publiziertem
+Content erhalten und auf Archivkonto übertragen. Archivkonto-Löschauftrag mit
+eigenem Logbuch-Space blockiert; Konto und Space bytegleich in den DB-Attributen.
+Beide Konsolenproben insgesamt erfolgreich.
+
+Prüfkommandos
+
+Mit ausdrücklich separaten HUMHUB_TEST_DB_* und HUMHUB_PATH je Zielversion:
+  <PHP-8.3.30> <Core>/protected/vendor/bin/codecept run unit \
+    -c <Core>/protected/modules/sociolog/tests/codeception.yml --no-colors
+  <PHP-8.3.30> sociolog/tests/validate-module.php
+  <PHP-8.3.30> -l <betroffene PHP-Datei>
+Die Unit-Suite lädt/bereinigt Fixtures: niemals gegen eine Anwendungsdatenbank
+ausführen. Logs und ergänzende Konsolenprobe liegen im Arbeitsordner
+Loeschschutz-2026-10-13/Belege. Vorheriger Quellstand: dortiger Unterordner vorher.
+
+Nicht als geprüft behauptet
+
+Kein kompletter HTTP-/Browser-E2E-Lauf der Admin-/Selbstlöschdialoge, kein laufender
+asynchroner Betriebssystem-Worker mit echter Transportzustellung, keine LDAP-/SSO-
+Fremdquellen, keine beliebigen eigenen Löschjobs und keine konkurrierenden
+Eigentumsänderungen. Die echte serialisierte Queue-Ausführung wurde synchron
+aus den Tests und der nativen Konsole benutzt. Andere PHP-/DB-Versionen wurden
+in diesem Korrekturschritt nicht neu vollständig geprüft.
+
+Manuelle Prüfung vor Installation auf einer weiteren Testkopie
+
+1. Module, Datenbank und uploads sichern; ausschliesslich künstliche Konten nutzen.
+2. Erhalt einschalten und ein separates aktives Archivkonto wählen.
+3. Archivkonto im Admin-Löschformular zum Löschen bestätigen: verständliche
+   Ablehnung; Konto bleibt aktiv, Anmeldung und dessen Space-Mitgliedschaften
+   funktionieren weiter. Auch beim noch unbenutzten Archivkonto prüfen.
+4. Testautor mit eigenem Logbuch-Space, Entscheid, Protokoll, Review und
+   direkt zugeordnetem Textanhang vorbereiten.
+5. Benutzerlöschung mit eingeschaltetem "Spaces löschen" versuchen: Abweisung
+   vor jeder Änderung, Eintrag weiter lesbar.
+6. "Spaces löschen" ausschalten oder Eigentum vorher übergeben; löschenden
+   Administrator als vorgesehenen neuen Space-Eigentümer kontrollieren. Dann
+   nativen Löschauftrag ausführen. Space, Eintrag und Anhang müssen erhalten sein;
+   Autorenbezüge der Logbuchdaten zeigen das Archivkonto.
+7. all/space/selected wiederholen; normalen berechtigten und unberechtigten Leser
+   verwenden, nicht nur Administrator. Privater Anhang darf nicht öffentlich werden.
+8. Auf der Kopie Archivkonfiguration ungültig machen bzw. einen früher eingereihten
+   Testauftrag ausführen: vor der Löschfolge stoppen. Nach Korrektur/Übergabe einen
+   neuen Auftrag über das native Formular einreihen; kein erzwungener Direktaufruf.
+9. Eigene Wartungsskripte auf den geschützten Einstieg umstellen. Vorhandene
+   frühere Datenverluste nur aus passenden Sicherungen prüfen/wiederherstellen.
+
+Dieser Stand ist lokal vorbereitet und getestet, nicht auf GitHub hochgeladen
+und nicht in die bestehenden MAMP-Installationen eingespielt.

@@ -26,6 +26,10 @@ use humhub\modules\sociolog\services\SociologUserDeletionService;
  */
 class Events
 {
+    public static function onDigestBootstrap($event): void
+    {
+        \humhub\modules\sociolog\components\LogbookMailSummary::register();
+    }
     public static function onContentBeforeSave($event): void
     {
         $content = $event->sender;
@@ -60,6 +64,71 @@ class Events
         if ($event->sender instanceof User) {
             SociologUserDeletionService::preserveEntriesForUser($event->sender);
         }
+    }
+
+    public static function onUserSoftDelete($event): void
+    {
+        SociologUserDeletionService::preserveEntriesForUser($event->user);
+    }
+
+    /** Validation finishes before native forms change accounts or Space ownership. */
+    public static function onUserDeletionFormValidated($event): void
+    {
+        $form = $event->sender;
+        if ($form->hasErrors() || !$form->user instanceof User) {
+            return;
+        }
+        try {
+            $transfer = $form instanceof \humhub\modules\admin\models\forms\UserDeleteForm
+                && !$form->deleteSpaces;
+            SociologUserDeletionService::assertDeletionAllowed($form->user, $transfer);
+        } catch (\RuntimeException $error) {
+            $attribute = $form instanceof \humhub\modules\admin\models\forms\UserDeleteForm
+                ? (count($form->getOwningSpaces()) > 0 ? 'deleteSpaces' : 'deleteContributions')
+                : 'currentPassword';
+            $form->addError($attribute, $error->getMessage());
+        }
+    }
+
+    /** Self-deletion and UserSource may first save a deleted/deactivated status. */
+    public static function onUserBeforeUpdate($event): void
+    {
+        $user = $event->sender;
+        if (SociologUserDeletionService::isProtectedArchive($user)
+            && $user->isAttributeChanged('status')
+            && (int)$user->status !== User::STATUS_ENABLED) {
+            $user->addError('status', 'Sociolog: Bitte zuerst ein anderes aktives Archivkonto auswählen.');
+            $event->isValid = false;
+        }
+    }
+
+    public static function onUserDeletionJobPush($event): void
+    {
+        if (!$event->handled && self::isCoreUserDeletionJob($event->job)) {
+            $user = User::findOne((int)$event->job->user_id);
+            if ($user !== null) {
+                SociologUserDeletionService::assertDeletionAllowed($user);
+            }
+        }
+    }
+
+    /** Also protects jobs that were queued before this module update. */
+    public static function onUserDeletionJobExecute($event): void
+    {
+        if (!$event->handled && !$event->error && self::isCoreUserDeletionJob($event->job)) {
+            $event->job = new \humhub\modules\sociolog\jobs\GuardedUserDeletion([
+                'originalJob' => $event->job,
+            ]);
+        }
+    }
+
+    private static function isCoreUserDeletionJob($job): bool
+    {
+        // Do not replace unrelated or custom jobs with different semantics.
+        return is_object($job) && in_array(get_class($job), [
+            \humhub\modules\user\jobs\DeleteUser::class,
+            \humhub\modules\user\jobs\SoftDeleteUser::class,
+        ], true);
     }
 
     /** 🔹 Menüeintrag im TopMenu hinzufügen (HumHub 1.18+) */

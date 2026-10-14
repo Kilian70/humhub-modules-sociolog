@@ -1,5 +1,6 @@
 <?php
 return [
+    'Neuer Logbucheintrag' => 'Neuer Logbucheintrag',
     'Es wurden keine vollständigen Space-Änderungen übermittelt. Bitte lade die Seite neu und versuche es erneut.'
         => 'Es wurden keine vollständigen Space-Änderungen übermittelt. Bitte lade die Seite neu und versuche es erneut.',
     'Empfänger der Benachrichtigungen' => 'Empfänger der Benachrichtigungen',

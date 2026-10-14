@@ -342,9 +342,9 @@ public function actionDelete($id)
     try {
         $content = $model->content;
         if ($content !== null && !$content->getIsNewRecord()) {
-            // HumHub-Standard: Content zunächst weich löschen. Der eigentliche
-            // Datensatz wird durch den Content-Lifecycle später entfernt.
-            if (!$content->softDelete()) {
+            // Native Eintrags-API: berücksichtigt auch Entry-Lifecycle-Events.
+            // Der eigentliche Datensatz bleibt bis zur endgültigen Löschung.
+            if (!$model->softDelete()) {
                 throw new \RuntimeException('Content could not be soft-deleted.');
             }
 

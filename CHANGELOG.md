@@ -3,6 +3,81 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.33] – 2026-10-14
+
+Enthält alle geprüften Korrekturen F1–F10, D1, B1 und B2 seit 1.0.32.
+
+- **Daten erhalten:** Archivkonto frühzeitig gegen Löschung schützen; eigene Logbuch-Spaces erhalten. Bei aktivierter Archivierung Beschlüsse, Protokolle, Verlauf, Reviews, Anhänge und Dateiversionen auf das Archivkonto übertragen, auch bei nativer Selbstlöschung.
+- **Digest ergänzen:** Neue lesbare Logbucheinträge mit Titel und Link in die E-Mail-Zusammenfassung aufnehmen. Aktuelle Leserechte und persönliche Space-Einstellungen gelten auch dort.
+- **Formulare korrigieren:** Initialisierung und Rückkehr nach dem Speichern verbessern, doppelte Protokoll-Listener verhindern und das bestehende Organ bei berechtigter Bearbeitung erhalten.
+- **Benachrichtigungen korrigieren:** Titel, Ereignis und Link in HTML-/Textmails anzeigen; Sonderzeichen und wörtliche HTML-Zeichen sicher ausgeben.
+- **Löschabläufe korrigieren:** Native Eintragslöschung verwenden; Lesecontainer bei endgültiger Löschung kontrolliert entfernen, bei Papierkorb/Wiederherstellung erhalten. Keine automatische Bestandsbereinigung.
+- **Betrieb und Altupdates absichern:** Cron-Fallback vollständig über HumHub starten. Vor gefährdeten historischen Migrationen stoppen und einen gesicherten Updatepfad mit Rohdatenarchiv anbieten.
+- **Kompatibilität geprüft:** HumHub 1.18.6 und offizielle 1.19.0, PHP 8.3.30, MySQL 8.0.44; je 92 Tests/6.070 Assertions sowie Browser- und lokale SMTP-/Digest-Abnahme bestanden.
+
+**Update-Hinweis:** Zwei zusätzliche Migrationen, 23 bereits veröffentlichte Migrationen unverändert. Datenbank/Dateien sichern; für noch ausstehende historische Schritte den geschützten Updater verwenden. Bereits früher verlorene Werte benötigen eine frühere Sicherung. Tabellenpräfixe bleiben nicht unterstützt.
+
+Verständliche Übersicht: [Änderungen](AENDERUNGEN-1.0.33.md). Vorgehen: [Update-Anleitung](UPDATE-1.0.33.md).
+
+Die folgenden technischen Notizen dokumentieren die einzelnen Korrekturschritte vor der Versionsanhebung. Ihre damaligen Angaben „Version unverändert“ beziehen sich auf den geprüften Arbeitsstand 1.0.32. Historische Prüfberichte bleiben erhalten.
+
+### Technische Details – Logbucheinträge im Digest (B2)
+
+- Neue lesbare Logbucheinträge mit Titel und Link in die native tägliche/wöchentliche Zusammenfassung aufnehmen; vorhandene Aktivitäten bleiben enthalten.
+- Leserrechte für den tatsächlichen Empfänger bei Auswahl und Ausgabe prüfen, einschließlich ausgewählter Benutzer/Gruppen und Rechteentzug.
+- Persönliche Space-Auswahl gegen den ursprünglichen Space auswerten, HTML sicher escapen und native Zeit-/Anzahlgrenzen erhalten.
+- Anbindung auch beim ersten Request und im Queueworker registrieren; keine historischen Aktivitäten nacherzeugen oder bestehenden Daten verändern.
+- Geprüft unter HumHub 1.18.6 und offizieller 1.19.0; Details: `docs/ai/B2-DIGEST-2026-10-14.txt`. Keine Veröffentlichung oder Versionsanhebung.
+
+### Technische Details – Löschschutz bei noch nicht geladenem Modul (B1)
+
+- Aktiviertes Modul in den Löschschutzprüfungen laden, statt native Formulare und frische Worker ohne Schutz passieren zu lassen.
+- Ablehnung eines Archivkontos ohne eigene Spaces an einem sichtbaren Formularfeld anzeigen.
+- Regressionen für nicht geladenes Modul, native Formularvalidierung, Statuswechsel, serialisierte Jobs und Archivübertragung bei Selbstlöschung ergänzen.
+- Keine Bestandsbereinigung, Coreänderung oder Migration; Version unverändert. Nachweise und Anleitung: `docs/ai/B1-LOESCHSCHUTZ-2026-10-13.txt`.
+
+### Technische Details – Mailinhalt und Manager-Bearbeitung (F9/F10)
+
+- Native HTML- und Textmails enthalten wieder Titel, passenden Erstell-/Änderungshinweis und Link; Sonderzeichen und wörtliche HTML-Zeichen bleiben sicher erhalten.
+- Berechtigte Bearbeiter können das bisherige Organ behalten, auch wenn ihnen dort das Erstellrecht fehlt. Erstellen und Organwechsel bleiben nach den bisherigen Regeln beschränkt.
+- Keine Datenmigration und keine Änderung an bestehenden Berechtigungsauswahlen. Prüfung: `docs/ai/MAIL-ORGAN-2026-10-13.txt`.
+
+### Technische Details – Geschützter Altupdatepfad (F6/F7)
+
+- Neue vorgeschaltete Schutzmigration und Aktivierungs-/Updateprüfung stoppen historische Datenverluste vor den unveränderten veröffentlichten Schritten.
+- Expliziter CLI-Updater mit Vorprüfung, sicherer Umwandlung vorhandener Berechtigungsauswahlen, Rohdatenarchiv und erhaltener Bereichsspalte; Organzuordnung bewusst manuell.
+- Notwendige Fortsetzung für unzugeordnete Organ-Spaces gegen NULL-Namen und wiederholtes Hinzufügen des Flags absichern, ohne veröffentlichte Migrationen zu ändern.
+- Zwei neue Migrationen; die ursprünglichen 23 Dateien bleiben bytegleich. Bereits früher verlorene Werte benötigen eine passende Sicherung.
+- Tests und Anleitung: `docs/ai/SICHERER-ALTUPDATE-2026-10-13.txt`; keine Versionsanhebung oder Veröffentlichung.
+
+### Technische Details – Native Eintragslöschung (D1)
+
+- Controller verwendet die native Entry-Softdelete-API einschließlich Vorabprüfung und Lifecycle-Ereignissen; Papierkorb und Wiederherstellung bleiben erhalten.
+- Veraltete zusätzliche Content-Löschung im Stream-Nachlaufcallback entfernen; native ContentActiveRecord-Bereinigung kontrollieren, keine rekursive zweite Löschung oder Bestandsbereinigung.
+- Fünf Regressionen für Controllerrechte, abgebrochene Löschung, Wiederherstellung und ungefährlichen Löschcallback ergänzt. Prüfbericht: `docs/ai/CONTENT-LOESCHABLAUF-2026-10-13.txt`.
+
+### Technische Details – Formular und Benachrichtigungen
+
+- Formularinitialisierung mit nicht vorhandenen Modal-APIs durch native HumHub-Initialisierung ersetzen; Rückkehr nach erfolgreichem Logbuch-Modalabschluss auf die serverseitig erzeugte Karten-/Tabellenroute begrenzen.
+- Formularvalidierung erhalten; Protokoll-Listener bei PJAX nicht mehrfach installieren und auf das betroffene Formular begrenzen.
+- Titel und Modulname in beiden Webbenachrichtigungen genau einmal sicher HTML-kodieren; Mailbetreffe, Empfänger und Leserechte unverändert.
+- Je 71 Tests / 5.833 Assertions unter HumHub 1.18.6 und offizieller 1.19.0 mit PHP 8.3.30; zusätzlich je elf isolierte Browserfälle mit versionsbezogenen Kernskripten bestanden. Grenzen und Anleitung: `docs/ai/FORMULAR-BENACHRICHTIGUNGEN-2026-10-13.txt`.
+
+### Technische Details – Cron-Fallback und Lesecontainer
+
+- Cron-Fallback über den nativen HumHub-Konsolenstart mit vollständiger Konfiguration, `.env` und Modulregistrierung ausführen.
+- Beim endgültigen Löschen eines Eintrags den zugehörigen unbenutzten Lesecontainer nativ entfernen; bei Papierkorb und Wiederherstellung erhalten.
+- Fremdreferenzen oder widersprüchliche Containerzuordnungen erhalten und protokollieren. Historische verwaiste Container ausschließlich mit `sociolog/read-scopes` auflisten; keine automatische Bestandsbereinigung.
+- Keine neue Migration oder Änderung der Modulversion.
+
+### Technische Details – Löschschutz
+
+- Archivkonto vor Bestätigung, Statusänderung und Ausführung nativer Benutzerlöschaufträge schützen, auch ohne vorhandene Einträge.
+- Bei aktiviertem Erhalt die Löschung betroffener Logbuch-Spaces abweisen; die vorhandene HumHub-Übergabe an den löschenden Administrator bleibt möglich.
+- Einträge, Protokolle, Verlauf, Reviews sowie direkt zugeordnete Anhänge und Datei-Versionen vor dem nativen Löschauftrag auf das aktive Archivkonto übertragen.
+- Bereits vorhandene Löschaufträge beim Ausführen erneut prüfen; veröffentlichte Migrationen und Modulversion unverändert.
+- Zwölf Integrationstests für Formulare, serialisierte Warteschlangenaufträge, Daten-/Dateierhalt und den ausgeschalteten Erhalt ergänzt. Grenzen und Ergebnisse: `docs/ai/LOESCHSCHUTZ-2026-10-13.txt`.
+
 ## [1.0.32] – 2026-10-12
 
 - Einwandsfrist samt Altdaten-Hinweis nach Ablauf in Karten und Detailansicht automatisch ausblenden.

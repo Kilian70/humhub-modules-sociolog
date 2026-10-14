@@ -1,0 +1,123 @@
+D1 – native Eintrags-Löschaufrufe
+Prüfdatum: 13.10.2026; Modulversion weiterhin 1.0.32, unveröffentlicht
+
+Auftrag und Grenzen
+
+Die beiden im ursprünglichen Prüfbericht genannten veralteten Content-Aufrufe
+korrigieren, Unterstützung von HumHub 1.18.6 und offizieller 1.19.0 beibehalten.
+Keine bestehenden Vereins-/MAMP-Daten verändert, keine produktiven Migrationen,
+keine Coreänderungen und keine GitHub-Aktionen. Frühere Korrekturen bleiben erhalten.
+Die vorhandenen MAMP-Installationen wurden nicht aktualisiert.
+
+Quellen
+
+Zentrale Regeln weiterhin auf Projektpin
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f (Kilian70/humhub-ai-dev).
+Zentrale AGENTS.md, README.md, START.md, docs/REGELN.md, docs/QUELLEN.md und
+ docs/VERSIONEN.md im Verlauf tatsächlich am festgelegten Stand gelesen.
+Vorhandene Projektdateien erhalten; Skill humhub-development angewandt.
+
+Versionsbezogene Kernquellen:
+HumHub 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3
+HumHub 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b
+Jeweilige CLAUDE.md und Migrationshinweise aus der Kompatibilitätsprüfung;
+ContentActiveRecord::softDelete/beforeSoftDelete/afterSoftDelete/hardDelete/afterDelete,
+Content-Löschmethoden und ContentStateService erneut versionsbezogen gelesen.
+Offizielles Vergleichsmodell post verwendet ebenfalls ContentActiveRecord.
+Keine unbedingte Verwendung von ausschließlich in 1.19 vorhandenen Internal-Methoden.
+
+Korrekturen
+
+controllers/EntryController.php::actionDelete:
+- Bei vorhandener Content-Zeile $model->softDelete() statt $content->softDelete().
+- Native Entry-BEFORE/AFTER_SOFT_DELETE-Ereignisse werden berücksichtigt. Ein
+  vorab abbrechender Handler verhindert die Löschung und führt zur Fehlermeldung.
+- Eintrag wird weiter zuerst in den Papierkorb verschoben, nicht sofort endgültig
+  entfernt. Datensatz, Text, GUID und Lesecontainer bleiben wiederherstellbar.
+- Bestehende Rechteprüfung, HTTP-Methodenfilter, CSRF-Vererbung, Kalenderbereinigung,
+  Sichtbarkeitsprüfung und Rückkehrroute unverändert.
+- Der begrenzte historische Fallback für Einträge ohne Content-Zeile bleibt
+  unverändert; hierfür wurde keine neue Bestandsbereinigung eingeführt.
+
+services/SociologStreamService.php::onAfterDelete:
+- Der Callback bleibt als Kompatibilitätseinstieg vorhanden, startet aber keine
+  zusätzliche Content-/Entry-Löschung mehr. Die native ContentActiveRecord-
+  afterDelete-Methode erledigt die Content-/Stream-Bereinigung bereits.
+- Frische gebundene Abfrage statt Zugriff auf eine eventuell veraltete gecachte
+  Content-Relation. Bereits erledigte Bereinigung wird protokolliert; vorhandener
+  Content führt zu einer Warnung ohne Datenänderung.
+- Kein rekursives $entry->delete()/hardDelete() im Löschcallback; keine neue
+  Registrierung des bisher nicht aufgerufenen Servicecallbacks.
+- Ein fehlerhaft vorzeitiger Aufruf löscht weder lebenden noch wiederherstellbaren
+  Content. Dies ist keine Reparatur vorhandener verwaister Datensätze.
+
+Prüfumgebung
+
+Zwei neue isolierte Datenbanken, ausschließlich künstliche Daten:
+sociolog_entrydelete118_20261013 und sociolog_entrydelete119_20261013.
+Separater MySQL-5.7-Testserver auf Port 33079, CLI-PHP 8.3.30.
+Fresh-Installation mit unveränderten 23 Modulmigrationen je Core erfolgreich.
+Kein Zugriff auf bestehende MAMP-/Vereinsdatenbanken für Änderungen.
+
+Regressionen
+
+Neue EntryDeletionLifecycleTest mit fünf Fällen:
+1. tatsächliche Controlleraktion mit explizit konfiguriertem Löschrecht:
+   je ein BEFORE/AFTER_SOFT_DELETE, unveränderter Entry-Datensatz, Papierkorb,
+   erhaltene Scope-/Container-IDs, erfolgreiche Wiederherstellung und anderer
+   Entscheid unverändert;
+2. native Entry-Vorabprüfung bricht ab: Entry, Content und Scope unverändert,
+   verständliche Fehlermeldung;
+3. Leser ohne Löschrecht: Warnung, keinerlei Content-/Entry-Löschung;
+4. endgültige native Eintragslöschung mit registriertem Nachlaufcallback und
+   zuvor gecachter Content-Relation: genau ein Entry-Löschereignis, keine
+   Rekursion; Entry, eigener Content und eigener Scope/Container entfernt,
+   ursprünglicher Space erhalten; wiederholter Callback bleibt ungefährlich;
+5. irrtümlicher Callback bei lebendem und bei Papierkorb-Eintrag:
+   Datensätze unverändert, keine zweite Löschung.
+
+Gezielte Tests je Version: 5 Tests / 52 Assertions bestanden.
+Vollständige Suite: HumHub 1.18.6 und offizielle 1.19.0 jeweils
+76 Tests / 5.885 Assertions erfolgreich. Alle bisherigen 71 Fälle bestehen.
+Syntax: alle 123 PHP-Dateien unter PHP 8.3.30, 8.4.17 und 8.5.2 ohne Fehler;
+Modulmetadaten-/Assetprüfer jeweils erfolgreich. PHP-8.4/8.5-Laufzeittests werden
+damit nicht behauptet. Version 1.0.32 und alle 23 Migrationen unverändert.
+
+Der erste gezielte Lauf fand eine unvollständige Controller-Testumgebung:
+kein aktiver Controller für die relative Rückkehrroute und kein ausdrücklich
+vergebenes Test-Löschrecht. Die Fixture wurde korrigiert, nicht die produktive
+Rechte- oder Routinglogik. Erfolgreiche Folgeausführungen und der Erstfehler
+sind getrennt als Belege erhalten.
+
+Die Controlleraktion wurde direkt in der nativen HumHub-Testanwendung aufgerufen.
+Dies belegt Modell-/Service-/Controllerintegration, keinen durchgehenden HTTP-Test
+mit CSRF-Token, Session und Browser. Solche HTTP-Prüflücken bleiben dokumentiert.
+Vorhandene historische Tests der Content-Kompatibilitätswrapper bleiben erhalten;
+der produktive Modulcode verwendet die zwei beanstandeten Aufrufe nicht mehr.
+
+Belege: Content-Loeschablauf-2026-10-13/evidence außerhalb des Modulordners,
+mit fresh118/fresh119.log, target118/target119.log, full118/full119.log,
+static.json und final-integrity.json.
+
+Manuelle Kontrolle auf einer gesicherten Testkopie
+
+1. Datenbank, Modul und uploads sichern; je Version ausschließlich neu angelegte
+   künstliche Entscheide verwenden. Ein berechtigtes und ein nur lesendes Konto
+   vorbereiten, einschließlich eingeschränkter Leserechte.
+2. Als Leser ohne Löschrecht keinen Entscheid löschen können. Manipulierter
+   POST darf keine Rechte umgehen; CSRF-/HTTP-Methodenschutz gesondert prüfen.
+3. Als Benutzer mit Löschrecht künstlichen Entscheid in den Papierkorb verschieben.
+   Er verschwindet aus der normalen Liste, steht aber zur Wiederherstellung bereit.
+4. Über den nativen HumHub-Papierkorb wiederherstellen. Titel, Text, Anhang,
+   Kommentar-/Like-Zuordnung und bisherige Leserechte kontrollieren. Nur berechtigte
+   Leser dürfen den Entscheid und seinen Anhang sehen.
+5. Ausschließlich diesen künstlichen Entscheid endgültig löschen: eigener Inhalt
+   und eigener unbenutzter Lesecontainer entfernt, andere Entscheide und Space
+   erhalten. Im Log keine wiederholten/rekursiven Eintragslöschungen.
+6. Eigene Wartungsskripte löschen Einträge über die Entry-/ContentActiveRecord-API.
+   SociologStreamService::onAfterDelete ist ein Nachlaufcallback, kein Löschbefehl
+   und keine Bereinigung historischer verwaister Inhalte.
+
+Modulversion und alle veröffentlichten Migrationen bleiben unverändert.
+F6/F7 (historische verlustbehaftete Migrationen) werden durch diesen Auftrag
+nicht geändert oder erneut ausgeführt.

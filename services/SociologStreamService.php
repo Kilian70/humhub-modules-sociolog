@@ -75,15 +75,23 @@ public static function onAfterSave(Entry $entry): void
 
     /**
      * Wird nach dem Löschen eines Eintrags aufgerufen.
-     * Entfernt den zugehörigen Stream-Beitrag.
+     * Prüft die bereits durch ContentActiveRecord erledigte Stream-Bereinigung.
+     * Kompatibilitätscallback; löst keine erneute Eintrags-/Content-Löschung aus.
      */
     public static function onAfterDelete(Entry $entry): void
     {
         try {
-            if ($entry->content) {
-                $entry->content->delete();
-                Yii::info("🗑️ Stream-Eintrag gelöscht für Sociolog-Entry #{$entry->id}", 'sociolog.stream');
+            // Keine gecachte Content-Relation verwenden: sie kann nach dem
+            // Löschen noch auf das alte Objekt zeigen. Native Bereinigung bleibt
+            // Aufgabe von ContentActiveRecord::afterDelete(), keine Rekursion.
+            if (Content::find()->where([
+                'object_model' => Entry::getObjectModel(),
+                'object_id' => (int)$entry->id,
+            ])->exists()) {
+                Yii::warning("Content für Entry #{$entry->id} noch vorhanden; nativen Eintrags-Lifecycle prüfen.", 'sociolog.stream');
+                return;
             }
+            Yii::info("Stream-Bereinigung für Sociolog-Entry #{$entry->id} abgeschlossen.", 'sociolog.stream');
         } catch (\Throwable $e) {
             Yii::error("💥 SociologStreamService::onAfterDelete Fehler: " . $e->getMessage(), 'sociolog.stream');
         }

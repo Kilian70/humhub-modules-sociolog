@@ -1,0 +1,158 @@
+Formular-JavaScript und Benachrichtigungen – lokale Korrektur
+Prüfdatum: 13.10.2026; Modulversion weiterhin 1.0.32, unveröffentlicht
+
+Auftrag
+
+Bestätigte Befunde F3 und F5 aus dem Kompatibilitätsbericht vom 13.10.2026
+korrigieren, unter HumHub 1.18.6 und offizieller 1.19.0 prüfen.
+Vorherige Löschschutz-/Cron-/Lesecontainerkorrekturen bleiben erhalten.
+Keine bestehenden Vereins- oder MAMP-Daten verändert, keine produktiven
+Migrationen, keine Core-Quelländerungen, kein Commit/Push/PR/Release/Deployment.
+Die vorhandenen MAMP-Installationen wurden nicht aktualisiert.
+
+Quellen und Regeln
+
+Projektpin: Kilian70/humhub-ai-dev, Commit
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f.
+Gelesene zentrale Dateien: AGENTS.md, README.md, START.md, docs/REGELN.md,
+docs/QUELLEN.md und docs/VERSIONEN.md; bestehender Skill humhub-development.
+Vorhandene Projektdateien/Anweisungen und historische Berichte erhalten.
+
+Offizielle Kernstände der separaten Prüfinstallationen:
+- HumHub 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3
+- HumHub 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b
+
+Versionsbezogene Quellen: jeweilige CLAUDE.md und vorheriger Migrationsvergleich;
+ui.modal, ui.additions, ui.widget und core-Modulinitialisierung; client.submit;
+Yii ActiveForm und yii.activeForm.js; BaseNotification und native Image-Widgets.
+Offizielles Vergleichsmodul post einschließlich module.json, Asset und Formular.
+Neue UI-APIs gegen beide tatsächlichen Kernskripte ausgeführt, keine Beta als
+Nachweis für die offizielle 1.19.0 verwendet.
+
+Änderungen
+
+resources/js/sociolog-form.js:
+- Kein Aufruf der nicht vorhandenen modal.initForm()-Methode mehr.
+- Native HumHub-Modulinitialisierung und ui.additions berücksichtigen erste
+  Seitenanzeige, später geladene Assets, Modalinhalte und PJAX.
+- Delegiertes echtes jQuery-Ereignis submitted am Modal anstelle des erfundenen
+  DOM-Ereignisses humhub:modules:ui:modal:submitted.
+- Rückkehr nur für ein zugeordnetes Logbuchformular und response.success === true.
+  Validierungs- oder Transportfehler, andere Formulare und andere Modals lösen
+  keine Rückkehr aus. Klassische Formularspeicherung bleibt serverseitig gesteuert.
+- Vorherige Ansicht über serverseitig erzeugte Rückkehr-URL; keine Annahme über
+  pretty URLs, Installationsunterordner oder einen nicht gespeicherten localStorage-Wert.
+- Namespaced Listener werden vor erneuter Registrierung entfernt. Bei einem
+  synchronen nativen Dialogreset bleibt der Rückkehrzustand bis zum submitted-
+  Abschluss erhalten; danach bzw. nach Abbruch wird er verworfen.
+
+views/entry/_form.php:
+- Nicht vorhandene Initialisierung modal.form und generischer data-ui-widget="form"
+  entfernt. Vorhandenes Yii ActiveForm, seine Validierung und CSRF-Ausgabe bleiben.
+  Kein Wechsel der vorhandenen Formularklasse mit anderen Validierungsdefaults.
+- data-sociolog-return-url enthält eine von Yii erzeugte Route mit cards/table;
+  ungültige Ansichtsangaben fallen auf validierte Sessionauswahl/Voreinstellung zurück.
+- Zusätzlich bei dieser Prüfung gefunden: Protokoll-Listener wurden bei erneutem
+  Rendering mehrfach installiert und verwendeten globale Selektoren. Jetzt
+  namespaced off/on, auf Logbuchformulare und das tatsächlich angeklickte Formular
+  begrenzt. Ein Klick fügt auch nach PJAX genau eine neue Protokollzeile hinzu;
+  Entfernung bleibt auf die betreffende Zeile beschränkt. Keine Änderung an
+  gespeicherten Protokollen oder deren serverseitiger Verarbeitung.
+
+views/notifications/entryCreated.php und entryUpdated.php:
+- Titel und Modulname als Rohtext bis zur Ausgabe behalten; dort genau einmal
+  Html::encode. Ampersand, Anführungszeichen und Umlaute erscheinen korrekt.
+- Bereits als Text eingegebene Zeichenreferenzen bleiben Text, keine HTML-Dekodierung.
+- Benutzername und URL weiterhin sicher kodiert; Linkschutz noopener/noreferrer
+  bleibt. Keine Änderungen an Empfängern, Leserechten, Versand oder Mailtransport.
+- Bestehende Mailbetreffe bleiben Klartext. Keine echte Benachrichtigung/Mail an
+  Mitglieder versendet; Rendering und Betreff wurden nur mit Testobjekten geprüft.
+
+Automatische Ergebnisse
+
+Zwei neue Prüfdatenbanken auf dem separaten MySQL-5.7-Testserver, Port 33079:
+sociolog_formnotify118_20261013 und sociolog_formnotify119_20261013.
+Ausschließlich künstliche Daten. Fresh-Installation mit den unveränderten
+23 Modulmigrationen erfolgreich. Der Server wurde zur Pause beendet; für die
+abschließenden reinen Browser-/Syntaxprüfungen war kein Datenbankstart nötig.
+
+PHP-Laufzeit: MAMP CLI-PHP 8.3.30.
+HumHub 1.18.6: 71 Tests / 5.833 Assertions erfolgreich.
+HumHub 1.19.0: 71 Tests / 5.833 Assertions erfolgreich.
+Alle bisherigen 67 Fälle einschließlich Löschschutz und Lesecontainer bestehen.
+Neue vier Fälle: tatsächliches Formular-Rendering/URL-Modi, Webbenachrichtigungen
+mit Sonderzeichen und HTML-ähnlichen Titeln, fehlende Quelle sowie Klartext-Mailbetreff.
+Die Webfälle prüfen den durch DOMDocument gelesenen sichtbaren Text und schließen
+injizierte script-/onerror-/onclick-Ausgabe aus. Auch "Literal &amp;" wird geprüft.
+
+Browser: isolierter kopfloser Chrome 155.0.8059.40; jeweils 11 Fälle bestanden:
+1. erfolgreicher nativer Modalabschluss -> Tabellenansicht mit index.php?r=...
+2. später geladenes Formular/Asset
+3. synchrones Schließen und Dialogreset vor submitted
+4. Kartenansicht mit pretty URL in Installationsunterordner
+5. Validierungsfehler ohne Navigation
+6. Antwort ohne Erfolgskennzeichen ohne Navigation
+7. Transportfehler ohne Navigation
+8. wiederholte Initialisierung/PJAX, genau ein Listener, fremdes Formular unberührt
+9. Abbruch und anschließendes fremdes Modal ohne falsche Navigation
+10. echte Yii-ActiveForm-Validierung: leere Eingabe blockiert, gültige erlaubt beforeSubmit
+11. tatsächliches durch PHP gerendertes Protokoll-JavaScript zweimal geladen:
+    genau eine neue Zeile, getrennte Formulare und fremde Entfernen-Schaltfläche geschützt.
+
+Die Browsertests verwenden die tatsächlichen versionsbezogenen jQuery-,
+ui.additions-, ui.modal- und Yii-Skripte sowie das Modul-JavaScript.
+Clienttransport und Bootstrap-Hide sind kontrollierte Testdoubles; alle Browser-
+Anfragen werden mit künstlichen Seiten beantwortet. Dies ist kein vollständiger
+HTTP-End-to-End-Test einer angemeldeten HumHub-Installation mit Mailversand.
+
+Erstläufe fanden zwei Testprobleme: fehlende simulierte Anfrageadresse für
+Formular-Rendering und zu frühe Auswertung der verzögerten Yii-Validierung.
+Nach Korrektur bestanden beide vollständigen PHP-Suiten und alle Browserfälle.
+Fehlgeschlagene Erstläufe sind als Belege erhalten, keine erfolgreichen Tests behauptet.
+
+Syntax/Metadaten: alle 122 PHP-Dateien unter PHP 8.3.30, 8.4.17 und 8.5.2;
+Modulprüfer jeweils erfolgreich. Sechs Modul-JavaScript-Dateien und der neue
+Browser-Test syntaktisch geprüft. Keine Behauptung zusätzlicher PHP-8.4/8.5-Laufzeittests.
+Alle 23 veröffentlichten Migrationen unverändert; keine neue Migration oder Versionsanhebung.
+
+Prüfbelege außerhalb des Modulordners:
+Formular-Benachrichtigungen-2026-10-13/evidence mit full118.log/full119.log,
+browser118.json/browser119.json, gerenderten Formularskripten, static.json und
+final-integrity.json. Lokale Quelldateien und Git-Arbeitskopie werden abgeglichen;
+Git-HEAD bleibt 429554c468ca8bdad820d57eea0fa57b339cad55.
+
+Manuelle Kontrolle auf einer gesicherten Testkopie
+
+1. Modul, Datenbank und uploads sichern. Nur künstliche Testeinträge/Testkonten
+   benutzen und echten Mailversand für die Testkopie abfangen/deaktivieren.
+2. Jeweils aus Karten- und Tabellenansicht neuen Eintrag öffnen. Leeren Pflichtwert
+   absenden: Fehlermeldung bleibt sichtbar, keine vorzeitige Weiterleitung.
+   Gültig speichern und bestehenden Testeintrag bearbeiten. Details/Zurück und
+   zuletzt gewählte Logbuchansicht kontrollieren, auch im Installationsunterordner.
+3. Seite mehrfach per PJAX/Navigation laden. Protokoll hinzufügen: genau eine Zeile;
+   diese neue Zeile entfernen: andere Zeilen unverändert. Im Browser keine Meldung
+   "modal.initForm is not a function" oder Fehler zur Initialisierung modal.form.
+4. Soweit ein nativer Modalaufruf im eigenen Ablauf vorhanden ist: erfolgreicher
+   Logbuchabschluss darf zur gewählten Liste zurückkehren; Fehler bleiben im
+   Formular. Danach fremdes Modal öffnen/schließen: keine Logbuchweiterleitung.
+   Diese Korrektur führt keine neue Modal-Erstellen/Bearbeiten-Funktion ein.
+5. Testbenachrichtigungen für Titel "A & B", "Änderung \"Haus\"" und
+   "<b>Test</b>" mit passenden Testlesern ansehen. Text muss wörtlich erscheinen,
+   HTML-ähnlicher Titel darf kein ausführbares HTML sein. Modulname mit & ebenso.
+   Der Link führt weiterhin zum richtigen Eintrag; unberechtigter Nutzer bekommt
+   durch die Darstellungsänderung keine zusätzlichen Rechte.
+6. Test-Mailbetreff im abgefangenen Mailtransport prüfen: "&", keine ungewollten
+   "&amp;"-Zeichenreferenzen. Produktiven Mailversand hierfür nicht aktivieren.
+
+Reproduzierbare Browserprüfung
+
+tests/javascript/form.test.cjs benötigt Node und Playwright sowie einen passenden
+Browser. Erster Parameter ist die jeweilige offizielle HumHub-Core-Kopie, inklusive
+jQuery- und Yii-Vendordateien. BROWSER_EXECUTABLE kann den lokalen Browser angeben.
+SOCIOLOG_BROWSER_FORM_SCRIPT aktiviert Fall 11; der entsprechende PHP-FormRenderingTest
+exportiert das gerenderte Script bei derselben Umgebungsvariable in eine Testdatei.
+Ohne diese Variable laufen die zehn übrigen Fälle. Es werden keine Anwendungsdaten
+geändert und keine echten Netzwerkanfragen ausgeführt.
+
+Die übrigen Auditbefunde, insbesondere historische destruktive Migrationen und
+noch nicht beauftragte veraltete Content-Aufrufe, sind hierdurch nicht erledigt.

@@ -1,0 +1,52 @@
+Vorbereitung Sociolog 1.0.33 – 14.10.2026
+======================================
+
+Benutzerauftrag: neue Modulversion mit allen Korrekturen und verständlichem
+Änderungsprotokoll vorbereiten, noch nichts auf GitHub hochladen.
+Version 1.0.33 ist lokal vorbereitet, nicht veröffentlicht und nicht getaggt.
+Lesende Prüfung: kein GitHub-Tag v1.0.33 vorhanden. Kein Commit/Push/Release.
+
+Enthalten: Korrekturen F1–F10, D1, B1 und B2 aus dem bisherigen geprüften Stand.
+Keine Funktion entfernt und keine zusätzliche funktionale Änderung nach der
+Abnahme. Versionsnummer in Module.php/module.json/composer.json/README konsistent
+auf 1.0.33 angehoben. Mindestversion HumHub 1.18.0 erhalten.
+
+Dokumentation:
+- AENDERUNGEN-1.0.33.md: verständliche Übersicht für Anwender.
+- CHANGELOG.md: zusammengefasste neue Version, technische Prüfschritte erhalten.
+- UPDATE-1.0.33.md: Sicherung, normales Update und geschützter historischer Updater.
+- Frühere Berichte bleiben historische Nachweise; nicht auf neue Ergebnisse umgeschrieben.
+
+Paketprüfungen des entpackten 1.0.33-Stands:
+- Beide offiziellen HumHub-Versionen 1.18.6 und 1.19.0: jeweils 92 Tests / 6070
+  Assertions auf getrennten Fixture-Testdatenbanken bestanden.
+- Je Core zehn isolierte Formular-Browserfälle mit versionspassenden Kernskripten
+  bestanden; keine realen Anwendungsrequests in diesen zusätzlichen JS-Proben.
+- 137 PHP-Dateien unter PHP 8.3.30 ohne Syntaxfehler.
+- Metadaten-/Assetprüfung des entpackten Pakets bestanden.
+- ZIP-CRC und SHA-256-Dateiabgleich mit dem Quellordner bestanden.
+- Alle 23 veröffentlichten Migrationen bytegleich; insgesamt 25 Migrationen.
+- Keine bekannten privaten Test-/Datenbankzugänge und keine Umgebungs-, Dump-,
+  Mail-, Laufzeit- oder generierten Testdateien im Paket.
+
+Die paketbezogenen Browser-/PHP-Tests änderten nur die Moduldateien auf den
+getrennten temporären Testkopien und deren Fixture-Datenbanken. Keine Original-
+installation aktualisiert, keine Anwendungsdatenbank migriert, keine Bereinigung
+bestehender Daten. Der native Browser-/SMTP-Abnahmebericht vom 14.10.2026 bleibt
+der Beleg für die unveränderten fachlichen Funktionen.
+
+Regelpin: 9854ea97c1db1c82e18c7c8dcc097810b6615a4f.
+Core 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3.
+Core 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b.
+Laufzeit PHP 8.3.30 / MySQL 8.0.44. Ursprünglicher Git-HEAD bleibt
+429554c468ca8bdad820d57eea0fa57b339cad55.
+
+Downloadpaket und SHA256SUMS.txt liegen im Arbeitsordner
+Version-1.0.33-2026-10-14. Die abschließende Ergänzung der Vorbereitungsdokumentation
+ändert keine PHP-/JS-/Metadatenbytes des erfolgreich getesteten Pakets.
+
+Prüfgrenzen: externe SMTP-Zustellung mit TLS/Auth, weitere PHP-Laufzeiten und
+optionale Fremdmodule nicht neu geprüft. Tabellenpräfixe weiterhin nicht unterstützt.
+Historische Updates benötigen Sicherungen; verlorene Altwerte werden nicht erfunden.
+Noch kein Update oder Deployment auf einer echten Installation und keine
+GitHub-Veröffentlichung. Dafür ist ein neuer ausdrücklicher Auftrag erforderlich.

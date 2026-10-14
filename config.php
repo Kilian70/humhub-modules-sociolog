@@ -7,13 +7,26 @@ use humhub\modules\dashboard\widgets\Sidebar;
 use humhub\commands\CronController;
 use humhub\modules\sociolog\models\Entry;
 use yii\db\ActiveRecord;
+use humhub\modules\user\models\User;
 
 return [
     'id' => 'sociolog',
     'class' => Module::class,
     'namespace' => 'humhub\modules\sociolog',
+    'consoleControllerMap' => [
+        'sociolog' => \humhub\modules\sociolog\commands\MaintenanceController::class,
+    ],
 
     'events' => [
+        [\yii\base\Application::class, \yii\base\Application::EVENT_BEFORE_REQUEST, [Events::class, 'onDigestBootstrap']],
+        [\yii\queue\Queue::class, \yii\queue\Queue::EVENT_BEFORE_EXEC, [Events::class, 'onDigestBootstrap']],
+        [\humhub\modules\admin\models\forms\UserDeleteForm::class,
+            \yii\base\Model::EVENT_AFTER_VALIDATE, [Events::class, 'onUserDeletionFormValidated']],
+        [\humhub\modules\user\models\forms\AccountDelete::class,
+            \yii\base\Model::EVENT_AFTER_VALIDATE, [Events::class, 'onUserDeletionFormValidated']],
+        [User::class, ActiveRecord::EVENT_BEFORE_UPDATE, [Events::class, 'onUserBeforeUpdate']],
+        [\yii\queue\Queue::class, \yii\queue\Queue::EVENT_BEFORE_PUSH, [Events::class, 'onUserDeletionJobPush']],
+        [\yii\queue\Queue::class, \yii\queue\Queue::EVENT_BEFORE_EXEC, [Events::class, 'onUserDeletionJobExecute']],
         ['class' => \humhub\modules\content\models\Content::class,
             'event' => ActiveRecord::EVENT_BEFORE_INSERT, 'callback' => [Events::class, 'onContentBeforeSave']],
         ['class' => \humhub\modules\content\models\Content::class,

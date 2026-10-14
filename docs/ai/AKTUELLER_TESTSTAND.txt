@@ -1,3 +1,36 @@
+Version 1.0.33 lokal vorbereitet am 14.10.2026
+-------------------------------------------
+Alle bisherigen Korrekturen enthalten, keine Funktionsänderung seit Abnahme.
+Entpacktes Paket unter HumHub 1.18.6 und offizieller 1.19.0 je 92 Tests/6070
+Assertions bestanden; zusätzliche Paket-, Syntax- und Formularprüfungen bestanden.
+Noch nicht veröffentlicht. Übersicht: AENDERUNGEN-1.0.33.md; Update: UPDATE-1.0.33.md;
+Vorbereitung: docs/ai/VERSION-1.0.33-2026-10-14.txt. Historische Nachweise folgen.
+
+Abnahme vom 14.10.2026
+---------------------
+Endgültiger lokaler Stand unter HumHub 1.18.6 und offizieller 1.19.0 abgenommen:
+je 92 Tests/6070 Assertions, erneute Browserlösch-/Formular-/Rechteprüfungen sowie
+native geplante Daily/Weekly-Jobs mit echtem lokalem SMTP-Transport bestanden.
+Bestehende Daten/Core/veröffentlichte Migrationen unverändert, keine Veröffentlichung.
+Details und Grenzen: docs/ai/ABNAHME-2026-10-14.txt.
+Die folgenden Abschnitte sind frühere Prüfschritte.
+
+Aktuelle Ergänzung vom 14.10.2026: Digest B2
+-----------------------------------------
+B2 lokal korrigiert und mit aktuellen Empfänger-Leserechten unter HumHub 1.18.6
+und offizieller 1.19.0 geprüft. Je 92 Tests/6069 Assertions sowie abschließend
+je 5 Digesttests/44 Assertions; 48 native tägliche/wöchentliche Empfängerprüfungen
+bestanden. Aktueller Umfang und Grenzen: docs/ai/B2-DIGEST-2026-10-14.txt.
+Die folgenden Abschnitte dokumentieren frühere Prüfschritte. Kein Upload/Release.
+
+Aktuelle Ergänzung vom 13.10.2026: Löschschutz B1
+------------------------------------------------
+B1 lokal korrigiert und native Browserlöschung unter HumHub 1.18.6 und offizieller
+1.19.0 geprüft. Die bisherigen Teststände im folgenden Text sind historische
+Prüfschritte. Aktuelle Ergebnisse, Schutzumfang und Anleitung:
+docs/ai/B1-LOESCHSCHUTZ-2026-10-13.txt. Digest-Befund B2 bleibt offen.
+Keine Veröffentlichung, keine Bestandsbereinigung und keine Migration.
+
 Sociolog – aktueller lokaler Teststand vom 11.10.2026
 ===================================================
 

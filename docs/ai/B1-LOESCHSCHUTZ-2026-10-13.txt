@@ -1,0 +1,156 @@
+Löschschutz B1 – Korrektur und Browserprüfung, 13.10.2026
+=====================================================
+
+B1 ist lokal korrigiert. Die erneut geprüften nativen Löschabläufe unter HumHub
+1.18.6 und offizieller 1.19.0 schützen Räume, Archivkonto und Logbuchdaten.
+Keine bestehenden Daten gelöscht, kein Core geändert, keine Migration ausgeführt,
+keine Versionsanhebung und keine GitHub-Aktion.
+
+Ursache und Änderung
+-------------------
+services/SociologUserDeletionService.php: assertDeletionAllowed(),
+isProtectedArchive() und preserveEntriesForUser() laden das aktivierte Modul jetzt
+mit Yii::$app->getModule('sociolog'). Der frühere zweite Parameter false bedeutete
+"nicht laden"; native Admin-/Account-Anfragen und frische Worker übersprangen
+dadurch den Schutz. Application::getModule() instanziiert die registrierte
+Anwendungskonfiguration; ein deaktiviertes, nicht registriertes Modul wird nicht
+über ModuleManager::getModule() künstlich angelegt.
+
+Events.php: onUserDeletionFormValidated() hängt die Ablehnung bei einem Konto
+ohne eigene Spaces an deleteContributions. Das Feld deleteSpaces existiert in
+diesem Formular nicht. Bei eigenen Spaces bleibt deleteSpaces der Fehlerort;
+bei Selbstlöschung currentPassword. Die Fehlermeldungen sind im Browser sichtbar.
+
+tests/codeception/unit/UserDeletionProtectionTest.php: zwei Regressionstests
+setzen das Modul vor Formular-/Statusprüfung und serialisierter Jobausführung
+in den Zustand "registriert, noch nicht geladen" zurück. Sie prüfen abgelehnte
+Raum-/Archivlöschung sowie Archivübertragung beim nativen SoftDelete-Job.
+
+Vorhandene Fachfunktionen, Schutzschalter, Archiveinstellungen und Leserrechte
+bleiben erhalten. README, CHANGELOG und Projekt-/Teststanddokumentation aktualisiert.
+
+Quellen und Umgebung
+-------------------
+Zentrale Regeln: Kilian70/humhub-ai-dev, Commit
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f; Skill humhub-development.
+AGENTS.md, REGELN.md, QUELLEN.md und VERSIONEN.md berücksichtigt;
+README/START und versionsbezogene Core-Anweisungen aus dem bestehenden Quellenstand.
+Application/getModule und ModuleManager/getModule sowie native User-/Space-/Formular-
+und Queue-Lifecycles mit den vorhandenen gepinnten Core-Quellen verglichen.
+Offizielles Core-user-Modul als Referenz, keine neue oder erfundene API.
+
+HumHub 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3.
+HumHub 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b.
+PHP CLI und Web: MAMP 8.3.30, MySQL 8.0.44, Chrome/Playwright.
+Version des Moduls weiterhin 1.0.32; Standardbranch main, Git-HEAD unverändert
+429554c468ca8bdad820d57eea0fa57b339cad55. Korrektur ist unveröffentlicht.
+
+Isolierung
+----------
+Browserkopien: /private/tmp/sociolog-mamp-e2e-20261013/118 und /119.
+Eigene Datenbanken sociolog_e2e118_20261013 und sociolog_e2e119_20261013.
+Vor B1-Browserdaten neue Sicherungen 118-before-b1.sql und 119-before-b1.sql;
+private Testzugänge/IDs in 118-b1-state.json und 119-b1-state.json.
+Eigene neue Tabellen e2e_b1_queue, Kanal b1-e2e; vorhandene Warteschlangen und
+zurückgehaltene Archivaufträge aus dem früheren Test nicht abgearbeitet.
+Alle zugelassenen Benutzerlösch-IDs gehören den acht neuen künstlichen Konten
+je Kopie. E-Mails ausschließlich als lokale Dateien, kein SMTP-Versand.
+Unit-Tests verwenden getrennte *_suite_20261013-Datenbanken mit Testfixtures,
+keine Browser-/Originaldatenbanken. Suite und Browser wurden nacheinander ausgeführt.
+
+Automatische Prüfungen
+---------------------
+PHP-Syntax der drei geänderten PHP-Dateien unter PHP 8.3.30 bestanden.
+Vollständige Unit-Suite je Version: 87 Tests / 6.025 Assertions bestanden.
+Danach sichtbaren Fehlerort im Archivformular ergänzt und die endgültige relevante
+Testklasse erneut geprüft: je 14 Tests / 274 Assertions bestanden.
+Diese gezielte Wiederholung prüft den endgültigen PHP-Stand; es wird kein zweiter
+vollständiger Suite-Durchlauf nach der Fehlerortänderung behauptet.
+
+Reproduzierbare Befehle auf einer eigenständigen Testumgebung:
+php protected/vendor/bin/codecept run unit -c protected/modules/sociolog/tests/codeception.yml
+php protected/vendor/bin/codecept run unit UserDeletionProtectionTest -c protected/modules/sociolog/tests/codeception.yml
+Nur mit separat konfigurierter Fixture-Testdatenbank ausführen: die Suite setzt
+Testfixtures zurück. Niemals die Datenbank einer bestehenden Installation verwenden.
+
+Browser und echte asynchrone Jobs – beide Versionen bestanden
+-----------------------------------------------------------
+Je Lesemodus all/space/selected ein neuer Kontoeigentümer mit neuem privaten Space,
+Beschluss, Protokoll, Flow, Review, privatem Anhang und Dateihistorie:
+- Native Adminlöschung mit "Beiträge löschen" UND "Spaces löschen" abgelehnt.
+  Sichtbare Logbuch-Space-Meldung, kein Löschjob und unveränderte Prüfdaten.
+- Danach "Spaces löschen" ausgeschaltet: HumHub übergibt den Raum an den
+  künstlichen Testadministrator; nativer DeleteUser-Job entfernt das Konto.
+- Alle Räume erhalten. Beschlüsse fachlich unverändert, Protokolle, Flows,
+  Reviews, Dateien und historische Dateiversionen erhalten. Alle sieben
+  Autorverweise je Fall auf das neue Archivkonto übertragen.
+
+Archivkonto ohne eigene Spaces:
+- Adminformular mit und ohne "Beiträge löschen" abgelehnt, sichtbare Meldung.
+- Selbstlöschung mit gültigem Passwort ebenfalls abgelehnt, sichtbare Meldung.
+- Konto aktiv, kein Löschauftrag eingereiht. Kein Testhilfen-Zurückhalten nötig.
+
+Normale Selbstlöschung eines weiteren neuen Kontos ohne eigene Spaces:
+- Echtes AccountDelete-Formular mit gültigem Passwort, Logout und nativer
+  SoftDeleteUser-Job vollständig durchlaufen.
+- Status 3, Benutzername geändert, E-Mail geleert und Passwortdatensatz entfernt.
+  Verbleibender User-Datensatz entspricht HumHubs nativer SoftDelete-Semantik.
+- Beschluss/Protokoll/Flow/Review/Anhang/Dateihistorie erhalten und jetzt auch hier
+  die Autorverweise auf das Archivkonto übertragen.
+
+Die echten Jobs wurden serialisiert über den MySQL-Queue-Treiber in einem separaten
+PHP-Prozess ausgeführt. Vor Ausführung war Sociolog ausdrücklich noch nicht geladen
+(initiallyLoaded=false); die Testhilfe initialisiert es nicht künstlich. Kein FakeQueue
+im Browser-/Worker-Test. Jede Datei und historische Version anhand SHA-256 vor/nach
+Löschung bytegleich; alle Eintragsfelder außer beabsichtigter Autorenübertragung gleich.
+
+Anschließend im echten Browser mit dem künstlichen Lesekonto: alle vier Beschlüsse
+und ihre Anhänge je Core erreichbar, HTTP 200 und Dateiinhalte exakt abgeglichen.
+Zusätzliche Kontrollen je Core: normales Mitglied erhält auf Adminlöschseite HTTP 403,
+Gast wird zur Anmeldung geführt, Admin-POST ohne CSRF-Token HTTP 400; kein Löschjob.
+
+Eine verzögerte Login-Weiterleitung unterbrach zunächst eine Browsernavigation.
+Die Testhilfe wartet jetzt auf die tatsächliche Zielseite; bereits erfolgreich
+gelöschte künstliche Konten wurden bei Fortsetzung übersprungen. Kein Modulfehler.
+
+Bestand und Grenzen
+-------------------
+Originalinstallationen wurden nicht aktualisiert. Bestandsvergleich im Begleitbericht:
+acht ursprüngliche Sociolog-Tabellen und funktionale Einstellungen je Original
+unverändert; je drei ursprüngliche Beschlüsse in den Browserkopien unverändert.
+Core-Dateien und 23 veröffentlichte Migrationen bytegleich, weiterhin 25 Migrationen.
+Bereits bekannte Statuslauf-Metriken können durch andere lokale Aktivität abweichen;
+keine Gleichheit sämtlicher Originaldatenbanktabellen behauptet.
+Keine frühere verwaiste Containerstruktur bereinigt oder Bestandsdaten rekonstruiert.
+Der eigene Browser-Testserver wurde nach den Prüfungen beendet.
+
+B2 (Logbucheinträge im nativen Digest) ist unverändert offen und nicht Teil dieser
+Korrektur. Keine globale Freigabe des Moduls oder Prüfung aller PHP-/HumHub-Versionen.
+Reale SMTP-Zustellung und besondere externe UserSources wurden hier nicht neu getestet.
+
+Manuelle Testanleitung – ausschließlich auf einer gesicherten Kopie
+-----------------------------------------------------------------
+1. In den Moduleinstellungen den Löschschutz einschalten und ein neues aktives
+   künstliches Archivkonto auswählen. Keine echten Mitgliedskonten verwenden.
+2. Ein weiteres künstliches Konto mit eigenem Logbuch-Space erstellen. Dort einen
+   Prüfbeschluss, Protokoll und privaten Anhang anlegen. Ein künstliches Lesekonto
+   als Mitglied hinzufügen. Beschlusstext und Dateiinhalte vorab festhalten.
+3. Als Administrator die native Benutzerlöschung öffnen. Beiträge und Spaces
+   zum Löschen auswählen und bestätigen. Erwartung: sichtbare Ablehnung,
+   Benutzer und Space unverändert, kein Benutzerlöschjob.
+4. Die Space-Löschoption ausschalten und erneut bestätigen. Den echten Worker
+   nur für diese isolierte Testwarteschlange ausführen. Erwartung: Konto entfernt,
+   Space-Eigentum übergeben, sämtliche Logbuchdaten und Anhänge erhalten.
+5. Mit dem Lesekonto Beschluss und Anhang öffnen. Beide müssen erreichbar sein.
+6. Archivkonto einmal durch Admin und einmal per eigener Kontolöschung versuchen
+   zu löschen. Erwartung: sichtbare Ablehnung vor jeder Kontoänderung/Queue-Aufnahme.
+7. Mit einem weiteren künstlichen Autor ohne eigenen Space die Selbstlöschung
+   mit gültigem Passwort ausführen und Worker abarbeiten. Erwartung: Anmeldedaten
+   entfernt, Logbuchdaten erhalten und Autoren auf das Archivkonto übertragen.
+8. Schritte 2–5 für alle drei Lesemodi wiederholen und jeweils einen frisch
+   gestarteten Worker verwenden. Auf beiden HumHub-Versionen getrennt durchführen.
+
+Nachweise: Arbeitsordner B1-Loeschschutz-2026-10-13/evidence enthält vollständige
+Suite-/Regressionsprotokolle, Browser-/Queuezustände, Screenshots, Zugriff-/CSRF-
+Ergebnisse und abschließenden Integritätsvergleich. Zugangsdaten und Datenbank-
+sicherungen liegen nur im privaten temporären Testverzeichnis.

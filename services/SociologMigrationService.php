@@ -26,6 +26,7 @@ class SociologMigrationService extends MigrationService
     public function migrateUp(): ?bool
     {
         self::assertSupportedDatabase();
+        LegacyUpgradeService::assertNormalRouteSafe();
         return parent::migrateUp();
     }
 }

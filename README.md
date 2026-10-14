@@ -11,9 +11,13 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.32
+**Version:** 1.0.33
 
-Beim Update von 1.0.30: Modul und Datenbank vollständig sichern, beide neuen Migrationen ausführen und die Leseeinstellungen einmal speichern. Geprüft auf HumHub 1.18.6 und 1.19.0-beta.3 mit PHP 8.3.30, ohne Tabellenpräfix. Eingeschränkte Leserechte begrenzen native Space-Streams und Kalendererinnerungen. Details und Testanleitung: [aktueller Prüfbericht](docs/ai/AKTUELLER_TESTSTAND.txt).
+**Release:** 1.0.33 vom 14.10.2026.
+
+Alle Korrekturen seit 1.0.32 sind enthalten. Geprüft unter HumHub **1.18.6** und der offiziellen **1.19.0** mit PHP 8.3.30 und MySQL 8.0.44. Die Unterstützung von HumHub 1.18 bleibt erhalten.
+
+[Änderungen in 1.0.33](AENDERUNGEN-1.0.33.md) · [Update-Anleitung](UPDATE-1.0.33.md) · [Abnahme und Prüfgrenzen](docs/ai/ABNAHME-2026-10-14.txt). Das Update enthält zwei zusätzliche Migrationen. Vor einem Update Datenbank und Dateien sichern; bei älteren, noch nicht vollständig migrierten Installationen zuerst die Update-Anleitung lesen.
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  
@@ -69,6 +73,15 @@ Eine formelle WCAG-Zertifizierung ist damit nicht verbunden. Vor einer öffentli
 Freigabe werden zusätzliche Praxistests mit Browser-Zoom, Tastatur und Screenreader
 empfohlen.
 
+## E-Mail-Zusammenfassung (Digest)
+
+Version 1.0.33 ergänzt neue Logbucheinträge in HumHubs
+E-Mail-Zusammenfassung mit Titel und Link. Es gelten die aktuellen Leserechte des
+Empfängers und seine persönlichen Digest-/Space-Einstellungen. Ältere Einträge
+werden nicht nachträglich als neue Ereignisse verschickt; eigene Einträge und
+gelöschte Inhalte sind ausgeschlossen. Einzelbenachrichtigungen bleiben erhalten.
+Prüfstand und Anleitung: [Digest-Korrektur B2](docs/ai/B2-DIGEST-2026-10-14.txt).
+
 ## Benutzer löschen (WICHTIG)
 
 HumHub löscht mit der Option **„Alle Beiträge des Benutzers löschen“** standardmässig
@@ -78,13 +91,17 @@ Sociolog kann die institutionellen Logbucheinträge davor schützen. Dazu muss i
 Moduleinstellungen unter **„Archiv“** ein dauerhaftes Archiv-Benutzerkonto ausgewählt
 und die Schutzfunktion aktiviert werden. Vor der endgültigen Benutzerlöschung werden
 die betroffenen Logbucheinträge, Protokoll-Verknüpfungen und der Verlauf auf dieses
-Konto übertragen.
+Konto übertragen. Das konfigurierte Archivkonto ist selbst gegen Löschung geschützt.
+Eigene Logbuch-Spaces müssen erhalten bleiben: Beim Löschen des Benutzers die
+Option zum Löschen seiner Spaces ausschalten, damit HumHub deren Eigentum übergibt.
 
-**Wichtig:** Von der Person in HumHub hochgeladene Protokolldateien werden von dieser
-Sociolog-Funktion nicht übertragen. Diese Dokumente müssen vor der Benutzerlöschung
-mit dem HumHub-Modul **„Move content and users“** auf das Archiv-Benutzerkonto
-verschoben werden. Andernfalls können die Dateien beim Löschen aller Beiträge verloren
-gehen und die im Logbuch erhaltenen Verknüpfungen danach ins Leere führen.
+Direkt einem vorhandenen Logbucheintrag zugeordnete Anhänge einschließlich ihrer
+Dateihistorien werden ebenfalls auf das Archivkonto übertragen. Dateien an anderen
+HumHub-Inhalten und externe Protokoll-Links müssen vor der Löschung separat geprüft
+und nötigenfalls mit **„Move content and users“** übertragen werden.
+
+Version 1.0.33 schützt auch native Löschformulare und frisch
+gestartete Worker. Prüfstand und Testanleitung: [B1-Löschschutz](docs/ai/B1-LOESCHSCHUTZ-2026-10-13.txt).
 
 Ohne aktivierte Schutzfunktion darf **„Alle Beiträge des Benutzers löschen“** weiterhin
 nicht verwendet werden, wenn die Sociolog-Einträge erhalten bleiben sollen.
@@ -186,6 +203,25 @@ Die Vorschau prüft Ziel-Spaces, Entscheidungstypen, Datumswerte und Duplikate.
 Der endgültige Import läuft in einer Datenbanktransaktion. Historische Einträge
 erzeugen keine Benachrichtigungen, Kalendertermine oder Stream-Aktivitäten.
 
+## Update sehr alter Modulstände
+
+Bei noch ausstehenden historischen F6/F7-Migrationen zunächst Datenbank, Modul und
+Dateien sichern und den Updatepfad auf einer getrennten Testkopie prüfen:
+
+```bash
+php protected/modules/sociolog/upgrade.php
+php protected/modules/sociolog/upgrade.php --apply
+php protected/modules/sociolog/upgrade.php --areas
+```
+
+Der erste Aufruf prüft, der zweite wendet ausdrücklich an, der dritte listet nur
+erhaltene Bereichswerte auf. Alte Berechtigungsauswahlen werden erhalten und
+geprüft umgewandelt; Bereichswerte bleiben bestehen und werden bewusst bestehenden
+oder neu angelegten Organen zugeordnet. Unbekannte Formate stoppen den Updatepfad.
+Veröffentlichte Migrationen nicht einzeln ausführen oder ihre Historie manuell
+verändern. Bereits früher gelöschte Werte benötigen eine geeignete Sicherung.
+Details: `docs/ai/SICHERER-ALTUPDATE-2026-10-13.txt`.
+
 ## Automatische Statusläufe & Cronjobs
 
 Das Modul unterstützt automatische Statuswechsel und Erinnerungen über einen **Cron-Mechanismus.**
@@ -214,7 +250,7 @@ Falls der HumHub-Cron nicht verfügbar ist, kann optional ein eigener Cronjob ve
 
 Diese Variante eignet sich für Hosting-Umgebungen:
 
-- ohne stabilen Zugriff auf `protected/yii`
+- mit einem separat konfigurierten Statuslauf
 - mit mehreren parallelen HumHub-Instanzen
 - mit instanzbezogener Cronsteuerung im Hosting-Panel
 
@@ -228,12 +264,23 @@ Beispiel (Cyon Shared Hosting):
 
 Dieser startet den Statuslauf einmal täglich um Mitternacht.
 
-`run.php` ermittelt den HumHub-Ordner automatisch relativ zum Modulpfad.
+`run.php` ermittelt den HumHub-Ordner automatisch relativ zum Modulpfad und ruft
+den nativen Befehl `php protected/yii sociolog/status` auf. Die HumHub-Konsole
+(`protected/yii`), ein aktiviertes Modul und dessen normale Konfiguration sind
+erforderlich. Gemeinsame/lokale Konfiguration und `.env` werden wie bei HumHub
+geladen. Der Fallback führt nur den Statuslauf aus; Kalendererinnerungen bleiben
+beim täglichen HumHub-Cron.
 Das Skript akzeptiert aus Sicherheitsgründen ausschliesslich Aufrufe über PHP-CLI
 und kann nicht als Web-Endpunkt verwendet werden.
 Im Skript selbst muss deshalb kein installationsabhängiger Serverpfad
 eingetragen werden.
 
+
+Verwaiste Lesecontainer lassen sich mit `php protected/yii sociolog/read-scopes`
+auflisten. Dieser Befehl liest nur IDs und löscht nichts. Neue endgültige
+Eintragslöschungen entfernen den eigenen, unbenutzten Lesecontainer über den
+nativen HumHub-Löschablauf. Papierkorb und Wiederherstellung behalten ihn.
+Bereits vorhandene verwaiste Container werden nicht automatisch bereinigt.
 
 ## Statuslogik (kurz & einfach)
 

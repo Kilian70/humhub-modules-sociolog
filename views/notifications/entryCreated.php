@@ -12,9 +12,9 @@ use humhub\modules\user\widgets\Image;
 
 $entry = $source ?? $object->source ?? null;
 $module = Yii::$app->getModule('sociolog');
-$moduleName = Html::encode($module->settings->get('moduleTitle', 'Logbuch'));
+$moduleName = (string)$module->settings->get('moduleTitle', 'Logbuch');
 
-$title = Html::encode($entry->title ?? Yii::t('SociologModule.base', 'Eintrag im {module}', ['module' => $moduleName]));
+$title = $entry->title ?? Yii::t('SociologModule.base', 'Eintrag im {module}', ['module' => $moduleName]);
 $user  = $entry->creator ?? null;
 $userName = Html::encode($user?->displayName ?? Yii::t('SociologModule.base', 'Unbekannt'));
 

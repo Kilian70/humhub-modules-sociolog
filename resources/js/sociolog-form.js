@@ -1,69 +1,53 @@
-/**
- * ============================================================
- * Sociolog – Formularlogik (HumHub 1.18+)
- * ------------------------------------------------------------
- * - Initialisiert Modal-Formulare automatisch
- * - Stellt Redirect nach Speichern auf letzte Ansicht sicher
- * - Kompatibel mit HumHub PJAX und Bootstrap 5
- * ============================================================
- */
+/** Native ActiveForm validation; scoped return after successful modal submission. */
+humhub.module('sociolog.form', function (module, require, $) {
+    'use strict';
 
-(function () {
-  'use strict';
+    const additions = require('ui.additions');
+    const stateKey = 'sociologFormReturn';
 
-  /**
-   * 🔹 Initialisiert HumHub-Modalformulare, falls nicht automatisch erkannt
-   */
-  function initModalForms() {
-    if (typeof humhub === 'undefined' || !humhub.require) {
-      console.warn('[Sociolog] humhub.require nicht verfügbar – warte...');
-      setTimeout(initModalForms, 500);
-      return;
+    function rememberForms($forms) {
+        $forms.each(function () {
+            const $modal = $(this).closest('.modal');
+            if (!$modal.length) {
+                return;
+            }
+            const url = $(this).attr('data-sociolog-return-url');
+            $modal.removeData(stateKey);
+            if (url) {
+                $modal.data(stateKey, {url: url});
+            }
+        });
     }
 
-    const modal = humhub.require('ui.modal');
-    const forms = document.querySelectorAll('form[data-ui-widget="form"]');
+    function init() {
+        // Native additions run on initial load, late assets, modal content and PJAX.
+        additions.register('sociolog.form', 'form', rememberForms);
+        $(document).off('.sociologForm', '.modal')
+            .on('show.bs.modal.sociologForm', '.modal', function () {
+                $(this).removeData(stateKey);
+                rememberForms($(this).find('form'));
+            })
+            .on('hidden.bs.modal.sociologForm', '.modal', function () {
+                const $modal = $(this);
+                const state = $modal.data(stateKey);
+                // HumHub may reset its dialog before triggering "submitted".
+                // Retain the state for that synchronous completion only.
+                setTimeout(function () {
+                    if ($modal.data(stateKey) === state) {
+                        $modal.removeData(stateKey);
+                    }
+                }, 0);
+            })
+            .on('submitted.sociologForm', '.modal', function (event, response) {
+                const $modal = $(this);
+                const state = $modal.data(stateKey);
+                if (!state || !response || response.success !== true) {
+                    return;
+                }
+                $modal.removeData(stateKey);
+                window.location.assign(state.url);
+            });
+    }
 
-    forms.forEach(form => {
-      if (!form.dataset.uiInit || form.dataset.uiInit !== 'modal.form') {
-        form.dataset.uiInit = 'modal.form';
-        modal.initForm($(form));
-        console.log('[Sociolog] Modal-Form initialisiert:', form);
-      }
-    });
-  }
-
-  /**
-   * 🔁 Leitet nach dem Speichern zur letzten Ansicht (cards/table)
-   */
-  function initRedirectAfterSave() {
-    document.addEventListener('humhub:modules:ui:modal:submitted', () => {
-      const mode = localStorage.getItem('sociologView') || 'cards';
-      const baseUrl = humhub.config.get('baseUrl') || '';
-      window.location.href = baseUrl + '/sociolog/entry/index?view=' + mode;
-    });
-
-    // Fallback bei klassischem Formularsubmit
-    document.addEventListener('submit', event => {
-      const form = event.target.closest('form');
-      if (!form) return;
-
-      form.addEventListener('ajaxSuccess', () => {
-        const mode = localStorage.getItem('sociologView') || 'cards';
-        const baseUrl = humhub.config.get('baseUrl') || '';
-        window.location.href = baseUrl + '/sociolog/entry/index?view=' + mode;
-      });
-    });
-  }
-
-  /**
-   * 🚀 Initialisierung
-   */
-  document.addEventListener('DOMContentLoaded', function () {
-    initModalForms();
-    initRedirectAfterSave();
-  });
-
-  // Auch nach PJAX-Reloads
-  document.addEventListener('pjax:end', initModalForms);
-})();
+    module.export({init: init});
+});

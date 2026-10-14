@@ -1,0 +1,165 @@
+Sociolog – abschließende Abnahme vom 14.10.2026
+=============================================
+
+Ergebnis: Abnahme im nachfolgend geprüften Umfang unter HumHub 1.18.6 und
+offizieller 1.19.0 bestanden. Keine neuen Modulfehler bestätigt.
+Endgültiger lokaler Modulstand einschließlich F1–F10, D1, B1 und B2 geprüft.
+Keine bestehenden Anwendungsdaten gelöscht, keine Coreänderung, keine produktive
+Migration und kein GitHub-Upload. Kein Commit, Push, Release oder Deployment.
+
+Prüfstände und Sicherungen
+-------------------------
+HumHub 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3.
+HumHub 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b.
+MAMP Web-/CLI-PHP 8.3.30, MySQL 8.0.44, echter Chrome-Browser/Playwright.
+Modulversion weiterhin 1.0.32, unveröffentlichte lokale Korrekturen;
+Git-HEAD unverändert 429554c468ca8bdad820d57eea0fa57b339cad55, Standardbranch main.
+Skill humhub-development und zentrale Regeln am bestehenden Pin
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f berücksichtigt.
+
+Gesicherte Kopien: /private/tmp/sociolog-mamp-e2e-20261013/118 und /119,
+eigene Datenbanken sociolog_e2e118_20261013 und sociolog_e2e119_20261013.
+Vor neuen Prüfdaten zusätzliche private Sicherungen 118-before-accept.sql und
+119-before-accept.sql sowie Sicherungen der Testkopien-Webkonfiguration.
+Je Kopie zehn neue künstliche Konten und neue eigene Räume/Entscheidungen.
+Nur diese neuen IDs waren für die nativen Löschtests zugelassen.
+Separate neue Tabellen e2e_accept_queue und e2e_digest_accept_queue;
+vorhandene Warteschlangen und zurückgehaltene Archivaufträge nicht abgearbeitet.
+Unit-Suiten separat auf *_suite_20261013-Fixture-Datenbanken; Browser und Unit-
+Suite wurden nacheinander ausgeführt. Keine Testsuite an Bestandsdaten angeschlossen.
+
+Automatische Abnahme
+--------------------
+Vollständiger endgültiger Teststand je Core: 92 Tests / 6.070 Assertions bestanden.
+Damit auch die zuletzt ergänzte Queue-Bootstrap-Prüfung im vollständigen Lauf enthalten.
+Die vorhandene Suite deckt unter anderem ACL, Widerruf, Content-Lifecycle,
+Eintrags-/Benutzerlöschung, sichere Altupdates, Validierung, Escaping, Fristen,
+Formular-/Notification-/Digest-Korrekturen ab. Belege full118.log und full119.log.
+Vorliegende Syntax-/Metadatenprüfungen aus dem B2-Schritt bleiben gültig;
+in diesem Abnahmeschritt wurde kein PHP-/JavaScript-Modulcode geändert.
+
+Erneute Browserabnahme – beide Versionen bestanden
+-------------------------------------------------
+1. Native Adminlöschung in all/space/selected, jeweils mit neuem künstlichem
+   Eigentümer, eigenem privaten Space, Beschluss, Protokoll, Flow, Review,
+   privatem Anhang und historischer Dateiversion:
+   - Gleichzeitiges Löschen des Logbuch-Spaces sichtbar abgelehnt;
+     kein Löschjob und keine Änderung der Prüfdaten.
+   - Bei ausgeschalteter Space-Löschoption native Eigentumsübergabe und
+     vollständiger DeleteUser-Job erfolgreich.
+   - Räume und fachliche Beschlussfelder erhalten. Alle sieben Autorverweise
+     auf das neue Archivkonto übertragen. Dateien/Dateiversionen SHA-256-identisch.
+2. Archivkonto: Adminlöschung mit/ohne Beiträge und eigene Kontolöschung mit
+   gültigem Passwort sichtbar abgelehnt, kein Auftrag eingereiht, Konto aktiv.
+3. Normale Selbstlöschung: tatsächliches Kontoformular, Logout und native
+   SoftDeleteUser-Ausführung erfolgreich. Status 3, Benutzername geändert,
+   E-Mail und Passwortanmeldung entfernt; Archivübertragung und Dateierhalt geprüft.
+4. Danach mit dem künstlichen Leser alle vier Beschlüsse und Anhänge je Core
+   geöffnet: HTTP 200 und exakte Dateibytes. Keine künstliche Modul-Vorinitialisierung
+   des Löschworkers; initiallyLoaded=false in den Nachweisen.
+5. Weitere neue Entscheidung im echten Rich-Text-Formular angelegt und als
+   berechtigter Manager bearbeitet; bisheriges Organ bleibt erhalten.
+   Kein JavaScript-Seitenfehler während dieser Formularabläufe.
+6. Normales Lesekonto darf den Beschluss ansehen, aber nicht manipuliert speichern:
+   native Ablehnung per Redirect HTTP 302, fachlicher Titel unverändert.
+   Admin-POST ohne CSRF-Token HTTP 400. Gast wird zur Anmeldung weitergeleitet.
+7. Erzwungener Passwortwechsel sperrt den Logbuchzugriff bis zur Freigabe.
+   Wartungsmodus sperrt das Mitglied, lässt den Systemadministrator zu.
+   Die temporären Testkopien-Einstellungen wurden anschließend zurückgesetzt.
+
+Testhilfenkorrekturen: Eine verzögerte native Weiterleitung unterbrach zunächst
+eine Folgebrowsernavigation; die Hilfe wartet nun auf die tatsächliche Zielseite.
+Ein Browser-fetch mit redirect=manual meldete einen undurchsichtigen Status 0.
+Die Rechteablehnung wurde mit gültigem CSRF und tatsächlich sichtbarem HTTP 302
+nachgeprüft. Dies waren Testablaufprobleme, keine neuen Modulfehler. Zusätzliche
+künstliche Prüfeinträge bleiben auf den Kopien; keine Altbestände bereinigt.
+
+Geplanter Digest und SMTP – beide Versionen bestanden
+----------------------------------------------------
+Der Benutzer wählte ausdrücklich den lokalen SMTP-Testserver. Er lief nur auf
+127.0.0.1:16925, akzeptierte ausschließlich die neuen künstlichen Empfänger und
+stellte keine Nachricht an externe Mailserver zu. Keine SMTP-Zugangsdaten benötigt.
+Es handelt sich um echten SMTP-Transport, nicht um useFileTransport.
+
+Geprüfte Kette:
+Activity\Events::onCronDailyRun -> native SendMailSummary-Jobs (Intervalle 2/3)
+-> echte MySQL-Queue -> unveränderter MailSummaryProcessor -> B2-Digest -> SMTP.
+Für den Test wurde der wöchentliche Fälligkeitstag nur im laufenden Testprozess
+auf heute gesetzt. Der echte native Zeitplanhandler wurde angestoßen, statt bis
+zum nächsten Betriebssystem-Crontermin zu warten. Andere Cron-Handler wurden
+nicht ausgelöst, damit Bestandsentscheidungen und fremde Wartungsjobs unberührt bleiben.
+Kein produktiver Cron installiert oder umgestellt.
+
+Je Core vier neue Empfänger: täglicher berechtigter Leser/Außenkonto ohne Recht,
+wöchentlicher berechtigter Leser/Außenkonto ohne Recht. Lesemodus selected erlaubt
+nur die beiden Leser. Deren persönliche Intervalle und Versandzeitpunkte wurden
+ausschließlich für diesen Test gesetzt. Vorab keine bestehenden exklusiven
+Digest-Aufträge vorhanden; es wurden nur die zwei neuen Digestjobs verarbeitet.
+
+Zusätzliche Testisolation: Die native Factory verwendet im Test eine Unterklasse
+der unveränderten B2-Komponente, die nur diese vier Empfänger zulässt. Bei anderen
+Benutzern kehrt sie ohne Mailerzeugung/Änderung des Versandzeitpunkts zurück.
+Der echte globale Core-Processor durchläuft seine normale Benutzer-/Intervall-
+Prüfung und Cachebereinigung; es gehen keine Mails an bestehende Benutzer.
+Scheduler, Jobklassen, Queue und Core-Processor wurden nicht ersetzt oder geändert.
+
+Ergebnisse je Core:
+- Zeitplanhandler hat einen täglichen und einen wöchentlichen Job eingereiht.
+- Beide Jobs vollständig ausgeführt; keine ausstehenden Digestjobs.
+- Je eine tägliche und wöchentliche Nachricht per SMTP angenommen (vier insgesamt).
+- Berechtigte Empfänger erhalten den neuen Logbucheintrag sowie den echten
+  privaten Core-Kontrollbeitrag. Titel mit &, Umlaut und <Test> im HTML sicher
+  escaped, im Klartext vollständig enthalten.
+- Beide Außenkonten ohne Leserecht erhalten keinen Logbucheintrag und keine Mail
+  aus diesem privaten Prüfraum. Aktuelle ACL gilt auch beim geplanten Versand.
+- SMTP-Gegenprobe: nicht freigegebener künstlicher Empfänger mit Status 550
+  bereits beim RCPT-Kommando abgelehnt; keine Zustellung.
+
+Die 48 Daily/Weekly-MIME-Prüfungen des unmittelbar vorherigen B2-Berichts für
+all/space/selected, ausgewähltes Außenkonto, Rechteentzug und Space-Ausschluss
+bleiben ergänzende Belege. Sie wurden hier nicht als weitere 48 neue Fälle gezählt.
+
+Bestand und Abschluss
+--------------------
+Abschließender Vergleich: acht ursprüngliche Sociolog-Tabellen und funktionale
+Sociolog-Einstellungen je Originalinstallation unverändert. Je drei ursprüngliche
+Beschlüsse in den Anwendungs-Testkopien unverändert. Core-Dateien bytegleich,
+23 veröffentlichte Migrationen unverändert; weiterhin insgesamt 25 Migrationen.
+186 relevante Moduldateien vor Dokumentation mit lokalem Git-Mirror identisch,
+sieben geprüfte B2-PHP-Dateien in beiden Kopien bytegleich zum Arbeitsstand.
+Bekannte Statuslauf-Metriken können durch andere lokale Aktivität abweichen;
+es wird keine Gleichheit sämtlicher Originaldatenbanktabellen behauptet.
+Nur neu angelegte künstliche Konten im genehmigten Löschtest entfernt/stillgelegt.
+Originalinstallationen nicht aktualisiert. Keine bestehenden Datenbankmigrationen
+auf Anwendungsdatenbanken ausgeführt und keine GitHub-Aktion.
+Der eigene Browser-Testserver und der lokale SMTP-Testprozess sind beendet.
+
+Verbleibende Grenzen
+-------------------
+Lokaler SMTP-Transport ist bestätigt; externe Postfachzustellung, SMTP-Authentifizierung,
+TLS und konkrete Providerkonfiguration wurden nach der gewählten lokalen Option
+nicht geprüft. Betriebssystem-Crontermin/Daemon im Dauerbetrieb nicht beobachtet.
+Stündliche/monatliche Zusammenfassung nicht separat Ende-zu-Ende abgenommen.
+Keine neue Kalender-/Papierkorb-Zusatzmodul-, LDAP/SSO-, S3/Remote-Store-, REST-/Mobile-,
+Last-/Parallelbenutzer- oder weitere PHP-Laufzeitprüfung. Frühere Updateprüfungen
+und feste Versionsbelege bleiben erhalten; nicht jeder historische Upgradepfad neu
+ausgeführt. Tabellenpräfixe bleiben nicht unterstützt, ebenso bleiben die bereits
+dokumentierten Grenzen eigener Lesecontainer in Fremdmodulen bestehen.
+Die Abnahme bestätigt den geprüften lokalen Umfang, ist aber kein allgemeiner
+Beweis der Fehlerfreiheit aller Installations- und Erweiterungskombinationen.
+
+Nachweise in evidence/
+---------------------
+full118.log / full119.log und suite-results.json: vollständige Tests.
+browser.json / browser-summary.json und Screenshots: native Löschabläufe und Erhalt.
+ui-results.json und Screenshots: Formulare, Rechte, CSRF, Gates und JavaScript.
+118-scheduled-smtp.json / 119-scheduled-smtp.json: native Zeitplan-/Queue-Durchläufe.
+smtp-results.json / smtp-recipient-guard.json: SMTP-Inhalt, Empfängerrechte und Ablehnung.
+final-integrity.json: Daten-/Core-/Migrationen-/Git-Vergleich.
+SMTP-MIME-Dateien, Zugänge und Sicherungen ausschließlich im privaten temporären
+Testverzeichnis, nicht im Modulrepository oder diesem Nachweispaket.
+
+Nächster sinnvoller Schritt: den geprüften lokalen Stand als neue Version zur
+Veröffentlichung vorbereiten. Commit, Upload und Release benötigen weiterhin
+einen ausdrücklichen Auftrag. Vor Einsatz auf einer echten Installation deren
+Sicherung, konkreten Updatepfad und produktiven Mail-/Cronbetrieb prüfen.

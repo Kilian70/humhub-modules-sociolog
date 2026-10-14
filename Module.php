@@ -33,7 +33,7 @@ class Module extends BaseModule
     public $resourcesPath = 'resources';
 
     /** 🧩 Modul-Version & Kompatibilität */
-    public string $version = '1.0.32';
+    public string $version = '1.0.33';
     public string $humhubMinVersion = '1.18';
     
   
@@ -43,6 +43,7 @@ class Module extends BaseModule
 public function init()
 {
     parent::init();
+    \humhub\modules\sociolog\components\LogbookMailSummary::register();
 
     // ============================================================
     // 📁 Modul-Alias setzen (HumHub Best Practice)
@@ -111,6 +112,15 @@ public function init()
         null,
         false
     );
+    // Profile content is removed at this earlier event. Queue/form preflight
+    // additionally runs before Core can start deleting owned Spaces.
+    Event::on(
+        \humhub\modules\user\models\User::class,
+        \humhub\modules\user\models\User::EVENT_BEFORE_SOFT_DELETE,
+        [\humhub\modules\sociolog\Events::class, 'onUserSoftDelete'],
+        null,
+        false
+    );
 }
     
     // ============================================================
@@ -156,6 +166,7 @@ public function init()
     {
         // Check before HumHub registers the module as enabled.
         \humhub\modules\sociolog\services\SociologMigrationService::assertSupportedDatabase();
+        \humhub\modules\sociolog\services\LegacyUpgradeService::assertNormalRouteSafe();
         return parent::enable();
     }
 
