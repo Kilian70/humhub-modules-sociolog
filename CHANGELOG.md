@@ -3,6 +3,12 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## Unveröffentlicht
+
+- MAMP-Browserprüfung: Rich-Text-Feld korrekt an die Formularvalidierung anbinden; jede neue Überprüfung mit eigenem Editor ohne Übernahme vorheriger Editor-Entwürfe öffnen.
+- „Überprüfung dokumentieren“ öffnet unabhängig von der Pflegeoption immer ein eigenes Formular mit neuer Pflichtbegründung und speichert diese im Verlauf, ohne die ursprüngliche Begründung zu überschreiben.
+- Eingeschränkte Überprüfung auch ohne Entscheidungsworkflow zugänglich machen. Zuständige Personen können ein zukünftiges Datum, eine neue Pflichtbegründung im Verlauf und einen zusätzlichen Protokolllink erfassen; ursprüngliche Eintragsangaben und vorhandene Protokolle bleiben erhalten. Das Ergebnis kann im eingeschränkten Formular auch per manipuliertem Request nicht geändert werden.
+
 ## [1.0.33] – 2026-10-14
 
 Enthält alle geprüften Korrekturen F1–F10, D1, B1 und B2 seit 1.0.32.

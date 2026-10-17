@@ -1,5 +1,16 @@
 # Sociolog: geprüfter Arbeitsstand vom 11.10.2026
 
+## Überprüfungen mit neuer Begründung, 17.10.2026
+
+- Auftrag: aktuellen GitHub-Stand berücksichtigen, eingeschränkte Pflege fälliger Einträge ermöglichen und bei jeder Überprüfung eine neue Pflichtbegründung erfassen, auch bei ausgeschalteter Pflegeoption. Ursprüngliche Begründung und frühere Überprüfungen erhalten.
+- Modulbasis: `f42cb3955ce67d1da25f4af4d9060f05ae60f4c6` (main, Version 1.0.33), am 17.10.2026 frisch von GitHub geladen. Zentrale Regeln lokal mit GitHub abgeglichen: `9854ea97c1db1c82e18c7c8dcc097810b6615a4f`, README.md und docs/REGELN.md berücksichtigt.
+- Zielprüfungen anhand der bestehenden Modulziele: offizielle HumHub-Kerncommits 1.18.6 `870e35a44dd8ec03c659bc698e75a9a8ec244dc3` und 1.19.0 `8f22a72361841404b3b442306126650fc0f8153b`. Die installierte Version der Nutzerinstallation wurde nicht ermittelt.
+- Quellen erneut gelesen: jeweilige CLAUDE.md und MIGRATE-DEV.md bzw. docs/develop/module-migrate-1.19.md; ContentActiveRecord und Controller beider Refs. Offizielles Beispiel `humhub/example-basic`: module.json (minVersion 1.18) und controllers/IndexController.php auf master, Blob `c3c075fc15709837ce50ff386d698d345187eaac`. Keine neue HumHub-API-Abhängigkeit eingeführt.
+- Separate neue Kernkopien und zwei leere Prüfdatenbanken auf eigenem MySQL-8.0.40-Prozess; PHP 8.3.14. Bestehende MAMP-Installationen und ihre Datenbanken nicht geändert. Vorhandene Vendor-Verzeichnisse nur lesend als Abhängigkeiten genutzt.
+- Beide Zielversionen: je 100 Tests / 6.183 Assertions erfolgreich, darunter acht neue Regressionstests. PHP-Syntax auf 8.3.14, 8.4.17 und 8.5.2 geprüft; Modulmetadaten gültig.
+- Zusätzlich ausdrücklich beauftragt: MAMP-Prüfung beider offiziellen Versionen. Eigene neue MAMP-Adressen, Web-PHP 8.3.14 (cgi-fcgi), künstliche Konten. Eingeschränktes Speichern, Pflichtbegründung, weitere Überprüfung mit ausgeschalteter Pflegeoption, Erhalt vorheriger Texte/Links und unberechtigter Direktzugriff im echten Browser geprüft. Dabei Feldselektor und wiederverwendete Editor-Entwürfe korrigiert; Quellen AbstractRichTextEditor und humhub.ui.richtext.prosemirror.js beider Refs zusätzlich gelesen.
+- Keine Migration und keine Versionsanhebung. Kein Commit, Push, Release oder Deployment. Ergebnis und Prüfgrenzen: `UEBERPRUEFUNG-2026-10-17.txt`.
+
 ## Aktueller Entwicklungsauftrag: Löschschutz, 13.10.2026
 
 - Ausdrücklich beauftragt: zuerst die zwei Benutzerlöschschutzfehler korrigieren und unter offiziellen HumHub-Versionen 1.18.6 und 1.19.0 prüfen. Keine bestehenden Anwendungsdaten löschen und nichts auf GitHub hochladen.

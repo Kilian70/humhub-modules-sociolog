@@ -1,3 +1,7 @@
+AKTUELLER NACHTRAG: 17.10.2026
+Überprüfungsformular und eingeschränkte Pflege: siehe UEBERPRUEFUNG-2026-10-17.txt.
+Die folgenden Angaben dokumentieren frühere Aufträge und Prüfstände.
+
 Historischer Teilbericht der ursprünglichen Fehlerkorrekturen.
 Aktueller Gesamtstand: docs/ai/AKTUELLER_TESTSTAND.txt.
 

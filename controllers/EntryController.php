@@ -653,40 +653,6 @@ public function actionReturn($id)
 public function actionReview($id)
 {
     $model = $this->findModel($id);
-    $limitedMaintenanceEnabled = (bool)Yii::$app->getModule('sociolog')
-        ->settings
-        ->get('limitedReviewMaintenanceEnabled', false);
-
-    if (!$limitedMaintenanceEnabled) {
-        if (!$model->canWrite(Yii::$app->user->identity)) {
-            throw new \yii\web\ForbiddenHttpException(
-                Yii::t('SociologModule.base', 'Du hast keine Berechtigung.')
-            );
-        }
-
-        if (!Yii::$app->request->isPost) {
-            throw new \yii\web\MethodNotAllowedHttpException();
-        }
-
-        if (!EntryFlow::log(
-            $model->id,
-            $model->current_organ,
-            $model->current_organ,
-            'review'
-        )) {
-            throw new \yii\web\ServerErrorHttpException(
-                Yii::t('SociologModule.base', 'Der Verlaufsschritt konnte nicht gespeichert werden.')
-            );
-        }
-
-        Yii::$app->session->setFlash(
-            'success',
-            Yii::t('SociologModule.base', 'Überprüfung wurde dokumentiert.')
-        );
-
-        return $this->redirect(['view', 'id' => $model->id]);
-    }
-
     if (!$model->canMaintainReview(Yii::$app->user->identity)) {
         throw new \yii\web\ForbiddenHttpException(
             Yii::t('SociologModule.base', 'Du hast keine Berechtigung.')
@@ -694,11 +660,14 @@ public function actionReview($id)
     }
 
     $form = new ReviewForm([
+        'scenario' => $model->canWrite(Yii::$app->user->identity)
+            ? ReviewForm::SCENARIO_DEFAULT
+            : ReviewForm::SCENARIO_LIMITED,
         'result' => EntryReview::RESULT_CONFIRMED,
         'reviewDate' => null,
     ]);
 
-    if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+    if (Yii::$app->request->isPost && $form->load(Yii::$app->request->post()) && $form->validate()) {
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
@@ -706,9 +675,13 @@ public function actionReview($id)
             $model->review_date = $form->result === EntryReview::RESULT_CONFIRMED
                 ? $form->reviewDate
                 : null;
-            $model->status = $form->result === EntryReview::RESULT_CONFIRMED
-                ? Entry::STATUS_VALID
-                : Entry::STATUS_EXPIRED;
+            if ($form->scenario !== ReviewForm::SCENARIO_LIMITED) {
+                $model->status = $form->result === EntryReview::RESULT_CONFIRMED
+                    ? Entry::STATUS_VALID
+                    : Entry::STATUS_EXPIRED;
+            }
+            // Im eingeschränkten Modus ändert nur die bestehende automatische
+            // Statusberechnung in beforeSave() den Status; manuelle Endzustände bleiben erhalten.
             if (!$model->save(false, ['review_date', 'status'])) {
                 throw new \RuntimeException('Review result could not be saved.');
             }
