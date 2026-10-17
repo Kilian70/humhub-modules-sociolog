@@ -17,22 +17,29 @@ class ReviewForm extends Model
     public $reviewDate;
     public $protocolTitle;
     public $protocolUrl;
+    public $replacementUrl;
 
     public function scenarios(): array
     {
         $scenarios = parent::scenarios();
-        // Das Ergebnis bleibt serverseitig auf „bestehen bleibt“ festgelegt.
-        $scenarios[self::SCENARIO_LIMITED] = ['justification', 'reviewDate', 'protocolTitle', 'protocolUrl'];
+        $scenarios[self::SCENARIO_LIMITED] = ['result', 'justification', 'reviewDate', 'protocolTitle', 'protocolUrl', 'replacementUrl'];
         return $scenarios;
     }
 
     public function rules(): array
     {
         return [
+            [['justification'], 'trim'],
             [['result', 'justification'], 'required'],
-            [['result'], 'in', 'range' => [EntryReview::RESULT_CONFIRMED, EntryReview::RESULT_REPEALED]],
+            [['result'], 'in', 'range' => array_keys(EntryReview::resultOptions())],
             [['justification'], 'string', 'max' => 5000],
-            [['reviewDate'], 'required', 'when' => fn(self $model): bool => $model->result === EntryReview::RESULT_CONFIRMED],
+            [['reviewDate'], 'filter', 'filter' => fn($value) => $this->result === EntryReview::RESULT_CONFIRMED ? $value : null, 'skipOnEmpty' => false],
+            [['reviewDate'], 'required', 'when' => fn(self $model): bool => $model->result === EntryReview::RESULT_CONFIRMED, 'enableClientValidation' => false],
+            [['replacementUrl'], 'trim'],
+            [['replacementUrl'], 'filter', 'filter' => fn($value) => $this->result === EntryReview::RESULT_REPLACED ? $value : null, 'skipOnEmpty' => false],
+            [['replacementUrl'], 'required', 'when' => fn(self $model): bool => $model->result === EntryReview::RESULT_REPLACED, 'enableClientValidation' => false],
+            [['replacementUrl'], 'string', 'max' => 1000],
+            [['replacementUrl'], 'url', 'validSchemes' => ['http', 'https']],
             [['reviewDate'], 'date', 'format' => 'php:Y-m-d'],
             [['reviewDate'], 'validateNextReviewDate'],
             [['protocolTitle', 'protocolUrl'], 'trim'],
@@ -72,6 +79,7 @@ class ReviewForm extends Model
     public function attributeLabels(): array
     {
         return [
+            'replacementUrl' => Yii::t('SociologModule.base', 'Link zum neuen Beschluss'),
             'result' => Yii::t('SociologModule.base', 'Ergebnis der Überprüfung'),
             'justification' => Yii::t('SociologModule.base', 'Neue Begründung der Überprüfung'),
             'reviewDate' => Yii::t('SociologModule.base', 'Nächste Überprüfung ab'),

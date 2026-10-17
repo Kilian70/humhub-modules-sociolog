@@ -3,6 +3,12 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
+## [1.0.35] – 2026-10-17
+
+- Zuständige Personen können bei einer fälligen eingeschränkten Überprüfung auch „Nicht mehr gültig“ oder „Ersetzt“ wählen. Neue Begründung bleibt Pflicht, ursprüngliche Angaben bleiben erhalten.
+- „Ersetzt“ benötigt einen HTTP-/HTTPS-Link zum neuen Beschluss, der im Überprüfungsverlauf gespeichert und angezeigt wird. Ausser Kraft gesetzte und ersetzte Beschlüsse erhalten kein nächstes Überprüfungsdatum und bleiben von der Statusautomatik geschützt.
+- Neue additive Migration ergänzt `replacement_url` in der Überprüfungstabelle; vor dem Einsatz Modulmigrationen ausführen. Keine Änderung veröffentlichter Migrationen.
+
 ## [1.0.34] – 2026-10-17
 
 - MAMP-Browserprüfung: Rich-Text-Feld korrekt an die Formularvalidierung anbinden; jede neue Überprüfung mit eigenem Editor ohne Übernahme vorheriger Editor-Entwürfe öffnen.

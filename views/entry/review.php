@@ -15,6 +15,20 @@ $this->title = Yii::t('SociologModule.base', 'Überprüfung dokumentieren');
 $limited = $formModel->scenario === ReviewForm::SCENARIO_LIMITED;
 // Jede Überprüfung beginnt mit einem eigenen Feld statt einem alten Editor-Entwurf.
 $reviewEditorId = 'sociolog-review-justification-' . bin2hex(random_bytes(8));
+$this->registerJs(<<<'JS'
+(function () {
+    var result = $('#reviewform-result');
+    function updateReviewFields() {
+        $('.field-reviewform-reviewdate').toggle(result.val() === 'confirmed');
+        $('#reviewform-reviewdate').prop('disabled', result.val() !== 'confirmed');
+        $('.field-reviewform-replacementurl').toggle(result.val() === 'replaced');
+        $('#reviewform-replacementurl').prop('disabled', result.val() !== 'replaced');
+    }
+    result.on('change', updateReviewFields);
+    updateReviewFields();
+})();
+JS
+);
 ?>
 
 <div class="panel panel-default">
@@ -28,16 +42,14 @@ $reviewEditorId = 'sociolog-review-justification-' . bin2hex(random_bytes(8));
             <?= Yii::t(
                 'SociologModule.base',
                 $limited
-                    ? 'Du kannst das nächste Überprüfungsdatum setzen, die Überprüfung begründen und ein neues Protokoll verlinken. Die ursprünglichen Angaben bleiben unverändert.'
+                    ? 'Du kannst den Beschluss bestätigen, ausser Kraft setzen oder als ersetzt kennzeichnen. Erfasse eine neue Begründung und bei Bedarf ein zusätzliches Protokoll. Die ursprünglichen Angaben bleiben unverändert.'
                     : 'Der ursprüngliche Beschlusstext und die ursprüngliche Begründung bleiben unverändert. Dokumentiere hier das Ergebnis und eine neue Begründung der Überprüfung.'
             ) ?>
         </p>
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <?php if (!$limited): ?>
-            <?= $form->field($formModel, 'result')->dropDownList(EntryReview::resultOptions()) ?>
-        <?php endif; ?>
+        <?= $form->field($formModel, 'result')->dropDownList(EntryReview::resultOptions()) ?>
 
         <?= $form->field($formModel, 'justification', [
             'selectors' => ['input' => '#' . $reviewEditorId . '_input'],
@@ -48,9 +60,14 @@ $reviewEditorId = 'sociolog-review-justification-' . bin2hex(random_bytes(8));
             'pluginOptions' => ['maxHeight' => '320px'],
         ]) ?>
 
-        <?= $form->field($formModel, 'reviewDate')->input('date')->hint($limited ? '' :
+        <?= $form->field($formModel, 'reviewDate')->input('date')->hint(
             Yii::t('SociologModule.base', 'Nur erforderlich, wenn der Entscheid bestehen bleibt.')
         ) ?>
+
+        <?= $form->field($formModel, 'replacementUrl')->input('url', [
+            'maxlength' => true,
+            'placeholder' => 'https://',
+        ])->hint(Yii::t('SociologModule.base', 'Bei „Ersetzt“ ist der Link zum neuen Beschluss erforderlich.')) ?>
 
         <fieldset class="mt-4">
             <legend class="h5">

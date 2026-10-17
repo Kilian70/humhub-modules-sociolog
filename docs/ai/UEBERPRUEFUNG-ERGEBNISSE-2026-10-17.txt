@@ -1,0 +1,95 @@
+Sociolog – Ergebniswahl bei eingeschränkter Überprüfung, 17.10.2026
+
+AUFTRAG UND VERHALTEN
+Zuständige Personen sollen fällige Beschlüsse auch ausser Kraft setzen oder als
+ersetzt kennzeichnen dürfen. Jede Überprüfung verlangt eine neue Begründung.
+- Bestehen bleibt: zukünftiges Überprüfungsdatum erforderlich.
+- Nicht mehr gültig: Status expired, nächstes Überprüfungsdatum entfernt.
+- Ersetzt: Status replaced, Pflichtlink (HTTP/HTTPS) zum Nachfolgebeschluss;
+  kein nächstes Überprüfungsdatum. Link wird an der Überprüfung gespeichert.
+- Ursprünglicher Beschluss, Originalbegründung, sonstige Angaben und vorhandene
+  Protokolle bleiben erhalten. Zusätzliche Protokolle können angehängt werden.
+- Keine zusätzlichen regulären Bearbeitungsrechte. Bestehende Zuständigkeits-,
+  Lese- und Fälligkeitsprüfung bleibt bestehen. Option aus: volle Schreibrechte nötig.
+- Ergebniswahl ist unabhängig von Entscheidungsworkflow/erweiterten Statuswerten.
+- Eingeschränkte Bestätigung reaktiviert geschützte Endzustände weiterhin nicht.
+  Auch Cron/automatische Statusberechnung respektieren expired und replaced.
+
+BASIS UND QUELLEN
+GitHub-main am 17.10.2026 abgeglichen: fdf37ef07c7de83a98a3ed05325333fc6da698e0
+(Version 1.0.34). Zentrale Regeln unverändert:
+Kilian70/humhub-ai-dev, 9854ea97c1db1c82e18c7c8dcc097810b6615a4f,
+docs/REGELN.md gelesen. Modul-ID sociolog, Mindestversion 1.18 unverändert.
+Offizielle HumHub-Kernkopien:
+- 1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3
+- 1.19.0: 8f22a72361841404b3b442306126650fc0f8153b (regulär)
+CLAUDE.md und versionsbezogene Migrationshinweise erneut berücksichtigt.
+HumHub components/Migration.php beider Zielstände und services/MigrationService.php
+geprüft; keine neue externe API-Abhängigkeit. HumHub-Migrationsklasse verwendet.
+Offizielles Beispiel humhub/example-basic: module.json minVersion 1.18;
+IndexController-Blob c3c075fc15709837ce50ff386d698d345187eaac erneut abgeglichen.
+Yii-Modell/ActiveForm des vorhandenen Formulars weiterverwendet.
+
+DATEIEN UND DATENBANK
+ReviewForm: sichere Ergebniswahl, neue URL-Eingabe, bedingte Pflichtfelder,
+serverseitige URL-/Ergebnisvalidierung. Nicht zutreffende Eingaben werden entfernt.
+EntryReview: Ergebnis replaced, URL-Validierung und sichere Ausgabe der URL.
+EntryController: Ergebnis -> Status, URL im Review, bestehende Transaktion.
+review.php: Auswahl auch eingeschränkt, abhängige Eingaben anzeigen/deaktivieren.
+view.php: Nachfolgelink im historischen Review. Adminhinweis/README/EN aktualisiert.
+Neue Migration m261017_120000_add_review_replacement_url:
+nullable VARCHAR(1000) replacement_url in sociolog_entry_review.
+Alle veröffentlichten Migrationen unverändert. Vor Einsatz Modulmigration ausführen.
+Die neue Migration ist additiv. Ein späteres Entfernen dieser Spalte würde die
+neu erfassten Nachfolgelinks verlieren; daher vor Rücknahme Datenbank sichern.
+
+PRÜFUNGEN
+- Beide Zielstände: vollständige Modulsuite je 106 Tests / 6.313 Assertions OK.
+- Nach letzter Formularänderung gezielte Suite je 14 Tests / 241 Assertions OK.
+- Sechs zusätzliche Regressionstests: eingeschränkt aufheben/ersetzen, ungültige
+  Ergebnisse/fehlende Gründe/unsichere URLs, Manager mit Option aus, unsichere
+  importierte URL nicht ausgeben, fehlende Berechtigung bei ausgeschalteter Option.
+- Bestehende GET-/Fälligkeits-/Fremdbenutzer-/Originaldatenschutztests weiter grün.
+- Neue Migration separat: bestehende Überprüfungszeile mit Text/Ergebnis bleibt
+  unverändert, URL bleibt NULL; safeDown/safeUp auf leerer Tabelle erfolgreich.
+- Vollständige Modul-Neuinstallation: je 26 Migrationen erfolgreich in eigens
+  angelegten leeren Datenbanken mit Core-Tabellenschema, danach entfernt.
+  Dabei SQL-Sitzung sql_mode='' verwendet: die veröffentlichte historische
+  Migration m260316_220000_fix_decision_date scheitert ansonsten an ihrem Vergleich
+  mit '0000-00-00' bei aktiviertem NO_ZERO_DATE. Kein neuer Fehler dieser Ergänzung;
+  keine veröffentlichten Migrationen hierfür verändert. Die neue additive
+  Migration wurde separat auch mit dem Standard-SQL-Modus geprüft.
+- 140 PHP-Dateien: Syntax unter PHP 8.3.14 und 8.5.2 OK; Metadatenprüfung OK.
+- JavaScript des tatsächlichen Formulars: sichtbare/deaktivierte Felder bei allen
+  drei Ergebnissen und beim Hin-/Herwechsel geprüft (Node, simulierte Elemente).
+- git diff --check ohne Fehler.
+
+MAMP-WEBPRÜFUNG
+Getrennte offizielle Kernkopien am MAMP-Apache, Port 8888; echte Web-PHP-Version
+beider Adressen erneut 8.3.14, SAPI cgi-fcgi. Eigener MySQL-8.0.40-Prozess auf 33187,
+ausschliesslich künstliche Konten und Testdaten; keine vorhandene Vereinsinstallation.
+Je 1.18.6 und 1.19.0 authentifizierte HTTP-Abläufe mit normalen Sitzungen/CSRF:
+- reguläre Anmeldung (1.19 mit getrenntem Passwortschritt)
+- Ergebniswahl und Linkfeld im ausgelieferten Formular vorhanden
+- ausser Kraft setzen ohne nächstes Datum erfolgreich
+- Ersatz ohne Link abgewiesen; mit Link erfolgreich gespeichert/angezeigt
+- Originalbegründung und Originalprotokoll in den Detailseiten erhalten
+Diese zusätzliche Abnahme verwendet HTTP-Formularaufrufe. Eine erneute visuelle
+Browser-/Richtext-Bedienprüfung war nicht möglich: Browserwerkzeug startet wegen
+fehlendem Laufzeit-Arbeitsverzeichnis nicht. Keine solche Prüfung behauptet.
+Die vorherige visuelle Abnahme für Version 1.0.34 bleibt historisch dokumentiert.
+Keine neue Mail-/Kalender-/CSRF-Angriffstestsuite. Vorhandene Vendor-Verzeichnisse
+lesend genutzt, keine neue Composer-Lockfile-Installation behauptet.
+Temporäre MAMP-Adressen/Diagnoseendpunkte nach Abschluss wieder entfernt.
+
+REPRODUKTION
+HUMHUB_PATH=/isolierte/kernkopie php /kernkopie/protected/vendor/bin/codecept run unit -c /modul/tests/codeception.yml
+Gezielt: gleicher Aufruf mit ReviewMaintenanceTest hinter unit.
+Manuell: Pflegeoption aktivieren, fälligen gesperrten Eintrag als zuständige Person
+öffnen. Alle drei Ergebnisse prüfen. Für Bestätigung Zukunftsdatum verlangen,
+für Ersatz Nachfolgelink, immer neue Begründung. Originaltext/-protokolle vergleichen.
+Fremdbenutzer darf Review-URL nicht ausführen. Status nach Cronlauf erhalten.
+
+ÜBERGABE
+Lokale unveröffentlichte Ergänzung auf Basis 1.0.34. Version unverändert.
+Kein Commit, Push, Merge, Release oder Deployment für diese Ergänzung.
