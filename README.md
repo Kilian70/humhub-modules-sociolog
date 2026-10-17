@@ -11,13 +11,15 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.33
+**Version:** 1.0.34
 
-**Release:** 1.0.33 vom 14.10.2026.
+**Release:** 1.0.34 vom 17.10.2026.
 
-Alle Korrekturen seit 1.0.32 sind enthalten. Geprüft unter HumHub **1.18.6** und der offiziellen **1.19.0** mit PHP 8.3.30 und MySQL 8.0.44. Die Unterstützung von HumHub 1.18 bleibt erhalten.
+Überprüfungen erfassen immer eine neue Pflichtbegründung im Verlauf. Die ursprüngliche Begründung bleibt erhalten. Die eingeschränkte Pflege erlaubt zuständigen Personen bei fälligen, gesperrten Einträgen ein neues Überprüfungsdatum, eine neue Begründung und einen zusätzlichen Protokolllink.
 
-[Änderungen in 1.0.33](AENDERUNGEN-1.0.33.md) · [Update-Anleitung](UPDATE-1.0.33.md) · [Abnahme und Prüfgrenzen](docs/ai/ABNAHME-2026-10-14.txt). Das Update enthält zwei zusätzliche Migrationen. Vor einem Update Datenbank und Dateien sichern; bei älteren, noch nicht vollständig migrierten Installationen zuerst die Update-Anleitung lesen.
+Geprüft unter HumHub **1.18.6** und der regulären **1.19.0**: je 100 Tests / 6.183 Assertions mit PHP 8.3.14 und MySQL 8.0.40 sowie echte MAMP-Browserabläufe. Die bestehenden Funktionen aus 1.0.33 sind enthalten.
+
+[Änderungen in 1.0.34](AENDERUNGEN-1.0.34.md) · [Update-Anleitung](UPDATE-1.0.34.md) · [Prüfbericht und Grenzen](docs/ai/UEBERPRUEFUNG-2026-10-17.txt). Gegenüber 1.0.33 gibt es keine neue Datenbankmigration. Für ältere Installationen gelten weiterhin die Hinweise zum geschützten Updatepfad.
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  

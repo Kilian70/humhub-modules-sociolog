@@ -162,3 +162,9 @@ Relevante APIs: `humhub/components/Module.php`, `humhub/services/MigrationServic
 - Module.php/module.json/composer.json/README auf 1.0.33, minimum weiterhin 1.18.0. Neue Anwenderübersicht und Update-Anleitung; frühere technische Nachweise erhalten. Keine Funktionsänderung seit Abnahme.
 - Entpacktes 1.0.33-Paket je 92 Tests/6070 Assertions auf eigenen Fixture-Testdatenbanken; je zehn isolierte JS-Browserfälle, 137 PHP-Syntaxprüfungen und Paket-/Metadatenprüfung bestanden. Kein produktives Update, keine Anwendungsdatenmigration und keine GitHub-Aktion.
 - ZIP mit Prüfsumme lokal erzeugt, 23 veröffentlichte Migrationen unverändert. Details: docs/ai/VERSION-1.0.33-2026-10-14.txt.
+
+## Veröffentlichungsfreigabe, 17.10.2026
+
+- Nutzer hat ausdrücklich die Übernahme von PR #22 nach main und eine neue Veröffentlichung beauftragt. PR #22 wurde mit Mergecommit b07da07 übernommen.
+- Release 1.0.34 erhöht ausschließlich die Versionsangaben in Module.php, module.json und composer.json und aktualisiert die Release-/Update-Dokumentation. Die getestete Funktionslogik bleibt unverändert; keine neue Migration.
+- GitHub-Stable-Prüfungen des Funktionsstands erfolgreich unter PHP 8.2 bis 8.5. Develop scheiterte vor Modultests an HTTP 404 des Testservers. Keine erfolgreiche Develop-Abnahme behaupten.

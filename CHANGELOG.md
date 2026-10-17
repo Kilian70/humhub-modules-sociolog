@@ -3,7 +3,7 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
-## Unveröffentlicht
+## [1.0.34] – 2026-10-17
 
 - MAMP-Browserprüfung: Rich-Text-Feld korrekt an die Formularvalidierung anbinden; jede neue Überprüfung mit eigenem Editor ohne Übernahme vorheriger Editor-Entwürfe öffnen.
 - „Überprüfung dokumentieren“ öffnet unabhängig von der Pflegeoption immer ein eigenes Formular mit neuer Pflichtbegründung und speichert diese im Verlauf, ohne die ursprüngliche Begründung zu überschreiben.
