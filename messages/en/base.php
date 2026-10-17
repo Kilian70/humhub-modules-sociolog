@@ -600,8 +600,8 @@ return [
 => 'Allow limited maintenance after a review',
 'Zuständige Personen dürfen bei veröffentlichten Einträgen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
 => 'Responsible users may only set the next review date and link one additional protocol for published entries. Other fields remain locked.',
-'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen nur das nächste Überprüfungsdatum setzen und ein zusätzliches Protokoll verlinken. Andere Felder bleiben gesperrt.'
-=> 'As soon as the review date is reached, responsible users may only set the next review date and link one additional protocol. Other fields remain locked.',
+'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen das nächste Überprüfungsdatum setzen, eine neue Begründung zur Überprüfung erfassen und ein zusätzliches Protokoll verlinken. Die ursprüngliche Begründung und andere Felder bleiben gesperrt.'
+=> 'As soon as the review date is reached, responsible users may set the next review date, add a new review justification and link one additional protocol. The original justification and other fields remain locked.',
 'Für ein neues Protokoll werden Titel und Link benötigt.'
 => 'A title and link are required for a new protocol.',
 'Titel des neuen Protokolls' => 'Title of the new protocol',
@@ -713,6 +713,9 @@ return [
 'Nur der Betrieb des Logbuches darf diese Berechtigungen verwalten.' => 'Only logbook operations may manage these permissions.',
 'Ergebnis der Überprüfung' => 'Review result',
 'Begründung der Überprüfung' => 'Review justification',
+'Neue Begründung der Überprüfung' => 'New review justification',
+'Der ursprüngliche Beschlusstext und die ursprüngliche Begründung bleiben unverändert. Dokumentiere hier das Ergebnis und eine neue Begründung der Überprüfung.' => 'The original decision text and justification remain unchanged. Document the review result and a new justification here.',
+'Du kannst das nächste Überprüfungsdatum setzen, die Überprüfung begründen und ein neues Protokoll verlinken. Die ursprünglichen Angaben bleiben unverändert.' => 'You can set the next review date, justify the review and link a new protocol. The original information remains unchanged.',
 'Entscheid bleibt bestehen' => 'Decision remains in force',
 'Entscheid wird ausser Kraft gesetzt' => 'Decision is repealed',
 'Nächste Überprüfung ab' => 'Next review from',

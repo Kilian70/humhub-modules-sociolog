@@ -56,9 +56,6 @@ $canMaintainReview = $model->canMaintainReview(Yii::$app->user->identity);
 $workflowEnabled = Yii::$app->getModule('sociolog')
     ->settings
     ->get('decisionWorkflowEnabled', true);
-$limitedReviewMaintenanceEnabled = (bool)Yii::$app->getModule('sociolog')
-    ->settings
-    ->get('limitedReviewMaintenanceEnabled', false);
 
 $organColor = Entry::getOrganColor($model->organName);
 $organLink  = Entry::getOrganLink($model->getDecisionOrgan());
@@ -323,7 +320,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
 <?php endif; ?>
 
 
-<?php if ($workflowEnabled && $canMaintainReview && $model->decision_date): ?>
+<?php if ($canMaintainReview && ($model->published_at || $model->decision_date)): ?>
 
 <div class="mt-2">
 
@@ -332,8 +329,7 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
     . Yii::t('SociologModule.base', 'Überprüfung dokumentieren'),
     ['review', 'id' => $model->id],
     [
-        'class' => 'btn btn-info btn-sm',
-        'data-method' => $limitedReviewMaintenanceEnabled ? null : 'post'
+        'class' => 'btn btn-info btn-sm'
     ]
 ) ?>
 

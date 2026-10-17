@@ -1,0 +1,140 @@
+Sociolog – Überprüfungen mit neuer Begründung
+Arbeitsstand 17.10.2026, unveröffentlicht
+
+AUSGANGSSTAND UND AUFTRAG
+
+GitHub main: f42cb3955ce67d1da25f4af4d9060f05ae60f4c6 (Version 1.0.33).
+Frisch geladen und vor Übergabe erneut lesend mit GitHub abgeglichen.
+Zentrale Regeln: humhub-ai-dev, Commit
+9854ea97c1db1c82e18c7c8dcc097810b6615a4f, README.md und docs/REGELN.md.
+Die bereits auf GitHub vorhandenen Änderungen bleiben die Grundlage.
+
+Vom Nutzer präzisiert: Bei JEDER Überprüfung ein eigenes Formular mit einer
+neuen Pflichtbegründung öffnen, unabhängig von der eingeschränkten Pflegeoption.
+Die ursprüngliche Begründung darf dabei nicht geändert werden.
+
+VERHALTEN
+
+1. „Überprüfung dokumentieren“ öffnet ein separates Formular mit leerem Feld
+   „Neue Begründung der Überprüfung“. Die bisherige Begründung wird nicht in das
+   neue Feld übernommen. Jede Speicherung ergänzt einen eigenen Verlaufseintrag
+   mit Person, Zeitpunkt, bisherigem/neuem Überprüfungsdatum und optionalem Protokoll.
+2. Das Formular ist auch bei ausgeschalteter eingeschränkter Pflege verfügbar,
+   sofern die Person reguläre Bearbeitungsrechte hat. Der frühere reine
+   Verlaufsklick ohne Begründung entfällt.
+3. Die Pflegeoption gewährt zuständigen Personen bei gesperrten, veröffentlichten
+   Einträgen ab dem expliziten Überprüfungsdatum den zusätzlichen begrenzten Zugang.
+   Auch bei ausgeschaltetem Entscheidungsworkflow ist die Aktion erreichbar.
+4. Im eingeschränkten Szenario sind nur neue Überprüfungsbegründung, zukünftiges
+   Überprüfungsdatum und ein neuer Protokolllink mit Titel übernehmbar. Das Ergebnis
+   ist serverseitig festgelegt und nicht per Formular oder manipuliertem POST änderbar.
+   Bestehende Protokolle werden nicht ersetzt oder entfernt. Titel, ursprüngliche
+   Begründung, Beschluss, Organ und sonstige fachliche Eintragsangaben werden nicht
+   aus Requestdaten übernommen. Die bestehende automatische Statusberechnung läuft
+   weiter; manuelle Endzustände werden im eingeschränkten Modus nicht reaktiviert.
+5. Öffnen per GET speichert nichts, auch mit übermitteltem Formularkörper.
+   Speichern erfordert POST. Native HumHub-Zugriffs-/CSRF-Mechanismen bleiben aktiv.
+6. Bestehende weitergehende Bearbeitungsrechte, insbesondere konfigurierte
+   Logbuch-Manager und globale Bearbeitungsrechte, bleiben erhalten. Im vollständigen
+   Formular kann weiterhin das Überprüfungsergebnis gewählt werden.
+
+DATEIEN
+
+controllers/EntryController.php – allgemeines Formular, POST-Prüfung, Szenariowahl.
+models/ReviewForm.php – begrenzte übernehmbare Eingaben, klare neue Feldbezeichnung.
+views/entry/review.php – Ergebnis nur bei vollem Zugriff, Erklärung zur neuen Begründung;
+Rich-Text-Selektor für native ActiveForm-Prüfung, eigener Editor je Formular und
+backupInterval=0 gegen Übernahme früherer Editor-Entwürfe.
+views/entry/view.php – Formularlink unabhängig vom Entscheidungsworkflow.
+views/admin/index.php, messages/en/base.php – Hinweise und englische Übersetzungen.
+README.md, CHANGELOG.md, docs/ai/PROJEKT.md, docs/ai/REVIEW.txt – Dokumentation.
+tests/codeception/unit/ReviewMaintenanceTest.php – acht neue Regressionstests.
+
+QUELLEN
+
+HumHub 1.18.6: https://github.com/humhub/humhub/tree/870e35a44dd8ec03c659bc698e75a9a8ec244dc3
+HumHub 1.19.0: https://github.com/humhub/humhub/tree/8f22a72361841404b3b442306126650fc0f8153b
+Jeweilige CLAUDE.md, Migrationshinweise, ContentActiveRecord und Controller gelesen.
+Offizielles Beispiel: https://github.com/humhub/example-basic
+module.json (minVersion 1.18) und controllers/IndexController.php, Blob
+c3c075fc15709837ce50ff386d698d345187eaac. Keine neue Kern-API-Abhängigkeit.
+
+PRÜFUNGEN
+
+HumHub 1.18.6: 100 Tests / 6.183 Assertions erfolgreich.
+HumHub 1.19.0: 100 Tests / 6.183 Assertions erfolgreich.
+Darin acht neue Regressionstests zum Überprüfungsformular. Prüfprotokolle:
+tests/verification/review-2026-10-17-humhub-118.txt und -119.txt.
+139 PHP-Dateien syntaktisch unter PHP 8.3.14, 8.4.17 und 8.5.2 erfolgreich geprüft.
+Modulmetadaten-/Assetprüfung und git diff --check erfolgreich.
+PHP 8.3.14, MySQL 8.0.40. Neue Kernkopien und zwei neue Datenbanken auf eigenem
+lokalem Testserver, ausschließlich offizielle Fixtures und künstliche Daten.
+Vorhandene MAMP-Vendor-Verzeichnisse nur als lesende Abhängigkeiten genutzt.
+Keine bestehenden HumHub-Installationen, Module oder Datenbanken aktualisiert.
+
+Zentrale Vorlagenprüfungen: 15 Python-Tests erfolgreich; Installervorschau erfolgreich,
+keine Dateien durch die Vorschau angelegt.
+
+Reproduktion nach Einrichtung einer separaten Kernkopie und Testdatenbank:
+HUMHUB_PATH=/pfad/zur/isolierten/kernkopie php /pfad/zur/kernkopie/protected/vendor/bin/codecept run unit -c /pfad/zum/modul/tests/codeception.yml --no-colors
+
+MANUELLE ABNAHME
+
+1. Auf einer Testinstallation Pflegeoption aktivieren und veröffentlichte Einträge
+   sperren. Einen Eintrag mit heute fälligem Überprüfungsdatum verwenden.
+2. Als zuständige Person „Überprüfung dokumentieren“ öffnen, auch wenn der
+   Entscheidungsworkflow ausgeschaltet ist. Keine Ergebniswahl und keine regulären
+   Eintragsfelder dürfen im eingeschränkten Formular angeboten werden.
+3. Neue Begründung, zukünftiges Datum und optional neuen Protokolllink speichern.
+   Originalbegründung und bisherige Protokolle vergleichen. Im Verlauf müssen die
+   neue Begründung sowie Person, Zeitpunkt, neues Datum und neuer Link erscheinen.
+4. Pflegeoption ausschalten. Als Person mit regulären Bearbeitungsrechten erneut
+   prüfen: Formular mit NEUER Pflichtbegründung öffnet weiterhin; keine sofortige
+   Dokumentation nur durch den Klick. Ursprüngliche Begründung bleibt erhalten.
+5. Als unzuständige Person und nach Entzug der Space-Zuständigkeit versuchen,
+   die Review-URL direkt aufzurufen. Zugriff muss abgewiesen werden.
+
+GRENZEN UND ÜBERGABE
+
+Direkte Controller-/Modellintegration und serverseitig gerenderte Formulare getestet.
+Zusätzlich echte angemeldete MAMP-Browserabläufe siehe unten. Kein umfassender
+HTTP-/CSRF-Angriffstest und keine tatsächliche Mailzustellung oder Kalenderintegration
+für diesen Auftrag. PHP/Version der externen Nutzeranlage bleiben unbekannt.
+Kein Nachweis für andere Versionen.
+Keine neue Migration, keine Bestandsbereinigung. Modulversion bleibt 1.0.33.
+Kein Commit, Push, Merge, Release oder Deployment. Der ZIP-Entwurf ist keine Freigabe.
+
+MAMP-BROWSERABNAHME, ZUSÄTZLICHER AUFTRAG 17.10.2026
+
+Offizielle Kernkopien direkt am vorhandenen MAMP-Apache (Port 8888) eingebunden:
+- /sociolog-review-118/: CORE=1.18.6, PHP=8.3.14, SAPI=cgi-fcgi.
+- /sociolog-review-119/: CORE=1.19.0, PHP=8.3.14, SAPI=cgi-fcgi.
+Versionen zusätzlich per eigenem, rein lesendem HTTP-Diagnoseendpunkt bestätigt.
+Keine Betaversion als 1.19-Ziel. Vorhandene MAMP-Seiten wurden nicht verändert.
+Neu angelegte Testadressen und eigene künstliche Datenbanken; drei Fixturekonten.
+Keine echten Benutzerkonten, Kundendaten oder Produktionsdaten verwendet.
+
+Je Version tatsächlich im Browser durchgeführt:
+- Zuständige Person bei gesperrtem veröffentlichtem Eintrag und ausgeschaltetem
+  Entscheidungsworkflow: Überprüfungsformular erreichbar, keine Ergebniswahl.
+- Leere neue Begründung wird mit sichtbarer Fehlermeldung abgewiesen.
+- Neue Begründung, zukünftiges Datum und zusätzlicher Protokolllink erfolgreich
+  über das echte Formular gespeichert. Originalbegründung und Originalprotokoll
+  in der Detailansicht unverändert, neuer Text separat im Verlauf mit Person/Datum.
+- Pflegeoption in der Testkonfiguration ausgeschaltet und als Logbuch-Manager
+  eine zweite neue Begründung gespeichert. Beide früheren Texte bleiben erhalten.
+- Folgeformular startet mit leerem Editor, kein alter Entwurf wird übernommen.
+- Als unzuständige Person die Review-URL direkt aufgerufen: „Du hast keine
+  Berechtigung.“ Der geschützte Formularzugriff wird am Server abgewiesen.
+
+Zwei im Browser bestätigte Formularprobleme im Rahmen des Auftrags korrigiert:
+1. ActiveForm verwendete den Standardselektor statt der verborgenen Textarea des
+   Rich-Text-Editors. Jetzt zeigt die Validierung auf die tatsächliche Eingabe.
+2. Die feste Editor-ID konnte einen früheren Editor-Entwurf wiederherstellen.
+   Jede Überprüfung erhält eine eigene ID; Entwurfssicherung für dieses Feld aus.
+   POST-Validierungsfehler behalten die aktuell eingereichte Begründung serverseitig.
+
+Belege in der Übergabe: MAMP-118-Verlauf.jpg und MAMP-119-Verlauf.jpg.
+Die Kern-Abhängigkeiten wurden aus den vorhandenen MAMP-Vendor-Verzeichnissen
+lesend verwendet; dies ist kein neu ausgeführter Composer-Lockfile-Installationstest.
+Die Testadressen sind temporäre Abnahmeumgebungen, keine neue Vereinsinstallation.

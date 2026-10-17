@@ -159,15 +159,27 @@ unter anderem festlegen:
 - welche Benutzer oder Gruppen das Logbuch verwalten dürfen
 - wie Feldbezeichnungen und der erste Status im Formular heißen
 
+### Überprüfung dokumentieren
+
+Die Aktion öffnet immer ein eigenes Formular mit einer neuen Pflichtbegründung,
+auch wenn die eingeschränkte Pflege ausgeschaltet ist. Sie überschreibt weder die
+ursprüngliche Begründung noch frühere Überprüfungen. Jede Überprüfung wird mit
+Person, Zeitpunkt und optionalem zusätzlichem Protokoll im Verlauf gespeichert.
+Ohne eingeschränkte Pflege benötigen Personen die regulären Bearbeitungsrechte.
+
 ### Eingeschränkte Pflege nach einer Überprüfung
 
 Ist diese Option aktiviert und das Überprüfungsdatum erreicht, dürfen berechtigte
-Administrator:innen des zuständigen Spaces nur:
+Personen des zuständigen Spaces nur:
 
-- ein neues Überprüfungsdatum festlegen
+- ein neues Überprüfungsdatum in der Zukunft festlegen
+- eine neue, verpflichtende Begründung der Überprüfung erfassen
 - ein zusätzliches Protokoll verlinken
 
-Titel, Beschlusstext, Zuständigkeit und andere veröffentlichte Angaben bleiben gesperrt.
+Die neue Begründung wird mit Person und Zeitpunkt im Überprüfungsverlauf gespeichert.
+Die ursprüngliche Begründung, Titel, Beschlusstext, Zuständigkeit und andere
+veröffentlichte Angaben bleiben gesperrt. Die Funktion ist auch bei ausgeschaltetem
+Entscheidungsworkflow verfügbar.
 Konfigurierte Logbuch-Manager behalten ihre weitergehenden Verwaltungsrechte.
 Systemadministratoren haben weiterhin Zugang zu den Moduleinstellungen, benötigen zum
 Erstellen, Bearbeiten oder Löschen von Einträgen jedoch ebenfalls die entsprechenden

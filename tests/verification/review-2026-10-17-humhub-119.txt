@@ -1,0 +1,207 @@
+Codeception PHP Testing Framework v5.3.5 https://stand-with-ukraine.pp.ua
+
+Sociolog.unit Tests (100) ------------------------------------------------------
+- DigestCompatibilityTest: Recipient acl is independent of worker identity and revocation
+✔ DigestCompatibilityTest: Recipient acl is independent of worker identity and revocation (1.42s)
+- DigestCompatibilityTest: Native space preferences use original space and suppressions
+✔ DigestCompatibilityTest: Native space preferences use original space and suppressions (0.50s)
+- DigestCompatibilityTest: Native delivery contains safe html plaintext and does not repeat entries
+✔ DigestCompatibilityTest: Native delivery contains safe html plaintext and does not repeat entries (0.20s)
+- DigestCompatibilityTest: Old deleted and own entries are excluded
+✔ DigestCompatibilityTest: Old deleted and own entries are excluded (0.09s)
+- DigestCompatibilityTest: Group selection and fresh request bootstrap
+✔ DigestCompatibilityTest: Group selection and fresh request bootstrap (0.47s)
+- EntryDeletionLifecycleTest: Controller trash fires record events and can be restored
+✔ EntryDeletionLifecycleTest: Controller trash fires record events and can be restored (0.13s)
+- EntryDeletionLifecycleTest: Cancelled record deletion keeps all data
+✔ EntryDeletionLifecycleTest: Cancelled record deletion keeps all data (0.07s)
+- EntryDeletionLifecycleTest: Unauthorized controller deletion does not change content
+✔ EntryDeletionLifecycleTest: Unauthorized controller deletion does not change content (0.07s)
+- EntryDeletionLifecycleTest: Hard deletion callback does not recurse or use stale content
+✔ EntryDeletionLifecycleTest: Hard deletion callback does not recurse or use stale content (0.09s)
+- EntryDeletionLifecycleTest: Misplaced compatibility callback never deletes live or trashed entry
+✔ EntryDeletionLifecycleTest: Misplaced compatibility callback never deletes live or trashed entry (0.09s)
+- EntryLifecycleTest: Explicit forwarding target takes precedence
+✔ EntryLifecycleTest: Explicit forwarding target takes precedence (0.04s)
+- EntryLifecycleTest: Create edit and soft delete
+✔ EntryLifecycleTest: Create edit and soft delete (0.09s)
+- EntryLifecycleTest: Configured write and delete rights
+✔ EntryLifecycleTest: Configured write and delete rights (0.11s)
+- EntryLifecycleTest: Review history persists without changing decision text
+✔ EntryLifecycleTest: Review history persists without changing decision text (0.07s)
+- EntryLifecycleTest: Selected writers replace automatic space admin access
+✔ EntryLifecycleTest: Selected writers replace automatic space admin access (0.05s)
+- FormRenderingTest: Native active form and generated return urls
+✔ FormRenderingTest: Native active form and generated return urls (0.13s)
+- LegacyUpgradeTest: Legacy ids and serialized selections resolve without deleting rows
+✔ LegacyUpgradeTest: Legacy ids and serialized selections resolve without deleting rows (0.05s)
+- LegacyUpgradeTest: Unknown format and unresolvable ids abort without writes
+✔ LegacyUpgradeTest: Unknown format and unresolvable ids abort without writes (0.04s)
+- LegacyUpgradeTest: Module route rejects unprotected pending history
+✔ LegacyUpgradeTest: Module route rejects unprotected pending history (0.28s)
+- LegacyUpgradeTest: Raw archive is additive and never overwrites original snapshot
+✔ LegacyUpgradeTest: Raw archive is additive and never overwrites original snapshot (0.81s)
+- LegacyUpgradeTest: Controlled guard flag is cleared even when migration throws
+✔ LegacyUpgradeTest: Controlled guard flag is cleared even when migration throws (0.05s)
+- LegacyUpgradeTest: Partial organ schema stops before any data changes
+✔ LegacyUpgradeTest: Partial organ schema stops before any data changes (0.04s)
+- MailAndEditCompatibilityTest: Native html and plain mail renderers keep literal titles and correct event
+✔ MailAndEditCompatibilityTest: Native html and plain mail renderers keep literal titles and correct event (0.17s)
+- MailAndEditCompatibilityTest: Mail content handles missing source without broken link
+✔ MailAndEditCompatibilityTest: Mail content handles missing source without broken link (0.04s)
+- MailAndEditCompatibilityTest: Manager keeps existing organ without gaining create or move rights
+✔ MailAndEditCompatibilityTest: Manager keeps existing organ without gaining create or move rights (0.10s)
+- MigrationSchemaTest: Complete migration result
+✔ MigrationSchemaTest: Complete migration result (0.06s)
+- NotificationRenderingTest: Web titles and module names are encoded exactly once
+✔ NotificationRenderingTest: Web titles and module names are encoded exactly once (0.09s)
+- NotificationRenderingTest: Missing source uses safe unencoded fallback text
+✔ NotificationRenderingTest: Missing source uses safe unencoded fallback text (0.04s)
+- NotificationRenderingTest: Mail subjects keep plain text characters
+✔ NotificationRenderingTest: Mail subjects keep plain text characters (0.08s)
+- ObjectionDeadlineTest: Ten full days and exact expiry boundary
+✔ ObjectionDeadlineTest: Ten full days and exact expiry boundary (0.04s)
+- ObjectionDeadlineTest: Legacy date does not invent publication time
+✔ ObjectionDeadlineTest: Legacy date does not invent publication time (0.04s)
+- ObjectionDeadlineTest: Publication is captured once and cannot be posted
+✔ ObjectionDeadlineTest: Publication is captured once and cannot be posted (0.11s)
+- ObjectionDeadlineTest: Reopened decision clears deadline and new decision restarts it
+✔ ObjectionDeadlineTest: Reopened decision clears deadline and new decision restarts it (0.16s)
+- ObjectionDeadlineTest: Optional display and legacy hint
+✔ ObjectionDeadlineTest: Optional display and legacy hint (0.05s)
+- ObjectionDeadlineTest: Display uses exact deadline boundary
+✔ ObjectionDeadlineTest: Display uses exact deadline boundary (0.04s)
+- ObjectionDeadlineTest: Legacy display ends after last day in formatter time zone
+✔ ObjectionDeadlineTest: Legacy display ends after last day in formatter time zone (0.04s)
+- ObjectionDeadlineTest: Display setting round trips and rejects malformed values
+✔ ObjectionDeadlineTest: Display setting round trips and rejects malformed values (1.01s)
+- ReadAccessTest: Default grants active non members but never guests
+✔ ReadAccessTest: Default grants active non members but never guests (0.07s)
+- ReadAccessTest: Guest visible space uses persistent private container
+✔ ReadAccessTest: Guest visible space uses persistent private container (0.07s)
+- ReadAccessTest: Space membership and revocation protect native content
+✔ ReadAccessTest: Space membership and revocation protect native content (0.75s)
+- ReadAccessTest: Selected users groups and immediate revocation
+✔ ReadAccessTest: Selected users groups and immediate revocation (0.88s)
+- ReadAccessTest: Denied reader cannot use detail search or single content stream
+✔ ReadAccessTest: Denied reader cannot use detail search or single content stream (0.51s)
+- ReadAccessTest: Policy applies to new entries and cannot be made public through core
+✔ ReadAccessTest: Policy applies to new entries and cannot be made public through core (0.92s)
+- ReadAccessTest: Settings reject malformed selections and unsafe calendar combination
+✔ ReadAccessTest: Settings reject malformed selections and unsafe calendar combination (0.04s)
+- ReadAccessTest: Legacy rows follow read policy without creating content
+✔ ReadAccessTest: Legacy rows follow read policy without creating content (0.88s)
+- ReadAccessTest: Failed synchronization rolls back settings and content
+✔ ReadAccessTest: Failed synchronization rolls back settings and content (0.47s)
+- ReadAccessTest: Selection revocation cannot be hidden by settings cache
+✔ ReadAccessTest: Selection revocation cannot be hidden by settings cache (0.49s)
+- ReadScopeLifecycleTest: Permanent deletion cleans only its own container
+✔ ReadScopeLifecycleTest: Permanent deletion cleans only its own container (0.10s)
+- ReadScopeLifecycleTest: Trash and restore keep scope and access
+✔ ReadScopeLifecycleTest: Trash and restore keep scope and access (0.10s)
+- ReadScopeLifecycleTest: Existing orphans are reported but not swept
+✔ ReadScopeLifecycleTest: Existing orphans are reported but not swept (0.14s)
+- ReadScopeLifecycleTest: Foreign content prevents container deletion
+✔ ReadScopeLifecycleTest: Foreign content prevents container deletion (0.11s)
+- ReadScopeLifecycleTest: Wrong or missing container is retained
+✔ ReadScopeLifecycleTest: Wrong or missing container is retained (0.11s)
+- ReadScopeLifecycleTest: Entry without scope can still be deleted
+✔ ReadScopeLifecycleTest: Entry without scope can still be deleted (0.07s)
+- RegressionTest: Saving default labels does not fix administrators language
+✔ RegressionTest: Saving default labels does not fix administrators language (0.43s)
+- RegressionTest: Module translations respect german and english locales
+✔ RegressionTest: Module translations respect german and english locales (0.04s)
+- RegressionTest: Module installation rejects unsupported prefix before migrations
+✔ RegressionTest: Module installation rejects unsupported prefix before migrations (0.04s)
+- RegressionTest: Date validation rejects invalid and array values
+✔ RegressionTest: Date validation rejects invalid and array values (0.04s)
+- RegressionTest: Hidden type cannot be saved but existing type can be retained
+✔ RegressionTest: Hidden type cannot be saved but existing type can be retained (0.09s)
+- RegressionTest: Effective date uses publication and configured extra day
+✔ RegressionTest: Effective date uses publication and configured extra day (0.09s)
+- RegressionTest: Former invited and disabled members have no selected writer access
+✔ RegressionTest: Former invited and disabled members have no selected writer access (0.04s)
+- RegressionTest: Search rejects malformed inputs without throwing
+✔ RegressionTest: Search rejects malformed inputs without throwing (0.04s)
+- RegressionTest: Status search keeps protected and forwarded states
+✔ RegressionTest: Status search keeps protected and forwarded states (0.15s)
+- RegressionTest: Implicit review of leap day uses calendar anniversary
+✔ RegressionTest: Implicit review of leap day uses calendar anniversary (0.04s)
+- RegressionTest: Search and daily run use the same date fallbacks
+✔ RegressionTest: Search and daily run use the same date fallbacks (0.31s)
+- RegressionTest: Organ stores integer timestamps
+✔ RegressionTest: Organ stores integer timestamps (0.04s)
+- RegressionTest: Unchanged protocols retain review reference and removal is rejected
+✔ RegressionTest: Unchanged protocols retain review reference and removal is rejected (0.07s)
+- RegressionTest: Historical import updates actual content record
+✔ RegressionTest: Historical import updates actual content record (0.06s)
+- RegressionTest: Review only author is transferred to archive account
+✔ RegressionTest: Review only author is transferred to archive account (0.10s)
+- ReviewMaintenanceTest: Due review is accessible without decision workflow
+✔ ReviewMaintenanceTest: Due review is accessible without decision workflow (0.11s)
+- ReviewMaintenanceTest: Limited post preserves original and existing protocols
+✔ ReviewMaintenanceTest: Limited post preserves original and existing protocols (0.11s)
+- ReviewMaintenanceTest: Get with form body never saves review
+✔ ReviewMaintenanceTest: Get with form body never saves review (0.09s)
+- ReviewMaintenanceTest: Limited input requires new justification future date and valid link
+✔ ReviewMaintenanceTest: Limited input requires new justification future date and valid link (0.22s)
+- ReviewMaintenanceTest: Maintenance requires enabled option due date and current responsibility
+✔ ReviewMaintenanceTest: Maintenance requires enabled option due date and current responsibility (0.10s)
+- ReviewMaintenanceTest: Foreign user cannot review and limited user cannot use update
+✔ ReviewMaintenanceTest: Foreign user cannot review and limited user cannot use update (0.09s)
+- ReviewMaintenanceTest: Limited review never reactivates protected status
+✔ ReviewMaintenanceTest: Limited review never reactivates protected status (0.10s)
+- ReviewMaintenanceTest: Review always opens new justification when limited option is disabled
+✔ ReviewMaintenanceTest: Review always opens new justification when limited option is disabled (0.11s)
+- RichTextSecurityStressTest: Active content is not rendered
+✔ RichTextSecurityStressTest: Active content is not rendered (0.09s)
+- RichTextSecurityStressTest: Many formatted previews can be converted
+✔ RichTextSecurityStressTest: Many formatted previews can be converted (0.25s)
+- SecurityValidationTest: Entry rejects oversized title
+✔ SecurityValidationTest: Entry rejects oversized title (0.05s)
+- SecurityValidationTest: Entry rejects oversized rich text before database write
+✔ SecurityValidationTest: Entry rejects oversized rich text before database write (0.05s)
+- SecurityValidationTest: Protocol rejects unsafe and oversized urls
+✔ SecurityValidationTest: Protocol rejects unsafe and oversized urls (0.04s)
+- SecurityValidationTest: Organ rejects hierarchy cycle
+✔ SecurityValidationTest: Organ rejects hierarchy cycle (0.04s)
+- SecurityValidationTest: Review requires justification and next date when confirmed
+✔ SecurityValidationTest: Review requires justification and next date when confirmed (0.04s)
+- SecurityValidationTest: Selected writer guids are stored as unique json values
+✔ SecurityValidationTest: Selected writer guids are stored as unique json values (0.04s)
+- SecurityValidationTest: Rich text preview removes formatting markup
+✔ SecurityValidationTest: Rich text preview removes formatting markup (0.04s)
+- StatusBatchStressTest: Status run processes large logbook in batches
+✔ StatusBatchStressTest: Status run processes large logbook in batches (0.33s)
+- UserDeletionProtectionTest: Unloaded module still protects native forms and archive status
+✔ UserDeletionProtectionTest: Unloaded module still protects native forms and archive status (0.27s)
+- UserDeletionProtectionTest: Unloaded module guards serialized jobs and transfers soft delete authors
+✔ UserDeletionProtectionTest: Unloaded module guards serialized jobs and transfers soft delete authors (0.39s)
+- UserDeletionProtectionTest: Archive account is protected before native soft and hard deletion
+✔ UserDeletionProtectionTest: Archive account is protected before native soft and hard deletion (0.16s)
+- UserDeletionProtectionTest: Native admin and account forms cannot delete archive or transfer its spaces
+✔ UserDeletionProtectionTest: Native admin and account forms cannot delete archive or transfer its spaces (0.20s)
+- UserDeletionProtectionTest: Archive status save cannot bypass deletion guard
+✔ UserDeletionProtectionTest: Archive status save cannot bypass deletion guard (0.08s)
+- UserDeletionProtectionTest: Space deletion option is rejected without changing data
+✔ UserDeletionProtectionTest: Space deletion option is rejected without changing data (0.23s)
+- UserDeletionProtectionTest: Existing queued deletion is blocked before touching owned space
+✔ UserDeletionProtectionTest: Existing queued deletion is blocked before touching owned space (0.23s)
+- UserDeletionProtectionTest: Archive cannot be queued and old archive job is also rejected
+✔ UserDeletionProtectionTest: Archive cannot be queued and old archive job is also rejected (0.19s)
+- UserDeletionProtectionTest: Ownership handover and hard deletion retain entry history and attachment
+✔ UserDeletionProtectionTest: Ownership handover and hard deletion retain entry history and attachment (0.74s)
+- UserDeletionProtectionTest: Soft deletion transfers references without deleting entry
+✔ UserDeletionProtectionTest: Soft deletion transfers references without deleting entry (0.17s)
+- UserDeletionProtectionTest: Missing archive is rejected before native form or job changes data
+✔ UserDeletionProtectionTest: Missing archive is rejected before native form or job changes data (0.22s)
+- UserDeletionProtectionTest: Safe maintenance entry point rejects owned space before core deletion
+✔ UserDeletionProtectionTest: Safe maintenance entry point rejects owned space before core deletion (0.30s)
+- UserDeletionProtectionTest: Attachment only author is transferred and unrelated file is not archived
+✔ UserDeletionProtectionTest: Attachment only author is transferred and unrelated file is not archived (0.19s)
+- UserDeletionProtectionTest: Disabled preservation leaves native job semantics intact
+✔ UserDeletionProtectionTest: Disabled preservation leaves native job semantics intact (0.13s)
+--------------------------------------------------------------------------------
+Time: 01:03.681, Memory: 50.00 MB
+
+OK (100 tests, 6183 assertions)

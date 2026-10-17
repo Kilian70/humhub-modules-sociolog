@@ -10,11 +10,21 @@ use yii\base\Model;
  */
 class ReviewForm extends Model
 {
+    public const SCENARIO_LIMITED = 'limited';
+
     public $result;
     public $justification;
     public $reviewDate;
     public $protocolTitle;
     public $protocolUrl;
+
+    public function scenarios(): array
+    {
+        $scenarios = parent::scenarios();
+        // Das Ergebnis bleibt serverseitig auf „bestehen bleibt“ festgelegt.
+        $scenarios[self::SCENARIO_LIMITED] = ['justification', 'reviewDate', 'protocolTitle', 'protocolUrl'];
+        return $scenarios;
+    }
 
     public function rules(): array
     {
@@ -63,7 +73,7 @@ class ReviewForm extends Model
     {
         return [
             'result' => Yii::t('SociologModule.base', 'Ergebnis der Überprüfung'),
-            'justification' => Yii::t('SociologModule.base', 'Begründung der Überprüfung'),
+            'justification' => Yii::t('SociologModule.base', 'Neue Begründung der Überprüfung'),
             'reviewDate' => Yii::t('SociologModule.base', 'Nächste Überprüfung ab'),
             'protocolTitle' => Yii::t('SociologModule.base', 'Titel des neuen Protokolls'),
             'protocolUrl' => Yii::t('SociologModule.base', 'Link zum neuen Protokoll'),
