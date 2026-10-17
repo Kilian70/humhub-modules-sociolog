@@ -11,15 +11,16 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.34
+**Version:** 1.0.35
 
-**Release:** 1.0.34 vom 17.10.2026.
+**Release:** 1.0.35 vom 17.10.2026.
 
-Überprüfungen erfassen immer eine neue Pflichtbegründung im Verlauf. Die ursprüngliche Begründung bleibt erhalten. Die eingeschränkte Pflege erlaubt zuständigen Personen bei fälligen, gesperrten Einträgen ein neues Überprüfungsdatum, eine neue Begründung und einen zusätzlichen Protokolllink.
+Bei einer fälligen Überprüfung können zuständige Personen den Beschluss bestätigen, ausser Kraft setzen oder als ersetzt kennzeichnen. Eine neue Begründung ist immer Pflicht, bei Ersatz zusätzlich der Link zum neuen Beschluss. Ursprüngliche Angaben bleiben erhalten.
 
-Geprüft unter HumHub **1.18.6** und der regulären **1.19.0**: je 100 Tests / 6.183 Assertions mit PHP 8.3.14 und MySQL 8.0.40 sowie echte MAMP-Browserabläufe. Die bestehenden Funktionen aus 1.0.33 sind enthalten.
+Geprüft unter HumHub **1.18.6** und der regulären **1.19.0**: je 106 Tests / 6.313 Assertions mit PHP 8.3.14 und MySQL 8.0.40. Die Ergänzung wurde zusätzlich über die echten MAMP-Webformulare per HTTP geprüft; keine neue visuelle Browserabnahme.
 
-[Änderungen in 1.0.34](AENDERUNGEN-1.0.34.md) · [Update-Anleitung](UPDATE-1.0.34.md) · [Prüfbericht und Grenzen](docs/ai/UEBERPRUEFUNG-2026-10-17.txt). Gegenüber 1.0.33 gibt es keine neue Datenbankmigration. Für ältere Installationen gelten weiterhin die Hinweise zum geschützten Updatepfad.
+[Änderungen in 1.0.35](AENDERUNGEN-1.0.35.md) · [Update-Anleitung](UPDATE-1.0.35.md) · [Prüfbericht und Grenzen](docs/ai/UEBERPRUEFUNG-ERGEBNISSE-2026-10-17.txt). **Eine neue additive Datenbankmigration ist erforderlich.** Für ältere Installationen gilt weiterhin der geschützte Updatepfad.
+
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
 **Lizenz:** GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later)  
@@ -174,11 +175,20 @@ Ohne eingeschränkte Pflege benötigen Personen die regulären Bearbeitungsrecht
 Ist diese Option aktiviert und das Überprüfungsdatum erreicht, dürfen berechtigte
 Personen des zuständigen Spaces nur:
 
-- ein neues Überprüfungsdatum in der Zukunft festlegen
+- den Beschluss bestätigen und ein neues Überprüfungsdatum in der Zukunft festlegen
+- den Beschluss als „Nicht mehr gültig“ ausser Kraft setzen
+- „Ersetzt“ wählen und den neuen Beschluss über einen HTTP-/HTTPS-Link verknüpfen
 - eine neue, verpflichtende Begründung der Überprüfung erfassen
 - ein zusätzliches Protokoll verlinken
 
 Die neue Begründung wird mit Person und Zeitpunkt im Überprüfungsverlauf gespeichert.
+Bei „Nicht mehr gültig“ und „Ersetzt“ entfällt das nächste Überprüfungsdatum. Diese
+Endzustände werden von der Statusautomatik nicht wieder auf „Gültig“ gesetzt. Der
+Nachfolgelink bleibt in der jeweiligen Überprüfung erhalten. Die Ergebniswahl ist
+unabhängig von der Einstellung für erweiterte Statuswerte verfügbar.
+
+Die Ergänzung benötigt die neue Modulmigration `m261017_120000_add_review_replacement_url`.
+Bestehende Überprüfungen bleiben dabei unverändert; die neue Spalte ist optional.
 Die ursprüngliche Begründung, Titel, Beschlusstext, Zuständigkeit und andere
 veröffentlichte Angaben bleiben gesperrt. Die Funktion ist auch bei ausgeschaltetem
 Entscheidungsworkflow verfügbar.

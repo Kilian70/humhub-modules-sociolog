@@ -48,6 +48,10 @@ class MigrationSchemaTest extends SociologTestCase
         $this->assertArrayNotHasKey('content_id', $entrySchema->columns);
         $this->assertArrayNotHasKey('protocol_link', $entrySchema->columns);
 
+        $reviewSchema = Yii::$app->db->schema->getTableSchema('sociolog_entry_review', true);
+        $this->assertArrayHasKey('replacement_url', $reviewSchema->columns);
+        $this->assertTrue($reviewSchema->columns['replacement_url']->allowNull);
+
         $spaceConfigSchema = Yii::$app->db->schema->getTableSchema('sociolog_space_config', true);
         $this->assertArrayHasKey('writer_mode', $spaceConfigSchema->columns);
         $this->assertArrayHasKey('writer_user_guids', $spaceConfigSchema->columns);

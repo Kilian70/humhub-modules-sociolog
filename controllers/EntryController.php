@@ -675,13 +675,15 @@ public function actionReview($id)
             $model->review_date = $form->result === EntryReview::RESULT_CONFIRMED
                 ? $form->reviewDate
                 : null;
-            if ($form->scenario !== ReviewForm::SCENARIO_LIMITED) {
-                $model->status = $form->result === EntryReview::RESULT_CONFIRMED
-                    ? Entry::STATUS_VALID
-                    : Entry::STATUS_EXPIRED;
+            if ($form->result === EntryReview::RESULT_REPLACED) {
+                $model->status = Entry::STATUS_REPLACED;
+            } elseif ($form->result === EntryReview::RESULT_REPEALED) {
+                $model->status = Entry::STATUS_EXPIRED;
+            } elseif ($form->scenario !== ReviewForm::SCENARIO_LIMITED) {
+                $model->status = Entry::STATUS_VALID;
             }
-            // Im eingeschränkten Modus ändert nur die bestehende automatische
-            // Statusberechnung in beforeSave() den Status; manuelle Endzustände bleiben erhalten.
+            // Bestehende manuelle Endzustände werden durch eine eingeschränkte
+            // Bestätigung weiterhin nicht reaktiviert.
             if (!$model->save(false, ['review_date', 'status'])) {
                 throw new \RuntimeException('Review result could not be saved.');
             }
@@ -705,6 +707,7 @@ public function actionReview($id)
             $review = new EntryReview([
                 'entry_id' => (int)$model->id,
                 'result' => $form->result,
+                'replacement_url' => $form->replacementUrl,
                 'justification' => trim((string)$form->justification),
                 'previous_review_date' => $previousReviewDate,
                 'next_review_date' => $model->review_date,

@@ -543,7 +543,7 @@ echo Html::encode(implode(', ', $names));
                 'uncheck' => 0,
             ])->hint(Yii::t(
                 'SociologModule.base',
-                'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen das nächste Überprüfungsdatum setzen, eine neue Begründung zur Überprüfung erfassen und ein zusätzliches Protokoll verlinken. Die ursprüngliche Begründung und andere Felder bleiben gesperrt.'
+                'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen den Beschluss bestätigen, ausser Kraft setzen oder als ersetzt kennzeichnen. Eine neue Begründung ist Pflicht; bei Bestätigung wird das nächste Überprüfungsdatum, bei Ersatz der Link zum neuen Beschluss benötigt. Ein zusätzliches Protokoll ist optional. Die ursprünglichen Angaben bleiben gesperrt.'
             )) ?>
           </div>
 

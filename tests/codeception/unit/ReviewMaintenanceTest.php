@@ -95,7 +95,8 @@ class ReviewMaintenanceTest extends SociologTestCase
         $html = $controller->actionReview($entry->id);
         $this->assertStringContainsString('ReviewForm[justification]', $html);
         $this->assertStringContainsString('ReviewForm[reviewDate]', $html);
-        $this->assertStringNotContainsString('ReviewForm[result]', $html);
+        $this->assertStringContainsString('ReviewForm[result]', $html);
+        $this->assertStringContainsString('ReviewForm[replacementUrl]', $html);
         $this->assertStringNotContainsString('Entry[description]', $html);
         $scripts = implode("\n", Yii::$app->view->js[\yii\web\View::POS_READY] ?? []);
         $dom = new \DOMDocument();
@@ -115,7 +116,7 @@ class ReviewMaintenanceTest extends SociologTestCase
         $old->refresh();
         $oldAttributes = $old->getAttributes();
         $next = date('Y-m-d', strtotime('+1 year'));
-        $this->post(['result' => EntryReview::RESULT_REPEALED, 'justification' => 'New review justification',
+        $this->post(['result' => EntryReview::RESULT_CONFIRMED, 'justification' => 'New review justification',
             'reviewDate' => $next, 'protocolTitle' => 'Additional protocol', 'protocolUrl' => 'https://example.org/new']);
         $this->controller()->actionReview($entry->id);
         $entry->refresh();
@@ -219,5 +220,116 @@ class ReviewMaintenanceTest extends SociologTestCase
         $entry->refresh();
         $this->assertSame('Original justification', $entry->description);
         $this->assertSame('New reason with option disabled', EntryReview::findOne(['entry_id' => $entry->id])->justification);
+    }
+    public function testLimitedReviewCanRepealWithoutNextDate(): void
+    {
+        $entry = $this->entry();
+        $before = $entry->getAttributes();
+        $this->post(['result' => EntryReview::RESULT_REPEALED, 'justification' => 'No longer needed',
+            'reviewDate' => '2020-01-01', 'replacementUrl' => 'https://example.org/ignored']);
+        $this->controller()->actionReview($entry->id);
+        $entry->refresh();
+        $this->assertSame(Entry::STATUS_EXPIRED, $entry->status);
+        $this->assertNull($entry->review_date);
+        foreach ($before as $key => $value) {
+            if (!in_array($key, ['review_date', 'status'], true)) $this->assertSame($value, $entry->$key, $key);
+        }
+        $review = EntryReview::findOne(['entry_id' => $entry->id]);
+        $this->assertSame(EntryReview::RESULT_REPEALED, $review->result);
+        $this->assertSame('No longer needed', $review->justification);
+        $this->assertNull($review->replacement_url);
+        $this->assertNull($review->next_review_date);
+        $this->assertFalse($entry->canMaintainReview());
+        $this->assertNull(\humhub\modules\sociolog\services\SociologStatusService::calculateStatus($entry->getAttributes(), new \DateTimeImmutable('+3 years')));
+    }
+
+    public function testLimitedReviewCanReplaceWithLinkAndPreservesOriginal(): void
+    {
+        $entry = $this->entry();
+        $before = $entry->getAttributes();
+        Yii::$app->getModule('sociolog')->settings->set('extendedStatusesEnabled', false);
+        $link = 'https://example.org/index.php?r=sociolog%2Fentry%2Fview&id=123';
+        $this->post(['result' => EntryReview::RESULT_REPLACED, 'justification' => 'New decision supersedes this one',
+            'replacementUrl' => $link, 'protocolTitle' => 'Minutes', 'protocolUrl' => 'https://example.org/minutes']);
+        $controller = $this->controller();
+        $controller->actionReview($entry->id);
+        $entry->refresh();
+        $this->assertSame(Entry::STATUS_REPLACED, $entry->status);
+        $this->assertNull($entry->review_date);
+        foreach ($before as $key => $value) {
+            if (!in_array($key, ['review_date', 'status'], true)) $this->assertSame($value, $entry->$key, $key);
+        }
+        $review = EntryReview::findOne(['entry_id' => $entry->id]);
+        $this->assertSame(EntryReview::RESULT_REPLACED, $review->result);
+        $this->assertSame($link, $review->replacement_url);
+        $this->assertSame($link, $review->safeReplacementUrl);
+        $this->assertSame('https://example.org/minutes', $review->protocol->url);
+        $this->assertNull($review->next_review_date);
+        $this->assertFalse($entry->canMaintainReview());
+        $html = $controller->actionView($entry->id);
+        $this->assertStringContainsString(Yii::t('SociologModule.base', 'Neuen Beschluss öffnen'), $html);
+        $this->assertStringContainsString(\yii\helpers\Html::encode($link), $html);
+        $this->assertNull(\humhub\modules\sociolog\services\SociologStatusService::calculateStatus($entry->getAttributes(), new \DateTimeImmutable('+3 years')));
+    }
+
+    public function testInvalidResultsReasonsAndReplacementLinksDoNotWrite(): void
+    {
+        foreach ([['result' => 'valid'], ['replacementUrl' => ''],
+            ['replacementUrl' => 'javascript:alert(1)'], ['replacementUrl' => '/relative/path'],
+            ['replacementUrl' => 'https://' . str_repeat('a', 1000) . '.org'],
+            ['justification' => ''], ['justification' => '   ']] as $invalid) {
+            $entry = $this->entry();
+            $before = $entry->getAttributes();
+            $this->post(array_merge(['result' => EntryReview::RESULT_REPLACED, 'justification' => 'Reason',
+                'replacementUrl' => 'https://example.org/new'], $invalid));
+            $this->controller()->actionReview($entry->id);
+            $entry->refresh();
+            $this->assertSame($before, $entry->getAttributes());
+            $this->assertFalse(EntryReview::find()->where(['entry_id' => $entry->id])->exists());
+        }
+    }
+
+    public function testManagerCanReplaceWhenLimitedMaintenanceIsDisabled(): void
+    {
+        $entry = $this->entry();
+        $settings = Yii::$app->getModule('sociolog')->settings;
+        $settings->setSerialized('managerUsers', [Yii::$app->user->identity->guid]);
+        $settings->set('limitedReviewMaintenanceEnabled', false);
+        $this->post(['result' => EntryReview::RESULT_REPLACED, 'justification' => 'Manager replacement',
+            'replacementUrl' => 'https://example.org/replacement']);
+        $this->controller()->actionReview($entry->id);
+        $entry->refresh();
+        $this->assertSame(Entry::STATUS_REPLACED, $entry->status);
+        $this->assertNull($entry->review_date);
+        $this->assertSame('Original justification', $entry->description);
+    }
+
+    public function testUnsafeStoredReplacementUrlIsNeverRendered(): void
+    {
+        $entry = $this->entry();
+        $review = new EntryReview(['entry_id' => $entry->id, 'result' => EntryReview::RESULT_REPLACED,
+            'justification' => 'Old imported record', 'replacement_url' => 'javascript:alert(42)', 'created_at' => time()]);
+        $this->assertFalse($review->validate());
+        $this->assertTrue($review->save(false));
+        $this->assertNull($review->safeReplacementUrl);
+        $html = $this->controller()->actionView($entry->id);
+        $this->assertStringNotContainsString('javascript:alert(42)', $html);
+        $this->assertStringNotContainsString(Yii::t('SociologModule.base', 'Neuen Beschluss öffnen'), $html);
+    }
+
+    public function testReplacementDeniedWhenOptionDisabledAndUserHasNoFullRights(): void
+    {
+        $entry = $this->entry();
+        Yii::$app->getModule('sociolog')->settings->set('limitedReviewMaintenanceEnabled', false);
+        $this->post(['result' => EntryReview::RESULT_REPLACED, 'justification' => 'Not allowed',
+            'replacementUrl' => 'https://example.org/new']);
+        try {
+            $this->controller()->actionReview($entry->id);
+            $this->fail('Replacement must be denied.');
+        } catch (ForbiddenHttpException $e) {
+            $entry->refresh();
+            $this->assertSame(Entry::STATUS_REVIEW, $entry->status);
+            $this->assertFalse(EntryReview::find()->where(['entry_id' => $entry->id])->exists());
+        }
     }
 }

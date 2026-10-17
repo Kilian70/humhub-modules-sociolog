@@ -423,6 +423,15 @@ $workflowEnabled = Yii::$app->getModule('sociolog')
                     'exclude' => RichTextHelper::EXCLUDED_FEATURES,
                 ]) ?>
               </div>
+              <?php if ($review->result === EntryReview::RESULT_REPLACED && $review->safeReplacementUrl): ?>
+                <div class="small">
+                  <?= Html::a(
+                    Html::encode(Yii::t('SociologModule.base', 'Neuen Beschluss öffnen')),
+                    $review->safeReplacementUrl,
+                    ['target' => '_blank', 'rel' => 'noopener noreferrer']
+                  ) ?>
+                </div>
+              <?php endif; ?>
               <?php if ($review->next_review_date): ?>
                 <div class="small text-muted">
                   <?= Yii::t('SociologModule.base', 'Nächste Überprüfung ab') ?>:

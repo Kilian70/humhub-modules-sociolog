@@ -1,5 +1,14 @@
 # Sociolog: geprüfter Arbeitsstand vom 11.10.2026
 
+## Überprüfung: ausser Kraft setzen und ersetzen, 17.10.2026
+
+- Auftrag „gerne ergänzen“: zuständige Personen dürfen im eingeschränkten Review bestätigen, ausser Kraft setzen oder ersetzen. Neue Pflichtbegründung, Nachfolgelink bei Ersatz, Originaldaten erhalten.
+- GitHub-Basis unverändert main `fdf37ef07c7de83a98a3ed05325333fc6da698e0`; Regeln `9854ea97c1db1c82e18c7c8dcc097810b6615a4f` abgeglichen. HumHub 1.18.6/1.19.0-Kernquellen und offizielle example-basic-Metadaten erneut berücksichtigt, siehe neuer Bericht.
+- Additive Migration `m261017_120000_add_review_replacement_url`; veröffentlichte Migrationen unverändert. Version weiterhin 1.0.34, keine Veröffentlichung dieser Ergänzung.
+- Je Zielversion 106 Tests / 6.313 Assertions grün; nach letzter Formularänderung je 14 Tests / 241 Assertions. MAMP-HTTP-Formularabläufe beider Versionen erfolgreich, keine erneute visuelle Browserprüfung. Neuinstallation mit 26 Migrationen und historischem SQL-Modus, Update/Datenerhalt separat geprüft. Historische Null-Datums-Einschränkung im Bericht offengelegt.
+- Details, Reproduktion und Grenzen: `UEBERPRUEFUNG-ERGEBNISSE-2026-10-17.txt`.
+
+
 ## Überprüfungen mit neuer Begründung, 17.10.2026
 
 - Auftrag: aktuellen GitHub-Stand berücksichtigen, eingeschränkte Pflege fälliger Einträge ermöglichen und bei jeder Überprüfung eine neue Pflichtbegründung erfassen, auch bei ausgeschalteter Pflegeoption. Ursprüngliche Begründung und frühere Überprüfungen erhalten.
@@ -168,3 +177,10 @@ Relevante APIs: `humhub/components/Module.php`, `humhub/services/MigrationServic
 - Nutzer hat ausdrücklich die Übernahme von PR #22 nach main und eine neue Veröffentlichung beauftragt. PR #22 wurde mit Mergecommit b07da07 übernommen.
 - Release 1.0.34 erhöht ausschließlich die Versionsangaben in Module.php, module.json und composer.json und aktualisiert die Release-/Update-Dokumentation. Die getestete Funktionslogik bleibt unverändert; keine neue Migration.
 - GitHub-Stable-Prüfungen des Funktionsstands erfolgreich unter PHP 8.2 bis 8.5. Develop scheiterte vor Modultests an HTTP 404 des Testservers. Keine erfolgreiche Develop-Abnahme behaupten.
+
+## Veröffentlichungsauftrag 1.0.35, 17.10.2026
+
+- Nutzerauftrag „veröffentlichen“ nach Übergabe der geprüften Ergänzung. Commit, Push, PR/Merge und reguläres Release für diesen Stand sind autorisiert.
+- GitHub-main weiterhin `fdf37ef07c7de83a98a3ed05325333fc6da698e0`, letztes Release v1.0.34. Keine fremden Änderungen zu übernehmen.
+- Versionsangaben in Module.php, module.json und composer.json auf 1.0.35 angehoben; Änderungen/Update-Anleitung ergänzt. Funktionsstand bleibt gegenüber dem geprüften Stand unverändert. Historische Angaben zu unveröffentlichten Ständen bleiben als solche erhalten.
+- Release enthält die neue additive Migration; Update-Anleitung beschreibt Migration, Datenerhalt und historische NO_ZERO_DATE-Grenze. Kein Deployment auf die Vereinsinstallation.
