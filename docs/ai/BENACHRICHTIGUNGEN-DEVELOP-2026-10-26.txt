@@ -90,3 +90,20 @@ Develop-Quellvertrag je 20 Prüfungen unter MAMP-PHP und Homebrew-PHP.
 149 PHP-Dateien in beiden PHP-Laufzeiten syntaktisch gültig, Metadaten gültig,
 git diff --check ohne Fehler. Die beiden Stable-Adapter sind bis auf Namespace/
 Imports bytegleich zur bisherigen Implementierung.
+
+VERÖFFENTLICHUNGSAUFTRAG UND GITHUB-ABNAHME, 26.10.2026
+Der Nutzer hat ausdrücklich „hochladen und veröffentlichen“ beauftragt. Die
+vorherigen Angaben „kein Commit/Push/CI“ dokumentieren den damaligen lokalen Stand.
+Funktionscommit 7782ef402bbda662d64892fbdfcd7e72e103e741, PR #24.
+GitHublauf 40303147350 prüft jetzt die vollständigen Stable-/Develop-Instanzen.
+Bereits vollständig überprüfte Beispieljobs PHP 8.2:
+- Develop 121505736781: 108 Tests / 6.193 Assertions, 5 ausgelassene alte
+  Templateprüfungen. Neue native Datensatz-/Versandprüfung erfolgreich.
+- Stable 121505737445: 108 Tests / 6.325 Assertions, 1 ausgelassener
+  Datensatztest, weil die neue API dort nicht existiert; alte Vorlagentests laufen.
+Develop-Commit weiterhin dee382ccb80838804b8888f3c66146c6cc0eade0.
+Version für Veröffentlichung auf 1.0.36 angehoben; keine neue Migration.
+Vor Veröffentlichung müssen alle acht PHP-Matrixjobs erfolgreich sein.
+Der genaue Release-Commit und endgültige Matrixstatus werden in den
+GitHub-Release-Hinweisen dokumentiert; die Veröffentlichung aktualisiert
+keine produktive HumHub-Installation.

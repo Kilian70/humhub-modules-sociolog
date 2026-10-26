@@ -3,7 +3,7 @@
 
 Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
-## [Unreleased]
+## [1.0.36] – 2026-10-26
 
 - Benachrichtigungen über die anhand der Kernschnittstelle gewählte Stable- oder Develop-Anbindung erzeugen. Bisherige öffentliche Klassennamen und Empfängerauswahl bleiben erhalten.
 - Develop verwendet seine native statische Kategorie, Nachrichtenparameter und Versandfunktion; die bisherigen Stable-Templates bleiben in der Stable-Anbindung. Verhindert den PHP-Abbruch durch die geänderte `category()`-Signatur und das Ableiten von der inzwischen finalen Kategorienklasse.

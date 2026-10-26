@@ -194,3 +194,9 @@ Relevante APIs: `humhub/components/Module.php`, `humhub/services/MigrationServic
 - GitHub-main weiterhin `fdf37ef07c7de83a98a3ed05325333fc6da698e0`, letztes Release v1.0.34. Keine fremden Änderungen zu übernehmen.
 - Versionsangaben in Module.php, module.json und composer.json auf 1.0.35 angehoben; Änderungen/Update-Anleitung ergänzt. Funktionsstand bleibt gegenüber dem geprüften Stand unverändert. Historische Angaben zu unveröffentlichten Ständen bleiben als solche erhalten.
 - Release enthält die neue additive Migration; Update-Anleitung beschreibt Migration, Datenerhalt und historische NO_ZERO_DATE-Grenze. Kein Deployment auf die Vereinsinstallation.
+
+## Veröffentlichungsauftrag 1.0.36, 26.10.2026
+
+- Ausdrücklich beauftragt: hochladen und veröffentlichen. PR #24 enthält die Korrektur; Version 1.0.36 vorbereitet. Keine neue Migration, keine Produktivinstallation geändert.
+- Vollständiger GitHub-Lauf 40303147350: erste geprüfte PHP-8.2-Jobs erfolgreich, Stable 108 Tests/6.325 Assertions (1 versionsbedingter Skip), Develop 108 Tests/6.193 Assertions (5 alte Templateprüfungen versionsbedingt ausgelassen). Die neue datensatzgebundene Prüfung läuft unter Develop tatsächlich erfolgreich.
+- Vor regulärer Veröffentlichung Abschluss aller acht Matrixjobs und des exakten Release-Commits prüfen; endgültigen Status in Release-Hinweisen festhalten. Historische Angaben zum damaligen fehlenden CI-Nachweis bleiben als Verlauf erhalten.

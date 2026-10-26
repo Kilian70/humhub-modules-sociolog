@@ -11,15 +11,15 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.35
+**Version:** 1.0.36
 
-**Release:** 1.0.35 vom 17.10.2026.
+**Release:** 1.0.36 vom 26.10.2026.
 
-Bei einer fälligen Überprüfung können zuständige Personen den Beschluss bestätigen, ausser Kraft setzen oder als ersetzt kennzeichnen. Eine neue Begründung ist immer Pflicht, bei Ersatz zusätzlich der Link zum neuen Beschluss. Ursprüngliche Angaben bleiben erhalten.
+Benachrichtigungen verwenden abhängig von der tatsächlichen HumHub-Schnittstelle die bisherige Stable-Anbindung oder die neue datensatzgebundene Anbindung von Develop. Die öffentlichen Benachrichtigungsklassen, Empfängerauswahl und Leserechtsprüfungen bleiben erhalten. Die Funktionen aus 1.0.35 sind enthalten.
 
-Geprüft unter HumHub **1.18.6** und der regulären **1.19.0**: je 106 Tests / 6.313 Assertions mit PHP 8.3.14 und MySQL 8.0.40. Die Ergänzung wurde zusätzlich über die echten MAMP-Webformulare per HTTP geprüft; keine neue visuelle Browserabnahme.
+Auf den gemeinsamen MAMP-Testinstanzen HumHub **1.18.6** und **1.19.0** wurden je 44 gezielte native Prüfungen durchgeführt. Ein Quellvertrag gegen die echten Develop-Klassen prüft zusätzlich die geänderten Signaturen; die GitHub-Matrix prüft die Laufzeit. Der jeweils geprüfte Develop-Commit ist keine Freigabe zukünftiger Entwicklungsstände.
 
-[Änderungen in 1.0.35](AENDERUNGEN-1.0.35.md) · [Update-Anleitung](UPDATE-1.0.35.md) · [Prüfbericht und Grenzen](docs/ai/UEBERPRUEFUNG-ERGEBNISSE-2026-10-17.txt). **Eine neue additive Datenbankmigration ist erforderlich.** Für ältere Installationen gilt weiterhin der geschützte Updatepfad.
+[Änderungen in 1.0.36](AENDERUNGEN-1.0.36.md) · [Update-Anleitung](UPDATE-1.0.36.md) · [Prüfbericht und Grenzen](docs/ai/BENACHRICHTIGUNGEN-DEVELOP-2026-10-26.txt). **Gegenüber 1.0.35 keine neue Datenbankmigration.** Für ältere Installationen gelten weiterhin die bisherigen Update-Hinweise.
 
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
