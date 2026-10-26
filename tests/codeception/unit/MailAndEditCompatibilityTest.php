@@ -26,6 +26,9 @@ class MailAndEditCompatibilityTest extends SociologTestCase
 
     public function testNativeHtmlAndPlainMailRenderersKeepLiteralTitlesAndCorrectEvent(): void
     {
+        if (\humhub\modules\sociolog\notifications\NotificationCompatibility::usesRecordApi()) {
+            $this->markTestSkipped('Legacy templates apply only to the Stable notification API; record API has separate tests.');
+        }
         $this->disableNotifications();
         $this->becomeUser('User1');
         $entry = $this->createEntry(Space::findOne(4));
@@ -54,6 +57,9 @@ class MailAndEditCompatibilityTest extends SociologTestCase
 
     public function testMailContentHandlesMissingSourceWithoutBrokenLink(): void
     {
+        if (\humhub\modules\sociolog\notifications\NotificationCompatibility::usesRecordApi()) {
+            $this->markTestSkipped('Legacy templates apply only to the Stable notification API; record API has separate tests.');
+        }
         Yii::$app->getModule('sociolog')->settings->set('moduleTitle', 'Haus & Verein <Test>');
         foreach ([EntryCreated::class, EntryUpdated::class] as $class) {
             $notification = new $class();

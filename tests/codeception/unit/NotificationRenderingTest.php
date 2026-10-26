@@ -13,6 +13,9 @@ class NotificationRenderingTest extends SociologTestCase
 {
     public function testWebTitlesAndModuleNamesAreEncodedExactlyOnce(): void
     {
+        if (\humhub\modules\sociolog\notifications\NotificationCompatibility::usesRecordApi()) {
+            $this->markTestSkipped('Legacy templates apply only to the Stable notification API; record API has separate tests.');
+        }
         $this->disableNotifications();
         $this->becomeUser('User1');
         $entry = $this->createEntry(Space::findOne(4));
@@ -42,6 +45,9 @@ class NotificationRenderingTest extends SociologTestCase
 
     public function testMissingSourceUsesSafeUnencodedFallbackText(): void
     {
+        if (\humhub\modules\sociolog\notifications\NotificationCompatibility::usesRecordApi()) {
+            $this->markTestSkipped('Legacy templates apply only to the Stable notification API; record API has separate tests.');
+        }
         Yii::$app->getModule('sociolog')->settings->set('moduleTitle', 'Haus & Verein <Test>');
         foreach ([EntryCreated::class, EntryUpdated::class] as $class) {
             $html = (new $class())->render();
@@ -53,6 +59,9 @@ class NotificationRenderingTest extends SociologTestCase
 
     public function testMailSubjectsKeepPlainTextCharacters(): void
     {
+        if (\humhub\modules\sociolog\notifications\NotificationCompatibility::usesRecordApi()) {
+            $this->markTestSkipped('Legacy templates apply only to the Stable notification API; record API has separate tests.');
+        }
         $this->disableNotifications();
         $this->becomeUser('User1');
         $entry = $this->createEntry(Space::findOne(4));

@@ -306,10 +306,12 @@ class Events
             }
 			try {
 		
-				$notificationClass::instance()
-					->from($actor)
-					->about($entry)
-					->send($user);
+				\humhub\modules\sociolog\notifications\NotificationCompatibility::send(
+                    $notificationClass,
+                    $entry,
+                    $actor,
+                    $user
+                );
 		
 				$sent++;
 		
