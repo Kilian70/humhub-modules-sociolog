@@ -1,0 +1,92 @@
+Sociolog: Stable-/Develop-Benachrichtigungen, 26.10.2026
+
+AUFTRAG / QUELLEN
+Gemeldeter PHP-Abbruch bei nichtstatischer EntryCreated::category(). Ebenfalls
+EntryUpdated betroffen. Vom Nutzer genannte Repositories und Workflow geprüft.
+Modul-main: 7b185fb1a05879832a68a05866351d9c9b55a0f1 (1.0.35), lokaler Stand sauber
+vor Beginn. humhub-ai-dev: 9854ea97c1db1c82e18c7c8dcc097810b6615a4f, aktuelle README
+und docs/REGELN.md gelesen. Keine neuen Projekt-/Subagenten angelegt.
+Workflowlauf 40297771677, Job 121487992746: Fatal category()-Signaturfehler.
+Dort und beim Abgleich verwendeter Develop-Commit:
+dee382ccb80838804b8888f3c66146c6cc0eade0.
+
+Verglichen: BaseNotification und NotificationCategory der offiziellen Tags v1.18.6,
+v1.19.0 sowie des genannten Develop-Commits. CLAUDE.md und Migrationshinweise
+(MIGRATE-DEV.md sowie module-migrate-1.19.md / module-migrate-1.20.md) berücksichtigt.
+Develop concept-notifications.md, components/NotificationManager.php und Module.php
+für Registrierung/Versand gelesen. Offizielles Beispiel humhub/example-basic,
+module.json (minVersion 1.18) erneut geprüft.
+
+BEFUND
+Stable: category() ist eine geschützte Instanzmethode, Kategorie ein erweiterbares
+Yii-Objekt, Versand über instance()->from()->about()->send().
+Develop: statische typisierte category(), finale readonly NotificationCategory,
+datensatzgebundener Konstruktor, getMessage(array): string, neues getMailSubject
+und statische send()-Schnittstelle. Nur static vor die bisherige Methode zu setzen
+würde daher Stable beschädigen und weitere Develop-Fehler ungelöst lassen.
+
+KORREKTUR
+- Öffentliche Klassennamen EntryCreated/EntryUpdated bleiben für gespeicherte
+  Benachrichtigungen unverändert. Elternklasse anhand tatsächlicher statischer
+  Kernmethode gewählt, keine Versionsnummer-Heuristik.
+- Bisherige Klassen/Template-Anbindung nach notifications/legacy verschoben.
+- Neue notifications/modern-Anbindung implementiert native Nachrichtenparameter;
+  finale native Kategorien und Mail-/URL-Rendering vom Develop-Kern geerbt.
+- Alte Kategorienklasse nur unter Stable erweitert. Unter Develop verweist der
+  öffentliche Kategorienname auf das finale native Wertobjekt, sodass auch die
+  automatische Modul-Klassensuche keine illegale Unterklasse lädt.
+- NotificationCompatibility::send verbindet beide Versandarten. Empfängerauswahl,
+  Gruppen-/Space-Modi und Leserechtsprüfung in Events unverändert. Neue native
+  canReceive-Prüfung verweigert fehlende/unlesbare Beschlüsse erneut.
+- Neue Parameter bleiben Klartext; HTML-Escaping übernimmt auf Develop der native
+  Kanalrenderer. Stable-Web-/Mail-Templates unverändert weiterverwendet.
+
+MAMP ZUHAUSE / DATENSCHUTZ
+Zentrale ANLEITUNG.txt gelesen. Ausschliesslich die bereits vorhandenen gemeinsamen
+Instanzen /humhub-1.18 und /humhub-1.19 verwendet. Web-PHP 8.3.14 durch HTTP-Header
+bestätigt, CLI-PHP 8.3.14, MySQL laut zentraler Anleitung 8.0.40 auf 8889.
+Vorher dort kein Sociolog installiert; andere vorhandene Module nicht geändert.
+MAMP über das vorhandene Startskript gestartet. Zentraler Sicherungslauf erfolgreich:
+backups/20261026-104155 (beide DBs und Instanzdateien, bleibt nur lokal).
+Danach Sociolog bewusst in beide Instanzen kopiert und aktiviert; 26 vorhandene
+Modulmigrationen erfolgreich. Keine neue Migration für diese Korrektur.
+Für die historische Zero-Date-Migration nur die Installationssitzung angepasst,
+keine globale SQL-Konfiguration verändert. Keine Shared-Fixtures zurückgesetzt,
+keine Benutzer/Space-/Anwendungsdaten für diese gezielte Prüfung gelöscht.
+Keine Zugangsdaten oder Sicherungen ins Modul übernommen. Test-E-Mails bleiben
+laut zentraler Konfiguration lokal; diese Prüfung löst keine Zustellung aus.
+
+PRÜFUNGEN UND GRENZEN
+- Je gemeinsame MAMP-Instanz 44 erfolgreiche native Prüfungen: API-Erkennung,
+  Registrierung genau zweier öffentlicher Klassen, native Kategorie-ID, öffentliche
+  Klassen bei instance(), bisheriges Digestflag, fehlende Quelle, Web-HTML,
+  Klartext-/HTML-Mail und Zeichen wie &, <tags>, eingeschleustes HTML.
+- Gegen echte Develop-Kernklassen: 20 erfolgreiche Quellvertragsprüfungen einschl.
+  abstrakter Hooks, finaler Kategorie, nativer Mailbetreff-Signatur, Ablehnung bei
+  fehlender Quelle und echter statischer send()-Signatur. Dispatch-Ziel aufgezeichnet.
+- Neue Codeception-Regressionen für Kategorie/Registrierung und datensatzgebundene
+  native Benachrichtigungen ergänzt. Alte Stable-Templateprüfungen nur auf Stable
+  ausführen; Develop hat native eigene Nachrichten und eigene Regression.
+- Keine vollständige Develop-Installation angelegt (Nutzervorgabe). Kein neuer
+  GitHub-CI-Lauf, kein vollständiger Integrationsnachweis für Develop. Die neuen
+  datensatzgebundenen CI-Tests müssen dort noch laufen.
+- Keine komplette Codeception-Suite auf die gemeinsamen DBs angewendet, um deren
+  Fixture-Löschungen und Zurücksetzungen anderer Modulprojekte zu vermeiden.
+- Kein E-Mail-End-to-End-Test und keine erneute vollständige Sicherheitsprüfung.
+
+Reproduktion: tests/compatibility/README.md. Die lokalen PHP-Skripte enthalten
+keine Passwörter und verwenden die vorhandene MAMP-Konfiguration. Develop-Test
+lädt nur unveränderte Quellklassen, erzeugt keine zusätzliche HumHub-Installation.
+
+ÜBERGABE
+Keine Modulversionsanhebung, kein Commit, Push, PR, Release oder produktives
+Deployment für diese Korrektur. Version bleibt 1.0.35. Vor einer Develop-Freigabe
+die vorhandene GitHub-Stable-/Develop-Matrix erneut ausführen und neue Befunde
+beheben; ein erfolgreicher Quellvertrag ist kein Nachweis allgemeiner Kompatibilität.
+
+ABSCHLIESSENDE PRÜFUNG
+Alle drei gespeicherten Prüfskripte erneut erfolgreich: MAMP je 44 Prüfungen,
+Develop-Quellvertrag je 20 Prüfungen unter MAMP-PHP und Homebrew-PHP.
+149 PHP-Dateien in beiden PHP-Laufzeiten syntaktisch gültig, Metadaten gültig,
+git diff --check ohne Fehler. Die beiden Stable-Adapter sind bis auf Namespace/
+Imports bytegleich zur bisherigen Implementierung.

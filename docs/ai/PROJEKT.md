@@ -1,5 +1,15 @@
 # Sociolog: geprüfter Arbeitsstand vom 11.10.2026
 
+## Benachrichtigungsschnittstelle Develop, 26.10.2026
+
+- Nutzerbefund aus Lauf 40297771677 / Job 121487992746 nachvollzogen. Quellstand Develop `dee382ccb80838804b8888f3c66146c6cc0eade0`; Modul-main weiterhin `7b185fb1a05879832a68a05866351d9c9b55a0f1`, zentrale Regeln `9854ea97c1db1c82e18c7c8dcc097810b6615a4f` abgeglichen.
+- Tatsächliche Notification-Schnittstellen v1.18.6/v1.19.0/Develop, CLAUDE.md, Migrationsleitfäden, Develop concept-notifications.md und offizielle example-basic-Metadaten gelesen.
+- Öffentliche Benachrichtigungsklassen wählen Stable-/record-API-Anbindung anhand der Kernfähigkeit. Originalvorlagen bleiben Stable vorbehalten; neue native statische Kategorie/Versand unter Develop. Empfänger/Leserechte bleiben geschützt.
+- Nur die ausdrücklich vorgegebenen gemeinsamen MAMP-Instanzen verwendet. Vor erstmaliger Sociolog-Aktivierung zentral gesichert; andere installierte Module unverändert. Keine Codeception-Fixture-Resets der Shared-DBs.
+- Je MAMP-Instanz 44 gezielte native Prüfungen erfolgreich, Develop-Quellvertrag mit echten Core-Dateien 20 Prüfungen erfolgreich. Kein vollständiger Develop-Laufzeit-/CI-Nachweis behauptet; kein Commit/Push/Release, Version unverändert.
+- Reproduktion/Details: `BENACHRICHTIGUNGEN-DEVELOP-2026-10-26.txt`, `tests/compatibility/README.md`.
+
+
 ## Überprüfung: ausser Kraft setzen und ersetzen, 17.10.2026
 
 - Auftrag „gerne ergänzen“: zuständige Personen dürfen im eingeschränkten Review bestätigen, ausser Kraft setzen oder ersetzen. Neue Pflichtbegründung, Nachfolgelink bei Ersatz, Originaldaten erhalten.
