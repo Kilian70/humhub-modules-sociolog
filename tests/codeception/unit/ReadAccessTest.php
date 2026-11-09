@@ -120,10 +120,20 @@ class ReadAccessTest extends SociologTestCase
         Yii::$app->request->setQueryParams(['contentId' => $entry->content->id, 'objectModel' => Entry::class, 'objectId' => $entry->id]);
         $oldController = Yii::$app->controller;
         try {
-            $comments = new \humhub\modules\comment\controllers\CommentController('comment', Yii::$app->getModule('comment'));
-            Yii::$app->controller = $comments;
-            $comments->action = $comments->createAction('show');
-            $comments->beforeAction($comments->action);
+            if (class_exists(\humhub\modules\comment\controllers\api\CommentController::class)) {
+                // Develop serves comment windows through the content API. Its action
+                // checks content visibility before serializing any comments.
+                $comments = new \humhub\modules\comment\controllers\api\CommentController('comment', Yii::$app->getModule('comment'));
+                Yii::$app->controller = $comments;
+                $comments->action = $comments->createAction('content-comments');
+                $comments->actionContentComments((int)$entry->content->id);
+            } else {
+                // Stable still checks visibility in the legacy controller's beforeAction().
+                $comments = new \humhub\modules\comment\controllers\CommentController('comment', Yii::$app->getModule('comment'));
+                Yii::$app->controller = $comments;
+                $comments->action = $comments->createAction('show');
+                $comments->beforeAction($comments->action);
+            }
             $this->fail('Restricted content must not expose comments.');
         } catch (\yii\web\ForbiddenHttpException $denied) {
             $this->assertTrue(true);

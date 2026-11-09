@@ -1,5 +1,13 @@
 # Sociolog: geprüfter Arbeitsstand vom 11.10.2026
 
+## Develop-Kommentarzugriffstest, 09.11.2026
+
+- Lauf #50 / 42556984899: ein Fehler wegen entfernter alter CommentController-Klasse im Zugriffstest; kein erneuter Benachrichtigungsfehler. Develop-Core `e3ff8e7e9e15122d79a500969faa8c0df31496ff`, Modul 1.0.36 auf `5b22a7d53a6c763007efb8c0d53573068c93d993`.
+- Neue Kommentar-API samt Sichtbarkeitsprüfung und Migrationshinweise gelesen. Test wählt anhand des vorhandenen Controllers die neue content-comments-Aktion oder den alten Stable-Zugriff; Zugriffsverweigerung bleibt zwingend. Anwendungscode unverändert.
+- Zentrale Testregeln/Runner verwendet, tatsächliche MAMP-Kerne 1.18.7 / 1.19.3, getrennte automatische Datenbanken. Nur identische Testdateien der vorhandenen Sociolog-Kopien aktualisiert; keine manuellen Daten-/Modul-Upgrades.
+- Regeln humhub-ai-dev `3bfc6461247834453b0e261f7bd8dacd9da69f72` sowie docs/PRUEFUNG.md berücksichtigt. Zentraler Runner: je 10 Tests / 91 Assertions unter 1.18.7 und 1.19.3 erfolgreich. Details: `KOMMENTAR-ZUGRIFFSTEST-2026-11-09.txt`. Neuer Develop-CI-Lauf steht aus; kein Commit/Push/Release für diese Testkorrektur.
+
+
 ## Benachrichtigungsschnittstelle Develop, 26.10.2026
 
 - Nutzerbefund aus Lauf 40297771677 / Job 121487992746 nachvollzogen. Quellstand Develop `dee382ccb80838804b8888f3c66146c6cc0eade0`; Modul-main weiterhin `7b185fb1a05879832a68a05866351d9c9b55a0f1`, zentrale Regeln `9854ea97c1db1c82e18c7c8dcc097810b6615a4f` abgeglichen.
