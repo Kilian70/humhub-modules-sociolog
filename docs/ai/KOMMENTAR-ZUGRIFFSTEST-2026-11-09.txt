@@ -1,0 +1,75 @@
+Sociolog: Kommentar-Zugriffstest in Develop, 09.11.2026
+
+BEFUND
+Screenshot: HumHub runtime tests #50. GitHub-Lauf 42556984899 am 09.11.2026,
+Modulcommit 5b22a7d53a6c763007efb8c0d53573068c93d993 (1.0.36).
+Develop-Job 128964848738 / PHP 8.2: 108 Tests, 6.182 Assertions, ein Fehler,
+fünf versionsbedingte Skips. Fehler in ReadAccessTest::
+testDeniedReaderCannotUseDetailSearchOrSingleContentStream: Klasse
+humhub\modules\comment\controllers\CommentController nicht gefunden.
+Andere Develop-Jobs wegen Matrix-Fail-Fast abgebrochen; Stable-Jobs erfolgreich.
+Am 02.11.2026 bestand derselbe Modulcommit die komplette Matrix (Lauf 41383667615).
+Der damalige Benachrichtigungsfehler ist nicht der Fehler dieses Laufs.
+
+QUELLEN
+Develop-Commit e3ff8e7e9e15122d79a500969faa8c0df31496ff aus dem aktuellen CI-Protokoll.
+- protected/humhub/modules/comment/controllers/api/CommentController.php:
+  actionContentComments($id) -> findContent -> assertViewable;
+  verweigert nicht lesbare Inhalte mit ForbiddenHttpException vor der Ausgabe.
+- docs/develop/module-migrate-1.20.md: alte Kommentar-Controller-/Popup-Routen
+  entfernt, Kommentarfenster über die neue Plattform-API.
+- CLAUDE.md dieses Kerncommits gelesen; Beispiel humhub/example-basic/module.json
+  erneut geprüft (minVersion 1.18).
+- humhub-ai-dev Commit 3bfc6461247834453b0e261f7bd8dacd9da69f72:
+  docs/REGELN.md und docs/PRUEFUNG.md berücksichtigt.
+
+KORREKTUR
+Nur tests/codeception/unit/ReadAccessTest.php sowie Changelog/Prüfdokumentation.
+Wenn der native Kommentar-API-Controller vorhanden ist, dessen actionContentComments
+mit der tatsächlichen geschützten Content-ID aufrufen. Sonst unverändert den
+bisherigen Stable-Controller mit show/beforeAction prüfen. Beide Zweige müssen
+ForbiddenHttpException liefern; anderenfalls schlägt der Test weiterhin fehl.
+Kein Überspringen der Sicherheitsprüfung und keine Änderung von Anwendungsrechten.
+Die bestehenden Prüfungen für Detailseite, Suche, Stream und CSV bleiben erhalten.
+
+GEMEINSAMES TESTLABOR
+HUMHUB_TEST_LAB war nicht gesetzt; zentralen Standardordner ermittelt und
+GEMEINSAME-TESTREGELN.txt, ANLEITUNG.txt, CODECEPTION-ANLEITUNG.txt und
+BROWSER-TESTS-ANLEITUNG.txt gelesen. Installierte Kerne tatsächlich 1.18.7 / 1.19.3,
+PHP 8.3.30. Keine zusätzliche HumHub-Instanz, kein Testpaket in Webinstanzen.
+Zentraler Runner tools/codeception-lab.py verwendet. Prepare erneuert ausschliesslich
+die vorgesehenen wegwerfbaren Testkopien und humhub_auto-Datenbanken.
+Manuelle humhub_shared-Datenbanken und andere Module werden nicht verändert.
+In beiden gemeinsamen Instanzen liegt Sociolog 1.0.35. Die betroffene Testdatei war
+bytegleich zum Projektstand; relevante ACL-Laufzeitdateien ebenfalls bytegleich
+geprüft. Bewusst nur diese Testdatei in den Modulkopien aktualisiert, kein Upgrade
+oder Überschreiben ihrer Anwendungsdateien. Originaltest ausserhalb des Projekts
+unter /tmp/ReadAccessTest-before-20261109.php gesichert.
+
+PRÜFKOMMANDOS
+python3 tools/codeception-lab.py prepare --version both
+python3 tools/codeception-lab.py run --version both --module sociolog --suite unit --test ReadAccessTest
+PHP-Syntax: php -l tests/codeception/unit/ReadAccessTest.php
+git diff --check
+
+GRENZEN
+Develop ist kein eingerichteter gemeinsamer Laufzeitstand; keine zusätzliche
+Installation angelegt. Der neue API-Zweig ist am konkreten nativen Kerncode
+geprüft, ein neuer GitHub-Develop-Lauf für den korrigierten Stand steht aus.
+Eine erfolgreiche Stable-Prüfung ist kein Develop-Laufzeitnachweis.
+Keine neue Migration oder Versionsanhebung, kein Commit, Push, PR oder Release.
+Dieser Befund belegt eine veraltete Testreferenz, keine Umgehung der Leserechte.
+
+LOKALE ERGEBNISSE
+Zentraler Runner erfolgreich: HumHub 1.18.7 und HumHub 1.19.3 jeweils
+10 Tests / 91 Assertions. Darunter die Zugriffsverweigerung für Kommentare,
+Detailseite, Stream, Suche und CSV sowie Rechteentzug und Einstellungen.
+PHP-Syntax unter PHP 8.3.30 sowie git diff --check erfolgreich.
+Der neue Develop-API-Zweig ist noch nicht zur Laufzeit in GitHub geprüft.
+
+UPLOADAUFTRAG, 09.11.2026
+Der Nutzer hat ausdrücklich den GitHub-Upload und einen erneuten Develop-Test
+beauftragt. Die vorstehenden Angaben zu fehlendem Commit/Push beschreiben den
+vorherigen lokalen Stand. Upload über codex/comment-api-access-test und Pull
+Request; die bestehende Workflow-Matrix prüft Stable und Develop erneut.
+Kein Merge oder Release mit diesem Auftrag. Modulversion unverändert.
