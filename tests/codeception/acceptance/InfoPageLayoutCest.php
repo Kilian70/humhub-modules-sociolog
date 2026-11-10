@@ -16,10 +16,20 @@ class InfoPageLayoutCest
         Assert::assertCount(1, $I->grabMultiple('#settingsform-infopagelayout'));
     }
 
+    private function scrollToClickable(AcceptanceTester $I, string $selector): void
+    {
+        // Native WebDriver clicks must wait until scrolling has actually finished.
+        $target = json_encode($selector);
+        $I->executeJS('document.documentElement.style.scrollBehavior="auto"; document.body.style.scrollBehavior="auto"; document.querySelector(' . $target . ').scrollIntoView({block:"center",behavior:"instant"});');
+        $I->waitForJS('var e=document.querySelector(' . $target . '), r=e.getBoundingClientRect(), x=r.left+r.width/2, y=r.top+r.height/2, hit=document.elementFromPoint(x,y); return y>100 && y<innerHeight && !!hit && (hit===e || e.contains(hit));', 10);
+    }
+
     private function save(AcceptanceTester $I): void
     {
         $I->executeJS('document.querySelector("#settingsform-infopagelayout").dataset.sociologBeforeSave="1";');
-        $I->click(['xpath' => '//form[.//select[@id="settingsform-infopagelayout"]]//button[@type="submit"]']);
+        $I->executeJS('document.querySelector("#settingsform-infopagelayout").closest("form").querySelector("button[type=submit]").setAttribute("data-sociolog-test-save","1");');
+        $this->scrollToClickable($I, '[data-sociolog-test-save]');
+        $I->click('[data-sociolog-test-save]');
         $I->waitForJS('var s=document.querySelector("#settingsform-infopagelayout"); return !!s && !s.dataset.sociologBeforeSave;', 20);
         $I->dontSeeElement("form .has-error");
         $I->waitForElementVisible('#settingsform-infopagelayout', 10);
@@ -41,9 +51,7 @@ class InfoPageLayoutCest
         $I->dontSeeElement('[data-sociolog-info-layout="board"]');
         $I->selectOption('#settingsform-infopagelayout', 'board');
         $I->waitForElementVisible('#sociolog-info-board .ProseMirror', 10);
-        // Chrome in CI may still be smoothly scrolling when WebDriver clicks.
-        $I->executeJS('document.documentElement.style.scrollBehavior="auto"; document.body.style.scrollBehavior="auto"; document.querySelector("#sociolog-info-board .ProseMirror").scrollIntoView({block:"center",behavior:"instant"});');
-        $I->waitForJS('var e=document.querySelector("#sociolog-info-board .ProseMirror"), r=e.getBoundingClientRect(), x=r.left+r.width/2, y=r.top+r.height/2, hit=document.elementFromPoint(x,y); return y>100 && y<innerHeight && !!hit && (hit===e || e.contains(hit));', 10);
+        $this->scrollToClickable($I, '#sociolog-info-board .ProseMirror');
         $I->click('#sociolog-info-board .ProseMirror');
         $I->pressKey('#sociolog-info-board .ProseMirror', 'Board text with an image and https://example.org/infoboard ');
         $I->executeJS('window.sociologUploadResult=null; jQuery("#sociolog-info-board-file-upload").on("fileuploaddone.sociologTest fileuploadfail.sociologTest",function(e,d){window.sociologUploadResult={status:d.jqXHR ? d.jqXHR.status : 0,result:d.result || (d.jqXHR ? d.jqXHR.responseText : null)};});');
