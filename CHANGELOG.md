@@ -5,6 +5,11 @@ Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentier
 
 ## [Unreleased]
 
+## [1.0.37] – 2026-11-10
+
+- Informationsseite wahlweise als bisherige Kacheln oder frei gestaltbare Infotafel anzeigen. Beide Inhalte bleiben beim Umschalten erhalten; Kacheln bleiben Voreinstellung.
+- Infotafel mit nativem Rich-Text-Editor, Bildern und Links; hochgeladene Dateien werden dauerhaft an den geschützten Einstellungsdatensatz gebunden. Keine neue Datenbankmigration.
+
 - Leserechts-Regressionstest an den neuen Kommentar-API-Controller in HumHub Develop anpassen. Unter Stable weiterhin den bisherigen Controller prüfen; die erwartete Zugriffsverweigerung bleibt verpflichtend. Keine Änderung am Anwendungscode.
 
 ## [1.0.36] – 2026-10-26

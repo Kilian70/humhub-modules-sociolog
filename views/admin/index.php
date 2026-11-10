@@ -10,6 +10,7 @@ use humhub\modules\user\models\User;
 use humhub\modules\user\models\Group;
 use humhub\modules\sociolog\helpers\RichTextHelper;
 use humhub\modules\sociolog\models\DecisionType;
+use humhub\modules\sociolog\models\SettingsForm;
 
 $this->title = Yii::t('SociologModule.base', 'Sociolog – Einstellungen');
 $this->params['breadcrumbs'][] = $this->title;
@@ -612,6 +613,11 @@ echo Html::encode(implode(', ', $names));
             'uncheck' => 0,
         ]) ?>
 
+        <?= $form->field($model, 'infoPageLayout')->dropDownList([
+            SettingsForm::INFO_LAYOUT_CARDS => Yii::t('SociologModule.base', 'Kacheln'),
+            SettingsForm::INFO_LAYOUT_BOARD => Yii::t('SociologModule.base', 'Infotafel'),
+        ])->hint(Yii::t('SociologModule.base', 'Beim Wechsel bleiben die Inhalte beider Darstellungen erhalten.')) ?>
+
         <p class="form-text mb-4">
           <?= Yii::t(
               'SociologModule.base',
@@ -637,9 +643,28 @@ echo Html::encode(implode(', ', $names));
               )) ?>
             </div>
 
+            <div class="col-12">
+              <?= $form->field($model, 'infoIntroText')->widget(RichTextField::class, [
+                  'id' => 'sociolog-infointrotext',
+                  'exclude' => RichTextHelper::EXCLUDED_FEATURES,
+                  'pluginOptions' => ['maxHeight' => '280px'],
+              ]) ?>
+            </div>
+
+            <div class="col-12" data-sociolog-info-layout="board">
+              <?= $form->field($model, 'infoBoardText', [
+                  'selectors' => ['input' => '#sociolog-info-board_input'],
+              ])->widget(RichTextField::class, [
+                  'id' => 'sociolog-info-board',
+                  'backupInterval' => 0,
+                  'exclude' => RichTextHelper::INFO_BOARD_EXCLUDED_FEATURES,
+                  'pluginOptions' => ['maxHeight' => '600px'],
+              ])->hint(Yii::t('SociologModule.base', 'Gestalte die Infotafel mit Text, Bildern und Links. Bilder können über den Editor hochgeladen werden.')) ?>
+            </div>
+
+            <div class="col-12" data-sociolog-info-layout="cards"><div class="row g-3">
             <?php
             $infoTextFields = [
-                'infoIntroText' => 'col-12',
                 'infoProcessText' => 'col-md-6',
                 'infoPermissionsText' => 'col-md-6',
                 'infoStatusText' => 'col-md-6',
@@ -660,6 +685,7 @@ echo Html::encode(implode(', ', $names));
                 ]) ?>
               </div>
             <?php endforeach; ?>
+            </div></div>
         </div>
       </fieldset>
     </div>
@@ -947,3 +973,19 @@ $updated  = $settings->get('lastStatusRunUpdated');
 <?php endif; ?>
 
 </div>
+
+<?php
+$this->registerJs(<<<'JS'
+(function () {
+    var selector = $('#settingsform-infopagelayout');
+    function updateInfoLayout() {
+        $('[data-sociolog-info-layout]').each(function () {
+            $(this).toggle($(this).attr('data-sociolog-info-layout') === selector.val());
+        });
+    }
+    selector.on('change.sociologInfoLayout', updateInfoLayout);
+    updateInfoLayout();
+})();
+JS
+);
+?>

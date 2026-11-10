@@ -9,6 +9,9 @@ use humhub\modules\user\models\User;
 
 class SettingsForm extends Model
 {
+    public const INFO_LAYOUT_CARDS = 'cards';
+    public const INFO_LAYOUT_BOARD = 'board';
+
     public const NOTIFICATION_MODE_NONE = 'none';
     public const NOTIFICATION_MODE_GROUPS = 'groups';
     public const NOTIFICATION_MODE_SPACE = 'space';
@@ -40,6 +43,8 @@ class SettingsForm extends Model
      * ============================================================ */
 
     public $infoPageEnabled;
+    public $infoPageLayout = self::INFO_LAYOUT_CARDS;
+    public $infoBoardText = '';
     public $infoPageTitle;
     public $infoIntroText;
     public $infoDocumentUrl;
@@ -101,6 +106,9 @@ class SettingsForm extends Model
 	public function rules()
 	{
 		return [
+            [['infoPageLayout'], 'required'],
+            [['infoPageLayout'], 'in', 'range' => [self::INFO_LAYOUT_CARDS, self::INFO_LAYOUT_BOARD]],
+            [['infoBoardText'], 'string', 'max' => 15000],
             [['readerMode'], 'in', 'range' => ['all', 'space', 'selected']],
             [['readerUsers', 'readerGroups'], 'validateReaders', 'skipOnEmpty' => false],
             [['readerMode'], 'validateReaderIntegrations'],
@@ -365,6 +373,9 @@ class SettingsForm extends Model
             'infoPageEnabled' =>
                 Yii::t('SociologModule.base', 'Informationsseite aktivieren'),
 
+            'infoPageLayout' => Yii::t('SociologModule.base', 'Darstellung der Informationsseite'),
+            'infoBoardText' => Yii::t('SociologModule.base', 'Inhalt der Infotafel'),
+
             'infoPageTitle' =>
                 Yii::t('SociologModule.base', 'Titel der Informationsseite'),
 
@@ -499,6 +510,10 @@ class SettingsForm extends Model
 
         $this->infoPageEnabled =
             (bool)$settings->get('infoPageEnabled', false);
+
+        $layout = $settings->get('infoPageLayout', self::INFO_LAYOUT_CARDS);
+        $this->infoPageLayout = $layout === self::INFO_LAYOUT_BOARD ? self::INFO_LAYOUT_BOARD : self::INFO_LAYOUT_CARDS;
+        $this->infoBoardText = (string)$settings->get('infoBoardText', '');
 
         $this->infoPageTitle =
             $settings->get('infoPageTitle', Yii::t('SociologModule.base', 'So funktioniert das Logbuch'));
@@ -714,6 +729,18 @@ class SettingsForm extends Model
 		$settings->set('decisionWorkflowEnabled', $this->decisionWorkflowEnabled);
 
         $settings->set('infoPageEnabled', (bool)$this->infoPageEnabled);
+        $settings->set('infoPageLayout', $this->infoPageLayout);
+        $settings->set('infoBoardText', trim((string)$this->infoBoardText));
+        // Keep native uploads assigned to a persistent, permission-aware setting record.
+        // Both modes retain their text and attached files when changing the layout.
+        $board = InfoBoard::current();
+        if ($board !== null) {
+            $processedBoard = \humhub\modules\content\widgets\richtext\RichText::postProcess(
+                trim((string)$this->infoBoardText), $board, 'value'
+            );
+            $this->infoBoardText = (string)$processedBoard['text'];
+            $settings->set('infoBoardText', $this->infoBoardText);
+        }
         $settings->set('infoPageTitle', trim((string)$this->infoPageTitle));
         $settings->set('infoIntroText', trim((string)$this->infoIntroText));
         $settings->set('infoDocumentUrl', trim((string)$this->infoDocumentUrl));

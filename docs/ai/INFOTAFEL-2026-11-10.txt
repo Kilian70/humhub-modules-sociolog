@@ -1,0 +1,116 @@
+Logbuch: Informationsseite als Infotafel oder Kacheln
+Stand: 10.11.2026
+
+Auftrag und Ausgangsstand
+Die bestehende Informationsseite um eine freie Infotafel mit Text, Bildern und
+Links ergänzen. Bestehende Kacheltexte und die eigenständige Infotafel beim
+Umschalten behalten. Im gemeinsamen MAMP-Labor prüfen. Orgmap nicht verändern.
+GitHub-main und lokaler Ausgangsstand: 2b7ee1461b4d403333e0a4c0393a9ee56ddc9a4e
+(PR #25), letzte veröffentlichte Modulversion 1.0.36. Kein neuer Versionsstand,
+Commit, Push oder Release im Rahmen dieses Auftrags.
+
+Umsetzung
+- SettingsForm: cards/board-Auswahl, Standard cards, eigener infoBoardText,
+  gültige Auswahl und maximal 15.000 Zeichen prüfen. Beide Inhalte speichern.
+- Adminformular: Auswahl unter Informationsseite; Einleitung, Titel und
+  Dokumentlink gemeinsam; inaktive Felder ausblenden und weiter mitspeichern.
+- Infoseite: nur die gewählte Ansicht über native RichText-Widgets ausgeben.
+- InfoBoard: HumHub ActiveRecord auf dem vorhandenen setting-Datensatz für
+  sociolog/infoBoardText. Keine zusätzliche Tabelle oder Textkopie.
+- Native RichText::postProcess/FileManager binden eigene neue Uploads an den
+  dauerhaften Datensatz. Verknüpfte Bilder bleiben bei Layoutwechsel erhalten.
+- ViewableInterface: aktive Mitglieder bei aktivierter Seite leseberechtigt;
+  aktive Systemadministration auch bei deaktivierter Seite für Entwürfe.
+  Bearbeiten/Löschen ausschließlich aktive Systemadministration. Gäste,
+  deaktivierte Konten und beliebige andere Settings erhalten keine Bildrechte.
+- Native Admin-/Datei-Controller, CSRF- und Upload-Prüfung bleiben maßgeblich.
+  Keine eigenen öffentlich erreichbaren Datei-Endpunkte. Bilder responsiv.
+- README, Unreleased-Changelog und englische Übersetzungen ergänzt.
+  Bestehende Migrationen und Versionsangaben nicht verändert.
+
+Quellen / API-Abgleich (10.11.2026)
+HumHub AI Dev: 3bfc6461247834453b0e261f7bd8dacd9da69f72,
+  docs/REGELN.md und docs/PRUEFUNG.md.
+HumHub v1.18.7: 013367b89fc634be59351d8fdb2169a4ab19945a.
+HumHub v1.19.3: 54c5447961d05e319d124d8d000fe3ca560e9e44.
+  Relevant: RichTextField, ProsemirrorRichTextEditor, AbstractRichText,
+  RichText::postProcess, FileExtension, File/FileManager, ViewableInterface,
+  UserHelper und User::isSystemAdmin; alle benötigten APIs an beiden Cores geprüft.
+  Post-Modell als offizielles Muster für RichText::postProcess gelesen.
+  Prosemirror-Upload-Menü/Service und humhub.file.js für echten Browserablauf.
+  Setting erbt Yii ActiveRecord und erfüllt nicht das HumHub-AR-Typehint des
+  RichText-Postprocessing; deshalb eigene HumHub-AR-Sicht auf dieselbe Zeile.
+  postProcess liefert ein Array mit dem Schlüssel text.
+  Migrationshinweise 1.18/1.19 aus vorhandenen docs/develop gelesen; im lokalen
+  1.18-Paket fehlen diese Dokumente, APIs direkt am 1.18-Core überprüft.
+Offizielles Beispiel humhub/example-basic: module.json, Version 1.1.0,
+  Mindestversion 1.18 geprüft. Orgmap nur als Referenz gelesen, nicht verändert.
+
+Lokale Umgebung und Datenerhalt
+Gemeinsames Labor: ~/Desktop/HumHub Module/mamp/GPT Zuhause.
+GEMEINSAME-TESTREGELN.txt und drei ergänzende Anleitungen berücksichtigt.
+Sicherung vor Übernahme: backups/20261110-070828 (beide Instanzen/Datenbanken).
+Vorhandener Sociolog-Modulstand 1.0.35 vor Übernahme mit dem Release verglichen;
+gegen aktuellen Projektstand 1.0.36/PR #25 abgeglichen. Nur Sociolog übernommen.
+Installierte Cores: 1.18.7 und 1.19.3; PHP 8.3.30, MySQL 8.0.44.
+Automatisierte Tests ausschließlich über tools/codeception-lab.py auf bestehenden
+isolierten Testkopien und automatischen Datenbanken. Keine neue Installation,
+keine Testpakete in den manuellen Instanzen, keine manuellen Daten überschrieben.
+14 betroffene Laufzeit-/Testdateien in beiden manuellen Sociolog-Kopien identisch
+mit dem Projektstand überprüft. Bestehende doppelte Orgmap-Verzeichnisse im Labor
+unverändert; deren Discovery-Warnungen sind kein Bestandteil dieser Änderung.
+
+Tests / Nachweise
+Neue InfoPageLayoutTest-Suite: 7 Fälle für Ansichtsstandard, Ausgabe, alle acht
+Kacheltexte, wiederholte Wechsel, stabile Datensatz-ID, Bilder/Dateirechte,
+Gast-/Mitglied-/Admin-/deaktivierte Konten, ausgeschaltete Seite, ungültige
+Auswahl, Größenlimit, HTML-Escaping und Adminschutz. Vorab je Core 7 Tests /
+96 Assertions erfolgreich; abschließende Ergebnisse nachfolgend.
+Neuer Browserfall InfoPageLayoutCest: über native Menüaktion Datei hochladen,
+Text/Bild speichern, eigentliche Modulinformationsseite aufrufen, zu Kacheln
+wechseln und speichern, ursprünglichen Kacheltext prüfen, zurück zur Infotafel,
+gespeicherten Text und geladenes Bild erneut prüfen.
+Frühe Browserläufe dienten der Korrektur des Tests: Pretty-URL-Einstieg,
+options-Wert statt übersetztem Label, Upload über natives Einfügen-Menü und
+Warten auf Formularneuladen statt kurzlebiger Flashmeldung. Ein abgelehnter
+absoluter Testdateipfad führte zu keinem Testlauf. Kein Erfolg hierfür behauptet.
+11 betroffene PHP-Dateien: Syntaxprüfung erfolgreich. git diff --check sauber.
+
+Manuelle Anleitung
+1. Logbuch-Moduleinstellungen öffnen und zur Informationsseite gehen.
+2. Informationsseite aktivieren und Darstellung Kacheln wählen: bisherige Texte
+   bleiben sichtbar und bearbeitbar.
+3. Infotafel wählen: eigenen Inhalt schreiben, über Einfügen > Datei hochladen
+   ein Bild einfügen, Links ergänzen. Speichern und Informationsseite öffnen.
+4. Zu Kacheln wechseln, speichern und ursprüngliche Kacheltexte kontrollieren.
+5. Zur Infotafel wechseln, speichern: Text, Links und Bild sind weiterhin da.
+6. Als Mitglied lesen; als Gast die Seite/Bilder nicht zugänglich. Bei
+   deaktivierter Informationsseite bleiben Inhalte für die Administration im
+   Formular erhalten.
+
+Grenzen
+Keine neue GitHub-CI-/Develop-Matrix und kein Produktions-HTTPS/CSP-Test.
+Nur die vorhandenen lokalen, oben genannten Cores/PHP-Version geprüft.
+Keine Veröffentlichung, kein Produktivdeployment und keine neue Migration.
+
+Abschließende Browserabnahme
+python3 tools/codeception-lab.py run --version both --module sociolog \
+  --suite acceptance --test InfoPageLayoutCest
+HumHub 1.18.7: 1 Test / 19 Assertions erfolgreich.
+HumHub 1.19.3: 1 Test / 19 Assertions erfolgreich.
+Protokoll: /tmp/sociolog-infoboard-browser8-both-20261110.log.
+Je vier Screenshots (Editor, gespeicherte Infotafel, erhaltene Kacheln,
+wiederhergestellte Infotafel mit geladenem Bild) außerhalb des Repositories:
+~/.codex/visualizations/2026/10/17/01a14888-e813-7fa0-a9fb-7f57930cee14/
+  sociolog-infoboard-20261110/{1.18,1.19}/
+Infotafel und Kacheln visuell kontrolliert.
+
+Abschließende gesamte Sociolog-Unit-Suite
+python3 tools/codeception-lab.py run --version both --module sociolog --suite unit
+HumHub 1.18.7: 115 Tests / 6.421 Assertions, 1 versionsbedingter Skip, keine Fehler.
+HumHub 1.19.3: 115 Tests / 6.421 Assertions, 1 versionsbedingter Skip, keine Fehler.
+Der vorhandene Record-API-Test wird bei nicht vorhandener neuer Core-API
+ausgelassen (NotificationCompatibilityTest); alle sieben neuen Fälle laufen.
+Protokoll: /tmp/sociolog-infoboard-unit-final-both-20261110.log.
+Beide Runner-Aufrufe mit Exitcode 0 abgeschlossen. Keine weitere Codeänderung
+nach diesen erfolgreichen Läufen; nur Dokumentation ergänzt.

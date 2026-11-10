@@ -208,3 +208,21 @@ Relevante APIs: `humhub/components/Module.php`, `humhub/services/MigrationServic
 - Ausdrücklich beauftragt: hochladen und veröffentlichen. PR #24 enthält die Korrektur; Version 1.0.36 vorbereitet. Keine neue Migration, keine Produktivinstallation geändert.
 - Vollständiger GitHub-Lauf 40303147350: erste geprüfte PHP-8.2-Jobs erfolgreich, Stable 108 Tests/6.325 Assertions (1 versionsbedingter Skip), Develop 108 Tests/6.193 Assertions (5 alte Templateprüfungen versionsbedingt ausgelassen). Die neue datensatzgebundene Prüfung läuft unter Develop tatsächlich erfolgreich.
 - Vor regulärer Veröffentlichung Abschluss aller acht Matrixjobs und des exakten Release-Commits prüfen; endgültigen Status in Release-Hinweisen festhalten. Historische Angaben zum damaligen fehlenden CI-Nachweis bleiben als Verlauf erhalten.
+
+## Informationsseite: Infotafel oder Kacheln, 10.11.2026
+
+- Autorisiert: Auswahl im Logbuch fertigstellen und in der gemeinsamen MAMP-Umgebung prüfen. Bestehende Inhalte beim Umschalten behalten. Orgmap bleibt unverändert.
+- Mit GitHub-main `2b7ee1461b4d403333e0a4c0393a9ee56ddc9a4e` (PR #25) abgeglichen; Modulversion weiterhin 1.0.36. Kein Commit, Push, Release oder Produktivdeployment.
+- Neue Auswahl cards/board mit Kacheln als Vorgabe; separate Infotafel mit nativem Rich-Text-Editor für Text, Bilder und Links. Beide Inhalte sowie gemeinsame Einleitung, Titel und Dokumentlink bleiben erhalten.
+- Bilder über natives RichText::postProcess/FileManager an bestehende Einstellungszeile gebunden. InfoBoard als HumHub ActiveRecord/ViewableInterface schützt Lesen und Bearbeiten; keine neue Migration.
+- Quellen am 10.11.: HumHub v1.18.7 `013367b89fc634be59351d8fdb2169a4ab19945a`, v1.19.3 `54c5447961d05e319d124d8d000fe3ca560e9e44`; RichTextField/-Editor, Post, FileExtension, File/FileManager, Setting, UserHelper/User, Migrationshinweise und Prosemirror-Upload-Ablauf geprüft. Offizielles Beispiel humhub/example-basic (module.json 1.1.0, min. 1.18) gelesen. Framework-Regeln `3bfc6461247834453b0e261f7bd8dacd9da69f72`.
+- Gemeinsame MAMP-Instanzen 1.18.7/1.19.3, PHP 8.3.30, MySQL 8.0.44; Sicherung `backups/20261110-070828`. Installierten Sociolog-Stand vor Übernahme verglichen, auf aktuelle Projektbasis abgeglichen; nur Sociolog geändert, manuelle Inhalte erhalten.
+- Zentraler Runner auf getrennten automatischen Datenbanken: je 115 Unit-Tests / 6.421 Assertions, jeweils 1 vorhandener versionsbedingter Skip; keine Fehler. Neue sieben Fälle prüfen Inhalts-/Dateierhalt, Ansichten, Validierung und Berechtigungen.
+- Je ein echter Firefox-Browserfall / 19 Assertions erfolgreich: Bild hochladen, speichern, Kacheln anzeigen und zurück zur Infotafel, Bild erneut laden. Screenshots visuell geprüft. 11 PHP-Syntaxprüfungen und git diff --check erfolgreich.
+- Details, Kommandos, Quellen, Screenshotordner, Zwischenschritte und Grenzen: docs/ai/INFOTAFEL-2026-11-10.txt. Keine neue GitHub-CI-/Develop-Matrix oder Produktions-HTTPS/CSP-Prüfung.
+
+## Veröffentlichungsauftrag 1.0.37, 10.11.2026
+
+- Nutzerauftrag: auf GitHub hochladen und eine neue Version veröffentlichen. Commit, Push, Übernahme und reguläre Veröffentlichung des geprüften Funktionsstands autorisiert.
+- GitHub-main vor Beginn unverändert `2b7ee1461b4d403333e0a4c0393a9ee56ddc9a4e`, letztes Release v1.0.36. Version in Module.php/module.json/composer.json/README auf 1.0.37 angehoben; Änderungen und Update-Anleitung ergänzt. Keine weitere Funktionsänderung und keine neue Migration.
+- Die MAMP-Prüfungen sind im Infotafel-Bericht dokumentiert. Vor Veröffentlichung GitHub-Metadaten- und Stable-/Develop-Laufzeitprüfungen des exakten Release-Commits abschließen und auf der Release-Seite verlinken. Das vorbestehende unversionierte Duplikat des Kommentarberichts bleibt unberührt und wird nicht veröffentlicht.
