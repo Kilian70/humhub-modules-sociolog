@@ -14,6 +14,9 @@ final class RichTextHelper
      */
     public const EXCLUDED_FEATURES = ['upload', 'mention', 'oembed', 'emoji'];
 
+    /** Informational board additionally supports native file/image uploads. */
+    public const INFO_BOARD_EXCLUDED_FEATURES = ['mention', 'oembed', 'emoji'];
+
     public static function plainText(?string $text, bool $singleLine = false): string
     {
         $plainText = trim(RichText::convert($text));

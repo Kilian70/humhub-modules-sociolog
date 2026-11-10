@@ -10,6 +10,8 @@ use humhub\modules\sociolog\helpers\RichTextHelper;
 /** @var string $introText */
 /** @var string $documentUrl */
 /** @var array $sections */
+/** @var string $layout */
+/** @var string $boardText */
 
 $hasDocument = $documentUrl !== '';
 $isExternalDocument = $hasDocument && preg_match('#^https?://#i', $documentUrl) === 1;
@@ -73,6 +75,16 @@ $renderInfoText = static function (string $text): string {
         </aside>
     <?php endif; ?>
 
+    <?php if ($layout === \humhub\modules\sociolog\models\SettingsForm::INFO_LAYOUT_BOARD): ?>
+        <article class="card shadow-sm sociolog-info-board" aria-label="<?= Html::encode(Yii::t('SociologModule.base', 'Infotafel')) ?>">
+            <div class="card-body sociolog-info-text">
+                <?= RichText::widget([
+                    'text' => $boardText,
+                    'exclude' => RichTextHelper::INFO_BOARD_EXCLUDED_FEATURES,
+                ]) ?>
+            </div>
+        </article>
+    <?php else: ?>
     <div class="sociolog-info-grid">
         <?php foreach ($sections as $section): ?>
             <?php if (trim((string)$section['text']) === ''): ?>
@@ -92,4 +104,5 @@ $renderInfoText = static function (string $text): string {
             </article>
         <?php endforeach; ?>
     </div>
+    <?php endif; ?>
 </div>

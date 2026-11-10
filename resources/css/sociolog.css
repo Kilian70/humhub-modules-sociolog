@@ -840,3 +840,8 @@ html[data-bs-theme="dark"] .badge-sociolog-expired {
     grid-template-columns: 1fr;
   }
 }
+
+/* A freely editable information board; scoped to this page only. */
+.sociolog-info-board .card-body { overflow-wrap: anywhere; }
+.sociolog-info-board img { max-width: 100%; height: auto; }
+.sociolog-info-board table { max-width: 100%; }

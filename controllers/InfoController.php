@@ -41,6 +41,8 @@ class InfoController extends Controller
 
         return $this->render('index', [
             'title' => $title,
+            'layout' => $module->settings->get('infoPageLayout', \humhub\modules\sociolog\models\SettingsForm::INFO_LAYOUT_CARDS),
+            'boardText' => (string)$module->settings->get('infoBoardText', ''),
             'introText' => (string)$module->settings->get('infoIntroText', ''),
             'documentUrl' => trim((string)$module->settings->get('infoDocumentUrl', '')),
             'sections' => [

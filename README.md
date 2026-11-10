@@ -11,15 +11,15 @@
  
 # Sociolog – Logbuch-Modul für HumHub
 
-**Version:** 1.0.36
+**Version:** 1.0.37
 
-**Release:** 1.0.36 vom 26.10.2026.
+**Release:** 1.0.37 vom 10.11.2026.
 
-Benachrichtigungen verwenden abhängig von der tatsächlichen HumHub-Schnittstelle die bisherige Stable-Anbindung oder die neue datensatzgebundene Anbindung von Develop. Die öffentlichen Benachrichtigungsklassen, Empfängerauswahl und Leserechtsprüfungen bleiben erhalten. Die Funktionen aus 1.0.35 sind enthalten.
+Die Informationsseite kann als bisherige **Kacheln** oder als frei gestaltbare **Infotafel** mit Text, Bildern und Links angezeigt werden. Beim Umschalten bleiben beide Inhalte und die hochgeladenen Bilder erhalten. Kacheln bleiben die Voreinstellung.
 
-Auf den gemeinsamen MAMP-Testinstanzen HumHub **1.18.6** und **1.19.0** wurden je 44 gezielte native Prüfungen durchgeführt. Ein Quellvertrag gegen die echten Develop-Klassen prüft zusätzlich die geänderten Signaturen; die GitHub-Matrix prüft die Laufzeit. Der jeweils geprüfte Develop-Commit ist keine Freigabe zukünftiger Entwicklungsstände.
+In den gemeinsamen MAMP-Instanzen HumHub **1.18.7** und **1.19.3** wurden je 115 Tests mit 6.421 Assertions ohne Fehler abgeschlossen (je ein vorhandener versionsbedingter Skip). Je ein Browsertest mit 19 Assertions bestätigt Bild-Upload, Speichern und wiederholtes Umschalten. Die GitHub-Prüfungen des Release-Commits werden in den Release-Hinweisen dokumentiert.
 
-[Änderungen in 1.0.36](AENDERUNGEN-1.0.36.md) · [Update-Anleitung](UPDATE-1.0.36.md) · [Prüfbericht und Grenzen](docs/ai/BENACHRICHTIGUNGEN-DEVELOP-2026-10-26.txt). **Gegenüber 1.0.35 keine neue Datenbankmigration.** Für ältere Installationen gelten weiterhin die bisherigen Update-Hinweise.
+[Änderungen in 1.0.37](AENDERUNGEN-1.0.37.md) · [Update-Anleitung](UPDATE-1.0.37.md) · [Prüfbericht und Grenzen](docs/ai/INFOTAFEL-2026-11-10.txt). **Gegenüber 1.0.36 keine neue Datenbankmigration.** Für ältere Installationen gelten weiterhin die bisherigen Update-Hinweise.
 
 **Author & Maintainer:** Kilian Schmid 
 **Kompatibel mit:** HumHub 1.18+   
@@ -161,6 +161,27 @@ unter anderem festlegen:
 - ob nach Erreichen des Überprüfungsdatums eine eingeschränkte Pflege erlaubt ist
 - welche Benutzer oder Gruppen das Logbuch verwalten dürfen
 - wie Feldbezeichnungen und der erste Status im Formular heißen
+
+### Informationsseite: Kacheln oder Infotafel
+
+Unter **Moduleinstellungen → Informationsseite → Darstellung der Informationsseite**
+kann die Administration zwischen **Kacheln** und **Infotafel** wählen. Ohne neue
+Einstellung bleibt die bisherige Kachelansicht aktiv.
+
+Die Infotafel hat ein eigenes Rich-Text-Feld für formatierten Text, Bilder und Links.
+Bilder lassen sich direkt im Editor hochladen. Einleitung, Seitentitel und optionales
+Einleitungsdokument stehen in beiden Darstellungen zur Verfügung.
+
+Beim Umschalten werden weder Kacheltexte noch Infotafeltext oder zugeordnete Bilder
+gelöscht. Die nicht aktive Darstellung wird im Formular nur ausgeblendet und weiterhin
+mitgespeichert. Bilder sind dauerhaft über HumHubs Dateiverwaltung an den
+Infotafel-Einstellungsdatensatz gebunden; angemeldete aktive Mitglieder dürfen sie
+bei aktivierter Informationsseite lesen, bearbeiten oder löschen darf nur die
+Administration. Bei deaktivierter Seite bleibt der Entwurf für Administrator:innen
+zugänglich. Gäste haben keinen Zugriff auf diese hochgeladenen Bilder.
+
+Die Funktion verwendet die bestehende Einstellungstabelle und benötigt keine
+Datenbankmigration. Sie ist unabhängig vom Orgmap-Modul.
 
 ### Überprüfung dokumentieren
 

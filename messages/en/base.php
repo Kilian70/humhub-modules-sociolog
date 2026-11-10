@@ -750,4 +750,10 @@ return [
     'Bei „Ersetzt“ ist der Link zum neuen Beschluss erforderlich.' => 'When replaced, a link to the new decision is required.',
     'Du kannst den Beschluss bestätigen, ausser Kraft setzen oder als ersetzt kennzeichnen. Erfasse eine neue Begründung und bei Bedarf ein zusätzliches Protokoll. Die ursprünglichen Angaben bleiben unverändert.' => 'You can confirm, repeal or replace the decision. Enter a new justification and optionally add a protocol. The original information remains unchanged.',
     'Sobald „Überprüfung ab“ erreicht ist, dürfen zuständige Personen den Beschluss bestätigen, ausser Kraft setzen oder als ersetzt kennzeichnen. Eine neue Begründung ist Pflicht; bei Bestätigung wird das nächste Überprüfungsdatum, bei Ersatz der Link zum neuen Beschluss benötigt. Ein zusätzliches Protokoll ist optional. Die ursprünglichen Angaben bleiben gesperrt.' => 'Once the review date is reached, responsible people can confirm, repeal or replace the decision. A new justification is required; confirmation requires a future review date, replacement requires a link to the new decision. An additional protocol is optional. The original information remains locked.',
+    'Darstellung der Informationsseite' => 'Information page layout',
+    'Inhalt der Infotafel' => 'Information board content',
+    'Kacheln' => 'Tiles',
+    'Infotafel' => 'Information board',
+    'Beim Wechsel bleiben die Inhalte beider Darstellungen erhalten.' => 'Both layouts retain their contents when switching.',
+    'Gestalte die Infotafel mit Text, Bildern und Links. Bilder können über den Editor hochgeladen werden.' => 'Design the information board with text, images and links. Images can be uploaded through the editor.',
 ];
