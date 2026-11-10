@@ -65,6 +65,13 @@ class InfoPageLayoutCest
         Assert::assertSame(200, $upload['status'], json_encode($upload));
         Assert::assertEmpty($upload['result']['files'][0]['error'] ?? null, json_encode($upload));
         $I->waitForJS('return !!document.querySelector("#sociolog-info-board .ProseMirror img");', 20);
+        // Newer cores ask for alternative text after inserting an uploaded image.
+        if ($I->grabMultiple('[data-vue-component="ImageAltTextModal"]')) {
+            $I->waitForElementVisible('#imagealttext-alt', 10);
+            $I->fillField('#imagealttext-alt', 'Teal image used to verify retained uploads');
+            $I->click('.modal.show .modal-footer .btn-primary');
+            $I->waitForElementNotVisible('.modal.show', 10);
+        }
         $I->makeScreenshot('info-board-editor-with-image');
         $this->save($I);
         $board = $I->grabValueFrom('SettingsForm[infoBoardText]');

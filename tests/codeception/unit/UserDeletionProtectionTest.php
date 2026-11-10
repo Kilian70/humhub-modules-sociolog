@@ -174,8 +174,20 @@ class UserDeletionProtectionTest extends SociologTestCase
         $this->assertSame($spaceBefore, Space::findOne($space->id)->getAttributes());
         Yii::$app->user->setIdentity($archive);
         $account = new AccountDelete(['user' => $archive]);
-        $this->assertFalse($account->performDelete());
-        $this->assertTrue($account->hasErrors('currentPassword'));
+        if ($account->hasProperty('currentPassword')) {
+            $this->assertFalse($account->performDelete());
+            $this->assertTrue($account->hasErrors('currentPassword'));
+        } else {
+            // The sudo-based core form queues directly without form validation.
+            // Our queue guard must still reject it before any account data changes.
+            try {
+                $account->performDelete();
+                $this->fail('Archive account deletion must be rejected by the queue guard.');
+            } catch (\RuntimeException $error) {
+                $this->assertStringContainsString('Archivkonto', $error->getMessage());
+            }
+        }
+        $this->assertSame($spaceBefore, Space::findOne($space->id)->getAttributes());
         $this->assertSame($before, $this->snapshot($archive));
         $this->assertSame(Content::STATE_PUBLISHED, (int)Entry::findOne($entry->id)->content->state);
         $this->becomeUser('Admin');

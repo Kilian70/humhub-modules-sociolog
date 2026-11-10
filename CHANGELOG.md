@@ -10,6 +10,8 @@ Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentier
 - Informationsseite wahlweise als bisherige Kacheln oder frei gestaltbare Infotafel anzeigen. Beide Inhalte bleiben beim Umschalten erhalten; Kacheln bleiben Voreinstellung.
 - Infotafel mit nativem Rich-Text-Editor, Bildern und Links; hochgeladene Dateien werden dauerhaft an den geschützten Einstellungsdatensatz gebunden. Keine neue Datenbankmigration.
 
+- Browsertest berücksichtigt den neuen Bildbeschreibungsdialog in Develop; Archivschutztest prüft die native Abweisung auch beim neuen Kontolöschungsformular ohne Passwortfeld.
+
 - Leserechts-Regressionstest an den neuen Kommentar-API-Controller in HumHub Develop anpassen. Unter Stable weiterhin den bisherigen Controller prüfen; die erwartete Zugriffsverweigerung bleibt verpflichtend. Keine Änderung am Anwendungscode.
 
 ## [1.0.36] – 2026-10-26
