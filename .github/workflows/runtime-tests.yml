@@ -21,6 +21,6 @@ jobs:
 
   develop:
     name: HumHub Develop
-    uses: humhub/module-coding-standards/.github/workflows/codeception-develop.yml@main
+    uses: ./.github/workflows/codeception-develop.yml
     with:
       module-id: sociolog

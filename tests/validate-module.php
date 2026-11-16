@@ -159,7 +159,7 @@ if (!str_contains($settingsForm, "NOTIFICATION_MODE_NONE = 'none'")
 }
 
 if (!str_contains($runtimeWorkflow, 'codeception-master.yml@main')
-    || !str_contains($runtimeWorkflow, 'codeception-develop.yml@main')
+    || !str_contains($runtimeWorkflow, 'uses: ./.github/workflows/codeception-develop.yml')
     || !str_contains($lifecycleTest, 'testCreateEditAndSoftDelete')
     || !str_contains($lifecycleTest, 'testConfiguredWriteAndDeleteRights')
     || !str_contains($migrationTest, 'testCompleteMigrationResult')) {
